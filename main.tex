@@ -1,0 +1,2058 @@
+\documentclass[11pt]{amsart}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{subfig}
+\usepackage{graphicx}
+\usepackage{caption}
+% \usepackage{subcaption}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[ansinew]{inputenc}
+\usepackage{bbm}
+\usepackage{cancel}
+\usepackage{mathdots}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+% \setlength\parindent{0pt}
+
+\let\biconditional\leftrightarrow
+\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+\newcommand{\p}{\text{p}}
+
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+
+\title{Last Chance Stats}
+\author{Joseph Boyd}
+%\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+Statistics are so ubiquitous across the hard and soft sciences that initial undergraduate courses on the topic may attempt to make themselves one-size-fits-all, regardless of the diverse backgrounds of the students in the class. The result therefore may be a course devoid of the mathematical rigour and comprehension expected by a mathematician. This can lead to an irrational hatred of statistics. Last Chance Stats returns to first principles and develops the theory behind statistics step by step. Each section aims to present a new idea, passing through the most essential and interesting mathematics, while sidestepping burdensome secondary details, and building towards a culminating result. The sections are accessible as individual modules, but also aim to contribute to a cohesive picture of statistics in general. Last Chance Stats begins with fundamental results from number theory, and goes on to show the connections to statistics, as well as to answer the nagging questions that often go unanswered in statistics courses--questions such as, `where do probability functions come form?', `what is the error function? what is the gamma function? and how can they be evaluated?', `what theory goes into a hypothesis test?', `what are degrees of freedom?', `what is a p-score?', `why is sample variance weighted by $N-1$ and not $N$ samples?'.
+
+\section{Warm Up}
+
+This section presents an assortment of mathematical problems, each embodying an idea that is useful or instructive to the material that follows.
+
+\subsection{Proof of Pythagorean Theorem}
+
+Consider a square with sides of length $c$ rotated inside a larger square with sides of length $(a + b)$, such that the four corners of the smaller square meet a distinct edge of the larger. The area of the four resulting right-angled triangles that fill the empty space are $\frac{1}{2}ab$ apiece. Thus, we have it that, $$(a + b)^2 = c^2 + 4 \cdot \frac{1}{2}ab,$$ expanding to, $$a^2 + 2ab + b^2 = c^2 + 2ab,$$ and finally, $$a^2 + b^2 = c^2.$$
+
+%\begin{figure}[!ht]
+%\centering
+%\includegraphics[width=0.5\textwidth]{Figures/pythagoras.pdf}
+%\caption{A square rotated inside of a larger square.}
+%\label{fig:squares}
+%\end{figure}
+
+\subsection{Irrationality of $\sqrt{2}$}
+
+Suppose $\sqrt{2}$ is rational. Then there exists $a, b \in \mathbb{Z}$, with $a > b$ and $gcd(a, b) = 1$\footnote{That is, $\frac{a}{b}$ is an irreducible fraction} such that, $$\frac{a}{b} = \sqrt{2}.$$
+
+Now, $$\frac{a^2}{b^2} = 2.$$ This implies that $a^2$ is even, and therefore that $a$ is even. That is, $$a = 2k,$$ for some $k \in \mathbb{Z}$. So, by substitution, $$\frac{4k^2}{b^2} = 2.$$ Rearranging, $$b^2 = 2k^2.$$ However, this now implies that $b^2$ is even, hence $b$ also, implying a common factor between $a$ and $b$. This contradiction proves $\sqrt{2}$ is irrational.
+
+\subsection{Euclid's Proof of the Infinitude of Primes}
+
+Take any finite set of primes, $p_1, p_2, \dots, p_n$. Then, the number, $q = p_1 \times p_2 \times \cdots \times p_n + 1$, is either prime or not prime. If it is prime, we have generated a new prime, not in our set. If it is not, it has a prime factor not in our set, as $q \equiv 1 \ (\text{mod}\ p_i)$ for $i = 1, 2, \dots, n$. It follows that there are infinitely many primes\footnote{This is an example of a constructive proof.}.
+
+\subsection{The Potato Paradox}
+
+A potato that is $99\%$ water weighs 100g. It is dried until it is only $98\%$ water. It now weighs only 50g. How can this be?
+
+The mistake people typically make is in assuming there has been a $1\%$ reduction in the volume of water, rather than a change to the ratio itself. In fact, the ratio of water to non-water content has changed from $1:99$ to $2:98$ or $1:49$. Since the non-water content of the potato is unchanged, the water must have lost $50\%$ of its volume, and so the potato now weighs half as much!
+
+\subsection{The Monty Hall Problem}
+
+This famous paradox, named after an American game show host, has the following problem statement:
+
+\emph{A game show presents you with the choice of selecting one of three doors. Two of the doors contain a goat (undesirable), whilst the third contains a car. Upon your choice, the game show host, who knows the contents of each of the doors, opens one of the two remaining doors to reveal a goat. He then gives you the option of either sticking with your initial choice, or switching to the one remaining door. The question is, is it advantageous to switch doors?}
+
+The answer is that it \emph{is} advantageous, increasing winning chances from $1/3$ to $2/3$. The essential realisation is that the host (Monty Hall) has knowledge of the door contents and will always reveal a goat, whether you have chosen the car or not.
+
+The solution can be understood as a decision theory problem. We designate two strategies: changing and not changing doors. In either case, there is a $2/3$ chance of initially having a goat. Because the other goat is eliminated independently by the host, changing wins whenever a goat was initially chosen, that is, with probability $2/3$. Not changing wins only if the car was initially chosen, that is, with probability $1/3$. Therefore changing will double your winning chances!
+
+Another (admittedly more complicated) way to solve the problem is using Bayes' theorem. Here we designate $C_1, C_2, C_3$ as the events the car is behind doors 1, 2, and 3 respectively; $X_1$ the event the player chooses door 1; and $H_3$ the event the host opens door 3. Note the numbering of the doors does not matter, for example `door 2' simply refers to `the other door'. First, $\text{Pr}(H_3|C_1,X_1) = 1/2$, $\text{Pr}(H_3|C_2,X_1) = 1$, and $\text{Pr}(H_3|C_3,X_1) = 0$, reflecting the knowledge that the host always opens a goat door (never the car). Then,
+
+\begin{align}
+\text{Pr}(C_2|X_1,H_3) &= \frac{\text{Pr}(H_3|C_2,X_1)\text{Pr}(C_2|X_1)}{\text{Pr}(H_3|X_1)} \notag \\
+&= \frac{\text{Pr}(H_3|C_2,X_1)\text{Pr}(C_2|X_1)}{\text{Pr}(H_3|C_1,X_1)\text{Pr}(C_1|X_1) + \text{Pr}(H_3|C_2,X_1)\text{Pr}(C_2|X_1) + \text{Pr}(H_3|C_3,X_1)\text{Pr}(C_3|X_1)} \notag \\
+&= \frac{1 \cdot 1/3}{1/2 \cdot 1/3 + 1 \cdot 1/3 + 0 \cdot 1/3} \notag \\
+&= \frac{2}{3}, \notag
+\end{align}
+
+so the winning odds for changing doors is $2/3$, hence not changing only $1/3$.
+
+\subsection{Finding Hamlet in the Digits of $\pi$}
+
+It is supposed, though not know for certain, that $\pi$ is a normal number. This means that in all the infinite decimal digits of $\pi$, every sequence of $n$ digits appears as often as every other $n$-length sequence. So, 123 occurs as often as 321 or 666, but more often than 123456789, because it is a shorter sequence. In this way, the behaviour of the sequences is indistinguishable to what would arise from a uniform random distribution. Of course, the digits of $\pi$ are not random, as many formulas exist for generating them. The same rules of normality apply if $\pi$ is converted to a different base, for example, binary code--the language of computing. The number $\pi$ in binary is,
+
+\begin{align}
+\pi &= 3.14... \notag \\
+&= 1\cdot2^1 + 1\cdot2^0 + 0\cdot2^{-1} + 0\cdot2^{-2} + 1\cdot2^{-3} + 0\cdot2^{-4} + 0\cdot2^{-5} + 1\cdot2^{-6} + \cdots \notag \\
+&= 11.001001... \notag
+\end{align}
+
+Note that to express $\pi$ in binary rather than decimal notation requires more digits, because it takes $\log_2(10) \approx 3.3$ binary digits (bits) to express a power of ten. Nevertheless, the same properties about the normality of $\pi$ hold in its binary form--$000$ is just as likely as $111$, and so on.
+
+Now, to find Hamlet, we would need to start with a common base. Hamlet is written in Latin characters. One way to convert Latin characters to numbers is to use a character encoding standard, such as ASCII (American Standard Code for Information Interchange). People use ASCII indirectly every day--it is how our data comes to be represented by computers and communication systems. ASCII gives a representation of each character in 8 binary digits. For example, in ASCII,
+
+$$\text{``pie''} = 01110000 \ 01101001 \ 01100101.$$
+
+So, Hamlet, like any text, has an ASCII, and therefore binary representation. Without specifying exactly what it is we can determine its length. There are 186,391 characters in the 31,842 word Hamlet, including spaces and indentation. At 8 bits per character, this is 1,491,128 bits.
+
+To develop a formula, we first consider a simpler problem: What is the expected number of digits we need to pass over a random binary sequence before we encounter a specific binary sub-sequence, say, 11? If we consider a binary tree covering all the possibilities, and let the expected length to find 11 be denoted by $\mathbb{E}_{11}$, then we may first see 0 with probability $\frac{1}{2}$, in which case we are back where we started. That is, the first digit is a ``failure'', because it is not the one we are looking for. The expected length from there is therefore $1 + \mathbb{E}_{11}$. We might alternatively see 1 in the first digit--a match--also with probability $\frac{1}{2}$. In this case, the next digit is 0 with probability $\frac{1}{2}$, which would mean a failure on the second digit, and again, we return to the starting point, with expected length now $2 + \mathbb{E}_{11}$. Otherwise, we could get a 1 in the second digit, and we have found the match straight away. In this case, the expected length is simply 2. Therefore we may write,
+
+$$\mathbb{E}_{11} = \frac{1}{2}\times(1 + \mathbb{E}_{11}) + \frac{1}{4}\times (2 + \mathbb{E}_{11}) + \frac{1}{4}\times 2,$$
+
+and so $\mathbb{E}_{11} = 6$. That is, we expect to pass over $6$ binary digits (on average) before we see the particular sequence, 11. We see that in general, it is possible to ``fail'' on each of the $n$ digits in the sequence. Thus, we have the following expression for the general $n$-bit sequence,
+
+$$\frac{1}{2^n}\mathbb{E}_{\{0, 1\}^n} = 1\times\frac{1}{2^1} + 2\times\frac{1}{2^2} + 3\times\frac{1}{2^3} + \cdots + 2n\times\frac{1}{2^{n}}.$$
+
+If we denote this sum $S$ then clearly,
+
+\begin{align}
+S - \frac{1}{2}S &= 1\times\frac{1}{2^1} + 1\times\frac{1}{2^2} + 1\times\frac{1}{2^3} + \cdots + 1\times\frac{1}{2^{n}} = 1 - \frac{1}{2^{n}} \notag \\
+&\implies S = 2 - \frac{1}{2^{n-1}}, \notag
+\end{align}
+
+hence, $\mathbb{E}_{\{0, 1\}^n} = 2^{n+1} - 2$. Applying this formula, we can expect to find Hamlet somewhere within the first $2^{1,491,129} - 2 \approx 3.6\times10^{448,874}$ digits of $\pi$.
+
+\section{Differential Calculus}
+
+This section presents the fundamental definitions of differential calculus: first the formal definition of a limit, then that of a derivative. In particular, we note the relationship between the binomial theorem and the differentiation of polynomials. The section culminates with a proof of the mean value theorem.
+
+\subsection{Binomial Theorem}
+
+The binomial theorem expresses a formula for expanding powers of a binomial\footnote{A binomial is the sum of two \emph{monomials}, that is, a polynomial with a single term.}. For example, $(x + y)^3 = x^3 + 3x^2y + 3xy^2 + y^3$. In general, the binomial expansion is,
+
+$$(x + y)^n = \sum_{k = 0}^{n}{{n}\choose{k}}x^ky^{n-k},$$
+
+where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coefficient. Note the binomial coefficient is symmetrical, that is, ${{n}\choose{k}} = {{n}\choose{n-k}}$. This symmetry may be seen in Pascal's triangle:
+
+\begin{center}
+\begin{tabular}{ccccccccccccc}
+&&&&&&1&&&&&& \\
+&&&&&1&&1&&&&& \\
+&&&&1&&2&&1&&&& \\
+&&&1&&3&&3&&1&&& \\
+&&1&&4&&6&&4&&1&& \\
+&1&&5&&10&&10&&5&&1& \\
+1&&6&&15&&20&&15&&6&&1 \\
+\end{tabular}
+\end{center}
+
+Pascal's triangle, named after French mathematician Blaise Pascal (1623-1662) embodies a recurrence relation for the coefficients of a binomial expansion. The numbers of each row are generated by summing the two numbers diagonally above it in the previous row. In terms of binomial expansion, this is equivalent to collecting like terms after expanding. To illustrate, consider the coefficients for the quadratic expansion, $x^2 + 2xy + y^2$,
+
+\begin{center}
+\begin{tabular}{ccccc}
+1&&2&&1\\
+\end{tabular}
+\end{center}
+
+Multiplying again by the binomial, $(x + y)$, gives the coefficients,
+
+\begin{center}
+\begin{tabular}{cccccccccccccccc}
+1&&1&&2&&2&&1&&1 \\
+\end{tabular}
+\end{center}
+
+which corresponds to $x^3 + x^2y + 2x^2y + 2xy^2 + xy^2 + y^3$, and clearly each of the interior pairs are like terms, so these are summed to arrive at,
+
+\begin{center}
+\begin{tabular}{cccccccccc}
+1&&3&&3&&1 \\
+\end{tabular}
+\end{center}
+
+In general, this process is reflected in Pascal's rule,
+
+$${{n}\choose{k}} = {{n-1}\choose{k-1}} + {{n-1}\choose{k}},$$
+		
+for $1 \leq k \leq n$. Isaac Newton (1642-1727) extended the notion of binomial expansion to real powers in 1665. This is an important stepping-stone towards the definition of a derivative, as we will see.
+
+\subsection{($\epsilon$-$\delta$) Defintion of a Limit}
+
+The standard formal ($\epsilon$-$\delta$) definition of a limit is due to German mathematician, Karl Weierstrass (1815-1897). We say that, $$\lim_{x \to a} f(x) = L,$$
+
+if for any value, $\epsilon > 0$, specifically, where $\epsilon$ is arbitrarily small, we can find a $\delta > 0$ such that,
+
+$$0 < |x - c| < \delta \implies |f(x) - L| < \epsilon.$$
+
+This somewhat off-putting notation captures the notion of a function approaching a limiting value continuously. It states that however close (within an infinitesimal $\epsilon$ units) we wish to get to the limiting value, $a$, we can always find a correspondingly tiny interval of radius $\delta$ around a point $x$ such that the function is closer.
+
+An example is always useful for such subtle ideas. Therefore, let $f(x) = 2x^2 + 2$. Then clearly, $\lim_{x \to 1} f(x) = 4$. To satisfy the inequality, $|2x^2 + 2 - 4| < \epsilon$, we can select $\delta < \sqrt{\epsilon/2 + 1}$. Clearly this is always possible, no matter how small we take $\epsilon$ to be, and so the limit exists. A function is said to be \emph{continuous} at a point $c$ if the limit $L$ exists, and $f(c) = L$, which is not necessarily the case, though true for our function. A function that is \emph{differentiable} at a point, $c$, implies continuity at $c$, but not vice-versa.
+
+\subsection{Differentiating From First Principles}
+
+The gradient of a linear function, $y = f(x)$, over an interval, $[x, \Delta x]$, is defined as $\Delta y / \Delta x$, that is, ``rise over run''. The derivative of a function is simply the gradient taken at a point. Formally, we define a derivative as,
+
+$$\frac{\mathop{d}}{\mathop{dx}} f(x) = \lim_{\Delta x \to 0} \frac{f(x  + \Delta x) - f(x)}{\Delta x},$$
+
+and it is clear this is just ``rise over run'', taken on an infinitesimal interval. It represents the gradient of a line tangent to the curve at $x$. To see how we can differentiate a polynomial, consider the general $n$th degree polynomial\footnote{Note that the powers of a polynomial are non-negative integers by definition.}, $f(x) = a_nx^n + a_{n-1}x^{n-1} + \cdots + a_1x + a_0$. Then, from the definition,
+
+\begin{align}
+\frac{\mathop{d}}{\mathop{dx}} f(x) &= \lim_{\Delta x \to 0} a_n\frac{(x + \Delta x)^n - x^n}{\Delta x} + \cdots + a_1\frac{(x + \Delta x) - x}{\Delta x} + a_0\frac{1 - 1}{\Delta x}\notag \\
+&= \lim_{\Delta x \to 0} a_n\frac{{{n}\choose{0}}x^n + {{n}\choose{1}}x^{n-1}\Delta x + \cdots + {{n}\choose{n}}(\Delta x)^n - x^n}{\Delta x} + \cdots + a_1\frac{\Delta x}{\Delta x} + a_0\frac{0}{\Delta x} \notag \\
+&= na_nx^{n-1} + (n-1)a_{n-1}x^{n-2} + \cdots + a_1, \notag
+\end{align}
+
+and it is clear that only the second term of each expansion survives cancelation, or annihilation by the infinitesimal $\Delta x$. From this we can infer that $\frac{\mathop{d}}{\mathop{dx}} a_kx^k = ka_kx^{k-1}$, the rule that every student of calculus is familiar with, though many do not realise it is a consequence of the binomial theorem! It is only when one tries to ``plug and play'' from first principles that the connection becomes apparent. As noted before, Newton extended the definition of the binomial theorem to real-valued powers.
+
+\subsection{Chain Rule}
+
+The chain rule for differentiation describes how to differentiate function compositions, $f \cdot u = f(u(x))$. Assuming $u(x)$ is differentiable at $a$, and $f(u)$ is differentiable at $u(a)$, the derivative,
+
+\begin{align}
+(f \cdot u)'(a) &= \lim_{x \to a}\frac{f(u(x)) - f(u(a))}{x - a} \notag \\
+&= \lim_{x \to a}\frac{f(u(x)) - f(u(a))}{u(x) - u(a)} \cdot \frac{u(x) - u(a)}{x - a} \notag \\
+&= f'(u(a))u'(a). \notag
+\end{align}
+
+An extension to this expression is needed for a rigorous proof, as a function may oscillate as it tends towards a limit, and $u(x)$ may equal $u(a)$ infinitely many times, resulting in a inexhaustible number of undefined points as $x \to a$.
+
+In general, the chain rule may be applied repeatedly for any number of nested functions,
+
+$$\frac{\mathop{d}}{\mathop{dx}} f_n(f_{n-1}(\cdots (f_1(x)))) = \frac{\mathop{df_n}}{\mathop{df_{n-1}}}\cdot \frac{\mathop{df_{n-1}}}{\mathop{df_{n-2}}} \cdot \cdots \cdot \frac{\mathop{df_2}}{\mathop{df_1}}\cdot \frac{\mathop{df_1}}{\mathop{dx}}.$$
+
+The corresponding technique for anti-differentiation is integration by substitution.
+
+\subsection{Product Rule}
+
+The product rule for differentiation allows us to differentiate products of functions of $x$. Suppose $f(x) = u(x)v(x)$. Then, from first principles,
+
+\begin{align}
+f'(x) &= \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x} \notag \\
+&= \lim_{\Delta x \to 0} \frac{u(x + \Delta x)v(x + \Delta x) - u(x)v(x)}{\Delta x} \notag \\
+&= \lim_{\Delta x \to 0} \frac{u(x + \Delta x)v(x + \Delta x) - u(x)v(x + \Delta x) + u(x)v(x + \Delta x) - u(x)v(x)}{\Delta x} \notag \\
+&= \lim_{\Delta x \to 0} \frac{u(x + \Delta x) - u(x)}{\Delta x}\cdot v(x + \Delta x) + \frac{v(x + \Delta x) - v(x)}{\Delta x}\cdot u(x)\notag \\
+&= u'(x)v(x) + v'(x)u(x). \notag
+\end{align}
+
+The quotient rule can be derived by applying both the product rule and the chain rule. For $f(x) = u(x) / v(x)$, write, $f(x) = u(x)v(x)^{-1}$. Then, 
+
+\begin{align}
+\frac{\mathop{d}}{\mathop{dx}}f(x) &= u'(x)v(x)^{-1} - u(x)v'(x)v(x)^{-2} \notag \\
+&= \frac{u'(x)v(x) - u(x)v'(x)}{v(x)^2}. \notag
+\end{align}
+
+The corresponding technique for anti-differentiation is integration by parts.
+
+\subsection{Rolle's Theorem}
+
+Rolle's theorem by Michel Rolle (1652-1719) asserts that for a differentiable function, $f(x)$, if $f(a) = f(b)$ for some $a$ and $b$, then there must be a stationary point on the interval $[a, b]$, unless $f = c$ for some constant, $c$. Plainly speaking, it says that if a curve returns to its starting point at the end of an interval, there must be at least one turning point somewhere in that interval. To prove this, first consider that there must be at least one extreme point $c$ on the interval $[a, b]$, be it maximum or minimum. For brevity, we assume the case that $c$ is a maximum. So, for all points after the interior point, $c$, $c + h$, such that $h > 0$, the function is upper-bound by $f(c)$. That is,
+
+$$\frac{f(c + h) - f(c)}{h} \leq 0.$$
+
+Taking the limit gives,
+
+$$f'(c) = \lim_{h \to 0^+} \frac{f(c + h) - f(c)}{h} \leq 0.$$
+
+Likewise, for $h < 0$ we have,
+
+$$f'(c) = \lim_{h \to 0^-} \frac{f(c + h) - f(c)}{h} \geq 0,$$
+
+from which it follows that the derivative of the function, $f'(x)$, is 0 at $c$.
+
+\subsection{Mean Value Theorem}
+
+The mean value theorem states that for a differentiable function defined on an interval $[a, b]$, at least one point on the curve must have gradient equal to that of the chord connecting the endpoints, $(a, f(a))$ and $(b, f(b))$. It is an intuitive result, as any curve which succeeds in climbing (or descending) from $f(a)$ to $f(b)$, must at least at some point match that slope, else it will never make the ascent.
+
+First define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since $f(x)$ is by construction. We choose $r$ such that $g(x)$ satisfies Rolle's theorem, that is, $g(a) = g(b)$, hence $f(a) - ra = f(b) - rb$, and $r = (f(a) - f(b))/(a - b)$, that is, the slope of the chord. Because of Rolle's theorem, for some $c \in [a, b], g'(c) = 0,$ hence $f'(c) = r$, and the proof is complete.
+
+\section{Vector Calculus}
+
+Vector calculus is an important tool for understanding multivariate probability distributions.
+
+\subsection{Preliminary Results}
+
+\subsubsection{Transposition Chain Rule}
+
+For matrices \textbf{A} and \textbf{B}, their product, \textbf{AB}, is formed by multiplying each row of \textbf{A} with each column of \textbf{B}. Thus, $(\textbf{AB})_{ij} = A(i, :) \cdot B(:, j)$, that is, the dot product of row $i$ of matrix \textbf{A} with column $j$ of matrix \textbf{B}. By definition, this is then equivalent to $A(i, :) \cdot B(:, j)= B^T(j, :) \cdot A^T(:,i)$, from which the rule,
+
+$$(\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}^T.$$
+
+It is further clear that due to associativity $(\mathbf{ABC})^T = (\mathbf{A(BC)})^T = (\mathbf{BC})^T\mathbf{A}^T$ = $\mathbf{C}^T\mathbf{B}^T\mathbf{A}^T$. From this, the chain rule,
+
+$$(\mathbf{A}_1\mathbf{A}_2\cdots \mathbf{A}_n)^T = \mathbf{A}_n^T\mathbf{A}_{n-1}^T\cdots\mathbf{A}_1^T.$$
+
+\subsubsection{Inversion Chain Rule}
+
+Given invertible square matrices \textbf{A} and \textbf{B}, it is clear that if we form the expression, $\mathbf{AB}\mathbf{B}^{-1}\mathbf{A}^{-1} = \mathbf{A}\mathbf{I}\mathbf{A}^{-1} = \mathbf{I}$, then $\mathbf{B}^{-1}\mathbf{A}^{-1}$ is the right inverse of $\mathbf{AB}$. It is further clear that this is also the left inverse. We have therefore,
+
+$$(\mathbf{AB})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}.$$
+
+Just as with transposition, we see that due to associativity $(\mathbf{ABC})^{-1} = (\mathbf{A(BC)})^{-1} = (\mathbf{BC})^{-1}\mathbf{A}^{-1}$ = $\mathbf{C}^{-1}\mathbf{B}^{-1}\mathbf{A}^{-1}$, and in general,
+
+$$(\mathbf{A}_1\mathbf{A}_2\cdots \mathbf{A}_n)^{-1} = \mathbf{A}_n^{-1}\mathbf{A}_{n-1}^{-1}\cdots\mathbf{A}_1^{-1}.$$
+
+\subsubsection{Trace Cyclic Permutation Property}
+
+The trace is the sum of a matrix product, $\text{tr}(\mathbf{A}\mathbf{B}) = \sum_{j=1}^N\sum_{i = 1}^n ab$, that is, the sum of the diagonal elements of the product. First consider the product,
+
+\begin{align}
+\text{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) &= \text{tr}\Bigg(\begin{bmatrix}
+\sum_{j=1}^N c_{j1}\sum_{i=1}^Na_{1i}b_{ij} & \cdots & & \cdots \\
+\cdots & \sum_{j=1}^N c_{j2}\sum_{i=1}^Na_{2i}b_{ij} & & \cdots \\
+ &  & \ddots & \\
+\cdots & \cdots &&  \sum_{j=1}^N c_{jN}\sum_{i=1}^Na_{Ni}b_{ij} \\
+\end{bmatrix}\Bigg) \notag \\
+&= \sum_{k=1}^N\sum_{j=1}^N\sum_{i=1}^Na_{ki}b_{ij}c_{jk}. \notag
+\end{align}
+
+Repeating for the permutation,
+
+\begin{align}
+\text{tr}(\mathbf{C}\mathbf{A}\mathbf{B}) &= \sum_{k=1}^N\sum_{j=1}^N\sum_{i=1}^Na_{ji}b_{ik}c_{kj} \notag \\
+&= \text{tr}(\mathbf{A}\mathbf{B}\mathbf{C}), \notag
+\end{align}
+
+where $j$ and $k$ are swapped. This result is called the trace cyclic permutation property, as it shows that $\text{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \text{tr}(\text{ROR}(\mathbf{A}\mathbf{B}\mathbf{C}))$. A related result is known as the \emph{trace trick}. Note that $\mathbf{x}^T\mathbf{A}\mathbf{x} = \text{tr}(\mathbf{x}^T\mathbf{A}\mathbf{x})$, since the result of the product is a $1 \times 1$ matrix (i.e. a scalar). By the permutation property we have, $\mathbf{x}^T\mathbf{A}\mathbf{x} = \text{tr}(\mathbf{x}\mathbf{x}^T\mathbf{A}) = \text{tr}(\mathbf{A}\mathbf{x}\mathbf{x}^T)$.
+
+\subsection{Vector Calculus}
+
+The single most important principle of vector calculus is the definition of what it means to differentiate with respect to a vector or matrix. For $\mathbf{A} \in \mathbb{R}^{n \times m}$,
+
+$$\frac{\partial}{\partial\mathbf{A}}f(\mathbf{A}) = \begin{bmatrix}
+\frac{\partial f}{\partial a_{11}}&\frac{\partial f}{\partial a_{12}}&\cdots&\frac{\partial f}{\partial a_{m1}}\\
+\frac{\partial f}{\partial a_{21}}&\frac{\partial f}{\partial a_{22}}&\cdots&\frac{\partial f}{\partial a_{m2}}\\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial f}{\partial a_{n1}}&\frac{\partial f}{\partial a_{n2}}&\cdots&\frac{\partial f}{\partial a_{nm}}\\
+\end{bmatrix},$$
+
+that is, the vector or matrix of partial derivatives corresponding to each of the vector or matrix elements. With this principle in mind, it is easy to derive some basic formulae of vector calculus.
+
+\subsubsection{Differentiating a Dot Product}
+
+Following our rule from above, we have,
+
+\begin{align}
+\frac{\partial(\mathbf{b}^T\mathbf{a})}{\partial\mathbf{a}} =
+\begin{bmatrix}
+\frac{\partial}{\partial a_1} \mathbf{b}^T\mathbf{a} \\
+\frac{\partial}{\partial a_2} \mathbf{b}^T\mathbf{a} \\
+\vdots \\
+\frac{\partial}{\partial a_n} \mathbf{b}^T\mathbf{a} \\
+\end{bmatrix}
+= 
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+\vdots \\
+b_n \\
+\end{bmatrix}
+= \mathbf{b} \notag.
+\end{align}
+
+Of course, if we replace $\mathbf{b}$ with $\mathbf{a}$, we have $\frac{\partial(\mathbf{a}^T\mathbf{a})}{\partial\mathbf{a}} = 2\mathbf{a}$.
+
+\subsubsection{Differentiating a Vector Quadratic}
+
+Beginning with a single element we have, $\partial(\mathbf{a}^T\mathbf{A}\mathbf{a})/\partial a_1 = 2A_{i, i}a_i + \sum_{j \neq i} A_{ij}a_j + \sum_{j \neq i} A_{ji}a_j = \mathbf{a}^TA(i, :) + \mathbf{a}^TA(:, i)$. Thus,
+
+\begin{align}
+\frac{\partial(\mathbf{a}^T\mathbf{A}\mathbf{a})}{\partial\mathbf{a}} =
+\begin{bmatrix}
+\frac{\partial}{\partial a_1} \mathbf{a}^T\mathbf{A}\mathbf{a} \\
+\frac{\partial}{\partial a_2} \mathbf{a}^T\mathbf{A}\mathbf{a} \\
+\vdots \\
+\frac{\partial}{\partial a_n} \mathbf{a}^T\mathbf{A}\mathbf{a} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf{a}^TA(1, :) + \mathbf{a}^TA(:, 1) \\
+\mathbf{a}^TA(2, :) + \mathbf{a}^TA(:, 2) \\
+\vdots \\
+\mathbf{a}^TA(n, :) + \mathbf{a}^TA(:, n) \\
+\end{bmatrix}
+&= \mathbf{a}^T\mathbf{A}^T + \mathbf{a}^T\mathbf{A} \notag \\
+&= (\mathbf{A} + \mathbf{A}^T)\mathbf{a} \notag
+\end{align}
+
+\subsubsection{Trace Formula}
+
+Considering firstly the partial derivative of a single element, it is clear that,
+
+$$\frac{\partial}{\partial A_{ij}}\big(\text{tr}(\mathbf{B}\mathbf{A})\big) = \frac{\partial}{\partial A_{ij}}\big(\mathbf{B}(1, :)\mathbf{A}(:, 1) + \mathbf{B}(2, :)\mathbf{A}(:, 2) + \cdots + \mathbf{B}(n, :)\mathbf{A}(:, n)\big) = B_{ji}.$$ Thus, it is clear that in general, 
+
+$$\frac{\partial}{\partial A} (\text{tr}(\mathbf{BA})) = \mathbf{B}^T.$$
+
+\subsubsection{Log Formula}
+
+Considering firstly the partial derivative of a single element, it is clear that,
+
+$$\frac{\partial}{\partial A_{ij}}\log|\mathbf{A}| = \frac{1}{|\mathbf{A}|}C_{ij},$$
+
+where $C_{ij}$ is row $i$, column $j$, of the cofactor matrix, $\mathbf{C}$, the matrix whose elements are each of the sub-determinants of used to calculate the determinant of $\mathbf{A}$. Noting the general inverse formula, $\mathbf{A}^{-1} = \frac{1}{|\mathbf{A}|}\mathbf{C}^T$,
+
+$$\frac{\partial}{\partial \mathbf{A}}\log|\mathbf{A}| = \frac{1}{|\mathbf{A}|}\mathbf{C} = (\mathbf{A}^T)^{-1}.$$
+
+\section{Series}
+
+This section introduces series and infinite sums. Notably, it presents Taylor series, a technique with many uses. The section culminates in deriving an infinite sum for $\pi$.
+
+\subsection{Geometric Series}
+
+A geometric series\footnote{A series is the sum of a sequence of terms.} is a series, $s$, of the form, $$s = a + ar + ar^2 + ar^3 + \cdots + ar^{n-1} = \sum_{k=0}^{n-1}ar^k,$$ for some choice of a, r, and n. Multiplying this sum by the factor $r$ and adding $a$ to it gives, $$a + rs = a + ar + arr + ar^2r + \cdots + ar^{n-1}r = s + ar^n.$$ Therefore, $$s = a\frac{1 - r^n}{1 - r},$$ $r \neq 1$. Thus we have a closed-form expression\footnote{A closed-form expression is one that may be evaluated in a finite number of operations.} for the value of a geometric series, which will converge provided $|r| < 1$.
+
+\subsection{Taylor Series}
+
+A Taylor series, named after English mathematician Brook Taylor (1685-1731), is a technique for writing an infinitely differentiable function\footnote{A function is infinitely differentiable at a point if all its derivatives exist}, $f(x)$ as an infinite order polynomial,
+
+\begin{align}
+f(x) &= \sum_{i = 0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n \notag \\
+&= f(a) + \frac{f'(a)}{1!}(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f'''(a)}{3!}(x - a)^3 + \cdots \notag,
+\end{align}
+
+for some choice of $a$. A Taylor series is an example of a power series. When $a = 0$, we have what is called a Maclaurin series, named after Scottish mathematician Colin Maclaurin (1698 - 1746). The first $n$ terms of the series may then be used to compute an approximation to the function at a point. For example, a calculator (which is only capable of addition and multiplication) will use a Taylor series approximation for its trigonometric functions. As we will see, Taylor series allow us to manipulate functions that have no closed-form, and are in fact the most important technique to our analysis.
+
+\subsubsection{Taylor's Theorem}
+
+The technique follows from Taylor's theorem, which gives quantifies the remainder term for a $k$th order Taylor polynomial to a function. The theorem states that given a $k$ times differentiable function $f : R \to R$ at point $a \in \mathcal{R}$, then there exists a function $h_k : R \to R$ such that,
+
+$$f(x) = f(a) + \frac{f'(a)}{1!}(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \cdots  + \frac{f(k)(a)}{k!}(x - a)^k + h_k(x)(x - a)^k,$$
+
+where $$\lim_{a \to 0}h_k(a) = 0.$$
+
+To show this, define $h_k(x) = \frac{f(x) - P(x)}{(x - a)^k}$ for $x \neq a$ and $h_k(x) = 0$ for $x = 0$, where $P(x)$ is the order $k$ Taylor polynomial for $f(x)$ centred on $a$. First note that $f^{(j)} = P^{(k)}$ for $k = 1, \dots k$. Applying L'H\^{o}pital's rule repeatedly,
+
+\begin{align}
+\lim_{x \to a} \frac{f(x) - P(x)}{(x - a)^k} &= \lim_{x \to a} \frac{\frac{d^k}{dx^k}(f(x) - P(x))}{\frac{d^k}{dx^k}(x - a)^k} \notag \\
+&= \frac{1}{k!}\lim_{x \to a} \frac{f^{(k-1)}(x) - P^{(k-1)}(x)}{x - a} \notag \\
+&= \frac{1}{k!}\lim_{x \to a} \frac{f^{(k-1)}(x) - f^{(k-1)}(a)}{x - a} - \frac{P^{(k-1)}(x) - P^{(k-1)}(a)}{x - a} \notag \\
+&= \frac{1}{k!}(f^{(k)}(a) - P^{(k)}(a)) \label{eq:taylor} \\
+&= 0, \notag
+\end{align}
+
+where (\ref{eq:taylor}) comes from the definition of a limit. Thus, we have shown the error term converges to 0 as $x \to a$.
+
+\subsubsection{Convergence}
+
+Holomorphic functions are a key interest in complex analysis, the study of functions of complex variables. Holomorphic functions are functions that are complex differentiable at every point on their domain. A consequence of complex differentiability is that the the function is both infinitely differentiable and equal to its own Taylor series on that domain. A major result from complex analysis is that all hyperbolic function are analytic.
+
+A function is analytic if and only if its Taylor series converges to the function in some neighbourhood of points around $x_0$ for every $x_0$ in the function's domain. That is, there is always a locally convergent power series for the function. The radius of convergence of a power series,
+
+$$f(z) = \sum_{n=0}^{\infty}c_n(z - a)^n$$
+
+defined around a point $a$ is $r$, defined to be,
+
+$$r = \sup\Bigg\{|z - a| \ \Bigg| \ \sum_{n=0}^{\infty}c_n(z - a)^n \ \text{converges} \Bigg\},$$
+
+beyond which the series diverges. An elementary function is a function in one variable expressible in terms of a finite number of arithmetic operators, exponentials, logarithms and roots. This includes trigonometric and hyperbolic functions, as these are expressible as complex exponential functions. Elementary functions are analytic at all but a finite number of points (singularities). Functions that are analytic everywhere (on all complex points) are said to be \emph{entire} functions, and have no singularities. These include polynomials (whose Taylor expansions are of course equal to themselves), trigonometric, hyperbolic, exponential, and many others. Such functions have an infinite radius of convergence.
+
+\subsubsection{Taylor Expansions of Sine and Cosine}
+
+In the analysis to come, we will use the Taylor series for $\sin x$,
+
+\begin{align}
+\sin x &= \sin 0 + \frac{\cos 0}{1!}(x - 0) - \frac{\sin 0}{2!}(x - 0)^2 - \frac{\cos 0}{3!}(x - 0)^3 + \cdots \notag \\
+&= x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots \notag \\
+&= \sum_{n=0}^{\infty}\frac{(-1)^n}{(2n + 1)!}x^{2n+1}, \notag
+\end{align}
+
+as well as for $\cos x$,
+
+$$
+\cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \cdots = \sum_{n=0}^{\infty}\frac{(-1)^n}{(2n)!}x^{2n}.
+$$
+
+These are entire functions, hence the Taylor series converge for all real numbers.
+
+%\subsubsection{Bernoulli Numbers}
+%
+%The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (such as $\pi$ and $e$). They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
+%
+%$$B_0 = 1, B_1 = \pm \frac{1}{2}, B_2 = \frac{1}{6}, B_3 = 0, B_4 = -\frac{1}{30}, B_5 = 0, B_6 = \frac{1}{42}, B_7 = 0, B_8 = -\frac{1}{30}.$$
+%
+%Curiously, the second Bernoulli number, $B_1$, may be plus or minus $\frac{1}{2}$. Therefore, there are strictly speaking \emph{two} sequences, the \emph{first} Bernoulli numbers ($B_1 = -\frac{1}{2}$) and the \emph{second} Bernoulli numbers ($B_1 = \frac{1}{2}$). The numbers may be defined by a recurrence relation. For example, the second Bernoulli numbers are related by,
+%
+%$$B_n = 1 - \sum_{k=0}^{n-1}{{{n}\choose{k}}}\frac{B_k}{n - k + 1}, B_0 = 1.$$
+%
+%The sequence appears in many places within number theory, for example some Taylor expansions, such as the hyperbolic function, $\tanh x$, whose Taylor expansion is,
+%
+%$$\tanh x = x - \frac{1}{3}x^3 + \frac{2}{15}x^5 - \frac{17}{315}x^7 + \cdots = \sum_{n=1}^{\infty}\frac{B_{2n}4^n(4^n-1)}{(2n)!}x^{2n-1}.$$
+%
+%The Bernoulli numbers also appear in the Euler-Maclaurin formula, and hence, the error term of the trapezoidal rule.
+
+\subsection{$\pi$ as an Infinite Series}
+
+\subsubsection{Pythagorean Trigonometric Identity}
+
+From the Pythagorean theorem, we may derive an important trigonometric identity. Given a right-angle triangle, we denote the sides $a, b, c$ such that $\sin{x} = \frac{a}{c}$ and $\cos{x} = \frac{b}{c}$. Note that this implies that, $$\tan{x} = \frac{a}{b} = \frac{\sin{x}}{\cos{x}}.$$ Now, dividing the Pythagorean equation by $c^2$ gives,
+
+$$\frac{a^2}{c^2} + \frac{b^2}{c^2} = \frac{c^2}{c^2},$$
+
+hence,
+
+$$\sin^2x + \cos^2x = 1.$$
+
+From this it may be seen that the coordinates $(\cos x, \sin x)$ sketch a unit circle on the real plane.
+
+\subsubsection{Differentiating Inverse Trigonometric Functions}
+
+The function, $\arctan x$ (otherwise written $\tan^{-1}x$) is an inverse trigonometric function, the inverse mapping of the function $\tan{x}$. If we let $y = \arctan{x}$, then we have $\tan{y} = x$. Differentiating both sides gives,
+
+$$\frac{d}{dx} \tan{y} = 1.$$
+
+Now,
+
+$$\frac{d}{dx} \tan{y} = \frac{dy}{dx}\frac{d}{dy}\tan{y} = \frac{dy}{dx} \frac{1}{\cos^2{y}},$$
+
+so,
+
+$$\frac{dy}{dx} = \cos^2(\arctan{x}).$$
+
+Rearranging the Pythagorean trigonometric identity, we have $\cos^2 x = 1 - \sin^2x$, and squaring and rearranging our other identity, $\cos^2{x} = \frac{\sin^2{x}}{\tan^2{x}}$. Equating these gives, $\cos^2x = \frac{1}{1 + \tan^2x}$. Thus, we have,
+
+\begin{align}
+\frac{d}{dx}\arctan{x} &= \frac{1}{1 + \tan^2(\arctan{x})} \notag \\
+&= \frac{1}{1 + x^2} \notag
+\end{align}
+
+\subsubsection{An Infinite Series For $\pi$}
+
+From the previous result, we have $$\arctan{x} = \int \frac{1}{1 + x^2} dx.$$ Replacing the integrand with its Maclaurin series gives,
+
+\begin{align}
+\arctan{x} &= \int \sum_{n=0}^{\infty} (-1)^nx^{2n} dx \notag \\
+&= \sum_{n=0}^{\infty} \frac{(-1)^n}{2n + 1}x^{2n+1}. \notag
+\end{align}
+
+Now, we know that a right-angle triangle with two $45^{\circ}$ angles has opposite and adjacent sides of equal length. Hence, $\arctan({1}) = \pi/4$. Evaluating our infinite series at $x = 1$ gives,
+
+$$\pi/4 = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \dots$$
+
+Though pretty, this series is extremely slow to converge. Other series representations for $\pi$ exist, deriving from other trigonometric identities.
+
+\section{Infinite Products}
+
+Infinite products are defined for an sequence of (complex) numbers, $a_1, a_2, a_3, \dots$, as
+
+$$\prod_{n=1}^{\infty}a_n = a_1a_2a_3.$$
+
+Just like infinite sums they may converge or diverge. The product converges if the limit of the partial product (the first $n$ factors) exists as $n \to \infty$. In this section we present some of the more stupendous mathematical results involving infinite products.
+
+\subsection{Vi\`ete's Formula}
+
+The first recorded infinite product was formulated by French mathematician Fran\c cois Vi\`ete (1540-1603), and gives an expression for $\pi$. The expression derives from a method for approximating the area of a circle: suppose we have a circle with radius 1. Its area is $\pi$ units. Suppose then that we inscribe a square within this circle. The area of the square (4-sided polygon) is $(\sqrt{2})^2 = 2$. This gives a (very) rough approximation to the area of the circle. If we then inscribe a hexagon (8-sided polygon) in the circle, it is clear we get a better approximation. A hexadecahedron (16-sided polygon) would give a better approximation again, and so on. As the number of sides goes to infinity, the inscribed shapes ``telescope'' to the shape of the circle.
+
+We can derive the area of the circle, $\pi$, by taking the area of the square and scaling it by the ratio of the area of the octagon to the area of the square, and scaling this result by the ratio of hexadecahedron to octagon, icosidodecahedron to hexadecahedron, and so on. We choose shapes whose number of sides are powers of two because there is a useful relation between these, as we shall see. For brevity, we will denote the area of the $2^n$-sided polygon as $A_n$. Thus, $A_2$ is the area of the square, $A_3$ the octagon, and so on. Our technique for calculating the area of the circle is therefore described by,
+
+$$
+\pi = 2 \cdot \frac{A_3}{A_2} \cdot \frac{A_4}{A_3} \cdot \frac{A_5}{A_4} \cdot \cdots
+$$
+
+We will rearrange this as,
+
+$$
+\frac{2}{\pi} = \frac{A_2}{A_3} \cdot \frac{A_3}{A_4} \cdot \frac{A_4}{A_5} \cdot \cdots
+$$
+
+Now, it can be seen that a $2^n$-sided polygon is an arrangement of $2^n$ equal isosceles triangles, with arm length $1$ and angle $2\pi/2^n$. Applying the formula for the area of an isosceles triangle gives, $A_n = 2^{n}\cdot\frac{1}{2}\sin(\pi / 2^{n-1})$. Thus, we have,
+
+$$
+\frac{2}{\pi} = \frac{1}{2\sin(\pi/4)} \cdot \frac{\sin(\pi/4)}{2\sin(\pi/8)} \cdot \frac{\sin(\pi/8)}{2\sin(\pi/16)} \cdot \cdots
+$$
+
+Applying the trigonometric identity, $\sin{2x} = 2\sin x\cos x$, our expression simplifies to,
+
+$$
+\frac{2}{\pi} = \frac{\sqrt{2}}{2} \cdot \cos(\pi/8) \cdot \cos(\pi/16) \cdot \cos(\pi/32) \cdot \cdots
+$$
+
+A useful trigonometric identity can be derived from the angle sum identity, $\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta$. Therefore, $\cos x = \cos^2(x/2) - \sin^2(x/2)$. Applying the pythagorean identity, $\cos x = 2\cos^2(x/2) - 1$. Finally, rearranging gives,
+
+$$\cos \Big(\frac{x}{2}\Big) = \pm\sqrt{\frac{1 + \cos x}{2}}.$$
+
+Employing this identity gives us a recurrence relationship from $\cos x$ to $\cos(x/2)$, finally yielding the startling,
+
+$$
+\frac{2}{\pi} = \frac{\sqrt{2}}{2} \cdot \frac{\sqrt{2 + \sqrt{2}}}{2} \cdot \frac{\sqrt{2 + \sqrt{2 + \sqrt{2}}}}{2} \cdot \cdots
+$$
+
+\subsection{The Basel Problem}
+In 1734, Leonhard Euler (1707-1783), found the elegant solution to the sum,
+
+$$\sum_{n=0}^{\infty}\frac{1}{n^2} = 1 + \frac{1}{4} + \frac{1}{9} + \cdots,$$
+
+a problem posed 90 years earlier by Italian mathematician, Pietro Mengoli (1626-1686). Its solution had previously defied the attempts of the eminent Bernoulli dynasty of mathematicians. The problem is named after Euler's hometown, and first place of employment in Switzerland. The solution involves infinite products, and a mathematical leap of faith, that was only later confirmed rigorously. Incidentally, this is the value of $\zeta(2)$, where $\zeta(s)$ is the then undiscovered Riemann zeta function\footnote{The Riemann zeta function, defined over the complex numbers, formulated by Bernhard Riemann (1826-1866) has proven to be of great mathematical interest. The Riemann hypothesis, which conjectures the placement of zeta function roots has great implications for number theory, particularly the distribution of prime numbers. The hypothesis is the subject of one of the seven Millennium problems.}. Euler's solution starts by considering the function,
+
+\begin{align}
+\frac{\sin x}{x} &= \frac{ x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots}{x}  \notag \\
+&=  1 - \frac{x^2}{3!} + \frac{x^4}{5!} - \cdots \label{eq:sinx}
+\end{align}
+
+Having written the infinite series expansion of this function, it is obvious that the limit, $\lim_{x\to 0} \sin x / x = 1$. Euler then found an infinite \emph{product} expansion for this function,
+
+\begin{align}
+\frac{\sin x}{x} &= \prod_{k=1}^{\infty}1 - \frac{x^2}{k^2\pi^2}, \notag \\
+&= \Big(1 - \frac{x}{\pi}\Big)\Big(1 + \frac{x}{\pi}\Big)\Big(1 - \frac{x}{2\pi}\Big)\Big(1 + \frac{x}{2\pi}\Big)\Big(1 - \frac{x}{3\pi}\Big)\Big(1 + \frac{x}{3\pi}\Big)\cdots \notag
+\end{align}
+
+reasoning that the infinitely many roots ($\pm\pi, \pm2\pi, \pm3\pi, \dots $) of the left- and right-hand functions were the same, hence the functions themselves. This was not an entirely rigorous piece of reasoning, but it was later confirmed to be correct\footnote{See the Weierstrass factorisation theorem.}. Multiplying out this product shows that the coefficient for $x^2$ is,
+
+$$
+-\frac{1}{\pi^2}\Big(1 + \frac{1}{4} + \frac{1}{9} + \cdots \Big)= -\frac{1}{\pi^2}\sum_{n=0}^{\infty}\frac{1}{n^2}.
+$$
+
+But we know from (\ref{eq:sinx}) that the coefficient for $x^2$ is $-\frac{1}{3!}$, hence, equating these gives,
+
+$$
+\sum_{n=0}^{\infty}\frac{1}{n^2} = \frac{\pi^2}{6}.
+$$
+
+\subsection{Wallis' Product}
+
+Wallis's product is an infinite product expression for $\pi$ discovered by the English mathematician John Wallis (1616-1703). It can be derived from the expression from the Basel problem,
+
+$$
+\frac{\sin x}{x} = \prod_{k=1}^{\infty}1 - \frac{x^2}{k^2\pi^2}.
+$$
+
+If we let $x = \pi/2$ we have,
+
+\begin{align}
+\frac{2}{\pi} &= \prod_{k=1}^{\infty}1 - \frac{1}{4k^2} \notag \\
+\implies \frac{\pi}{2} &= \prod_{k=1}^{\infty} \frac{4k^2}{4k^2 - 1} \notag \\
+&= \prod_{k=1}^{\infty} \frac{2k}{2k - 1} \cdot \frac{2k}{2k + 1} \notag \\
+&= \frac{2}{1} \cdot \frac{2}{3} \cdot \frac{4}{3} \cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdots \notag
+\end{align}
+
+If we consider the partial product, we derive a related expression,
+
+\begin{align}
+p_k &= \prod_{n=1}^{k} \frac{2n}{2n - 1} \cdot \frac{2n}{2n + 1} \notag \\
+&= \frac{1}{2k + 1} \prod_{n=1}^{k}\frac{(2n)^4}{[2n(2n - 1)]^2} \notag \\
+&= \frac{1}{2k + 1} \cdot \frac{2^{4k}(k!)^4}{[(2k)!]^2} \to \frac{\pi}{2}, \notag
+\end{align}
+
+as $k \to \infty$.
+
+\subsection{The Method of Eratosthenes}
+
+The method of Eratosthenes is a prime number sieve algorithm discovered by Eratosthenes of Cyrene (c. 276 BC - 195/194 BC). It is central to the derivation of the Euler product formula. It is a method of identifying all primes up to some natural number, $N$. An example of the algorithm is given here. Let $N = 15$, then we have the list of candidate primes,
+
+$$2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15$$
+
+2 must be prime as there are no smaller numbers in the list to divide it. We can then eliminate all multiples of 2, as they are composite by definition,
+
+$$2, 3, \cancel{4}, 5, \cancel{6}, 7, \cancel{8}, 9, \cancel{10}, 11, \cancel{12}, 13, \cancel{14}, 15$$
+
+3 was not eliminated by this step, and as the new smallest candidate, it must be prime. Likewise, we may eliminate all multiples of 3,
+
+$$2, 3, \cancel{4}, 5, \cancel{6}, 7, \cancel{8}, \cancel{9}, \cancel{10}, 11, \cancel{12}, 13, \cancel{14}, \cancel{15}$$
+
+Continuing in this way (though by now all non-primes have been eliminated), we find 2, 3, 5, 7, 11, and 13 are the primes up to 15.
+
+\subsection{The Euler Product Formula}
+
+The Riemann zeta function analytically continues the infinite sum,
+
+\begin{align}\zeta(s) = \sum_{i=1}^{\infty}\frac{1}{n^s} = 1 + \frac{1}{2^s} + \frac{1}{3^s} + \frac{1}{4^s} + \frac{1}{5^s} + \cdots,\label{eq:zeta}
+\end{align}
+
+for complex numbers, $s$, with $\text{Re}(s) > 1$. The case of $s = 2$ is the form of the Basel problem. Consider,
+
+\begin{align}\frac{1}{2^s}\zeta(s) = \frac{1}{2^s} + \frac{1}{4^s} + \frac{1}{6^s} + \frac{1}{8^s} + \frac{1}{10^s} + \cdots \label{eq:halfzeta}
+\end{align}
+
+Subtracting (\ref{eq:halfzeta}) from (\ref{eq:zeta}) removes all multiples of 2 leaving,
+
+\begin{align}\Big(1 - \frac{1}{2^s}\Big)\zeta(s) = 1 + \frac{1}{3^s} + \frac{1}{5^s} + \frac{1}{7^s} + \frac{1}{9^s} + \cdots \label{eq:thirdzeta}
+\end{align}
+
+Multiplying (\ref{eq:thirdzeta}) by $1/3^s$ and subtracting it from itself gives,
+
+$$\Big(1 - \frac{1}{3^s}\Big)\Big(1 - \frac{1}{2^s}\Big)\zeta(s) = 1 + \frac{1}{5^s} + \frac{1}{7^s} + \frac{1}{9^s} + \frac{1}{11^s} + \cdots$$
+
+If we continue in this fashion, eliminating the primes and all their remaining multiples, we are following the method of Eratosthenes, leaving,
+
+$$
+\cdots\Big(1 - \frac{1}{11^s}\Big)\Big(1 - \frac{1}{7^s}\Big)\Big(1 - \frac{1}{5^s}\Big)\Big(1 - \frac{1}{3^s}\Big)\Big(1 - \frac{1}{2^s}\Big)\zeta(s) = 1.
+$$
+
+Dividing through leaves,
+
+$$\zeta(s) = \sum_{i=1}^{\infty}\frac{1}{n^s} = \prod_{p \ \text{prime}}\Bigg(\frac{1}{1 - p^{-s}}\Bigg),$$
+
+which is an infinite product, since we know from Euclid that there are infinitely many primes.
+
+\section{Deriving the Golden Ratio}
+
+The section presents the concept of continued fractions and the distinctive continued fraction expression for the golden ratio.
+
+\subsection{Continued Fractions}
+Continued fractions are a way of specifying fractional numbers as a sequence of nested fractions,
+$$a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2 + \cfrac{1}{\ddots + \cfrac{1}{a_n}}}},$$
+where $a_0, a_1, \dots, a_n$ are integers. For example, take the fraction, $ f = \frac{387}{259}$. We can then write, $f = 1 + \frac{128}{259} = 1 + \frac{1}{259/128}$. Following this procedure,
+
+$$
+f = \cfrac{387}{259}
+= 1 + \cfrac{1}{259/128}
+= 1 + \cfrac{1}{2 + \cfrac{1}{128/3}} 
+= 1 + \cfrac{1}{2 + \cfrac{1}{42 + \cfrac{1}{3/2}}} 
+= 1 + \cfrac{1}{2 + \cfrac{1}{42 + \cfrac{1}{1 + \cfrac{1}{2}}}}.
+$$
+
+Standard notation takes the constants on the leftmost diagonal and writes them as, $f = [1; 2, 42, 1, 2]$.
+
+\subsection{Fibonacci Sequences}
+
+A Fibonacci sequence is a sequence of numbers for seed values, $F_0$ and $F_1$, and recurrence relationship,
+
+$$F_n = F_{n-1} + F_{n-2},$$
+
+for $n \geq 2$. If we take the ratio of the $n+1$th and $n$th terms in the sequence we have,
+
+$$
+\cfrac{F_{n+1}}{F_n}
+= \cfrac{F_n + F_{n - 1}}{F_n}
+= 1 + \cfrac{1}{F_{n}/F_{n - 1}}
+= 1 + \cfrac{1}{1 + \cfrac{1}{F_{n-1}/F_{n - 2}}}
+= \cdots
+= 1 + \cfrac{1}{1 + \cfrac{1}{\ddots + \cfrac{F_0}{F_1}}},
+$$
+
+the fraction continuing for $n - 1$ levels.
+
+\subsection{The Golden Ratio}
+
+The golden ratio is a number with many interesting properties, and with some mysterious connections to the natural world. It is the ratio that arises when for two numbers, $a$ and $b$, $a : b = (a + b) : a$. It is also the limiting value of the ratio of successive terms in a Fibonacci sequence. We may discover the self-referential golden-ratio, $\varphi$, by looking at the self-referential infinite continued fraction, $\varphi = [1; 1, 1, 1, \dots]$. That is, the ratio of $F_{n+1}/F_n$ as $n \to \infty$.
+
+$$
+\varphi = 1 + \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{\ddots}}} = 1 + \frac{1}{\varphi},
+$$
+
+noting the recursion. Multiplying through gives the quadratic, $\varphi^2 - \varphi - 1 = 0$. Applying the quadratic formula gives,
+
+$$\varphi = \frac{1 \pm \sqrt{5}}{2}.$$
+
+\section{The Exponential Function}
+
+The exponential function is a transcendental entire function, its base, $e$ a transcendental number\footnote{A transcendental number is one that is not algebraic. An algebraic number is a number that is the root of a non-zero polynomial function with rational coefficients, and is a generalisation of the ancient Greek concept of \emph{constructible} numbers. Another way of putting this is that if a number is transcendental there exists no expression containing a finite number of integers and elementary operations that can express the number. To illustrate, $\sqrt{17/4}$ is not transcendental (though it is irrational) as it is the square root of a quotient of integers. Formally, it would solve the expression, $4x^2 = 17$. It is known that most numbers are transcendental.}. It makes many appearances throughout number theory and statistics.
+
+\subsection{Deriving the Exponential Function}
+
+The starting point for deriving the exponential function is to consider the differential equation,
+
+$$f = \frac{df}{dx},$$ that is, a function that is its own derivative. This equation models many common physical problems. One solution to this is the infinite series,
+
+$$f(x) = \sum_{n=0}^{\infty} \frac{x^n}{n!},$$ since $f'(x) = \sum_{n=1}^{\infty} \frac{x^{n-1}}{(n - 1)!} = \sum_{n=0}^{\infty} \frac{x^{n}}{n!} = f(x)$. Note that this is the Maclaurin series for a function whose derivatives are all equal to 1 at 0. Evaluating the function at 1 gives,
+
+$$f(1) = \sum_{n=0}^{\infty} \frac{1}{n!} = 1 + \frac{1}{1!} + \frac{1}{2!} + \frac{1}{3!} + \frac{1}{4!} + \cdots,$$ which must converge since the rate of growth after the second term is inferior to that of geometric series with base $1/2$. The number it converges to is know as $e = \sum_{k=0}^{\infty}  \frac{1}{k!} \approx 2.718.$ With the binomial theorem, an equivalence may be shown between this infinite sum, and the product,
+
+$$e = \lim_{n \to +\infty} \bigg(1 + \frac{1}{n}\bigg)^n.$$
+
+This form is particularly famous in financial modelling. Compound interest gives an expression for the future value of a device, $F$, based on its present value, $P$, the interest rate, $r$, and the the compounding frequency, $n$, over $t$ time periods, with $F = P(1 + r/n)^{nt}$. As $n\to\infty$, we have what is called \emph{continuous} compound interest, and the formula clearly converges to $F = Pe^{rt}$.
+
+The closed form of the function may be deduced by considering how it grows. Consider,
+
+\begin{align}
+f(x + 1) &= \sum_{n=0}^{\infty} \frac{(x + 1)^n}{n!} \notag \\
+&= \sum_{n=0}^{\infty} \sum_{k=0}^{n}{{n}\choose{k}}\frac{x^k \cdot 1^{n-k}}{n!} \label{eq:e1}, \\
+&= \sum_{n=0}^{\infty} \sum_{k=0}^{n}\frac{x^k}{k!(n-k)!} \label{eq:e2}, \\
+&= \begin{array}{cccccccc}
+\frac{1}{0! \cdot 0!} & + & & & & \\
+\frac{1}{0! \cdot 1!} & + & \frac{x}{1! \cdot 0!} & + & & & & \\
+\frac{1}{0! \cdot 2!} & + & \frac{x}{1! \cdot 1!} & + & \frac{x^2}{2! \cdot 0!} & + & &\\
+\frac{1}{0! \cdot 3!} & + & \frac{x}{1! \cdot 2!} & + & \frac{x^2}{2! \cdot 1!} & + & \frac{x^3}{3! \cdot 0!} & +\\
+\vdots & \vdots  & \vdots  &\vdots  & \vdots  & \vdots  & \vdots  & \vdots 
+\end{array} \notag \\
+&= \sum_{n=0}^{\infty} \frac{x^n}{n!} \sum_{k=0}^{\infty} \frac{1}{k!} \notag, \\
+&= f(x) \cdot e \notag,
+\end{align}
+
+where (\ref{eq:e1}) comes from the binomial theorem, and (\ref{eq:e2}) substitutes the binomial coefficient. Therefore, $f(1 + \delta) / f(1) = f(\delta)$. Thus, the ratio of growth of the function is fixed for an increase $\delta$ in $x$, regardless of the value of $x$. Therefore,
+
+$$\frac{f(\delta)}{f(0)} = \frac{f(2\delta)}{f(\delta)} = \cdots = \frac{f(1)}{f((n-1)\delta)},$$
+
+where $\delta = 1 / n$, for any choice of n. Multiplying the $n$ terms together gives $f(1/n)^n = f(1) / f(0) = e$. Therefore, $f(x/n)$ is the $x/n\textsuperscript{th}$ root of $e$. Thus, $f(x/n) = \sqrt[n]{e^x}$. Or simply, $f(x) = e^x$.
+
+\subsection{Other Solutions}
+
+Could any other function solve our differential equation? No, as can be seen from separation of variables, $$\frac{1}{f}df = {dx}.$$ Integrating both sides gives $$\ln{f} = x + C.$$ So, $$f = Ce^x.$$
+
+\subsection{Euler's Formula}
+
+Here we take the opportunity to derive a very famous equation\footnote{The equation is in fact a special case of a more general result found earlier by de Moivre.}, based on what we have covered so far. Consider the Maclaurin series,
+
+\begin{align}
+e^{ix} &= 1 + ix + \frac{(ix)^2}{2!} + \frac{(ix)^3}{3!} + \frac{(ix)^4}{4!} + \frac{(ix)^5}{5!} + \cdots \notag \\
+&= 1 + ix - \frac{x^2}{2!} - i\frac{x^3}{3!} + \frac{x^4}{4!} + i\frac{x^5}{5!} - \cdots \notag
+\end{align}
+
+The reader may now confirm that the even terms correspond with $\cos x$, and the odd terms with $i\sin x$. Thus, $$e^{ix} = \cos x + i\sin x,$$ a fantastic result! Now, just as coordinates $(\cos x, \sin x)$ trace a unit circle on the real plane, the complex numbers arising from $e^{ix} = \cos x + i\sin x$ do so on the complex plane (Figure \ref{fig:eulersformula}). Thus, we have basis on which to perform complex exponentiation, for example, $z^{a + bi} = z^a \cdot (e^{\ln z\cdot bi}) = z^a \cdot (\cos(b\ln z) + i\sin(b\ln z))$. Furthermore, for any integer $k$,
+
+$$
+e^{i(k\pi)} = \cos (k\pi) + i\sin (k\pi) \notag = -1.
+$$
+
+For the case of $k = 1$, we may rearrange to acquire Euler's\footnote{Euler (1707-1783) was Swiss mathematician, considered one of the greatest of all time.} identity,
+
+$$
+e^{i\pi} + 1 = 0,
+$$
+
+uniting the base of the natural logarithm, $e$, the unit of imaginary numbers, $i$, the ratio of a circle's circumference to its diameter, $\pi$, the multiplicative identity, $1$, and the additive identity, $0$, in an equation involving a single sum, product, and exponentiation.
+
+\subsubsection{Angle Sum Identities}
+
+A nice way to derive the trigonometric identities for sums of angles is with Euler's formula. First note that,
+
+$$e^{i(\alpha + \beta)} = \cos (\alpha + \beta) + i\sin (\alpha + \beta).$$
+
+But also that,
+
+\begin{align}
+e^{i(\alpha + \beta)} = e^{i\alpha}e^{i\beta} &= (\cos \alpha + i\sin \alpha)(\cos \beta + i\sin \beta) \notag \\
+&= (\cos\alpha\cos\beta - \sin\alpha\sin\beta) + i(\sin\alpha\cos\beta + \cos\alpha\sin\beta).\notag
+\end{align}
+
+Equating real and imaginary parts gives the trigonometric identities for sums of angles,
+
+$$\cos (\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta,$$
+
+and,
+
+$$\sin (\alpha + \beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta.$$
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/eulersformula.png}
+\caption{$e^{ix}$ traces a unit circle on the complex plane.\cite{eulerformula}}
+\label{fig:eulersformula}
+\end{figure}
+
+\section{Integral Transforms}
+
+Integral transforms are a technique for transforming a function in one domain to an equivalent function is another domain. It just so happens that some problems are more easily solved in one domain than the other.
+
+%\subsection{Fourier Series}
+%
+%Fourier series are a 
+
+\subsection{The Fourier Transform}
+
+Fourier transforms are widely used in statistics, engineering, and physics. The Fourier transform maps a function in the time domain to a function in the frequency domain. The Fourier transform is defined as,
+$$\hat{f}(\xi) = \int_{-\infty}^{\infty}f(x)e^{-2\pi ix\xi}\mathop{dx}.$$
+
+The inverse Fourier transform is defined as,
+$$f(x) = \int_{-\infty}^{\infty}\hat{f}(x)e^{2\pi i\xi x}\mathop{d\xi}.$$
+
+\subsection{The Laplace Transform}
+
+The Laplace transform is an integral transform defined as,
+
+$$F(s) = \mathcal{L}\{f(t)\} = \int_{0}^{\infty} f(t)e^{-st}\mathop{dt}.$$
+
+It is a more generalised transform than the Fourier transform, and maps a function, $f(t)$, from the time ($t$) domain to the $s$ domain. The inverse Laplace transform is a more complicated function and usually it is more practical to take inverse transforms from a reference table. For example, let $f(x) = \cos kt$, we first use a trick to convert it to a more amenable form,
+
+\begin{align}
+\cos(kt) &= \frac{1}{2}\cos(kt) + \frac{1}{2}i\sin(kt) + \frac{1}{2}\cos(kt) - \frac{1}{2}i\sin(kt) \notag \\
+&= \frac{1}{2}(\cos(kt) + i\sin(kt)) + \frac{1}{2}(\cos(-kt) + i\sin(-kt)) \notag \\
+&= \frac{1}{2}e^{kit} + \frac{1}{2}e^{-kit}. \notag
+\end{align}
+
+Then,
+
+\begin{align}
+\mathcal{L}\{\cos(kt)\} &= \int_{0}^{\infty} \frac{1}{2}e^{kit}e^{-st} \mathop{dx} + \int_{0}^{\infty} \frac{1}{2}e^{-kit}e^{-st} \mathop{dt} \notag \\
+&= \int_{0}^{\infty} \frac{1}{2}e^{(-s + ki)t} \mathop{dx} + \int_{0}^{\infty} \frac{1}{2}e^{(-s - ki)t}\mathop{dt} \notag \\
+&= \frac{1/2}{s - ki} + \frac{1/2}{s + ki} = \frac{s}{s^2 + k^2} \notag
+\end{align}
+
+If we are to apply the Laplace transform to differential equations, it is useful to establish a result for the transform of a derivative. By parts,
+
+\begin{align}
+\mathcal{L}\{f(t)\} = \int_{0}^{\infty} f(t)e^{-st}dt &= \Bigg[\frac{f(t)e^{-st}}{-s}\Bigg]_0^{\infty} - \int_{0}^{\infty} f'(t)\frac{e^{-st}}{-s}dt \notag \\
+&= \frac{f(0)}{s} + \frac{1}{s}\mathcal{L}\{f'(t)\} \notag,
+\end{align}
+
+thus in general, $\mathcal{L}\{f^{(n)}(t)\} = s^n \mathcal{L}\{f(t)\} - s^{n-1}f(0) - \dots - f^{(n-1)}(0)$. Now, the linear homogeneous ordinary differential equation,
+
+$$y'' - 5y' + 6y = 0,$$
+
+with initial conditions $y(0) = 2$, and $y'(0) = 2$, can be solved with the Laplace transform. Using the derivatives formula on the left-hand side of the equation,
+
+$$\mathcal{L}\{y\} - 5\mathcal{L}\{y'\} + 6\mathcal{L}\{y''\} = s^2\mathcal{L}\{y\} - 2s - 2 - 5s\mathcal{L}\{y\} +10 + 6\mathcal{L}\{y\},$$
+
+from which we have,
+
+$$\mathcal{L}\{y\} = \frac{2s - 8}{s^2 - 5s + 6} = \frac{4}{s - 2} - \frac{2}{s - 3},$$
+
+hence $$y = \mathcal{L}^{-1}\bigg\{\frac{4}{s - 2}\bigg\} - \mathcal{L}^{1}\bigg\{\frac{-2}{s - 3}\bigg\} = 4e^{2t} - 2e^{3t}.$$
+
+\section{The Factorial Function}
+
+The factorial function, written $n!$ for a positive integer $n$ is the product of all natural numbers less than or equal to n. That is, $$n! = n \times (n - 1) \times (n - 2) \times \cdots \times 1.$$ The value of $0!$ is 1, not as a matter of mathematical necessity, but because it continues the pattern: $0! = (n - n)! = n!/n! = 1$. Otherwise, we can note that the factorial function models the number of permutations of $n$ objects, that is, $^nP_n = n!$. The number of ways of permuting \emph{no} objects is assuredly 1, as no reorderings of \emph{no} objects are possible. There is such a thing as \emph{double} factorial,
+
+$$n!! = n \times (n - 2) \times (n - 4) \times \cdots,$$
+
+which multiples all even numbers $\leq n$ if n is even, and all odd numbers $\leq n$ if n is odd.  The factorial function is undefined for non-natural numbers, whereas the gamma function extends it to all real and complex numbers. The factorial function grows faster than exponentiation, but not as fast as double exponentiation or tetration, that is, the hyperoperation of repeated exponentiation. That is,
+
+$$\mathcal{O}(a^x) < \mathcal{O}(x!) < \mathcal{O}(a^{b^x}) < \mathcal{O}(^nx = x^{x^{\iddots^{x}}})$$
+
+\subsection{Stirling's Approximation}
+
+Stirling's approximation is a powerful approximation for the factorial function that converges as $n \to \infty$. It was first found by de Moivre, but Scottish mathematician James Stirling (1692-1770) found a nice simplification. Its derivation begins by taking the log of the function,
+
+$$\ln(n!) = \ln(1) + \ln(2) + \ln(3) + \cdots + \ln(n).$$
+
+Now we notice that subtracting $\frac{1}{2}(\ln(1) + \ln(n))$ gives the trapezoidal rule\footnote{The trapezoidal rule is a part of a family of techniques for approximating integrals known as Riemann sums.} approximation to the integral of $\ln(n)$ with $\Delta x = 1$. That is,
+
+\begin{align}
+\ln(n!) - \cancelto{0}{\frac{1}{2}\ln(1)} - \frac{1}{2}\ln(n) &= \frac{\cancelto{0}{\ln(1)} + \ln(2)}{2} + \frac{\ln(2) + \ln(3)}{2} + \frac{\ln(3) + \ln(4)}{2} \cdots + \frac{\ln(n + 1) + \ln(n)}{2} \notag \\
+&\approx \int_{1}^{n} \ln{x} \mathop{dx} = n\ln n - n + 1 + \sum_{k=2}^{m} \frac{(-1)^kB_k}{k(k-1)}\Bigg(\frac{1}{n^{k-1}} - 1\Bigg) + R_{m,n}. \notag
+\end{align}
+
+The error term is expressed in terms of Bernoulli numbers, $B_k$ and the remainder term, $R_{m,n}$, from the Euler-Maclaurin formula. The index, $m$, may be chosen freely. We next consider the behaviour of the error term as $n$ tends to $\infty$,
+
+$$\lim_{n \to \infty}\Big(\ln(n!) - \frac{1}{2}\ln n - n\ln n + n\Big) = 1 - \sum_{k=2}^{m} \frac{(-1)^kB_k}{k(k-1)} + \lim_{n \to \infty}R_{m,n},$$
+
+and it is known that $\lim_{n \to \infty}R_{m,n} = R_{m,n} + O\Big(\frac{1}{n^m}\Big)$. Thus, the difference tends toward a constant, denoted $c$. Returning to our equation, we have,
+
+$$\ln(n!) = n\ln n - n + \frac{1}{2}\ln n + 1 + c + \sum_{k=2}^{m} \frac{(-1)^kB_k}{k(k-1)}\Bigg(\frac{1}{n^{k-1}}\Bigg) + \mathcal{O}\Bigg(\frac{1}{n^m}\Bigg).$$
+
+To eliminate the bothersome sum, we can choose the parameter, $m = 1$, incurring an error term of greater magnitude, $O(1/n)$. Exponentiating both sides gives,
+
+$$n! = e^c\cdot\Bigg(\frac{n}{e}\Bigg)^n \cdot \sqrt{n} \cdot \Bigg(1 + \mathcal{O}\Bigg(\frac{1}{n}\Bigg)\Bigg),$$
+
+as $n \to \infty$. Note that the error term comes from the fact that $e^x \approx 1 + x$, for $x$ close to 0. To deal with the constant, $e^c$, which we will denote, $C$, recall from Wallis' product that,
+
+$$\frac{1}{2n + 1} \cdot \frac{2^{4n}(n!)^4}{[(2n)!]^2} \to \frac{\pi}{2},$$
+
+as $n \to \infty$. Substituting our convergent expression for $n!$,
+
+$$\frac{1}{2n + 1} \cdot \frac{2^{4n}[C(n/e)^n\sqrt{n}]^4}{[C(2n/e)^{2n}\sqrt{2n}]^2} = \frac{n}{4n + 2}\cdot C^2 \to \frac{\pi}{2},$$
+
+from which we can see $C \to \sqrt{2n}$, as $n \to \infty$. Finding the convergent value through application of Wallis' product was Sterling's contribution. Our approximation therefore simplifies to Sterling's approximation,
+
+$$n! \to \sqrt{2\pi n}\Bigg(\frac{n}{e}\Bigg)^n.$$
+
+\subsection{The Gamma Function}
+
+The gamma function is a function that interpolates the factorial function (Figure \ref{fig:factorial}), and extends its domain from the natural numbers to the real and complex numbers. It is defined as,
+
+$$\Gamma(t) = \int_0^{\infty} x^{t-1}e^{-x}\mathop{dx}.$$
+
+To show its connection to the factorial function, we integrate by parts,
+
+\begin{align}
+\Gamma(n) &= \big\{-x^{n-1}e^{-x}\big\}_{x=0}^{\infty} + (n - 1)\int_0^{\infty} x^{n-2}e^{-x}\mathop{dx} \notag \\
+&= (n-1)\Gamma(n-1).\notag
+\end{align}
+
+Noting that $\Gamma(1) = 1$, it is clear that $\Gamma(n) = (n - 1)!$ for all positive integers, $n$. However, the gamma function is defined for all complex numbers, $t$. It is worth nothing that there exists a related function, the pi function, $\Pi(t) = \Gamma(t + 1)$, that does away with the offset term, so as to coincide exactly with the factorial function. Another related function, the beta function, is a composite of the gamma function, where $B(x, y) = \Gamma(x)\Gamma(y)/\Gamma(x+y)$.
+
+It makes many appearances in the domain of statistics, for example in the Student's t-distribution. This is because of an intimate link to the Normal distribution, which we can show by first observing that the form of the function $\varphi(x) = e^{-x^2}$ is that of the bell curve. Now, the infinite integral\footnote{An integral taken over an infinite integral is known as \emph{improper} and is an abuse of notation to do away with limit notation.} of this function is,
+
+$$\int_{-\infty}^{\infty} e^{-t^2} tx = 2\cdot\int_{0}^{\infty} e^{-t^2} \mathop{dt}.$$
+
+Defining $t = u^{1/2}$, we have it that $\mathop{dt} = \frac{1}{2}u^{-1/2}\mathop{du}$ and integrating by substitution gives,
+
+$$\int_{-\infty}^{\infty} e^{-t^2} tx = 2\cdot\frac{1}{2}\cdot\int_{0}^{\infty}u^{1/2 - 1} e^{-u}\mathop{du} = \Gamma(1/2).$$
+
+Given that we know the area under the non-normalised bell curve to be $\sqrt{\pi}$, we may write, $\Gamma(1/2) = \sqrt{\pi}$. Though there exist many such identities for points on the gamma function, to evaluate the gamma function at any positive real point, the Stirling approximation was historically used as a good approximation. Its use has been supplanted in recent decades by the numerical algorithm, Lanczos approximation.
+
+An interesting property of the gamma function (that has implications for machine learning), is that it is the only function that interpolates the factorial function that is also log-convex. This is according to a result known as the Bohr-Mollerup theorem.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.6\textwidth]{Figures/factorial.pdf}
+\caption{Comparison of the discrete factorial points, the gamma function, which interpolates them, and Stirling's approximation.\cite{factorial}}
+\label{fig:factorial}
+\end{figure}
+
+\section{Fundamentals of Statistics}
+\subsection{Philosophical Notions of Probability}
+
+Pierre-Simon Laplace (1749-1827) described probability as, ``nothing but common sense reduced to calculation.'' As it is, there are two competing interpretations of the meaning of probabilities: the \emph{frequentist} interpretation, and the \emph{bayesian} interpretation. In the frequentist interpretation, probabilities represent frequencies or rates. Thus, a probability of $0.5$ that a coin comes up heads\footnote{Although recent research has shown the probability is slightly biased towards the upward-facing side of the coin when flipped, with about a $51\%$ chance of landing on that same side. This is linked somehow to the physics of the problem. See the Diaconis-Holmes-Montgomery coin-tossing theorem.} means that, with sufficient throws, this proportion of heads will prevail. In the bayesian (or epistemological) interpretation, probabilities quantify an uncertainty or `degree of belief' in an outcome, and so is more closely aligned with information theory. In information theory, a fair coin flip (50-50) has maximum entropy, because a uniform distribution maximises uncertainty. Though both views are fully compatible, adopting one or the other changes the emphasis slightly.
+
+\subsection{Fundamental Rules}
+
+\subsubsection{Probability Functions}
+
+Probabilities express the uncertainty (or frequency) of a random variable, $X$, of assuming states (events) $A, B, C, \dots$, as a numeric value between 0 (impossible) and 1 (certain). A distribution may be defined by a function to allocate the probabilities. We write $p(X=A)$ or simply $p(A)$ for the probability $X$ assumes state $A$.
+
+Discrete random variables take values in a finite or countably infinite set (such as the set of integers). The function that assigns each event a probability is called the probability mass function (pmf). The probabilities of events in a distribution must sum to 1. Thus,
+
+$$\Bigg(\sum_{k = 1}^{K} p(X = k)\Bigg) = 1.$$
+
+Continuous probability distributions express probabilities for random variables taking values in a continuum. For this reason, it no longer makes sense to model probabilities of the form $p(X = k)$. Such an event taken apart has an infinitesimal probability. Rather, we compute the probability of intervals, such as $p(X \leq k)$. The starting point is the probability density function (pdf), $p(x)$, a function that expresses \emph{densities}. A density is a quantity related to probability by the expression,
+
+$$P(x \leq X \leq x+dx) \approx p(x)dx.$$
+
+The value of $p(x)$ defines the relative weight of probabilities measured on intervals local to $x$. The function that gives probabilities, the cumulative density function (cdf), is the integral of the pdf, defined as,
+
+$$
+P(X \leq a) = \int_{-\infty}^{a} p(x) \mathop{dx},
+$$
+
+For this reason, the pdf must be non-negative, and must integrate to $1$. Should we wish to compute the probability of a closed integral, we require, $$P(a \leq X \leq b) = P(X \leq b) - P(X \leq a).$$
+
+\subsubsection{Union of Events}
+
+The probability of a union of events $A$ and $B$, that is, the probability $A$ \emph{or} $B$ occurs is, $$p(A \lor B) = p(A) + p(B) - p(A \land B).$$ When $A$ and $B$ are \emph{mutually exclusive}, the joint probability, $p(A \land B) = 0$. Mutually exclusive events are events that cannot happen simultaneously, such as $A$, the event of rolling a 2 on a die, and $B$, the event of rolling a 3 on a die. An example of events that are \emph{not} mutually exclusive is $A$, the event we draw a king from a deck of cards, and $B$, the event we draw a diamond. The events can happen both separately and together. Measuring the probability of the union of events seems rarely to be of interest, however.
+
+\subsubsection{Inclusion-Exclusion Principle}
+
+The generalisation to the union of events formula is arrived at using the inclusion-exclusion principle, used for counting unions of sets. The case corresponding to the union of events probability is,
+
+$$|A \cup B| = |A| + |B| - |A \cap B|,$$
+
+for sets $A$ and $B$. If we include a third set, $C$, we acquire,
+
+$$|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C|,$$
+
+These ideas are most easily understand by looking at Venn diagrams (Figure \ref{fig:inclusionexclusion}), where the probability spaces of the events are depicted as sets. The $n$th case of the union of events is,
+
+$$p(X_1 \lor \dots \lor X_N) = \sum_{i = 1}^{N}p(X_i) - \sum_{1 \leq i < j \leq N}p(X_i \land X_j) + \sum_{1 \leq i < j < k \leq N}p(X_i \land X_i \land X_j) - \cdots + (-1)^{N-1}p(X_1 \land \dots \land X_N)$$
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/inclusionexclusion.png}
+\caption{The inclusion-exclusion principle is best understood with Venn diagrams\cite{inclusionexclusion}}
+\label{fig:inclusionexclusion}
+\end{figure}
+
+\subsubsection{Intersection of Events}
+
+The joint distribution, $p(A \land B)$, or simply, $p(A, B)$, is the probability events $A$ and $B$ occur together. The joint distribution is factorised in accordance with the dependencies of the events. If two events, $A$ and $B$, are independent, we write $A \indep B$. Independence is distinct from mutual exclusivity, which is exclusive or. Independent events may occur apart or together, but the essence of independence is that the occurrence of one event does not affect the occurrence of the other. Hence, the joint distribution of independent $A$ and $B$ is,
+
+$$p(A, B) = p(A)p(B),$$
+
+that is, the product of the probabilities of the events taken separately. When $A$ and $B$ are \emph{dependent}, the occurrence of one changes the probability of the other occurring. In this case we write,
+
+\begin{align}
+p(A, B) &= p(A|B)p(B) \notag \\
+&= p(B|A)p(A). \notag
+\end{align}
+
+The probability, $p(A|B)$, is the conditional probability of the event $A$ \emph{given} the occurrence of event $B$. Notice the symmetry of the conditioning; we can condition on any variable we like. The definition of independence is that $p(A|B) = p(A)$.
+
+\subsubsection{Chain Rule}
+
+Extending the factorisation gives us a general result for $N$ random variables, $X_!, X_2, \dots, X_N$--the chain rule. The joint distribution may be factorised,
+
+\begin{align}
+p(X_1, X_2, X_3,\dots,X_N) &= p(X_1)p(X_2, X_3, \dots, X_N|X_1) \notag \\
+&= p(X_1)p(X_2|X_1)P(X_3, \dots, X_N|X_1, X_2) \notag \\
+&= p(X_1)p(X_2|X_1)P(X_3|X_1, X_2)\cdots P(X_N|X_1, X_2, \dots, X_{N-1}) \notag
+\end{align}
+
+\subsubsection{Law of Total Probability}
+
+The law of total probability allows us to calculate the probability of an event by summing over a joint distribution,
+
+\begin{align}
+p(X=x) &= \sum_{y \in Y} p(X=x, Y=y) \notag \\
+&= \sum_{y \in Y} p(X=x|Y=y)p(Y=y). \notag
+\end{align}
+
+This is called the marginal distribution on $X$, and we say that $Y$ has been `marginalised out'.
+
+\subsubsection{Markov Chain}
+A Markov chain is a sequence of random variables, $X_!, X_2, \dots, X_N$ written,
+
+$$X_1 - X_2 - \cdots - X_N.$$
+
+A Markov chain exhibits the Markov property, meaning each variable is dependent only on the previous variable in the sequence. Otherwise put, $p(X_{N+1}|X_N, X_{N-1}) = p(X_{N+1}|X_N)$. The chain rule applied to a Markov chain therefore simplifies to,
+
+\begin{align}
+p(X_1, X_2, X_3,\dots,X_N) &= p(X_1)p(X_2|X_1)P(X_3|X_1, X_2)\cdots P(X_N|X_1, X_2, \dots, X_{N-1}) \notag \\
+ &= p(X_1)p(X_2|X_1)P(X_3|X_2)\cdots P(X_N|X_{N-1}) \notag
+\end{align}
+
+To give an example of what a Markov chain might model: let $X$ be the event we see clouds on the horizon this morning; $Y$ it is raining by noon; $Z$ it is raining this evening. These events form a Markov chain, $X-Y-Z$. The probability of rain at noon, $Y$, is clearly dependent on there being clouds in the morning, $X$. That it rains in the evening, $Z$, also depends on there being clouds in the morning, $X$, but not once we have knowledge of $Y$. Thus, $Z$ is independent of $X$ given (conditioned on) $Y$.
+
+\subsection{Quantiles}
+
+Quantiles mark milestones in the cumulative distribution, that is, the values for which certain cumulative probabilities are reached. Quantiles may be taken anywhere, but the most common ones are:
+
+\begin{itemize}
+\item median - the value for which there is a 0.5 probability of exceeding and 0.5 probability of falling short, that is, the midpoint of the distribution;
+\item quartile ($Q_1, Q_2, Q_3$) - the values marking 0.25, 0.5, and 0.75, probabilities in the cumulative distribution ($Q_2$ is the median);
+\item percentile - the values marking the $0.01, 0.02, \dots, 0.99$ cumulative probabilities.
+\end{itemize}
+
+For a continuous distribution, any quartile, $q$, can be computed by solving the integral, for the desired probability,
+
+$$
+p = \int_{-\infty}^{q} p(x) \mathop{dx}.
+$$
+
+
+\subsection{Moments}
+
+Moments are quantitative measures (statistics) of distribution first formulated by English statistician Karl Pearson (1857-1936). The general form is,
+
+$$
+\mathbb{E}[(X - c)^N],
+$$
+
+for some constants, $c$ and $N$. When $c = 0$, we have what is called the \emph{raw} moment. Usually $c = \mathbb{E}[X]$, as we are chiefly interested in how $X$ moves about its mean, and these are called \emph{central} moments. Further, standardised moments are used in higher orders.
+
+\subsubsection{Expected Value}
+
+The expected value (or mean, or average), denoted $\mu$, of a discrete random variable is the average of the random variable, weighted by probabilities. It is the first-order ($N=1$) \emph{raw} moment (the central moment is 0 by definition). It is defined as,
+
+$$
+\mathbb{E}[X] \triangleq \sum_{x} p(x) x.\\
+$$
+
+Similarly, for continuous, $X$,
+
+$$
+\mathbb{E}[X] \triangleq \int_{-\infty}^{\infty} p(x) x \mathop{dx}.\\
+$$ 
+
+In general, the expectation of a transformation, $f(X)$, is $\mathbb{E}[f(X)] = \sum_x p(x)f(x)$
+
+\subsubsection{Variance}
+
+Variance, $\text{Var}$ or $\sigma^2$, is the expected (average) squared deviation from the mean, and therefore a measure of spread. Clearly, we need a second order measure to indicate spread since the first moment will be 0 for a symmetric distribution (the negative scores cancelling out the positive scores). Thus, variance,
+
+\begin{align}
+\text{Var}[X] &= \mathbb{E}[(X - \mathbb{E}[X])^2] \notag \\
+&= \mathbb{E}[X^2 - 2\mathbb{E}[X]X + \mathbb{E}[X]^2] \notag \\
+&= \mathbb{E}[X^2] - 2\mathbb{E}[X]^2 + \mathbb{E}[X]^2 \notag \\
+&= \mathbb{E}[X^2] - \mathbb{E}[X]^2 \notag
+\end{align}
+
+Another measure of spread is the standard deviation, $\sigma$, defined as the square root of the variance, $\sqrt{\sigma^2}$.
+
+\subsubsection{Skewness}
+
+Skewenss, $\gamma_1$, is the third order \emph{standardised} moment. It is a measure of the skew or \emph{asymmetry} of a distribution, and is simply the third order central moment standardised,
+
+$$
+\gamma_1 = \mathbb{E}\Bigg[\frac{(X - \mathbb{E}[X])^3}{\sigma^3}\Bigg]
+$$
+
+\subsubsection{Kurtosis}
+
+Kurtosis, $\text{Kurt}[X]$, is the fourth-order standardised central moment. It is a measure of the heaviness of the tails of the distribution. It is defined to be,
+
+$$
+\text{Kurt}[X] = \frac{\mathbb{E}[(X - \mathbb{E}[X])^4]}{\mathbb{E}[(X - \mathbb{E}[X])^2]^2}
+$$
+
+\subsection{Sample Statistics}
+
+Given a set of sample data $x_1, x_2, \dots, x_N$, we can compute estimates of the distribution's statistics. Samples are drawn at random \emph{with} replacement. The sample mean is simply the arithmetic average,
+
+$$\bar{x} = \frac{1}{N}\sum_{i=1}^N x_i.$$
+
+At first it may appear that through the $\frac{1}{N}$ term that we are assuming a uniform distribution. This is not the case, however. Wherever non-uniformity exist, the data will `find' the right proportion as a matter of course. That is, the higher probabilities will feature more heavily, and receive more weight, effecting higher probabilities. The sample variance is a lot more curious. We might take the sample variance in a similar way to the mean,
+
+$$\sigma_x^2 = \frac{1}{N}\sum_{i=1}^N (x_i - \bar{x})^2$$
+
+This would be, surprisingly, only \emph{almost} correct. This is due to the fact we are using the sample mean only, not the true mean. Given all possible samples, the expectation of the sample variance is,
+
+\begin{align}
+\mathbb{E}[\sigma_x^2] &= \mathbb{E}\Bigg[\frac{1}{N}\sum_{i=1}^N\Bigg(x_i - \frac{1}{N}\sum_{i=1}^N x_i\Bigg)^2 \Bigg] \notag \\
+&=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[x_i^2 - \frac{2}{N}x_i\sum_{j=1}^N x_j + \frac{1}{N^2}\sum_{j=1}^N x_j \sum_{k=1}^N x_k\Bigg] \notag \\
+&=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[\frac{N-2}{N}\mathbb{E}[x_i^2] - \frac{2}{N}\sum_{j\neq i}^N \mathbb{E}[x_ix_j] + \frac{1}{N^2}\sum_{j=1}^N \sum_{k\neq j}^N \mathbb{E}[x_jx_k] + \frac{1}{N^2}\sum_{j=1}^N \mathbb{E}[x_j^2]\Bigg] \notag \\
+&=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[\frac{N-2}{N}(\sigma^2 + \mu^2) - \frac{2(N - 1)}{N} \mu^2 + \frac{N(N-1)}{N^2} \mu^2 + \frac{1}{N} (\sigma^2 + \mu^2)\Bigg] \notag \\
+&= \frac{N-1}{N}\sigma^2 \notag
+\end{align}
+
+Note the substitution in the second to last step comes from the definition of variance, $\text{Var}[X] = \mathbb{E}[X^2] - \mathbb{E}[X]^2$. Thus, our formula becomes,
+
+$$\sigma_x^2 = \frac{1}{N-1}\sum_{i=1}^N (x_i - \bar{x})^2.$$
+
+This is called the unbiased sample variance, and the leading quotient is known as Bessel's\footnote{Friedrich Bessel (1784-1846) was a German mathematician and scientist.} correction. This formula is usually presented without the above justification, and may be baffling to the student. The same correction is used for the sample covariance and other statistics. Given independent samples, these statistics converge to the true statistics as the sample size increases, as per the law of large numbers. That is, the sample variance converges to the expected sample variance, and the Bessel's correction converges to 1.
+
+\subsection{Covariance}
+
+Covariance measures the interaction between random variables, that is, it quantifies how much two random variables move together. It is defined as,
+
+\begin{align}
+\text{Cov}[X, Y] &= \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] \notag \\
+&= \mathbb{E}[X^2 - \mathbb{E}[Y]X - \mathbb{E}[X]Y + \mathbb{E}[X]\mathbb{E}[Y]] \notag \\
+&= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] \notag
+\end{align}
+
+In the multivariate case, we have the covariance matrix,
+
+\begin{align}
+\text{Cov}[\mathbf{x}] &\triangleq \mathbb{E}[(\mathbf{x} - \mathbb{E}[\mathbf{x}])^T(\mathbf{x} - \mathbb{E}[\mathbf{x}])] \notag \\
+&= \begin{bmatrix}
+\text{Var}[X_1] & \text{Cov}[X_1, X_2] & \dots & \text{Cov}[X_1, X_n] \\
+\text{Cov}[X_2, X_1] & \text{Var}[X_2] & \dots & \text{Cov}[X_2, X_n] \\
+\vdots & \vdots & \ddots & \vdots \\
+\text{Cov}[X_n, X_1] & \text{Cov}[X_n, X_2] &\dots & \text{Var}[X_n]
+\end{bmatrix} \notag
+\end{align}
+
+\subsection{Correlation}
+
+Correlation is covariance normalised by. It measures the extent to which two variables are \emph{linearly} related and computes a correlation coefficient in the range $[-1, 1]$. A correlation coefficient of 0 indicates no relation. The formula for correlation is,
+
+$$\text{corr}(X, Y) = \frac{\text{Cov}[X, Y]}{\sqrt{\text{Var}[X]\text{Var}[Y]}}.$$
+
+Similary, for the multivariate case, the correlation matrix is,
+
+$$
+\text{Corr}[\mathbf{x}] = \begin{bmatrix}
+\text{Corr}[X_1, X_1] & \text{Corr}[X_1, X_2] & \dots & \text{Corr}[X_1, X_n] \\
+\text{Corr}[X_2, X_1] & \text{Corr}[X_2, X_2] & \dots & \text{Corr}[X_2, X_n] \\
+\vdots & \vdots & \ddots & \vdots \\
+\text{Corr}[X_n, X_1] & \text{Corr}[X_n, X_2] &\dots & \text{Corr}[X_n, X_n]
+\end{bmatrix} \notag
+$$
+
+\subsection{Bayes' Theorem}
+
+We may derive Bayes' theorem using our definitions of joint probabilities,
+
+\begin{align}
+p(x, y) &= p(x | y)p(y) \notag \\
+&= p(y | x)p(x). \notag
+\end{align}
+
+Equating these gives Bayes' theorem,
+
+$$p(x | y) = \frac{p(y | x)p(x)}{p(y)}.$$
+
+Bayesians interpret this as an expression relating event $x$ and evidence $y$. The probability $p(x)$ is known as the `prior' distribution for the event taken alone (that is, `before' the evidence is presented). The `posterior' distribution, $p(x | y)$, represents the uncertainty of the event `after' the evidence has been presented.
+
+\subsection{Transformation of Random Variables}
+
+For random variable, $X$, define a new random variable, $Y = aX + b$. How have its properties changed? Recall for discrete variables that $\mathbb{E}[f(X)] = \sum_x p(x)f(x)$. Then we have,
+
+\begin{align}
+\mathbb{E}[Y] &= \sum_x p(x)(ax + b) \notag \\
+&= a\sum_x p(x)x + b\sum_x 1 = a\mathbb{E}[X] + b. \notag
+\end{align}
+
+The same result is arrived at for continuous random variables. This effect is known as the `linearity of expectation'. Variance behaves a little differently,
+
+\begin{align}
+\text{Var}[Y] &= \mathbb{E}[(Y - \mathbb{E}[Y])^2] \notag \\
+&= \mathbb{E}[(aX + b - (a\mathbb{E}[X] + b))^2] \notag \\
+&= \mathbb{E}[a^2(X  - \mathbb{E}[X])^2] \notag \\
+&= a^2\text{Var}[X] \notag
+\end{align}
+
+Thus, adding a constant to a random variable does not change its variance, but scaling a random variable scales its variance by the square.
+
+\subsection{Change of Variables}
+
+In the general case, given transformation, $Y = f(X)$, a discrete distribution can be derived by,
+
+$$p_y(y) = \sum_{x:f(x)=y} p_x(x),$$
+
+that is, by mapping the probabilities of the values of x corresponding to y via the mapping. This is not the case for continuous random variables, in which case, we must address the cdf. Being a cumulative function, it is monotonic\footnote{A monotonic function holds the property that $f(b) > f(a)$ for any $b > a$.}. If it is monotonic, it is bijective\footnote{If $f$ is bijective, it is a one-to-one mapping.}, and if it is bijective, it is invertible. Therefore, we can write the cumulative distribution,
+
+$$P_y(y) = P(f(X) \leq y) = P(X \leq f^{-1}(y) = P_x(f^{-1}(y))$$
+
+Now,
+
+$$
+p_y(y) \triangleq \frac{d}{dy}P_y(y) = \frac{d}{dy}P_x(f^{-1}(y)) = \frac{dx}{dy}\frac{d}{dx}P_x(x),
+$$
+
+giving us the change of variables formula,
+
+$$p_y(y) = p_x(x)\Big|\frac{dx}{dy}\Big|.$$
+
+An example here would perhaps be useful, so let $X \sim U(-1, 1)$ and $Y = X^2$. Since X is uniformly distributed on an interval of length 2, its pdf, $p_x(x) = 1/2$. Therefore, by the change of variables formula, $p_y(y) = \frac{1}{2} \cdot \frac{1}{2}y^{1/2} = \frac{1}{4}y^{1/2}$.
+
+In the multivariate case, we have need of the Jacobian matrix from vector calculus, that is, the matrix of partial derivatives\footnote{Not to be confused with the Hessian, which is the matrix of partial \emph{second} derivatives.}, defined as,
+
+$$\mathbf{J}_{\mathbf{x} \to \mathbf{y}} \triangleq \frac{\partial(y_1, \dots, y_n)}{\partial(x_1, \dots, x_n)} \triangleq 
+\begin{bmatrix}
+\frac{\partial y_1}{\partial x_1} & \dots & \frac{\partial y_1}{\partial x_n} \\
+\vdots & \ddots & \vdots \\
+\frac{\partial y_n}{\partial x_1} & \dots & \frac{\partial y_n}{\partial x_n} \\
+\end{bmatrix},
+$$
+
+and the change of variables formula becomes,
+
+$$p_y(\mathbf{y}) = p_x(\mathbf{x})\big|\det \Bigg(\frac{\partial\mathbf{x}}{\partial\mathbf{y}}\Bigg)\big| = p_x(\mathbf{x})|\det \mathbf{J}_{\mathbf{y} \to \mathbf{x}}|.$$
+
+\subsection{Monte Carlo Statistics}
+
+Monte Carlo statistics are a branch of numerical techniques for providing estimations using random sampling. The name comes from the famous casino in the city in the principality of Monaco near the south of France. One famous example of applying Monte Carlo techniques is that of sampling from a unit circle inscribed inside a $2 \times 2$ unit square. The ratio of the areas of circle to square is $\pi : 4$. We can estimate the value of $\pi$ by randomly sampling points within the square, and comparing the number of points that fall inside and outside the circle (Figure \ref{fig:montecarlo}). A sufficiently large sample would converge to the correct result by the law of large numbers.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/montecarlo.pdf}
+\caption{Monte Carlo approach to estimating $\pi$. 1963 of the 2500 random points landed in the circle, giving an estimation of $\pi \approx 3.1408$. Generated by \texttt{monteCarloDemo.m}.}
+\label{fig:montecarlo}
+\end{figure}
+
+\subsubsection{Buffon's Needles}
+An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line give an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that the these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, $p_x = 1/L$, and $\theta$, which varies between $0$ $p_{\theta} = 2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These condition alone are enough to calculate the probability,
+
+$$
+p = \int_{0}^{\pi/2}\int_{0}^{\frac{L}{2}\sin\theta}p_xp_{\theta}\mathop{dx}\mathop{d\theta} = \frac{2}{L\pi}\int_{0}^{\pi/2}\frac{L}{2}\sin\theta\mathop{d\theta} = \frac{1}{\pi}.
+$$
+
+Therefore, the proportion of a sample of $n$ scattered needles crossing a line gives, $\frac{\text{\# crosses}}{n} \approx \frac{1}{\pi} \implies \pi \approx \frac{n}{\text{\# crosses}}$
+
+\section{Common Discrete Probability Distributions}
+
+\subsection{Uniform Distribution}
+
+A uniform distribution models a coin toss, or a die roll, or any other probability of $K$ events with equal chance, defining an interval, $[a, b]$. The probability mass function for a uniform distribution is,
+
+$$p(k) = \frac{1}{K}.$$
+
+Its mean is, $\mu = \frac{a + b}{2}$. Note there is also a continuous uniform distribution. Laplace's principle of insufficient reason argues to assume a uniform distribution for a discrete variable in the absence of further information (Gaussian for continuous variables).
+
+\subsection{Bernoulli Distribution}
+
+A Bernoulli distribution models an event with two alternative outcomes. It may therefore model a coin toss, but is parameterised with probability $\theta$ of outcome 1, and $1 - \theta$ of outcome 2. Thus, any binary event may be modelled. We write $X \sim \text{Ber}(\theta)$. Thus,
+
+$$\text{Ber}(x|\theta) = \theta^{1_{x=1}}(1 - \theta)^{1_{x=0}}.$$
+
+The expected value is therefore,
+
+$$\mathbb{E}[X] = \theta \cdot 1 + (1 - \theta) \cdot 0 = \theta$$
+
+\subsection{Binomial Distribution}
+
+A Binomial distribution may model the number of heads, $k$, from the flipping of a coin (or any other binary event) $n$ times. The Binomial distribution generalises the Bernoulli distribution to $n$ binary trials (rather than a single trial). Its pmf is,
+
+$$\text{Bin}(k | n,\theta) \triangleq {{n}\choose{k}}\theta^{k}(1 - \theta)^{n-k}$$
+
+Note the resemblance in form to the Bernoulli distribution. The multinomial distribution further generalises the binomial distribution to $k$-ary events $n$ times.
+
+\section{Common Continuous Probability Distributions}
+
+\subsection{Laplace Distribution}
+
+The Laplace pdf resembles two opposing exponential functions that meet in the middle, and is written,
+
+$$f(x ; \mu, b) = \frac{1}{2b}\exp\Bigg\{-\frac{|x - \mu|}{b}\Bigg\}.$$
+
+It is similar in form to the Gaussian distribution, but the exponent is linear, and so the log probability decreases linearly, whereas a Gaussian's ``tails'' decrease quadratically. Thus, we say the Laplace distribution has ``heavy'' tails. This has implications when we fit a distribution to data (such as in machine learning), where the Laplace distribution is less sensitive to outliers, as extreme events have higher probability than in a Gaussian. One advantage is it is easily integrable, whereas the Gaussian has no closed-form solution, as we shall see. Integrating the pdf gives,
+
+\begin{align}
+F(x) &= \int_{-\infty}^{+\infty} \frac{1}{2b}\exp\Bigg\{-\frac{|x - \mu|}{b}\Bigg\}dx \notag \\
+&= \int_{-\infty}^{\mu} \frac{1}{2b}\exp\Bigg\{\frac{x - \mu}{b}\Bigg\}\mathop{dx} + \int_{\mu}^{+\infty} \frac{1}{2b}\exp\Bigg\{\frac{\mu - x}{b}\Bigg\}\mathop{dx} \notag \\
+&= \frac{1}{2}\Bigg[\exp\Bigg\{\frac{x - \mu}{b}\Bigg\}\Bigg]_{x=-\infty}^{x=\mu} + \frac{1}{2}\Bigg[\exp\Bigg\{\frac{\mu - x}{b}\Bigg\}\Bigg]_{x=\mu}^{x=+\infty} \notag \\
+&= \frac{1}{2}(1 - -0) + \frac{1}{2}(0 - -1) \notag
+= 1, \notag
+\end{align}
+
+which confirms its validity as a probability distribution.
+
+\subsection{Gaussian Distribution}
+
+The Gaussian or Normal distribution was first proposed by Karl Frederich Gauss (1777-1855) in 1809. In the same paper, he presented other fundamental tenets of statistics--the method of least squares (for fitting data with Gaussian error), and the method of maximum likelihood. The pdf of the Gaussian distribution is,
+
+$$f(x;\mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}}\exp\Bigg\{\frac{-(x - \mu)^2}{2\sigma^2}\Bigg\}$$
+
+Its shape is the well-known bell curve, the distribution so often seen in real-world data (the profound central limit theorem offers an explanation for why that is). The CDF for a Gaussian distribution,
+
+$$\Phi({x;\mu,\sigma^2}) = \int_{-\infty}^{x}\mathcal{N}(z | \mu, \sigma^2)\mathop{dz}. \notag$$
+
+Defining $u = \frac{z - u}{\sqrt{2\sigma}}$, and so $du = dz/\sqrt{2\sigma}$, we can integrate by substitution,
+
+\begin{align}
+\Phi({z;\mu,\sigma^2}) &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\frac{x - \mu}{\sqrt{2\sigma}}} e^{-u} \sqrt{2\sigma}\mathop{du} \notag \\
+&= \frac{1}{2}\big(\text{erf}(u)\big)_{u=-\infty}^{u=(x-\mu)/\sqrt{2\sigma}} \notag \\
+&= \frac{1}{2}\big(1 + \text{erf}(u)\big), \notag
+\end{align}
+
+where $\text{erf}(x) = \frac{2}{\sqrt{\pi}}\int_{0}^{x}e^{-t^2}\mathop{dt}$ is the error function. This is a dead-end for a closed-form solution, and we must have recourse to an infinite series. Substituting the Taylor expansion for $e^{-t^2}$,
+
+\begin{align}
+\text{erf}(x) &= \frac{2}{\sqrt{\pi}}\int_{0}^{x} \sum_{k=0}^{\infty} \frac{(-t^2)^k}{k!} \mathop{dt} \notag \\
+%&= \frac{2}{\sqrt{\pi}}\int_{0}^{x} \sum_{k=0}^{\infty} \frac{(-1)^kt^{2k}}{k!} dt \notag \\
+&= \frac{2}{\sqrt{\pi}}\sum_{k=0}^{\infty} \frac{(-1)^kx^{2k + 1}}{k!(2k + 1)}, \notag
+\end{align}
+
+giving us an infinite series for the error function. Thus, approximations to the Gaussian CDF can be computed by statistical software, or placed in statistics tables.
+
+\subsubsection{Standardisation}
+
+The standard Normal distribution is the Normal distribution with mean $0$ and variance $1$, $\mathcal{N}(0, 1)$. It is possible to \emph{standardise} a random variable, $X \sim \mathcal{N}(\mu, \sigma^2)$, by first subtracting its mean, $\mu$ (which adjusts the mean to 0 without changing the variance), then dividing by its standard deviation, $\sigma$, (which does not change the mean ($\mu = 0$, but shrinks the variance from $\sigma^2$ to 1), yielding,
+
+$$Z = \frac{X - \mu}{\sigma}.$$
+
+Since these transformations do not change the type of distribution, and a Gaussian is uniquely defined by its mean and variance, the transformed random variable, $Z$, is distributed according to the standard normal distribution.
+
+\subsection{Chi-squared Distribution}
+
+The chi-squared ($\chi^2$) distribution expresses a probability distribution over the sums of squares of normally distributed random variables. That is, the distribution of $Y$ where $Y = X_1^2 + X_2^2 + \dots + X_k^2$ for $k$, and where the $X_i \sim \mathcal{N}(0, 1)$ are i.i.d random variables. Note that by the central limit theorem, the chi-squared distribution converges to a normal distribution as $k \to \infty$. We write $Y \sim \chi^2_k$ where $k$ is the number of variables in the sum, also known as the \emph{degrees of freedom}. When the random variable $Y$ takes on a value, that value is like the dial of radius of a $k$-dimensional sphere, where the $k$ random variables are free to vary. The chi-squared distribution is the basis of some common statistical tests, and is also crucial to the derivation of other distributions, such as Student's t-distribution. The pdf of a chi-squared distribution is,
+
+$$p(y; k) = \frac{1}{2^{\frac{k}{2}}\Gamma\big(\frac{k}{2}\big)}y^{\frac{k}{2} - 1}e^{-\frac{y}{2}},$$
+
+where the parameter, $k$, are the degrees of freedom (number of variables in the sum), and $\Gamma$ is the gamma function. In the unique case that $k = 2$, the expression simplifies to $p(y; 2) = \frac{1}{2}e^{-y/2}$. We take the time to derive the pdf of the chi-squared distribution, as it involves several of the topics we have covered already.
+
+In the simplest case, $k = 1$, we have $Y = X^2$. Since, $X$ is a standardised Gaussian variable, its square makes all previously negative values positive. The shape of the pdf is hence something like a half bell curve. We can derive the pdf of the transformed variable using the change of variables formula. Because of the symmetry of the squared variable, we have, $f_Y(y) = 2f_X(f^{-1}(y))\Big|\Big(\frac{\mathop{dx}}{\mathop{dy}}\Big)\Big|$. Now, $X = \sqrt{Y}$, so $dx/dy = 1/2y^{-1/2} $. Hence,
+
+$$f(y; 1) = 2\frac{1}{\sqrt{2\pi}}e^{-(\sqrt{y})^2/2}\frac{1}{2}y^{-1/2} = \frac{1}{\sqrt{2}\Gamma(1/2)}e^{-y/2}y^{-1/2},$$
+
+where we recall that $\Gamma(1/2) = \sqrt{\pi}$. The $k$th order case may be derived with a more involved version of the same technique. In the general case, it becomes clear that the variable $Y$, is directly related to a k-dimensional sphere, with surface area, $S$, given by,
+
+$$S = \frac{2\pi^{\frac{n}{2}}}{\Gamma(\frac{n}{2})}.$$
+
+This is how the gamma function comes to be part of the function.
+
+\subsection{Student's T-Distribution}
+
+The Student's t-distribution has an interesting history. Student is a pseudonym for the English mathematician who discovered it, William Sealy Gosset (1876-1937), unable to attribute his true name due to his employment as a statistician at Guiness Brewery in Dublin. According to Gosset, the t-distribution expresses a distribution of the sample mean given the true standard deviation of the samples if unknown. The probability density function is,
+
+$$f(t) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\Bigg(1 + \frac{t^2}{\nu}\Bigg)^{-\frac{\nu + 1}{2}},$$
+
+where $\Gamma(v)$ is the gamma function, and $\nu$, the Greek letter ``nu'', are the degrees of freedom. The variable, $t = \frac{\hat{x} - \mu}{s/\sqrt{n}}$, where $\hat{x} = (x_1 + \cdots + x_n)/n$ is the sample mean, $\mu$ is the true mean, $s^2 = \frac{1}{N - 1}\sum_{i=1}^{n} (x_i - \hat{x})^2$ is the sample variance, and $n$ is the sample size. The degrees of freedom is therefore $\nu = n - 1$. Thus, the Student's t-distribution distributes $t$, the sample mean.
+
+\section{Hypothesis Testing}
+
+\subsection{Standard Error}
+
+Standard error is the standard deviation of the sample mean, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots X_n)$ from $n$ independent samples, $X_1, X_2, \dots, X_n$, with standard deviation $\sigma$. The total, $$T = X_1 + X_2 + \dots + X_n,$$ has variance, $\sigma_T^2 = n\sigma^2$. Then, the variance of $\bar{X} = T/n$, $$\sigma_{\bar{X}}^2 = \frac{1}{n^2}n\sigma^2 = \sigma^2/n.$$ We write, finally the standard error as, $$\text{SE}_{\bar{X}} = \sigma/\sqrt{n}.$$ Note that in practice $\sigma$ must be approximated by the sample variance.
+
+\subsection{Confidence Intervals}
+
+A confidence interval is the interval, expressed in standard deviations, around a sample mean, $\bar{X}$, known to contain the true mean, $\mu$, to a desired degree of certainty. Because of the central limit theorem, we know the sum of n random variables is normally distributed, hence the sample mean also. The standard error statistic tells us the standard deviation of this distribution. Because the Normal CDF has no closed form, it must be computed numerically. In practice, it is necessary to have a lookup table of precomputed probabilities from a standard normal distribution. The value of our variable can then be normalised and the corresponding probability retrieved. In a standard Normal distribution, $Pr(Z \leq 1.96) = 0.9775$ (approximately), and due to symmetry, $Pr(Z \geq - 1.96) = 0.9775$. That is, $95\%$ of the distribution sits in the interval $[-1.96, 1.96]$. In other words, $Z$ has a 95\% chance of being within 1.96 standard deviations ($\sigma = 1$) of the mean. Thus, we may solve for our own $95\%$ confidence interval by writing,
+
+$$1.96 = \frac{\bar{X} - \mu}{\sigma}.$$
+
+Rearranging gives,
+
+$$\mu = [\bar{X} - 1.96\times\text{SE}, \bar{X} + 1.96\times\text{SE}],$$
+
+which is the general form for a $95\%$ confidence interval. Confidence intervals of alternative sizes can be constructed by looking up the normalised value of the desired probability.
+
+\subsection{Hypothesis Testing}
+
+We can use our knowledge of statistics to perform tests on sample data. The formal framework for this is to propose two hypotheses, one the null (or default) hypothesis, $H_0$, the other the alternative hypothesis, $H_1$. The procedure is to compute a statistic to challenge the statistical implications of the null hypothesis, producing a probability that the sample data is consistent with $H_0$. If the probability is lower than some conventional threshold (usually 0.05 or 0.1), $H_0$ is rejected and $H_1$ accepted, in a sort of probabilistic proof by contradiction. Erroneously rejecting $H_0$ is referred to as a type 1 error (false positive); erroneously accepting $H_0$ is referred to as a type 2 error (false negative).
+
+\subsubsection{Z-test}
+
+Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution. The calculations are similar to creating a confidence interval, as it involves computing the SE and Z-score. This score is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, ``can this data reasonably be believed to have been drawn from our distribution?''
+
+\subsubsection{Pearson's Chi-Squared Test}
+
+This test checks for bias in categorical variables. The null hypothesis is that the $n$ categories of a variable are uniformly distributed. If, for example, we have a die producing a set of sample data from $N$ throws, we can compute the difference between the observed total of each category, $O_i$, $i = 1, \dots, 6$, and the expected total for a fair die, $E_i = \frac{1}{6}\times N$. This difference is assumed to be a continuous, normally distributed random variable. The normalised squared error for each variable is $(O_i - E_i)^2/E_i$. We can therefore sum these squared errors and use a chi-squared with $k = 5$ degrees of freedom\footnote{In such problems, the degrees of freedom is $n - 1$, where $n$ is the number of categories. This is due to the fact that once the first $n-1$ variables are given, the final one is determined because the sum is constant.} to provide us with a probability for the null hypothesis.
+
+\section{The Central Limit Theorem}
+\subsection{Moment-Generating Functions}
+
+The moment-generating function (MGF) of a random variable, $X$, is defined as,
+
+\begin{align}
+M_X(t) = \mathbb{E}[e^{tX}] &= \mathbb{E}\Bigg[\sum_{k = 0}^{\infty} \frac{(tX)^k}{k!}\Bigg] \notag \\
+&= \sum_{k = 0}^{\infty} \frac{\mathbb{E}[X^k]t^k}{k!}. \notag
+\end{align}
+
+Such a function is an alternative specification of a distribution to a pdf. By L\'evy's continuity theorem, convergence in MGF implies convergence in distribution, a result that underpins our proof of the central limit theorem. The function is `moment-generating' in that the coefficients of the series expansion are the central moments of the distribution. The MGF of a sum of N i.i.d variables, $T = X_1 + X_2 + \cdots + X_N$ is,
+
+\begin{align}
+M_T(t) = \mathbb{E}[e^{tX_1 + tX_2 + \cdots + tX_N}] &= \mathbb{E}[e^{tX_1}]\mathbb{E} [e^{tX_2}] \cdots\mathbb{E}[e^{tX_N}] \notag \\
+&= M_X(t)^N. \notag
+\end{align}
+
+The MGF of a Gaussian distribution\footnote{Here standardised for simplicity.} is,
+
+$$M_z(t) = \mathbb{E}[e^{tX}] = \int_{-\infty}^{+\infty}e^{zt}\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\mathop{dz}.$$
+
+If we consider the exponents, we have $e^{zt - z^2/2}$. Completing the square gives $e^{-z^2/2 + zt - t^2/2 + t^2/2} = e^{(z-t)^2/2}\cdot e^{t^2/2}$. Therefore we have,
+
+\begin{align}
+M_z(t) &= e^{t^2/2}\int_{-\infty}^{+\infty}\frac{1}{\sqrt{2\pi}}e^{(z-t)^2/2}\mathop{dz} \notag \\
+&= e^{t^2/2} \cdot 1, \notag
+\end{align}
+
+since the integrated expression defines $\mathcal{N}(z | t, 1)$. 
+
+\subsection{Proof of the Central Limit Theorem}
+
+The central limit theorem (CLT) is the crowning jewel of statistics; a profound result, with far-reaching applications. It explains, at least in part, the uncanny ubiquitousness of the bell curve in nature. Its proof is therefore the demonstration of a universal constant. This is where Laplace's statement that ``probability is common sense reduced to calculations'' resonates most strongly. The theorem states that the sum of $n$ random variables, whatever their individual distributions, converges to a Gaussian distribution as $n \to \infty$. If we suppose natural phenomena to be aggregations of many random events, the result is inevitable.
+
+Given $X_1, X_2, ... X_n$ are i.i.d. random variables with mean 0, variance $\sigma^2$, and moment-generating function, $M_x(t)$, denote their standardised sum, $Z = (X_1 + X_2 + \cdots X_n)/\sqrt{n\sigma^2}$. Therefore,
+
+$$M_Z(t) = \Bigg(M_x\Bigg(\frac{t}{\sqrt{n\sigma^2}}\Bigg)\Bigg)^n.$$
+
+A Taylor approximation for $M_x$ is,
+
+$$M_x(s) = M_x(0) + sM_x(0) + \frac{1}{2}s^2M_x''(0) + o(s^2),$$
+
+where $o(s^2)$ is a function that shrinks faster than a quadratic function as $s \to 0$. By definition, $M_x(0) = 0$, $M_x'(0) = 1$, and $M_x''(0) = \sigma^2$. Combining these results gives,
+
+\begin{align}
+M_Z(t) &= \Bigg(1 + \frac{t^2/2}{n} + o\Bigg(\frac{t^2}{n\sigma^2}\Bigg)\Bigg)^n \notag \\
+&\to e^{t^2/2}, \ n \to \infty, \notag
+\end{align}
+
+that is, the MGF of a Normal distribution. Thus, the MGF, $M_Z(t)$, converges to the MGF of a Normal distribution. Hence, by the L\'evy continuity theorem, it converges in distribution to a Gaussian.
+
+\section{The Law of Large Numbers}
+
+In this section we prove one of the fundamental laws of statistics--the law of large numbers--first deriving the Markov and Chebyshev inequalities that are used in the proof.
+
+\subsection{Markov Inequality}
+
+The Markov inequality expresses a general property of probability distributions. An elegant proof exists, but it may be derived simply by the following observation: it is not possible for $\frac{1}{n}\textsuperscript{th}$ of a population to be greater than $n$ times the average value. Expressed mathematically this is,
+
+$$\text{Pr}(X \geq a) \leq \frac{\mathbb{E}[X]}{a}$$
+
+\subsection{Chebyshev Inequality}
+
+The Chebyshev inequality is another general result for probabilities, expressing a bound on the probability of a random variable, $X$, straying from its mean, $\mu$, by more than $k$ standard deviations. To dervie this, we first define a random variable, $Y = (X - \mu)^2$, and constant, $a = (k\sigma)^2$. Then, by the Markov inequality,
+
+$$\text{Pr}((X - \mu)^2 \geq (k\sigma)^2) \leq \frac{\mathbb{E}[(X - \mu)^2]}{(k\sigma)^2},$$
+
+which we may rewrite as,
+
+\begin{align}
+\text{Pr}(|X - \mu| \geq k\sigma) &\leq \frac{\text{Var}(X)}{k^2\sigma^2} \notag \\
+&= \frac{1}{k^2} \notag
+\end{align}
+
+\subsection{Law of Large Numbers}
+
+The law of large numbers states that given a sequence $X_1, X_2, \dots, X_N$ of i.i.d\footnote{independent and identically distributed} random variables, the sample average, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots + X_n)$ converges to the true mean, $\mu$, as n grows. That is, $\bar{X}_n \rightarrow \mu$ as $n \rightarrow \infty$.
+
+Note first that,
+
+\begin{align}
+\text{Var}(\bar{X}_n) &= \text{Var}\bigg(\frac{X_1 + X_2 + \cdots + X_n}{n}\bigg) \notag \\
+&= \frac{1}{n^2}\big(\text{Var}(X_1) + \text{Var}(X_2) + \cdots + \text{Var}(X_n)\big) \notag \\
+%&= \frac{n\sigma^2}{n^2} \notag \\
+&= \frac{\sigma^2}{n} \notag
+\end{align}
+
+Now, by the Chebyshev inequality,
+
+$$
+\text{Pr}(|\bar{X}_n - \mu| \geq k\frac{\sigma}{\sqrt{n}}) \leq \frac{1}{k^2}
+$$
+
+Choosing $k = \frac{\sqrt{n}}{\sigma}\epsilon$ for any arbitrary choice of $\epsilon$,
+
+$$
+\text{Pr}(|\bar{X}_n - \mu| \geq \epsilon) \leq \frac{\sigma^2}{n\epsilon^2},
+$$
+
+that is,
+
+$$
+\text{Pr}(|\bar{X}_n - \mu| < \epsilon) \geq 1 - \frac{\sigma^2}{n\epsilon^2},
+$$
+
+which converges to 1 for a sufficiently large choice of $n$.
+
+\section{Information Theory}
+
+This section presents the basics of information theory.
+
+\subsection{Entropy}
+
+The entropy of a random variable, $X$, is a measure of its uncertainty. It is a core tenet of information theory, the science underpinning coding signal processing. Entropy measures the average number of bits required to encode an alphabet, and is the lower bound on compression (coding). Entropy is defined as,
+
+$$\mathcal{H}(X) = \sum_{x \in X}p(x)\log\frac{1}{p(x)}.$$
+
+Entropy clearly must be positive, and is minimised for a distribution where a single event has probability 1, that is, a deterministic variable. In this case, the entropy of the variable is 0, that is, minimally uncertain. Hence, $\mathcal{H}(X) \geq 0$. When we have binary events, $x \in \{0, 1\}$, we have the binary entropy function, which simplifies to,
+
+$$h_2(p) = -p\log p - (1-p)\log p.$$
+
+\subsection{Kullback-Liebler Divergence}
+
+Kullback-Liebler (KL) divergence is a measure of the disparity between two probability distributions, p and q, written,
+
+\begin{align}
+\mathcal{D}(p || q) &= \sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag \\
+&= \mathcal{H}(p, q) - \mathcal{H}(p). \notag
+\end{align}
+
+The KL divergence can therefore be interpreted as the average number of additional bits required to encode an alphabet with chosen distribution $q$, given true distribution $p$. Like entropy, divergence must be greater than zero. To see this, write,
+
+\begin{align}
+-\mathcal{D}(p || q) &= -\sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag \\
+&= \sum_{k=1}^K p_k \log\frac{q_k}{p_k} \notag \\
+&\leq \log\Bigg(\sum_{k=1}^K p_k\frac{q_k}{p_k}\Bigg) \notag \\
+&= \log 1 = 0, \notag
+\end{align}
+
+where the inequality comes from applying Jensen's inequality, since $\log$ is a convex function. A corollary to this is that the distribution maximising entropy for discrete variables is the uniform distribution, since,
+
+\begin{align}
+0 \leq -\mathcal{D}(p || u) &= \sum_{k=1}^K p_k \log\frac{p_k}{u_k} \notag \\
+&= \sum_{k=1}^K p_k \log{p_k} - \sum_{k=1}^K p_k \log \frac{1}{K} \notag \\
+&= -\mathcal{H}(p) + \log K \notag
+\end{align}
+
+\subsection{Mutual Information}
+
+Mutual information uses the KL divergence to measure the difference in the entropy of a random variable, $X$, before and after a second variable, $Y$, (on which $X$ may be dependent) is introduced. The formula for mutual information is,
+
+\begin{align}
+I(X; Y) &\triangleq \mathcal{D}(p(X, Y) || p(X)p(Y)) = \sum_x \sum_y p(x, y) \log\frac{p(x, y)}{p(x)p(y)}\notag \\
+&= \mathcal{H}(Y) - \mathcal{H}(Y|X) \notag \\
+&= \mathcal{H}(X) - \mathcal{H}(X|Y) \notag,
+\end{align}
+
+and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is removed from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}, hence can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
+
+\section{Convex Optimisation}
+\subsection{Convex Sets}
+A set of points, $S$, in a vector space is convex if for any two points $x_1$ and $x_2$ in $S$, all points in-between, that as, all points on the straight line connecting $x_1$ and $x_2$ are also in $S$. In a sense, it is a region that does not have any ``holes''. For example, a circular region is convex, but a doughnut is not, nor is a crescent. A line passing through points $x_1$ and $x_2$ can be written, $x_1 + c(x_2 - x_1)$, for some constant $c$. Formally, a set $S$ is convex if,
+
+$$S = \Big\{x_1, x_2 \in S \implies (1 - \lambda) x_1 + \lambda x_2 \in S \Big\},$$
+
+for all $\lambda \in [0, 1]$. A convex hull of a set of points is the smallest convex region enclosing those points.
+
+\subsection{Convex Functions}
+
+A function, $f(x)$, is convex on an interval if,
+
+$$
+f((1 - \lambda)x_1 + \lambda x_2) \leq (1 - \lambda) f(x_1) + \lambda f(x_2),
+$$
+
+for all $\lambda \in [0, 1]$. That is, the curve lies below a line drawn $x_1$ and $x_2$. A function with more than one turning point in a domain cannot be convex. Examples of convex functions are $e^x$, $x^2$, etc. \emph{Strict} convexity occurs when there is a strict inequality. Concavity is the same property with the inequality reversed. Hence, $f(x)$ convex $\Longleftrightarrow$ $-f(x)$ concave. A linear function is both concave and convex.
+
+\subsection{Jensen's Inequality}
+
+Jensen's inequality essentially extrapolates the definition of convexity to $n$ dimensions, stating,
+
+$$
+f\Bigg(\sum_{i=1}^{N}\lambda_i \mathbf{x}_i\Bigg) = \sum_{i=1}^{N} \lambda_if(\mathbf{x}_i) \notag,
+$$
+
+for convex function, $f$, $\mathbf{x} \in \mathcal{R}^N$, and $\sum_{i=1}^N \lambda_i = 1$. For $N = 2$, we have,
+
+$$
+f(\lambda_1 x_1 + \lambda_2 x_2) \leq \lambda_1f(x_1) + \lambda_2f(x_2),
+$$
+
+for any $\lambda_1, \lambda_2$ such that $\lambda_1 + \lambda_2 = 1$ (definition of convexity). Then suppose,
+
+$$
+f\Bigg(\sum_{i=1}^k\lambda_i x_i\Bigg) \leq \sum_{i=1}^k \lambda_if(x_i)
+$$
+
+Define,
+
+\[\lambda_j = \begin{cases} 
+      \ \ \ \ \lambda_i & j = 1, ..., k-1 \\
+      \lambda_k + \lambda_{k+1} & j = k
+   \end{cases}
+\]
+
+and \[x_j = \begin{cases} 
+      \ \ \ \ \ \ \ \ \ \ \ \ \ \  x_i & j = 1, ..., k-1 \\
+      \frac{\lambda_k}{\lambda_k + \lambda_{k+1}}x_k + \frac{\lambda_{k+1}}{\lambda_k + \lambda_{k+1}}x_{k+1} & j = k
+   \end{cases}
+\]
+
+Then,
+
+\begin{align}
+f\Bigg(\sum_{i=1}^{k+1}\lambda_i x_i\Bigg) &= f\Bigg(\sum_{j=1}^{k}\lambda_j x_j\Bigg) \notag \\
+&\leq \sum_{j=1}^k \lambda_jf(x_j) \notag \\
+&= \sum_{i=1}^{k-1} \lambda_if(x_i) + (\lambda_k + \lambda_{k+1})f\Bigg(\frac{\lambda_k}{\lambda_k + \lambda_{k+1}}x_k + \frac{\lambda_{k+1}}{\lambda_k + \lambda_{k+1}}x_{k+1}\Bigg) \notag \\
+&\leq \sum_{i=1}^{k-1} \lambda_if(x_i) + (\lambda_k + \lambda_{k+1})\frac{\lambda_k}{\lambda_k + \lambda_{k+1}}f(x_k)+ \frac{\lambda_{k+1}}{\lambda_k + \lambda_{k+1}}f(x_{k+1}) \notag \\
+&= \sum_{i=1}^{k+1} \lambda_if(x_i) \notag, 
+\end{align}
+
+and Jensen's inequality follows from the principle of mathematical induction.
+
+\subsubsection{Sums of Convex Functions}
+An important result is that if we sum two convex functions, the result is convex also. To see this in two dimensions, define $f(x)$ and $g(x)$ convex, and their sum $h(x)$. Then,
+
+\begin{align}
+h((1 - \lambda)x_1 + \lambda x_2) &= f((1 - \lambda)x_1 + \lambda x_2) + g((1 - \lambda)x_1 + \lambda x_2) \notag \\
+&\leq (1 - \lambda)f(x_1) + \lambda f(x_2) + (1 - \lambda)g(x_1) + \lambda g(x_2) \notag \\
+&= (1 - \lambda)(f(x_1) + g(x_1)) + \lambda(f(x_2) + g(x_2)) \notag \\
+&= (1 - \lambda)h(x_1) + \lambda h(x_2). \notag
+\end{align}
+
+If one of the functions, say $f(x)$, is linear, it is sufficient to note that $f((1 - \lambda)x_1 + \lambda x_2) = (1 - \lambda)f(x_1) + \lambda f(x_2) \leq (1 - \lambda)f(x_1) + \lambda f(x_2)$, and the proof holds as before. In fact, a linear function satisfies the definition for convexity \emph{and} concavity.
+
+\subsection{Lagrange Multipliers}
+Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), are a powerful technique for solving a constrained optimisation problem of the form,
+
+$$
+\begin{array}{rl}
+\text{maximise} & f(x_1, \dots, x_n) \\
+\text{subject to} & g(x_1, \dots, x_n) = 0,
+\end{array}
+$$
+
+noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. The constraint, $g$, restricts solutions to a path traced across the hyper-surface defined by $f$, similar to how a partial derivative describes a cross-section of a surface. The key realisation is that once this path runs parallel to a contour of $f$, we are at a critical point, where the gradients of $f$ and $g$ (running perpendicular to the contour) is in the same direction. At this point,
+
+\begin{align}\nabla f = \bigg[\frac{\delta f}{\delta x}, \frac{\delta f}{\delta y}\bigg] = -\lambda\bigg[\frac{\delta g}{\delta x}, \frac{\delta g}{\delta y}\bigg] = -\lambda\nabla g \label{eq:lagrange},
+\end{align}
+
+and where the constant $\lambda$, known as the Lagrange multiplier, represents the ratio of the magnitudes of the gradients. The superfluous minus sign is kept for historical reasons. Note we have confined our study to two dimensions for simplicity. From this we introduce the auxiliary equation,
+
+$$\mathcal{L}(x, y, \lambda) = f(x, y) + \lambda g(x, y).$$
+
+Maximising this function would satisfy the conditions in (\ref{eq:lagrange}), and clearly at the maximum, $$\frac{\delta\mathcal{L}}{\delta\lambda} = g(x, y) = 0,$$ satisfying the constraint. It is further possible to combine constraints of this form for multiple Lagrange multipliers. The Karush-Kuhn-Tucker (KKT) conditions describe a generalisation of the Lagrange multipliers for non-linear programming problems with equality or inequality constraints.
+
+\section{Introduction to Machine Learning}
+
+Machine learning makes up the stochastic wing of the artificial intelligence community. When viewed as the basis of automated systems, it can be thought of as a mode of programming based on probabilities. It is an amalgamation of techniques from across statistics, probability theory, and numerical analysis. From the Bayesian viewpoint, the real machine learning exists in models derived using Bayesian inference. All other parametric models (SVMs, neural networks) are a vulgarisation of this, with no intelligible grounding in probability theory. Rather, they satisfy the engineering requirement of working very well.
+
+\subsection{Bayes and the Beta-Binomial Model}
+
+We begin with examining the original result--that studied by English mathematician, Thomas Bayes (1701-1761), in \emph{An Essay towards solving a Problem in the Doctrine of Chances}\footnote{This early term for probability theory comes from de Moivre's seminal textbook (1718).}. Here we consider the inference of data produced from a sequence of coin tosses, such as, $$0101001010111,$$ where $0$ represents `tails' and 1 `heads'. In fact, it is sufficient to know the number of heads and tails, which we denote $N_1$ and $N_0$ respectively. These are consequently known as `sufficient statistics'. Note that the beta-binomial model is not a classifier, as we are not engaging in \emph{classification}, but rather we are predicting outcomes. For this reason, not all the components described above will come into play. Nevertheless it should be an instructive case study.
+
+The starting point is to define the likelihood. The probability distribution for such a random sequence is the discrete binomial distribution. As we are maximising for the rate parameter, we can drop the normalisation constant and we have,
+
+$$p(\mathcal{D}|\theta) = \theta^{N_1}\cdot(1 - \theta)^{N_0}$$
+
+Clearly, we can maximise this expression by taking the derivative to give,
+
+\begin{align}
+N_1\theta^{N_1 - 1}(1 - \theta)^{N_0} - N_0\theta^{N_1}(1 - \theta)^{N_0 - 1} &= 0 \notag \\
+&\implies \hat\theta_{MLE} = \frac{N_1}{N_0 + N_1} = \frac{N_1}{N}, \notag
+\end{align}
+
+where $N = N_0 + N_1$. The prior distribution is chosen to be \emph{conjugate} to the likelihood, that is, of like form. The continuous beta distribution is therefore a suitable choice, hence,
+
+$$p(\theta) = \text{Beta}(\theta|a, b) \propto \theta^{a - 1}(1 - \theta)^{b - 1},$$ where we drop the normalising beta function for the proportionality. The values of $a$ and $b$ are hyper-parameters that control the skew. When $a = b = 1$, we have a uniform prior and the posterior is just the same as the likelihood. We multiply the prior and likelihood to obtain the posterior,
+
+$$p(\theta|\mathcal{D}) \propto \theta^{N_1 + a}\cdot(1 - \theta)^{N_0 + b}.$$
+
+Notice how the hyper-parameters behave as additional observations. For this reason they are known as \emph{pseudo-counts}--it is as though we had some additional data other than $\mathcal{D}$ that we can use to influence or stabilise the behaviour of the posterior. This is the power of a prior distribution. Now, the beta distribution distributes the continuous $\theta$, so this time we can simply look up the mode of a beta distribution to obtain the MAP estimate,
+
+$$\hat\theta_{MAP} = \frac{N_1 + a - 1}{N + a + b - 2}.$$ Notice that as $N \to \infty$, the MAP estimate approaches the ML estimate. This shows that a prior serves its role of stabiliser only for smaller data sets. As data is added, it is overwhelmed by the volume of data fitted by the likelihood. Now, the posterior predictive distribution for unseen data, $\hat{x}$, is either given directly by the ML or MAP estimates, or else from Bayes model averaging,
+
+\begin{align}
+p(\hat{x} = 1|\mathcal{D}) &= \int_0^1 p(x = 1 |\theta)p(\theta|\mathcal{D})\mathop{dx} \notag \\
+&= \int_0^1 \theta p(\theta|\mathcal{D})\mathop{dx} = \mathbb{E}[\theta|\mathcal{D}] = \frac{N_0 + a}{N + a + b}. \notag
+\end{align}
+
+The mean of a beta distribution differs from its mode, as it is asymmetric.
+
+\subsection{Generative Classifiers}
+
+Here we describe \emph{generative classifiers}, by illustrating how their components are derived with the naive Bayes classifier (NBC). A classifier is simply a model that predicts the membership of an observation, $x$, in one of a discrete number of classes. Generative classifiers `generate' the posterior distribution through inference, in contrast with \emph{discriminative} classifiers, which model the posterior distribution directly. The parameters of a NBC are found by considering the likelihood for $N$ data training samples, $\mathcal{D}$, of dimension $D$, which may be written,
+
+\begin{align}
+\textbf{likelihood} = p(\mathcal{D}|\theta) = p(\mathbf{X}, \mathbf{y}|\boldsymbol\theta) &= p(\mathbf{y}|\boldsymbol\theta)p(\mathbf{X}|\mathbf{y}=c,\boldsymbol\theta) \notag \\
+&= \textbf{class prior} \times \textbf{class conditional density} \notag \\
+&= \prod_{i=1}^N p(y_i|\boldsymbol\pi)p(\mathbf{x}_i|y=c,\boldsymbol\theta), \label{eq:iid} \\
+&= \prod_{i=1}^N p(y_i|\boldsymbol\pi)\prod_{j = 1}^D p(x_{ij}|y=c,\boldsymbol\theta_j), \label{eq:nbc}
+\end{align}
+
+where we denote the set of parameters for both input and output variables, $\theta = \{\pi, \theta\}$. Step (\ref{eq:iid}) following from the data being independent and identically distributed (a standard assumption), and step (\ref{eq:nbc}) from the naive Bayes assumption of feature independence when the class is given\footnote{This is called a naive assumption because it precludes covariance between model features, which in practice is usually present.} We take logs to derive the log-likelihood, a common trick that makes optimisation easier without changing the optimal parameters,
+
+\begin{align}
+\log p(\mathcal{D}|\boldsymbol\theta) &= \sum_{i=1}^N \log p(y_i|\boldsymbol\pi) + \sum_{i=1}^N\sum_{j = 1}^D\log p(x_{ij}|y=c,\boldsymbol\theta_j) \notag \\
+&= \sum_{c} N_c\log p(y_i|\boldsymbol\pi_c) + \sum_{c}\sum_{i:y_i=c}\sum_{j = 1}^D\log p(x_{ij}|y=c,\boldsymbol\theta_{jc}) \notag
+\end{align}
+
+where $N_c$ is the number of observations having class $c$. Now we have an expression that is easy to optimise, we can obtain the \textbf{maximum likelihood estimate} (MLE) by optimising each of the parts of the sum. This is equivalent to calculating the \emph{mode} of each of the probability functions. For the multinomial class variable, the task is simple, $\hat\pi_c = N_c/N.$ For the input parameters, the MLE depends upon the choice of distribution. One of the benefits of the naive independence assumption is it allows us to model any combination of distributions with ease--all we need do is substitute their probability functions. For simplicity, we opt for Bernoulli distributions on each of the features. Hence, the mean for feature $j$ given class $c$ is $\hat\theta_{jc} = N_{jc}/N_c$, where $N_{jc} = \sum_{i:y_i=c} x_{ij}$, noting the $x_{ij}$ are binary. The maximum likelihood estimate is therefore, $\hat{\boldsymbol\theta}_{MLE} = \{\hat\pi_c, \hat\theta_{jc} : 1\leq c\leq C, 1\leq j\leq D\}$. This is now enough to make a prediction. The posterior predictive distribution derives from,
+
+\begin{align}
+\textbf{posterior predictive} = p(y = c|\mathbf{x},\boldsymbol\theta) 
+&= \frac{p(y = c|\boldsymbol\theta)p(\mathbf{x}|y=c,\boldsymbol\theta)}{\sum_{c'}p(y = c'|\boldsymbol\theta)p(\mathbf{x}|y=c',\boldsymbol\theta)} \notag \\
+&\propto p(y = c|\boldsymbol\theta)p(\mathbf{x}|y=c,\boldsymbol\theta), \notag
+\end{align}
+
+having the same form as (\ref{eq:nbc}). For a test observation, $\hat{\mathbf{x}}$, we can simply cycle through each of the classes, plug the appropriate parameters into (\ref{eq:nbc}), and compute a probability. We can then predict the classification of $\mathbf{x}$ to be the class $c$ maximising the expression. This is called a \textbf{plug in approximation}, and it is the first of two alternatives for prediction. We will come to the other shortly, however, there are several more things we can do with plug in approximation.
+
+To begin with, we may want to include \emph{prior} information on the parameters. Thus, we form the prior distribution,
+
+\begin{align}
+\textbf{prior} = p(\boldsymbol\theta) = p(\pi)\prod_c\prod_{j=1}^Dp(\theta_{jc}) \notag
+\end{align}
+
+The prior imposes a distribution on the parameter set, which has a stabilising effect when the training data is limited, mitigating overfitting. We choose the prior distributions on the parameters to be \emph{conjugate} to the likelihood distributions, that is having a similar form. This is by no means mandatory, but it makes the derivations easier. Since we have a multinomial distribution on $y$ and Bernoulli distributions on $x|y=c$, we choose Dirichlet and beta distributions respectively for the prior parameters. Thus, $\pi \sim \text{Dir}(\boldsymbol\alpha)$ and $\theta_j \sim \text{Beta}(\beta_0, \beta_1)$. Choosing $\boldsymbol\alpha = \mathbf{1}$ and $\boldsymbol\beta = \mathbf{1}$ corresponds to a common practice known as \emph{add one} smoothing.
+
+If we combine the prior with the likelihood, we get the posterior distribution, which strikes a balance between what the data tells us, and what we expect,
+
+\begin{align}
+\textbf{posterior} = p(\boldsymbol\theta|\mathcal{D}) &\propto \textbf{likelihood} \times \textbf{prior} \notag \\
+&= \prod_{n=1}^N\text{Cat}(y_i|\boldsymbol\pi)\text{Dir}(\boldsymbol\pi;\boldsymbol\alpha)\prod_{c}\prod_{i:y_i = c}\prod_{j = 1}^D \text{Ber}(x_{ij}|\theta_{jc})\text{Beta}(\theta_{jc};\beta_0, \beta_1), \notag \\
+&= p(\boldsymbol\pi|\mathcal{D})\prod_{j = 1}^D p(\theta_{jc}|\mathcal{D}), \notag
+\end{align}
+
+where $p(\boldsymbol\pi|\mathcal{D}) = \text{Dir}(N_1 + \alpha_1, \dots, N_C + \alpha_C)$ is the posterior on $\boldsymbol\pi$, and $p(\theta_{jc}|\mathcal{D}) = \text{Beta}((N_c - N_{jc}) + \beta_0, N_{jc} + \beta_1)$ is the posterior on $\theta_{jc}$. Note that because we are optimising for $\boldsymbol\theta$, it does not matter that the expression is only proportional to the posterior. Now we have two options. Firstly, we can compute the mode of this posterior distribution giving us the \textbf{maximum a posteriori estimate}, $\hat{\boldsymbol\theta}_{MAP}$. This can then be plugged into the posterior predictive, just as with the MLE. The alternative is to use \textbf{Bayes model averaging}. This calculates the posterior as a weighted average of the distribution. In this scheme, neither the ML or MAP estimates are computed directly, rather, we sum or integrate over the unknown parameters, marginalising them,
+
+\begin{align}
+p(y = c|\hat{\mathbf{x}}, \mathcal{D}) &= \frac{p(\hat{\mathbf{x}}|y = c, \mathcal{D})p(y=c|\mathcal{D})}{\sum_{c'}p(\hat{\mathbf{x}}|y = c', \mathcal{D})p(y=c'|\mathcal{D})} \notag \\ &\propto p(\hat{\mathbf{x}}|y = c, \mathcal{D})p(y=c|\mathcal{D}) \notag \\
+&= \int p(\hat{\mathbf{x}}, \boldsymbol\theta|y = c, \mathcal{D})\mathop{d\boldsymbol\theta}\int p(y=c, \boldsymbol\pi|\mathcal{D})\mathop{d\boldsymbol\pi} \label{eq:ltp} \\
+&= \int p(\hat{\mathbf{x}}|y = c, \boldsymbol\theta, \cancelto{}{\mathcal{D}})p(\boldsymbol\theta|\mathcal{D})\mathop{d\boldsymbol\theta}\int p(y=c|\boldsymbol\pi, \cancelto{}{\mathcal{D}})p(\boldsymbol\pi|\mathcal{D})\mathop{d\boldsymbol\pi}, \label{eq:cancel}
+\end{align}
+
+with step (\ref{eq:ltp}) comes form the law of total probability and the cancellations in step (\ref{eq:cancel}) occur because of the prediction is independent of the data when conditioned on the parameters. Thus we are averaging by the posterior distribution. This may be solved analytically for the choice of distributions we have made. A simple implementation of the naive Bayes classifier is given in \texttt{nbcDemo.m}.
+
+\subsection{Multivariate Normal Distributions}
+Multivariate Normal (MVN) or multivariate Gaussian distributions are the multidimensional generalisation of the Gaussian distribution. The form of the probability density function for a $D$-dimensional Gaussian is defined to be,
+
+$$\mathcal{N}(\mathbf{x} ; \mu, \Sigma) \triangleq \frac{1}{(2\pi)^{D/2}|\Sigma|^{1/2}}
+\exp\bigg[-\frac{1}{2}(\mathbf{x} - \mathbf{\mu})^T\Sigma^{-1}(\mathbf{x} - \mathbf{\mu})\bigg]
+$$
+
+where the vector $\mu$ is the vector of means, and $\Sigma$ is the covariance matrix. The exponent expresses the Mahalanobis distance (named after Indian statistician Prasanta Chandra Mahalanobis (1893-1972)), which captures the behaviour of mean square error in $D$ dimensions. The covariance matrix is by definition symmetric positive-semidefinite, and may be diagonalised with diagonal matrix of eigenvalues, $\Lambda$, and orthonormal eigenvectors, $U$, as $\Sigma = \mathbf{U}\Lambda\mathbf{U}^T$. Orthonormality implies $U^{-1} = U^T$. Consequently,
+
+$$\Sigma^{-1} = \mathbf{U}\Lambda^{-1}\mathbf{U}^T = \sum_{d=1}^D\frac{1}{\lambda_d}\mathbf{u}_d\mathbf{u}_d^T,$$
+
+where $\mathbf{u}_d$ are the columns of $\mathbf{U}$. Therefore, the Mahalanobis distance can be expressed as,
+
+$$(\mathbf{x} - \mathbf{\mu})^T\Sigma^{-1}(\mathbf{x} - \mathbf{\mu}) = \sum_{d=1}^D\frac{y_d^2}{\lambda_d^2},$$
+
+where $y_i = \mathbf{u}_i^T(\mathbf{x} - \mu)$, from which it may be seen that events of equal probability lie along elliptical contours, for which the eigenvectors form the axes and eigenvalues control the variance. Fitting a MVN from data $\mathcal{D}$ of size $N$, can be done by maximum log-likelihood estimation. With a bit of vector calculus, the MLE is,
+
+$$\hat{\mu}_{MLE} = \frac{1}{N}\sum_{n=1}^N\mathbf{x}_n$$
+
+that is, the sample mean and,
+
+$$\hat\Sigma_{MLE} = \frac{1}{N}\sum_{n=1}^N(\mathbf{x}_i - \mu)^T(\mathbf{x}_i - \mu),$$
+
+the sample covariance matrix.
+
+\subsection{Gaussian Discriminant Analysis}
+
+Gaussian discriminant analysis is a classifier that fits a Gaussian distribution to each of $K$ classes. That is, the class-conditional densities are defined to be,
+
+$$p(\mathbf{x} | y = c) = \mathcal{N}(\mathbf{x} ; \hat{\mu}_c, \hat\Sigma_c),$$
+
+where the parameters come from the maximum likelihood for multivariate normal distributions (MVN). Where the covariance matrix is diagonal, the features are independent, and this is equivalent to the naive Bayes classifier. This sort of modelling, where we learn $K$ Gaussian densities and predict membership of a test observation is like a nearest centroids classifier.
+
+\subsubsection{Quadratic Discriminant Analysis}
+
+The posterior distribution can then be defined as,
+
+$$p(y = c|\mathbf{x}, \theta) = \frac{\pi_c(2\pi)^{-D/2}|\Sigma|^{-1/2}\exp\big[-\frac{1}{2}(\mathbf{x} - \mathbf{\mu}_c)^T\Sigma_c^{-1}(\mathbf{x} - \mathbf{\mu_c})\big]}{\sum_{c'}\pi_{c'}(2\pi)^{-D/2}|\Sigma|^{-1/2}\exp\big[-\frac{1}{2}(\mathbf{x} - \mathbf{\mu}_{c'})^T\Sigma_{c'}^{-1}(\mathbf{x} - \mathbf{\mu}_{c'})\big]},$$
+
+where $\pi_c$ is the class prior. It may be shown (though we will not do so here) that a decision rule (a probability threshold for classification), creates a quadratic boundary between the centroids in Euclidean space. Notice finally that we are effectively doing a $plug-in$ approximation, in the absence of Bayes model averaging.
+
+\subsubsection{Linear Discriminant Analysis}
+
+Linear discriminant analysis (LDA) arises from QDA when the simplifying assumption is made that the covariances matrices are all equal. In this instance we have,
+
+$$p(y = c|\mathbf{x}, \theta) \propto \exp\Big[\mu_c^T\Sigma^{-1}\mathbf{x} - \frac{1}{2}\mu_c^T\Sigma^{-1}\mu_c + \log\pi_c\Big]\exp\Big[-\frac{1}{2}\mathbf{x}^T\Sigma^{-1}\mathbf{x}\Big],$$
+
+and the quadratic term cancels out over the sum, leaving an expression that is linear in $\mathbf{x}$. It can be shown easily that this produces linear decision boundaries. There are some interesting connections between LDA and other parts of machine learning. If we define $\gamma_c = - \frac{1}{2}\mu_c^T\Sigma^{-1}\mu_c + \log\pi_c$ and $\beta_c = \Sigma^{-1}\mu_c$, we can write,
+
+$$p(y = c|\mathbf{x}\theta) = \frac{e^{\beta_c^T\mathbf{x} + \gamma_c}}{\sum_{c'}e^{\beta_{c'}^T\mathbf{x} + \gamma_{c'}}} = \mathcal{S}({\eta})_c,$$
+
+wher $\eta_c = [\beta_1^T\mathbf{x} + \gamma_1, \beta_2^T\mathbf{x} \gamma_2 , \dots, \beta_C^T\mathbf{x} + \gamma_C]$, and $\mathcal{S}$ is the \emph{softmax} function (so called because at low `temperatures', that is if we divide all the exponents by $T$, the probability of the most likely class goes to $1$ as $T \to 0$. This terminology comes from statistical physics--in fact the softmax function is the form of the Boltzmann\footnote{Ludwig Boltzmann (1844-1906) was a German physicist credited with the development of statistical mechanics.} distribution. The marginal likelihood is known as the partition function, denoted $Z$ for `Zustandssumme'--the German expression for `sum over states'.
+
+This form of LDA is very similar to logistic regression, differing only in the fact that LDA is generative and logistic regression is discriminative. If we normalise an naive Bayes classifier with Gaussian features, it is equivalent to LDA--hence naive Bayes and logistic regression form what is known as a generative-discriminative pair.
+
+\subsection{Linear Regression}
+
+A linear regression is used to make predictions for a continuous variable.
+
+\subsubsection{Constructing a Loss Function}
+The starting point for building a regression model is a dataset, $\mathcal{D}$, where,
+
+$$\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N},$$
+
+that is, a set of $N$ data points, where $\mathbf{x}_i \in \mathbb{R}^D$ is a $D$-dimensional \emph{input} vector, and $y_i \in \mathbb{R}$ are the corresponding scalar outputs. The dataset, $\mathcal{D}$, is known as our \emph{training set}. The objective of the regression algorithm is to infer the linear function that best fits the data. More precisely, we want to find the vector of coefficients, $\boldsymbol\beta = [\beta_1, \beta_2, \dots, \beta_D]$, that gives the best approximation for,
+
+\begin{align}
+y_n &\approx \beta_1x_{n1} + \beta_2x_{n2} + \cdots + \beta_Dx_{nD} \notag \\
+&= \mathbf{x}_n^T\boldsymbol\beta, \notag
+\end{align}
+
+for all $n = 1, \dots, N$. Each of the $D$ dimensions of $\mathbf{x_n}$ is known as an indicator. The greater the corresponding coefficient in the parameter vector, $\boldsymbol\beta$, the more weight this dimension has in determining the output, $y_n$. We can formulate the above as an optimisation problem,
+
+$$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2N}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
+
+where $\mathcal{L}(\boldsymbol\beta)$ is the ``loss'' function, expressing a \emph{mean square error} for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm minimise this function. Note we could have chosen any sort of loss function, but our reasons for choosing mean square error will be revealed in the following section.
+
+\subsubsection{Method of Least Squares}
+
+The method of least squares (MLS) is a closed-form solution algorithm. As previously stated, its discovery was in the same paper by Gauss that first formalised the Normal distribution. We will discover the link in the following section. We may write the derivative of the loss function,
+
+$$\frac{\delta\mathcal{L}}{\delta\boldsymbol\beta} = -\frac{1}{N}X^T(\mathbf{y} - X\boldsymbol\beta),$$
+
+where $X \in \mathbb{R}^{N\times D}$ is the matrix whose $i$th row is the $i$th $D$-dimensional vector, $x_i$, and $\mathbf{y} \in \mathbb{R}^D$ is the vector whose $i$th element is the $i$th scalar, $y_i$. We can therefore minimise $\mathcal{L}(\boldsymbol\beta)$ by setting its derivative to 0, giving the normal equation,
+
+$$X^T(X\boldsymbol\beta - \mathbf{y}) = 0,$$
+
+and finally, the optimal parameter vector,
+
+$$\boldsymbol\beta^* = (X^TX)^{-1}X^T\mathbf{y}.$$
+
+MLS also has a nice geometric interpretation. According to the normal equation, the error, $X\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $X^T$. This makes sense, because it means the choice of prediction, $X\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly ``below'' it on the hyperplane, $X^T$.
+
+\subsubsection{Gradient Descent}
+
+In most cases, the closed-form method of least squares cannot be used, as it requires the matrix $X^TX$ to have an inverse. This depends on some conditions on $X$ that are in practice rarely met. Therefore, we have recourse to sure-fire numerical methods. The most fundamental of these is the method of gradient descent. The convenient form of our loss function makes it a differentiable function that is furthermore \emph{convex}. It therefore has a unique global minimum. We can approach this optimal point iteratively from an arbitrary starting point by taking steps in the direction of the gradient (Figure \ref{fig:gradientdescent}). The algorithm is defined as,
+
+$$\boldsymbol\beta^{k+1} = \boldsymbol\beta^{k} - \alpha \nabla\mathcal{L}(\boldsymbol\beta^k),$$
+
+where $\alpha$ is the step-size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent has more sophisticated variants such as Newton's method and L-BFGS, whose application may be warranted for larger data sets.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/gradientdescent.png}
+\caption{The method of gradient descent iteratively approaches a global minimum on a convex function.\cite{gradientdescent}}
+\label{fig:gradientdescent}
+\end{figure}
+
+\subsubsection{Model Prediction}
+
+Once we have computed our optimal model parameters, $\boldsymbol\beta^*$, we can start making predictions for unseen data, $\hat{\mathbf{x}}$. Our prediction is then,
+
+$$\hat{y} = \hat{\mathbf{x}}^T\boldsymbol\beta^*.$$
+
+Usually, the model is first validated on a partition of the original training dataset, $\mathcal{D}$, called a \emph{test} data set. Train-test sets are partitioned from the original dataset by conventional split ratios, for example 80-20, or 50-50. More rigorous validation procedures exist, such as \emph{k-fold cross validation}. These procedures are used to guage model performance, and to estimate the \emph{generalisation error}.
+
+\subsubsection{Maximum Likelihood Estimation}
+
+Now we will derive our regression model from a probabilistic angle. Probabilistic constructions are preferred in machine learning because they make the models more comprehensible\footnote{For some techniques, however, such as neural networks, things are not so straightforward.}. We start our derivation with the following assumptions: firstly, that the data points, $(\mathbf{x}_n, y_n)$ are independent and identically distributed (i.i.d); second, that the output variable is modelled by a linear function with gaussian noise, that is, $\mathbf{y} = X\boldsymbol\beta + \boldsymbol\epsilon$, where $\boldsymbol\epsilon$ is a vector of normally distributed random variables, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$, where $\sigma^2$ is the variance representing the random noise. We are thereby making an assumption about the how the output variable is distributed around our predictions, $\mathbf{x}_n^T\boldsymbol\beta$. Now we may write a probability distribution for $y_n$,
+
+$$p(y_n|\mathbf{x}_n, \boldsymbol\beta) = \mathcal{N}(\mathbf{x}_n^T\boldsymbol\beta, \sigma^2),$$
+
+and since the data points are independent, the distribution over all $y_n$ is,
+
+$$p(\mathbf{y}|X, \boldsymbol\beta) = \prod_{n=1}^N p(y_n|\mathbf{x}_n, \boldsymbol\beta).$$
+
+As we will soon see, maximising this probability is equivalent to minimising the square loss function! Because of our assumption of Gaussian noise, the optimal parameters will be those that construct a line such that the data points around it are distributed according to a Normal distribution, that is, maximising the likelihood of the data around the line. This is equivalent to minimising the square loss. As we shall see, it is convenient to work with the log of the likelihood. Since a $\log$ function is a monotonically increasing function, maximising the log-likelihood is no different to maximising the likelihood itself. Therefore we have,
+
+\begin{align}
+\max_{\boldsymbol\beta}\mathcal{L}_{lik}(\boldsymbol\beta) &= \max_{\boldsymbol\beta}\Big\{\log \prod_{n=1}^N \mathcal{N}(\mathbf{x}_n^T\boldsymbol\beta, \sigma^2)\Big\} \notag \\
+&=\max_{\boldsymbol\beta}\Big\{\sum_{n=1}^N \log \frac{1}{\sigma\sqrt{2\pi}}e^{-(y - \mathbf{x}_n^T\boldsymbol\beta)^2/2\sigma^2}\Big\} \notag \\
+&=\max_{\boldsymbol\beta}\Big\{-\frac{1}{2\sigma^2}\sum_{n=1}^N (y - \mathbf{x}_n^T\boldsymbol\beta)^2 + \log\frac{N}{\sigma\sqrt{2\pi}}\Big\} \notag \\
+&=\max_{\boldsymbol\beta}\Big\{-k_1\mathcal{L}(\boldsymbol\beta) + k_2\Big\} \notag \\
+&=\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta)\notag
+\end{align}
+
+where $k_1$ and $k_2$ are positive constants, and so they have no bearing on the maximising $\boldsymbol\beta^*$. Thus, we see that maximising our likelihood function is equivalent to minimising our original mean square error loss function.
+
+\subsubsection{Non-linear Fits}
+
+If we wish to fit a non-linear function to our data, we can simply transform our original data. For example, if we want to fit a quadratic function to our data (Figure \ref{fig:quadraticfit}), we need only square the values in our dataset and introduce it as a new dimension in our data. This is still considered a linear regression, as we still have a linear combination of variables, albeit with a non-linear basis function. These more complex model are best created in the framework of a \emph{ridge regression}, where we introduce a penalty term in the loss function\footnote{This has the probabilistic interpretation of imposing a prior distribution on the parameter vector}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/quadraticfit.pdf}
+\caption{A non-linear fit may be found by transforming the data.}
+\label{fig:quadraticfit}
+\end{figure}
+
+\subsection{Decision Trees}
+
+Classification is also a predictive action, but predicts \emph{membership} in one of a finite number of classes, rather than a continuous value. Many techniques exist for classification. One of the most common is \emph{logistic regression}, which has a similar MLE derivation as presented above, albeit replacing the Gaussian pdf with a (binary) Bernoulli pdf. Other well-known techniques for classification include \emph{support vector machines} (SVM) and \emph{neural networks}. Decision trees are distinct from these techniques in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data.
+
+\subsubsection{Decision Trees Learning}
+
+Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups iteratively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree.
+
+The only question then is \emph{how} we should split the data. For example, if we are classifying vehicles, and $y \in \{\text{car}, \text{motorbike}\}$, and our data consisted of categories, $\mathbf{x} = [\text{number wheels}, \text{colour}, \text{milage}]$, the number of wheels is likely be a very effective indicator for sorting the cars from the bikes. In fact, it may be decisive, and rarely are indicators so informative in practice. The colour would likely tell us very little, but the milage might tell us something, as longer journeys are usually done by cars, so there may be a weak correlation. We therefore use an impurity measure to quantify the reduction in uncertainty upon making a given split. The best split is the one that minimises the uncertainty,
+
+\begin{align}
+( k^*, \tau^*) &= \min_{k, \tau} I_{split}(X, k, \tau) \notag \\
+&= N_LI_{split}(p_L) + N_RI_{split}(p_R), \notag
+\end{align}
+
+where $L$ and $R$ denote the left and right splits of the data, $N_L$ and $N_R$ are respective the population sizes of the split data, and $p_L = \frac{\#(y = 0)}{N_L}$ and $p_R = \frac{\#(y = 0)}{N_R}$ are the sample probabilities of belonging to a given class , where in our fictitious data, $y=0$ could indicate a car, and $y=1$ a bike. Of course, when these probabilities go to 1, we are \emph{certain} of the class of the remaining data. Note the split consists of two components: the variable of split $x_k$, and the decision rule $\tau$. For example, with our fictitious data, the optimal split might be on $x_{k^*} = (\text{number wheels})$ and $\tau^* = (\text{number wheels} \leq 2)$. Clearly, this would more or less perfectly divide the bikes and the cars into distinct groups. In practice, we must systematically try all possible splits for each variable. If the variable is continuous, we must then discretise it in some way.
+
+Several impurity measures are possible, but we know from information theory that uncertainty can be modelled with the \emph{entropy} statistic. For binary classification, we have only two probabilities, $p(y = 0)$ and $p(y=1) = 1 - p(y=0)$. We therefore have the special case of binary entropy, $h_2(p)$, and our impurity measure becomes,
+
+$$I_{split}(p) = h_2(p) = -p\log p - (1-p)\log (1-p).$$
+
+\subsubsection{More Advanced Techniques}
+
+An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done by aggregating the predictions of individual trees. The advantage of random forests is that it reduces the variance of the prediction.
+
+\subsection{Unsupervised Machine Learning}
+
+Whereas supervised machine learning can be said to embody learning by example, \emph{unsupervised} machine learning is concerned with finding inherent patterns in a dataset. In this sense, its aim is \emph{description}, rather than prediction. The two most common applications of unsupervised machine learning are feature extraction and \emph{clustering}. Clustering is of particular interest to data mining applications. Clustering is the act of grouping data observations according to some grouping measure. The choice of clustering algorithm is usually problem-specific. Various approaches exist, for example density-based clustering algorithm DBSCAN (density-based spatial clustering with additive noise), or agglomerative clustering dendrograms models. These former techniques are popular, but are more heuristic algorithms than machine learning. The techniques we will discuss are more sophisticated and are based on fitting probability densities to data.
+
+\subsubsection{K-means}
+
+One of the most popular clustering techniques, K-means, organises data into $k$ clusters. The algorithm begins by initialising $K$ centre points in $D$-dimensional space and alternates between two steps. The first step assigns observations to centres based on a distance measure (usually Euclidean distance). Observations assigned to a common centre can then be said to be in the same cluster. For each cluster, a new centre point is calculated as the average of all observations in the cluster. This is repeated until the centre points converge (which will occur when observations cease to change clusters). Note that $K$ must be pre-selected; the algorithm does not tell us what value of $K$ is most suitable. To formalise beyond this intuitive algorithm, we denote a set of parameters, $r_{nk}$, whose binary value indicates the membership (or not) of observation $x_n$ in cluster $k$. A further set of parameters, $u_k$ denote the centre point of each of the $K$ clusters. Thus, the K-means algorithm can be formulated as the optimisation problem,
+
+$$\min_{\mu, \mathbf{r}} \mathcal{L}(\mu, \mathbf{r}) = \sum_k\sum_n r_{nk}||\mathbf{x_n} - \mathbf{\mu}_k||^2_2,$$
+
+where $\sum_k r_{nk} = 1$, and the distance measure is the sum of squares, $(x_n - \mu_k)^T\cdot(x_n - \mu_k)$. Now, we may write step 1:
+
+\[r_{nk} = \begin{cases}
+    1 & \text{if} \ k = \arg \min_k \ ||\mathbf{x}_n - \mu_k||_2^2 \\
+    0 & \text{otherwise}
+\end{cases}\]
+
+Step 2 can then be seen as an optimisation of $\mathcal{L}$ with respect to each $u_k$. Clearly,
+
+\begin{align}\frac{\partial\mathcal{L}}{\partial\mu_k} = \frac{\partial}{\partial\mu_k}\sum_n r_{nk} (\mathbf{x}_n^T\mathbf{x}_n - 2\mathbf{x}_n^Tu_k + u_k^Tu_k) &= 0 \notag \\
+&\implies \hat{\mu}_k = \frac{\sum_nr_{nk}x_n}{\sum_nr_{nk}}, \notag
+\end{align}
+
+this is clearly the arithmetic mean of the points in the cluster. With this in mind, we may see that our loss function can be written as a maximum likelihood,
+
+\begin{align}\min_{\mu, \mathbf{r}} \mathcal{L}(\mu, \mathbf{r}) = \max_{\mu, \mathbf{r}} \log p(\mathcal{D} | \mu, \mathbf{r}) &= \log\prod_k\prod_n \mathcal{N}(\mathbf{x}_n ; u_k, \mathbf{I})^{r_{nk}} \notag \\
+&= -\sum_k\sum_nr_{nk}(\mathbf{x}_n - \mu_k)^T\mathbf{I}(\mathbf{x}_n - \mu_k), \notag
+\end{align}
+
+where $\mathbf{I}$ is the identity matrix. This shows that K-means is fitting $K$ Gaussian densities with unit variance. So, despite the initially simple algorithm, we see the deeper probabilistic meaning behind K-means. Because the clusters are all based on spherical Gaussians of fixed size and shape, the technique can alternatively be viewed as clustering points by nearness in Euclidean space. It is useful, however, to take note of the probabilistic notions, as these are expanded upon in the more powerful Gaussian mixture models.
+
+\subsubsection{Gaussian Mixture Models}
+A more powerful technique, Gaussian mixture models (GMM) improve on two major shortcomings of K-means. Firstly, GMM fits elliptical Gaussian densities, optimising over the choice of $\Sigma$, the covariance matrix. Secondly, the parameters, $r_{nk}$, are replaced by random variables, $r_n$, of a special kind called \emph{latent} random variables. These act as a bridge between each observation $x_n$ (also a random variable), and its class, $k$. Thus, rather than hard binary values, the values $r_{nk} = p(r_n = k)$ indicate the probabilities of $\mathbf{x_n}$ belonging to cluster $k$. This is useful both for the fact that the parameters no longer grow with the size of the data, and also to quantify an uncertainty about $x_n$, which can be used for analysis of outliers, and for example the selection of $K$. However, the complexity of the algorithm is far greater than K-means. Again, problem-specific considerations must be made when choosing the most suitable algorithm. Note that unlike spatial clustering algorithm DBSCAN, GMMs are capable of clustering densities that overlap, but are less useful when the data are not linearly separable. Thus, GMMs are good at clustering populations that are likely to be normally distributed in their features, but not, for example, geospatial data that exhibit irregular shapes.
+
+\begin{figure}
+\centering
+\begin{tabular}{cc}
+\subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.png}} & 
+\subfloat[10 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm10.png}}\\
+\subfloat[20 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm15.png}}&
+\subfloat[30 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm30.png}} \\
+\end{tabular}
+\caption{Expectation maximisation (EM) algorithm in action over 30 iterations for Gaussian mixture models with $K = 3$. Colour coding reflects the ratio of probabilities for each cluster--note that points in overlapping positions are more ambiguous. Contour plot of sample Gaussians given in final iteration. Created with \texttt{gmmDemo.m}.}
+\label{fig:gmm}
+\end{figure}
+
+The likelihood function for GMMs is maximised using an iterative algorithm called expectation maximisation (EM) (Figure \ref{fig:gmm}), which, similar to K-means, consists of two alternating steps, the $E$ and $M$ steps. In general this is,
+
+$$\arg \max_\theta \mathbb{E}_{p(z_n)}[\log p(x_n, r_n | \theta)].$$
+
+\section{Useless Maths Facts}
+
+\begin{itemize}
+\item The length : width ratio of all standard paper sizes (A4, A5, etc.) is $\sqrt{2}:1$. It is easy to show folding a sheet of paper in half width-ways retains this same ratio. 
+\item There are $10!$ seconds in 6 weeks
+\item Mersenne primes are primes of the form $2^n - 1$ for some integer $n$. The Great Internet Mersenne Prime Search (GIMPS) is an ongoing collaborative experiment to find Mersenne primes. The largest Mersenne prime (and largest known prime) found to date is $2^{74207281} - 1$. Only 49 Mersenne primes have ever been found.
+\item $1/e \approx 37\%$
+\item Pairs of primes of difference two (e.g. 5, 7) are known as twin primes. Pairs of primes of difference four (e.g. 7, 11) are known as cousin primes. Pairs of primes of difference six (e.g. 11, 17) are known as sexy primes.
+\item According to legend, the Pythagorean mathematician, Hippasus, was killed for proving the existence of irrational numbers. This conflicted with the dogmatic worldview of the other Pythagoreans.
+\item For any map (for example of a geographic region), there is always a way to colour the map with at most four colours such that no two sections of the map sharing a border have the same colour. This comes from the four colour theorem, the first theorem in the world to be proved (partially) by computer.
+\item The mirror reflection of 3.14 closely resembles the word `pie'.
+\item Perfect numbers are those whose factors (including 1) sum to itself. For example, $6 = 1 + 2 + 3$. Amicable numbers are pairs of numbers each of whose factors sum to the other. For example 220 and 284.
+\item 23 is the first number at which the Birthday paradox gives a greater than $50\%$ chance of a collision
+\item $2^{20} \approx 10^6$
+\item One googol is $10^{100}$, that is, 1 followed by 100 zeroes. A googolplex is $10^{\text{googol}} = 10^{10^{100}}$. A \emph{googolplexian}, which, according to googolplexian.com is the largest number with a name, is $10^{\text{googolplex}} = 10^{10^{10^{100}}}$. It is simply impossible to fathom the size of such numbers.
+\item The above item is of course nonsense. Graham's number is a famous named number larger by incomprehensible magnitudes. It provides an upper bound to the solution of a problem in graph theory. It is so large, it can only practically be written in terms of amalgamations of hyper-operations, exponentiation being absurdly insufficient. Using the specialised Knuth's arrow notation, Graham's number can be written as the last in a sequence 64 numbers, the first being $g_1 = 3\uparrow\uparrow\uparrow\uparrow3 = g\uparrow^4$, that is, 3 hexation 3 (already unimaginably big), the next being $g_2 = 3\uparrow^{g_1}3$, where $\uparrow^{g_1}$ is a hyperoperation whose order is $g_1$ (recall exponentiation is order 3 and hexation is order 6). It is necessary to pause and try to think what this means (you can't). Thus, the sequence continues, with $g_n = 3\uparrow^{g_{n-1}}$, all the way to $g_{64} = 3\uparrow^{g_{63}}$, and $g_{64}$ is Graham's number.
+There are simply no conceivable analogies to describe or relativise this number, or even the first number in the sequence. If, for example, you wrote 1 digit on every Planck length volume in the universe, once every Planck time unit, from the start to the end of the universe, you would still have completed $0.000000...\%$ (with another (slightly smaller) inconceivably large number of zeroes) of $g_1$.
+\item With 42 folds of a single sheet of paper, you would have a tower high enough to touch the moon! Given the thickness of paper is $1 \times 10^{-4}$ meters (0.1 mm) and the moon is $3.8 \times 10^{9}$ meters (380,000 km) away, the number of folds required solves the equation $10^{-4}\times 2^{\text{folds}} = 3.8\times10^9 \implies \text{folds} \approx 42$. Unfortunately, it is not possible to fold paper more than six or seven times! 103 folds would make the size of the universe.
+\item $1729 = 10^3 + 9^3 = 12^3 + 1^3$ is the smallest number expressible of two positive cubes in two different ways. According to legend, this observation was first made by Ramanujan to G. H. Hardy when Hardy informed him he had travelled in taxi number 1729 to visit him. The number makes a number of other famous appearances in number theory.
+\item The `number of the beast', 666, is likely to have originated from an encoding of the Hebrew name of the Roman emperor, `Nero Caesar'.
+\item $0.999... = 1$. A paradox arises if one does not appreciate what ``forever recurring'' means. To see this, let $x = 0.999...$. Then $10x = 9.999...$ and so $10x - x = 9.999 - 0.999 = 9 \implies x = 1$.
+\item There is a fairly compelling argument for replacing $\pi$ with $\tau = 2\pi$. Many formulas from the normal pdf, to the Fourier transform, to the period of a sine wave use a superfluous $2\pi$. It is also more difficult to teach with half circles than full circles.
+\item There is a good argument for replacing the decimal system (which is rooted in the metric system that came from revolutionary France) with the \emph{dozenal} system (base-12). Common fractions are more easily expressible in base-12, since it has more factors than 10, so measurements and arithmetic become easier to learn and work with. Though humans have 10 fingers in total, they have 3 segments on each of their 4 fingers on each hand, making base-12 equally convenient.
+\item Most integers contain the digit 3. Consider the numbers before the first power of 10, namely, $0, 1, 2, 3, 4, 5, 6, 7, 8, 9$. Clearly there is only one number containing a 3 (3 itself), and we write $N(1) = 1$, and the proportion is $P(1) = 1/10$. For the first hundred numbers, the pattern is the same, with each group of tens containing one number with a 3, which are $3, 13, 23, \dots, 93$, \emph{except} for the thirties, which have $30, 31, 32, 33, \dots, 39$. Thus we have $N(2) = 9 \times 1 + 10 = 19$, and $P(2) = 19/100$. For the thousands, the same is true for each hundred, except for the three hundreds, all of which contain a 3. Hence, $N(3) = 9\times(9 \times 1 + 10) + 100 = 199$, and $P(3) = 199/1000$. It is clear that in general, for the $k$th power of 10 we have $N(k) = 10^{k-1} + 9\cdot N(k-1) = 10^{k-1} + 9(10^{k-2} + 9(10^{k-3} \dots 9\cdot N(1))) = \sum_{i=1}^{k}9^{i-1}\cdot10^{k-i} = (9/10^k)\cdot\sum_{i=1}^{k}(9/10)^i$. Thus, we have a geometric series displaced by one term, and so $N(k) =  (9/10^k)\cdot((1-(9/10)^k)/(1-(9/10)) - 1)$, and $P(k) = N(k)/10^k$. As $k \to \infty$, $P(\infty) = \lim_{k \to \infty} P(k) = (1/9)\cdot(10 - 1) = 1$, hence the proportion of numbers containing at least one digit 3 goes to 1. Of course, the same can be shown for the other 9 digits, and the general finding is that almost all numbers contain every digit.
+\item Mill's constant is a number that, conditioned on the unproven Riemann hypothesis, is the base of a double exponential function that always yields an integer part that is prime. That is, Mill's number is $A \approx 1.306$ and $\lfloor A^{3^n}\rfloor$ is always prime.
+\item Fractals have very interesting self-similar properties. For example, Koch's snowflake is a geometric shape with infinite perimeter but finite area. By inspection the area is finite, as a circle of finite diameter can be drawn around it provided it is sufficiently large. The perimeter is the result of repeating infinitely many times a procedure that reduces side-length by a factor of three, but nevertheless quadruples the side length each time. Repeating ad infinitum therefore results in a perimeter that is $\lim_{N \to \infty}(4/3)^N = \infty$ times the length of the initial perimeter.
+\item The Euler characteristic states for any convex polyhedron (any shape in any dimensions that is outward-facing like a circle, triangle, cube, sphere, etc.) $V - E + F = 2$, where $V$ is the number of vertices, $E$ is the number of edges, and $F$ is the number of faces. This equation is regularly voted as one of the most beautiful in mathematics, usually right behind Euler's identity.
+\item A M\"obius strip is a three dimensional shape with a single surface and one edge. It can be emulated by twisting a ribbon by a half-turn and connecting its ends. A Klein bottle is a \emph{four}-dimensional solid with a single surface and \emph{no} edges! It is formed by fusing two M\"obius strips along their edges.
+\emph Skewes' number, $10^{10^{10^{34}}}$ is another famous large number, and the record holder before Graham's number. Named after one of John Littlewood's students, Stanley Skewes, it gives an upper bound on the smallest number for which Gauss' prime-counting function, $\pi(n)$ is greater than the logarithmic integral function, $\text{li}(n)$ (another prime-counting function initially thought to always be greater than Gauss').
+\item Graph theory was invented by Euler in 1736 when he solved the \emph{Seven Bridges of K\"onigsberg} problem. He demonstrated no walk could be made over the seven bridges connecting the islands of the town, K\"onigsberg (then Prussia, now Kaliningrad, Russia), such that each bridge was crossed exactly once.
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{eulerformula}
+``Euler's formula'' by Originally created by gunther using xfig, recreated in Inkscape by Wereon, italics fixed by lasindi. - Drawn by en User:Gunther, modified by others.. Licensed under CC BY-SA 3.0 via Commons - https://commons.wikimedia.org/wiki/\\File:Euler\%27s\_formula.svg\#/media/File:Euler\%27s\_formula.svg
+
+\bibitem{factorial}
+``Mplwp factorial gamma stirling'' by Geek3 - Own work. Licensed under CC BY 3.0 via Commons - https://commons.wikimedia.org/wiki/\\File:Mplwp\_factorial\_gamma\_stirling.svg\#/media/File:Mplwp\_factorial\_gamma\_stirling.svg
+
+\bibitem{inclusionexclusion}
+``Inclusion-exclusion'' Licensed under CC BY-SA 3.0 via Commons - \\https://commons.wikimedia.org/wiki/File:Inclusion-exclusion.svg\#/media/File:Inclusion-exclusion.svg
+
+\bibitem{gradientdescent}
+``Gradient descent'' by Gradient\_descent.png: The original uploader was Olegalexandrov at English Wikipediaderivative work: Zerodamage - This file was derived from Gradient descent.png:. Licensed under Public Domain via Commons - \\https://commons.wikimedia.org/wiki/File:Gradient\_descent.svg\#/media/File:Gradient\_descent.svg
+
+\end{thebibliography}
+
+\end{document}
