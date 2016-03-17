@@ -348,7 +348,7 @@ b_n \\
 = \mathbf{b} \notag.
 \end{align}
 
-Of course, if we replace $\mathbf{b}$ with $\mathbf{a}$, we have $\frac{\partial(\mathbf{a}^T\mathbf{a})}{\partial\mathbf{a}} = 2\mathbf{a}$.
+Of course, if we replace $\mathbf{b}$ with $\mathbf{a}$, we are differentiating the squared $l_2$ norm\footnote{The $l_2$ norm of a vector, $\mathbf{a}$, is $|\mathbf{a}|_2 = \sqrt{\sum_i a_i^2}$. The $l_1$ norm is $|\mathbf{a}|_1 = \sum_i |a_i|$.} of $\mathbf{a}$ $\frac{\partial(\mathbf{a}^T\mathbf{a})}{\partial\mathbf{a}} = 2\mathbf{a}$.
 
 \subsubsection{Differentiating a Vector Quadratic}
 
@@ -1697,6 +1697,65 @@ Maximising this function would satisfy the conditions in (\ref{eq:lagrange}), an
 
 Machine learning makes up the stochastic wing of the artificial intelligence community. When viewed as the basis of automated systems, it can be thought of as a mode of programming based on probabilities. It is an amalgamation of techniques from across statistics, probability theory, and numerical analysis. From the Bayesian viewpoint, the real machine learning exists in models derived using Bayesian inference. All other parametric models (SVMs, neural networks) are a vulgarisation of this, with no intelligible grounding in probability theory. Rather, they satisfy the engineering requirement of working very well.
 
+\subsection{Fundamental Notions of Machine Learning}
+
+Here we specify a glossary of important terms in machine learning.
+
+\subsubsection{Learning Approaches}
+
+A machine learning task will follow one of the following approaches, which depend fundamentally on the nature of the data $\mathcal{D}$ to be learned from:
+
+\begin{itemize}
+\item supervised learning - in this case, $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each of the rows of $\mathbf{X}$, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real for a regression task, and discrete for classification. The task of supervised learning is therefore to learn the map that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, including many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
+\item unsupervised - in this case, $\mathcal{D}$ is unlabelled and the task is to extract patterns from the data. It is sometimes also known as knowledge discovery. For example, we might want to find how to reasonably group the observation in $\mathcal{D}$, in a task known as clustering. This is arguably the part of machine learning that is most like human learning. Unlike supervised learning, which boasts of a profusion of techniques, unsupervised learning is less developed and understood. Unsupervised learning is a sort of holy grail of machine learning.
+\item semi-supervised - in this final case, the dataset is a mixture of both labelled and unlabelled data. In many practical problems, labelled data is hard to come by, but unlabelled data might be abundant. Semi-supervised techniques seek to combine the data in a reliable way. This has shown surprisingly limited success so far.
+\end{itemize}
+
+The following schemes refer to how the data is \text{used}, rather than the nature of the data (as above):
+
+\begin{itemize}
+\item transducive learning
+\item reinforcement learning
+\item active learning
+\item online learning
+\item sequence learning
+\item ensemble learning
+\end{itemize}
+
+\subsubsection{Training and Prediction}
+
+Feature engineering is the task of designing features, according to some ontologies about the model. This is an opportunity for domain knowledge to be imparted in a model, as the intuitively most indicative features. This is an inherently soft science, but constitutes a large part of applied machine learning in practice. \emph{Feature extraction} is a separate discipline, which uses unsupervised learning to derive features for modelling.
+
+Training or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is rigorously removed from the training process. A piece of the training set is extracted as a validation set. All these splits follow some rule-of-thumb, leaving the majority of data for training, for example $70-20-10$. Models are trained on a training set and a validation set is used to compare choices of model and model hyperparameters. When data is scarce, we can simulate having a validation set in a procedure called cross validation (CV). Cross validation partitions the training data into $K$ validation folds. A model is trained on the first $K - 1$ folds, and validated on the final fold. The process is repeated $K$ times, such that each fold is validated on, giving $K$ samples for estimating error. If the fold size is chosen to be a single sample (that is, $K = N$), we have leave-one-out cross validation (LOOCV). The chosen model will be the one that minimises the average CV error. A model is then trained on all the training data (including validation data), and the resulting model tested on the test data. The predictions made are compared with the true values, giving an estimation of generalisation error that can then be reported.
+
+As more data is added, the predictive power (generalisation error) of the model improves, following what is known as the learning curve, until it converges to the \emph{noise floor}, . The model is further subject to structural error, approximation error 
+
+The ground truth is a somewhat nebulous term referring variably both to the \emph{correctness} of the data being used (with respect to the real world), and, more intuitively, to the real world data itself. It differs from data that is derived or inferred. The term comes from the field of earth sciences where it refers to the reality of conditions in nature rather than collected data samples.
+
+The gold standard is a related term from statistics that refers to the convention for the best possible statistical test one can perform. What qualifies as the gold standard varies according to the context. In practice, it is shorthand for indicating that a statistical study. conforms to the highest possible standard.
+
+Overfitting is a constant danger when training. This is the effect of \emph{fitting the noise instead of the signal}. All data contains noise, and when the dataset is sufficiently small and the model sufficiently complex (e.g. a high degree polynomial), the model can fit the training data perfectly, only to be useless on test data. There are various solutions to this. The most ideal is to increase the amount of data for available training, but this is rarely an option. A more typical approach is \emph{regularisation}. This usually takes the form of a penalty term, but really corresponds to imposing a prior distribution on the parameter set. A prior distribution assigns low probabilities to large parameter values. Complex models that overfit usually require large parameter values to make a fit, so regularisation curtails these. Another, more drastic approach, is to change the form of the likelihood function of the model to make to insulate it from outliers in the data. An example of this is robust regression, where a Laplace likelihood replaces a Gaussian. A variant of overfitting is the zero count (sparse data) problem, where specific data that ought to be modelled has not appeared in the dataset and leads to a zero probability prediction.
+
+\begin{figure}
+\centering
+\begin{tabular}{cc}
+\subfloat[$k = 1$]{\includegraphics[width=0.5\textwidth]{Figures/knn1.png}} & 
+\subfloat[$k = 7$]{\includegraphics[width=0.5\textwidth]{Figures/knn7.png}}
+\end{tabular}
+\caption{Visualisation of overfitting with k-nearest neighbours (kNN) (non-parametric model). A data point is classified as the majority class of the $k$ geometrically closest data points. Note the steadier decision boundary formed for $k = 7$. Created with \texttt{knnDemo.m}.}
+\label{fig:gmm}
+\end{figure}
+
+Underfitting occurs when the complexity of the model is insufficient to capture the trends of the data. This can be addressed by modifying the choice of basis function or kernel, otherwise to choose a more complex model.
+
+The curse of dimensionality refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axis of highest variance (think \emph{trends}) of the data. Dimensionality reduction can also be crudely achieved by removing model features.
+
+bias-variance tradeoff
+
+NO FREE LUNCH THEOREM?
+
+generlisation error etc.
+
 \subsection{Bayes and the Beta-Binomial Model}
 
 We begin with examining the original result--that studied by English mathematician, Thomas Bayes (1701-1761), in \emph{An Essay towards solving a Problem in the Doctrine of Chances}\footnote{This early term for probability theory comes from de Moivre's seminal textbook (1718).}. Here we consider the inference of data produced from a sequence of coin tosses, such as, $$0101001010111,$$ where $0$ represents `tails' and 1 `heads'. In fact, it is sufficient to know the number of heads and tails, which we denote $N_1$ and $N_0$ respectively. These are consequently known as `sufficient statistics'. Note that the beta-binomial model is not a classifier, as we are not engaging in \emph{classification}, but rather we are predicting outcomes. For this reason, not all the components described above will come into play. Nevertheless it should be an instructive case study.
@@ -1763,7 +1822,7 @@ To begin with, we may want to include \emph{prior} information on the parameters
 \textbf{prior} = p(\boldsymbol\theta) = p(\pi)\prod_c\prod_{j=1}^Dp(\theta_{jc}) \notag
 \end{align}
 
-The prior imposes a distribution on the parameter set, which has a stabilising effect when the training data is limited, mitigating overfitting. We choose the prior distributions on the parameters to be \emph{conjugate} to the likelihood distributions, that is having a similar form. This is by no means mandatory, but it makes the derivations easier. Since we have a multinomial distribution on $y$ and Bernoulli distributions on $x|y=c$, we choose Dirichlet and beta distributions respectively for the prior parameters. Thus, $\pi \sim \text{Dir}(\boldsymbol\alpha)$ and $\theta_j \sim \text{Beta}(\beta_0, \beta_1)$. Choosing $\boldsymbol\alpha = \mathbf{1}$ and $\boldsymbol\beta = \mathbf{1}$ corresponds to a common practice known as \emph{add one} smoothing.
+The prior imposes a distribution on the parameter set, which has a stabilising effect when the training data is limited, mitigating overfitting. We choose the prior distributions on the parameters to be \emph{conjugate} to the likelihood distributions, that is having a similar form. This is by no means compuslory, but it makes the derivations easier. Since we have a multinomial distribution on $y$ and Bernoulli distributions on $x|y=c$, we choose Dirichlet and beta distributions respectively for the prior parameters. Thus, $\pi \sim \text{Dir}(\boldsymbol\alpha)$ and $\theta_j \sim \text{Beta}(\beta_0, \beta_1)$. Choosing $\boldsymbol\alpha = \mathbf{1}$ and $\boldsymbol\beta = \mathbf{1}$ corresponds to a common practice known as \emph{add one} smoothing.
 
 If we combine the prior with the likelihood, we get the posterior distribution, which strikes a balance between what the data tells us, and what we expect,
 
@@ -1773,15 +1832,15 @@ If we combine the prior with the likelihood, we get the posterior distribution, 
 &= p(\boldsymbol\pi|\mathcal{D})\prod_{j = 1}^D p(\theta_{jc}|\mathcal{D}), \notag
 \end{align}
 
-where $p(\boldsymbol\pi|\mathcal{D}) = \text{Dir}(N_1 + \alpha_1, \dots, N_C + \alpha_C)$ is the posterior on $\boldsymbol\pi$, and $p(\theta_{jc}|\mathcal{D}) = \text{Beta}((N_c - N_{jc}) + \beta_0, N_{jc} + \beta_1)$ is the posterior on $\theta_{jc}$. Note that because we are optimising for $\boldsymbol\theta$, it does not matter that the expression is only proportional to the posterior. Now we have two options. Firstly, we can compute the mode of this posterior distribution giving us the \textbf{maximum a posteriori estimate}, $\hat{\boldsymbol\theta}_{MAP}$. This can then be plugged into the posterior predictive, just as with the MLE. The alternative is to use \textbf{Bayes model averaging}. This calculates the posterior as a weighted average of the distribution. In this scheme, neither the ML or MAP estimates are computed directly, rather, we sum or integrate over the unknown parameters, marginalising them,
+where $p(\boldsymbol\pi|\mathcal{D}) = \text{Dir}(N_1 + \alpha_1, \dots, N_C + \alpha_C)$ is the posterior on $\boldsymbol\pi$, and $p(\theta_{jc}|\mathcal{D}) = \text{Beta}((N_c - N_{jc}) + \beta_0, N_{jc} + \beta_1)$ is the posterior on $\theta_{jc}$. Note that because we are optimising for $\boldsymbol\theta$, it does not matter that the expression is only proportional to the posterior. Also note that if we have a uniform prior, the probabilities are constant, and the posterior is equivalent to the likelihood. Now we have two options. Firstly, we can compute the mode of this posterior distribution giving us the \textbf{maximum a posteriori estimate}, $\hat{\boldsymbol\theta}_{MAP}$. This can then be plugged into the posterior predictive, just as with the MLE. The alternative is to use \textbf{Bayes model averaging}. This calculates the posterior as a weighted average of the distribution. In this scheme, neither the ML or MAP estimates are computed directly, rather, we sum or integrate over the unknown parameters, marginalising them,
 
 \begin{align}
 p(y = c|\hat{\mathbf{x}}, \mathcal{D}) &= \frac{p(\hat{\mathbf{x}}|y = c, \mathcal{D})p(y=c|\mathcal{D})}{\sum_{c'}p(\hat{\mathbf{x}}|y = c', \mathcal{D})p(y=c'|\mathcal{D})} \notag \\ &\propto p(\hat{\mathbf{x}}|y = c, \mathcal{D})p(y=c|\mathcal{D}) \notag \\
 &= \int p(\hat{\mathbf{x}}, \boldsymbol\theta|y = c, \mathcal{D})\mathop{d\boldsymbol\theta}\int p(y=c, \boldsymbol\pi|\mathcal{D})\mathop{d\boldsymbol\pi} \label{eq:ltp} \\
-&= \int p(\hat{\mathbf{x}}|y = c, \boldsymbol\theta, \cancelto{}{\mathcal{D}})p(\boldsymbol\theta|\mathcal{D})\mathop{d\boldsymbol\theta}\int p(y=c|\boldsymbol\pi, \cancelto{}{\mathcal{D}})p(\boldsymbol\pi|\mathcal{D})\mathop{d\boldsymbol\pi}, \label{eq:cancel}
+&= \int p(\hat{\mathbf{x}}|y = c, \boldsymbol\theta, \cancelto{}{\mathcal{D}})p(\boldsymbol\theta|\cancelto{}{y = c}, \mathcal{D})\mathop{d\boldsymbol\theta}\int p(y=c|\boldsymbol\pi, \cancelto{}{\mathcal{D}})p(\boldsymbol\pi|\cancelto{}{y = c}, \mathcal{D})\mathop{d\boldsymbol\pi}, \label{eq:cancel}
 \end{align}
 
-with step (\ref{eq:ltp}) comes form the law of total probability and the cancellations in step (\ref{eq:cancel}) occur because of the prediction is independent of the data when conditioned on the parameters. Thus we are averaging by the posterior distribution. This may be solved analytically for the choice of distributions we have made. A simple implementation of the naive Bayes classifier is given in \texttt{nbcDemo.m}.
+with step (\ref{eq:ltp}) comes form the law of total probability and the cancellations in step (\ref{eq:cancel}) occur because of the prediction is independent of the data when conditioned on the parameters. Thus we are averaging by the posterior distribution. This may be solved analytically for the choice of distributions we have made. A simple implementation of the naive Bayes classifier is given in \texttt{nbcDemo.m}. Now a retrospective connection to plug-in approximation may be seen. Plug-in approximation works on the assumption that the distribution on the parameters, $p(\theta|\mathcal{D}) \to \delta_{\hat{\theta}_{MAP}}(\theta)$ as $|\mathcal{D}| \to \infty$. This follows the intuition that increasing data increases our certainty about the parameters. If we replace the posteriors in the integral with the limit, then by the sifting property of the Dirac delta function, we obtain the class conditional and class prior distributions, conditioned on the MAP estimate--the plug-in approximation.
 
 \subsection{Multivariate Normal Distributions}
 Multivariate Normal (MVN) or multivariate Gaussian distributions are the multidimensional generalisation of the Gaussian distribution. The form of the probability density function for a $D$-dimensional Gaussian is defined to be,
@@ -1832,7 +1891,7 @@ $$p(y = c|\mathbf{x}, \theta) \propto \exp\Big[\mu_c^T\Sigma^{-1}\mathbf{x} - \f
 
 and the quadratic term cancels out over the sum, leaving an expression that is linear in $\mathbf{x}$. It can be shown easily that this produces linear decision boundaries. There are some interesting connections between LDA and other parts of machine learning. If we define $\gamma_c = - \frac{1}{2}\mu_c^T\Sigma^{-1}\mu_c + \log\pi_c$ and $\beta_c = \Sigma^{-1}\mu_c$, we can write,
 
-$$p(y = c|\mathbf{x}\theta) = \frac{e^{\beta_c^T\mathbf{x} + \gamma_c}}{\sum_{c'}e^{\beta_{c'}^T\mathbf{x} + \gamma_{c'}}} = \mathcal{S}({\eta})_c,$$
+$$p(y = c|\mathbf{x}, \theta) = \frac{e^{\beta_c^T\mathbf{x} + \gamma_c}}{\sum_{c'}e^{\beta_{c'}^T\mathbf{x} + \gamma_{c'}}} = \mathcal{S}({\eta})_c,$$
 
 wher $\eta_c = [\beta_1^T\mathbf{x} + \gamma_1, \beta_2^T\mathbf{x} \gamma_2 , \dots, \beta_C^T\mathbf{x} + \gamma_C]$, and $\mathcal{S}$ is the \emph{softmax} function (so called because at low `temperatures', that is if we divide all the exponents by $T$, the probability of the most likely class goes to $1$ as $T \to 0$. This terminology comes from statistical physics--in fact the softmax function is the form of the Boltzmann\footnote{Ludwig Boltzmann (1844-1906) was a German physicist credited with the development of statistical mechanics.} distribution. The marginal likelihood is known as the partition function, denoted $Z$ for `Zustandssumme'--the German expression for `sum over states'.
 
@@ -1858,11 +1917,11 @@ for all $n = 1, \dots, N$. Each of the $D$ dimensions of $\mathbf{x_n}$ is known
 
 $$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2N}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
 
-where $\mathcal{L}(\boldsymbol\beta)$ is the ``loss'' function, expressing a \emph{mean square error} for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm minimise this function. Note we could have chosen any sort of loss function, but our reasons for choosing mean square error will be revealed in the following section.
+where $\mathcal{L}(\boldsymbol\beta)$ is the ``loss'' function, expressing a \emph{mean square error} (MSE) for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm minimise this function. It is also typical to write $\text{MSE} = \text{RSS}/N$, where RSS stands for \emph{residual sum of squares}, the non-weighted sum. Note we could have chosen any sort of loss function, but our reasons for choosing mean square error will be revealed in the following section.
 
 \subsubsection{Method of Least Squares}
 
-The method of least squares (MLS) is a closed-form solution algorithm. As previously stated, its discovery was in the same paper by Gauss that first formalised the Normal distribution. We will discover the link in the following section. We may write the derivative of the loss function,
+The method of least squares (MLS) is a closed-form solution to a linear regression. As previously stated, its discovery was in the same paper by Gauss that first formalised the Normal distribution. We will discover the link in the following section. We may write the derivative of the loss function,
 
 $$\frac{\delta\mathcal{L}}{\delta\boldsymbol\beta} = -\frac{1}{N}X^T(\mathbf{y} - X\boldsymbol\beta),$$
 
@@ -1874,7 +1933,7 @@ and finally, the optimal parameter vector,
 
 $$\boldsymbol\beta^* = (X^TX)^{-1}X^T\mathbf{y}.$$
 
-MLS also has a nice geometric interpretation. According to the normal equation, the error, $X\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $X^T$. This makes sense, because it means the choice of prediction, $X\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly ``below'' it on the hyperplane, $X^T$.
+MLS also has a nice geometric interpretation. According to the normal equation, the error, $X\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $X^T$. This makes sense, because it means the choice of prediction, $X\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly ``below'' it on the hyperplane, $X^T$. This solution is known as the ordinary least squares (OLS) solution.
 
 \subsubsection{Gradient Descent}
 
@@ -1919,11 +1978,11 @@ As we will soon see, maximising this probability is equivalent to minimising the
 &=\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta)\notag
 \end{align}
 
-where $k_1$ and $k_2$ are positive constants, and so they have no bearing on the maximising $\boldsymbol\beta^*$. Thus, we see that maximising our likelihood function is equivalent to minimising our original mean square error loss function.
+where $k_1$ and $k_2$ are positive constants, and so they have no bearing on the maximising $\boldsymbol\beta^*$. Thus, we see that maximising our likelihood function is equivalent to minimising our original mean square error loss function. This is equivalently known as the negative log-likelihood (NLL).
 
 \subsubsection{Non-linear Fits}
 
-If we wish to fit a non-linear function to our data, we can simply transform our original data. For example, if we want to fit a quadratic function to our data (Figure \ref{fig:quadraticfit}), we need only square the values in our dataset and introduce it as a new dimension in our data. This is still considered a linear regression, as we still have a linear combination of variables, albeit with a non-linear basis function. These more complex model are best created in the framework of a \emph{ridge regression}, where we introduce a penalty term in the loss function\footnote{This has the probabilistic interpretation of imposing a prior distribution on the parameter vector}.
+If we wish to fit a non-linear function to our data, we can simply transform our original data. For example, if we want to fit a quadratic function to our data (Figure \ref{fig:quadraticfit}), we need only square the values in our dataset and introduce it as a new dimension in our data. It is important to note that this is still a linear regression, as we still have a linear combination of parameters, albeit with a non-linear basis function. These more complex model are best created in the framework of a \emph{ridge regression}, where we introduce a penalty term in the loss function\footnote{This has the probabilistic interpretation of imposing a prior distribution on the parameter vector}.
 
 \begin{figure}[!ht]
 \centering
@@ -1931,6 +1990,14 @@ If we wish to fit a non-linear function to our data, we can simply transform our
 \caption{A non-linear fit may be found by transforming the data.}
 \label{fig:quadraticfit}
 \end{figure}
+
+\subsubsection{Robust Linear Regression}
+
+One drawback of using a Gaussian likelihood is that it is sensitive to outliers. This makes it likely to overfit in practice. There are two ways of mitigating this effect. The first is to train on more data, taking density away from outliers, but data is often hard to come by. Another approach is to regularise the cost function by introducing a prior distribution on the parameters. This is also known as a penalty term in the cost function. If we choose another Gaussian for the prior, we get what a \emph{ridge regression}. This is very popular, and has the added bonus of producing a more numerically stable normal equation. Another option is a Laplace prior. This is known as a \emph{lasso regression}. Unfortunately, the cost function is no longer differentiable everywhere, and our solution algorithm changes (albeit not beyond recognition). A final, more drastic option is to modify the form of the likelihood to a distribution with heavier tails, making it more immune to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer convex, but with a reformulation trick can be made into a linear programming problem, which can then be solved by an appropriate algorithm.
+
+\subsubsection{Bayesian Linear Regression}
+
+Bayes model averaging may be performed for linear regression to obtain a more robust posterior predictive distribution, just as we saw for generative classifiers. Such a result can for example be analysed for its variance, unlike a mere point estimate such as a ML or MAP estimate. The derivation involves multiplying and integrating Gaussians and belongs in a textbook, rather than in Last Chance Stats.
 
 \subsection{Decision Trees}
 
@@ -1955,7 +2022,7 @@ $$I_{split}(p) = h_2(p) = -p\log p - (1-p)\log (1-p).$$
 
 \subsubsection{More Advanced Techniques}
 
-An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done by aggregating the predictions of individual trees. The advantage of random forests is that it reduces the variance of the prediction.
+An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done by aggregating the predictions of individual trees. This is an example of ensemble learning and \emph{bagging} (bootstrap aggregating). The advantage of random forests is that it reduces the variance of the prediction.
 
 \subsection{Unsupervised Machine Learning}
 
