@@ -270,6 +270,43 @@ Vector calculus is an important tool for understanding multivariate probability 
 
 \subsection{Preliminary Results}
 
+\subsubsection{Sums and Matrices}
+
+It is useful to note how certain matrix expressions may be written as sums. There are many occasions in machine learning where linear models are written interchangeably using summation notation and vectors and matrices. Consider the simplest case--the dot product,
+
+$$\mathbf{a}\cdot\mathbf{b} = \mathbf{a}^T\mathbf{b} = a_1b_1 + a_2b_2 + \cdots + a_nb_n = \sum_i a_ib_i.$$
+
+The geometric interpretation of a dot product is a projection of one vector onto the line defined by another. In machine learning, linear classifiers are log-linear with respect to their parameters. Geometrically, a model prediction amounts to projecting a data point onto a line (or hyperplane) defined by the parameters. This line runs perpendicular to a decision boundary, which determines the classification of the point. Now consider a matrix vector multiplication,
+
+$$\mathbf{A}\mathbf{b} = \big[A_{:, 1}, A_{:, 2}, \dots, A_{:, N}\big]
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+\vdots \\
+b_n \\
+\end{bmatrix}
+= b_1A_{:, 1} + b_2A_{:, 2} + \dots + b_NA_{:, N} = \sum_{i} b_iA_{:, i},$$
+
+which represents a projection onto the hyperplane defined by the span of $\mathbf{A}$. Note that if instead in the sum we had row rather than columns of $\mathbf{A}$, we have,
+
+$$\sum_{i} b_i\mathbf{a}_i = \mathbf{A}^T\mathbf{b}.$$
+
+Now consider a matrix product,
+
+$$\mathbf{A}\mathbf{B} = \big[A_{:, 1}, A_{:, 2}, \dots, A_{:, N}\big]
+\begin{bmatrix}
+\mathbf{b}_1^T \\
+\mathbf{b}_2^T \\
+\vdots \\
+\mathbf{b}_n^T \\
+\end{bmatrix}
+= \sum_{i} A_{:, i}\mathbf{b}_i^T.
+$$
+
+Again working backwards, should we have rows rather than columns, we have the rule,
+
+$$\sum_{i} \mathbf{a}_i\mathbf{b}_i^T = \mathbf{A}^T\mathbf{B}.$$
+
 \subsubsection{Transposition Chain Rule}
 
 For matrices \textbf{A} and \textbf{B}, their product, \textbf{AB}, is formed by multiplying each row of \textbf{A} with each column of \textbf{B}. Thus, $(\textbf{AB})_{ij} = A(i, :) \cdot B(:, j)$, that is, the dot product of row $i$ of matrix \textbf{A} with column $j$ of matrix \textbf{B}. By definition, this is then equivalent to $A(i, :) \cdot B(:, j)= B^T(j, :) \cdot A^T(:,i)$, from which the rule,
@@ -315,16 +352,29 @@ where $j$ and $k$ are swapped. This result is called the trace cyclic permutatio
 
 \subsection{Vector Calculus}
 
-The single most important principle of vector calculus is the definition of what it means to differentiate with respect to a vector or matrix. For $\mathbf{A} \in \mathbb{R}^{n \times m}$,
+The single most important principle of vector calculus is the definition of what it means to differentiate with respect to a vector. In general, the derivative of a multi-variate function is the vector of partial derivatives, that is,
 
-$$\frac{\partial}{\partial\mathbf{A}}f(\mathbf{A}) = \begin{bmatrix}
-\frac{\partial f}{\partial a_{11}}&\frac{\partial f}{\partial a_{12}}&\cdots&\frac{\partial f}{\partial a_{m1}}\\
-\frac{\partial f}{\partial a_{21}}&\frac{\partial f}{\partial a_{22}}&\cdots&\frac{\partial f}{\partial a_{m2}}\\
+$$\nabla\mathbf{f} \triangleq \frac{\partial f}{\partial(x_1, \dots, x_n)} = \bigg[\frac{\partial f}{\partial x_{1}}, \frac{\partial f}{\partial x_{2}}, \dots, \frac{\partial f}{\partial x_{n}}\bigg].$$
+
+With this principle in mind, it is easy to derive some basic formulae of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
+
+$$\mathbf{J} \triangleq \frac{\partial (f_1, \dots, f_m)}{\partial(x_1, \dots, x_n)} = \begin{bmatrix}
+\frac{\partial f_1}{\partial x_{1}}&\frac{\partial f_1}{\partial x_{2}}&\cdots&\frac{\partial f_1}{\partial x_{n}}\\
+\frac{\partial f_2}{\partial x_{1}}&\frac{\partial f_2}{\partial x_{2}}&\cdots&\frac{\partial f_2}{\partial x_{n}}\\
 \vdots & \vdots & \ddots & \vdots \\
-\frac{\partial f}{\partial a_{n1}}&\frac{\partial f}{\partial a_{n2}}&\cdots&\frac{\partial f}{\partial a_{nm}}\\
+\frac{\partial f_m}{\partial x_{1}}&\frac{\partial f_m}{\partial x_{2}}&\cdots&\frac{\partial f_m}{\partial x_{n}}\\
 \end{bmatrix},$$
 
-that is, the vector or matrix of partial derivatives corresponding to each of the vector or matrix elements. With this principle in mind, it is easy to derive some basic formulae of vector calculus.
+that is, the matrix of partial derivatives corresponding to each of the input and output pairs. In the case $f$ is scalar-valued, the Jacobian becomes a row vector. The Jacobian features as the first-order term in the Taylor expansion of a multivariate function. For a \emph{scalar}-valued function, $f$, the Hessian matrix is the matrix of all second order partial derivatives, written,
+
+$$\mathbf{H} \triangleq \nabla^2\mathbf{f} = \mathbf{J}(\nabla\mathbf{f}(\mathbf{x})) = \begin{bmatrix}
+\frac{\partial^2 f}{\partial x_{1}^2}&\frac{\partial^2 f}{\partial x_{1}\partial x_{2}}&\cdots&\frac{\partial^2 f}{\partial x_{1}\partial x_{n}}\\
+\frac{\partial^2 f}{\partial x_{2}\partial x_{1}}&\frac{\partial^2 f}{\partial x_{2}^2}&\cdots&\frac{\partial^2 f}{\partial x_{2}\partial x_{n}} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial^2 f}{\partial x_{n}\partial x_{1}}&\frac{\partial^2 f}{\partial x_{n}\partial x_{2}}&\cdots&\frac{\partial^2 f}{\partial x_{n}^2}. \\
+\end{bmatrix}$$
+
+Note that the Hessian is not defined for vector-valued functions like the Jacobian is.
 
 \subsubsection{Differentiating a Dot Product}
 
@@ -1925,7 +1975,7 @@ In most cases, the closed-form method of least squares cannot be used, as it req
 
 $$\boldsymbol\beta^{k+1} = \boldsymbol\beta^{k} - \alpha \nabla\mathcal{L}(\boldsymbol\beta^k),$$
 
-where $\alpha$ is the step-size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent has more sophisticated variants such as Newton's method and L-BFGS, whose application may be warranted for larger data sets.
+where $\alpha$ is the step-size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent can be enhanced with a line search to find the optimal step size for each search direction. When used, the algorithm exhibits a zig-zag path to the optimal point, as each step is perpendicular to the last. Gradient descent also has more sophisticated variants such as Newton's method and quasi-Newton methods, whose application may be warranted for larger data sets.
 
 \begin{figure}[!ht]
 \centering
@@ -1982,6 +2032,111 @@ One drawback of using a Gaussian likelihood is that it is sensitive to outliers.
 \subsubsection{Bayesian Linear Regression}
 
 Bayes model averaging may be performed for linear regression to obtain a more robust posterior predictive distribution, just as we saw for generative classifiers. Such a result can for example be analysed for its variance, unlike a mere point estimate such as a ML or MAP estimate. The derivation involves multiplying and integrating Gaussians and belongs in a textbook, rather than in Last Chance Stats.
+
+\subsection{Logistic Regression}
+
+Logistic regression is a class of classification models. It can be thought of . There is also a strong connection between logistic regression and linear discriminant analysis. In fact logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably exposes the student to the quintessential optimisation techniques of machine learning.
+
+\subsubsection{Binary Logistic Regression}
+
+A binary logistic regression models,
+
+$$p(y|\mathbf{x}, \boldsymbol\beta) = \text{Ber}(y|\sigma(\boldsymbol\beta^T\mathbf{x})),$$
+
+where,
+
+$$\sigma(\boldsymbol\beta^T\mathbf{x}) = \frac{\exp(\boldsymbol\beta^T\mathbf{x})}{1 + \exp(\boldsymbol\beta^T\mathbf{x})},$$
+
+is the sigmoid or logistic function. Thus, in training a logistic regression model we are fitting a multivariate Bernoulli distribution. In this binary case, we encode the class variable as a binary variable, that is, $y_i \in \{0, 1\}$, and we have $p(y = 1) = \sigma(\boldsymbol\beta^T\mathbf{x})$ and $p(y = 0) = 1 - \sigma(\boldsymbol\beta^T\mathbf{x})$. The negative log likelihood for our model is therefore,
+
+\begin{align}
+\text{NLL}(\boldsymbol\beta) &= -\log\prod_i \sigma(\boldsymbol\beta^T\mathbf{x}_i)^{y_i}(1 - \sigma(\boldsymbol\beta^T\mathbf{x}_i))^{(1 - y_i)} \notag \\
+&= \sum_i \log(1 + \exp(\boldsymbol\beta^T\mathbf{x}_i)) - y_i\boldsymbol\beta^T\mathbf{x}_i\notag
+\end{align}
+
+Due to the logistic function, it is no longer possible to obtain a least-squares solutions. We therefore have recourse to numerical techniques. Because the function is convex, vanilla gradient descent will do the trick. However, more powerful techniques exist. Newton's method is a similar algorithm incorporating second order information into the step. It comes from considering the second order Taylor polynomial for the NLL function, around a point $\boldsymbol\beta_k$,
+
+$$p(\boldsymbol\beta) = NLL(\boldsymbol\beta_k) + g_k^T(\boldsymbol\beta - \boldsymbol\beta_k) + \frac{1}{2}(\boldsymbol\beta - \boldsymbol\beta_k)\mathbf{H}_k(\boldsymbol\beta - \boldsymbol\beta_k).$$
+
+This quadratic expression is minimised for $\boldsymbol\beta = \boldsymbol\beta_k - \mathbf{H}^{-1}g_k$. This constitutes the Newton step. Now we will derive expressions for the gradient and Hessian of our logistic regression model. The gradient is the vector of partial derivatives,
+
+$$g(\boldsymbol\beta) = \begin{bmatrix}
+\frac{\partial}{\partial \beta_0} \text{NLL}(\boldsymbol\beta) \\
+\frac{\partial}{\partial \beta_1} \text{NLL}(\boldsymbol\beta) \\
+\vdots \\
+\frac{\partial}{\partial \beta_D} \text{NLL}(\boldsymbol\beta) \\
+\end{bmatrix} =
+\sum_i \begin{bmatrix}
+(\sigma(\boldsymbol\beta\mathbf{x}_i) - y_i)x_{i1} \\
+(\sigma(\boldsymbol\beta\mathbf{x}_i) - y_i)x_{i2} \\
+\vdots \\
+(\sigma(\boldsymbol\beta\mathbf{x}_i) - y_i)x_{iD} \\
+\end{bmatrix}
+= \sum_i (\sigma_i - y_i)\mathbf{x}_i = \mathbf{X}^T(\boldsymbol\sigma - \mathbf{y}),
+$$
+
+The Hessian is defined as $\frac{\partial}{\partial\mathbf{\boldsymbol\beta}}g(\boldsymbol\beta)^T$,
+
+$$\mathbf{H} = \begin{bmatrix}
+\frac{\partial}{\partial \beta_0} g(\boldsymbol\beta) \\
+\frac{\partial}{\partial \beta_1} g(\boldsymbol\beta) \\
+\vdots \\
+\frac{\partial}{\partial \beta_D} g(\boldsymbol\beta) \\
+\end{bmatrix} =
+\sum_i\begin{bmatrix}
+\sigma(\boldsymbol\beta\mathbf{x}_i)(1 - \sigma(\boldsymbol\beta\mathbf{x}_i))x_{i1}\mathbf{x}_i^T \\
+\sigma(\boldsymbol\beta\mathbf{x}_i)(1 - \sigma(\boldsymbol\beta\mathbf{x}_i))x_{i2}\mathbf{x}_i^T \\
+\vdots \\
+\sigma(\boldsymbol\beta\mathbf{x}_i)(1 - \sigma(\boldsymbol\beta\mathbf{x}_i))x_{iD}\mathbf{x}_i^T
+\end{bmatrix}
+= \sum_i \sigma_i(1 - \sigma_i)\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{S}\mathbf{X},
+$$
+
+where $S = \text{diag}[\sigma(\boldsymbol\beta^T\mathbf{x}_1), \sigma(\boldsymbol\beta^T\mathbf{x}_2), \dots, \sigma(\boldsymbol\beta^T\mathbf{x}_N)]$. The Newton step may be rewritten as a least squares problem. In such a formulation, the optimisation algorithm is known as iterative reweighted least squares (IRLS). Due to the computational complexity of computing the Hessian, quasi-Newton techniques exist that create an approximation iteratively. The most common is the BFGS algorithm (Broyden, Fletcher, Goldfarb and Shanno). The $\mathcal{O}(D^2)$ space complexity of the Hessian gave rise to a further approximation in the limited memory or L-BFGS algorithm. This is the usual weapon of choice for modelling high-dimensional data. Just as with linear regression, $l_2$ regularisation may be used. Unlike linear regression, however, the full posterior distribution is not directly computable due to the absence of a conjugate prior. Approximation techniques, such as Monte Carlo Markov chains (MCMC), are therefore used.
+
+\subsubsection{Multinomial Logistic Regression}
+
+Going beyond binary logistic regression requires some adjustments--the sigma function is replaced by the generalised softmax function,
+
+$$p(y_i = c | \mathbf{x}_i, \mathbf{W}) = \frac{\exp(\mathbf{w}_c^T\mathbf{x})}{\sum_{c' = 1}^C \exp(\mathbf{w}_{c'}^T\mathbf{x})},$$
+
+just as with linear discriminant analysis. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a ``one-of-C encoding'' binary vector of length $C$. Thus, the negative log likelihood is,
+
+$$\text{NLL}(\mathbf{W}) = -\sum_i \bigg[\bigg(\sum_{c = 1}^Cy_{ic}\mathbf{w}_c^T\mathbf{x}_i\bigg) - \log\bigg(\sum_{c'=1}^C\exp(\mathbf{w}_{c'}^T\mathbf{x}_i)\bigg)\bigg].$$
+
+The gradient and Hessian may be derived as before, but it useful to introduce a specialised \emph{Kronecker product} notation for specifying block matrices,
+
+$$\mathbf{A} \otimes \mathbf{B} = \begin{bmatrix}
+a_{11}\mathbf{B}&a_{12}\mathbf{B}&\cdots&a_{1m}\mathbf{B}\\
+a_{21}\mathbf{B}&a_{22}\mathbf{B}&\cdots&a_{2m}\mathbf{B}\\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1}\mathbf{B}&a_{n2}\mathbf{B}&\cdots&a_{nm}\mathbf{B}\\
+\end{bmatrix}.$$
+
+Now, we may derive the gradient as before, adhering to the first principle of forming the vector of partial derivatives,
+
+$$g(\mathbf{W}) = \begin{bmatrix}
+\frac{\partial}{\partial \mathbf{w}_{11}} \text{NLL}(\mathbf{W}) \\
+\vdots \\
+\frac{\partial}{\partial \mathbf{w}_{D, C}} \text{NLL}(\mathbf{W}) \\
+\end{bmatrix} =
+\sum_i \begin{bmatrix}
+(\sigma(\mathbf{w}_1\mathbf{x}_i) - y_{i1})x_{i1} \\
+\vdots \\
+(\sigma(\mathbf{w}_c\mathbf{x}_i) - y_{ic})x_{iD} \\
+\end{bmatrix}
+= \sum_i (\boldsymbol\sigma_i - \mathbf{y}_i)\otimes\mathbf{x}_i.
+$$
+
+The Hessian is seemingly messy to derive, but it can be done on paper without too much trouble\footnote{I recommend you try with the simplest 2-dimensional case with two classes to spot the pattern.}, yielding,
+
+$$\mathbf{H}(\mathbf{W}) =  \begin{bmatrix}
+\frac{\partial}{\partial \mathbf{w}_{11}} g(\mathbf{W}) \\
+\vdots \\
+\frac{\partial}{\partial \mathbf{w}_{D, C}} g(\mathbf{W}) \\
+\end{bmatrix} = \sum_i (\text{diag}(\boldsymbol\sigma_i) - \boldsymbol\sigma_i\boldsymbol\sigma_i^T)\otimes(\mathbf{x}_i\mathbf{x}_i^T),$$
+
+giving a $DC \times DC$ matrix. The model can likewise incorporate a regularisation term.
 
 \subsection{Decision Trees}
 
