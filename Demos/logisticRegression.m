@@ -1,10 +1,10 @@
-classdef LogisticRegression
+classdef logisticRegression
     %LOGISTICREGRESSION class for logistic regression model
     properties
         X, y, w
     end
     methods
-        function obj = LogisticRegression(X, y)
+        function obj = logisticRegression(X, y)
             % initialise properties
             obj.X = X;
             obj.y = y;

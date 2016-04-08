@@ -2100,11 +2100,11 @@ Going beyond binary logistic regression requires some adjustments--the sigma fun
 
 $$p(y_i = c | \mathbf{x}_i, \mathbf{W}) = \frac{\exp(\mathbf{w}_c^T\mathbf{x})}{\sum_{c' = 1}^C \exp(\mathbf{w}_{c'}^T\mathbf{x})},$$
 
-just as with linear discriminant analysis. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a ``one-of-C encoding'' binary vector of length $C$. Thus, the negative log likelihood is,
+just as with linear discriminant analysis. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes\footnote{This incidentally leads to an issue of identifiability. Identifiability is a property of statistical models whereby a model (the distribution) is defined by a unique parameter set, that is, there is a one-to-one mapping between parameters and models. It is important for precise statistical inference. In this instance the model is clearly not identifiable, as adding any constant vector to each of the parameter vectors gives the same model probabilities. To address this, the parameters are usually offset to eliminate this ambiguity.}. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a ``one-of-C encoding'' binary vector of length $C$. Thus, the negative log likelihood is,
 
 $$\text{NLL}(\mathbf{W}) = -\sum_i \bigg[\bigg(\sum_{c = 1}^Cy_{ic}\mathbf{w}_c^T\mathbf{x}_i\bigg) - \log\bigg(\sum_{c'=1}^C\exp(\mathbf{w}_{c'}^T\mathbf{x}_i)\bigg)\bigg].$$
 
-The gradient and Hessian may be derived as before, but it useful to introduce a specialised \emph{Kronecker product} notation for specifying block matrices,
+The gradient and Hessian may be derived as before, but it useful to introduce a specialised \emph{Kronecker\footnote{Leopold Kronecker (1823-1891) was a German mathematician, well known for his Kronecker delta--an indicator function shorthand for identity. This is not to be confused with the Dirac delta function, a Gaussian distribution with infinitesimal variance.} tensor product} notation for specifying block matrices,
 
 $$\mathbf{A} \otimes \mathbf{B} = \begin{bmatrix}
 a_{11}\mathbf{B}&a_{12}\mathbf{B}&\cdots&a_{1m}\mathbf{B}\\
@@ -2128,7 +2128,7 @@ $$g(\mathbf{W}) = \begin{bmatrix}
 = \sum_i (\boldsymbol\sigma_i - \mathbf{y}_i)\otimes\mathbf{x}_i.
 $$
 
-The Hessian is seemingly messy to derive, but it can be done on paper without too much trouble\footnote{I recommend you try with the simplest 2-dimensional case with two classes to spot the pattern.}, yielding,
+The Hessian is seemingly messy to derive, but it can be done on paper without too much trouble\footnote{It is simplest to try the 2-dimensional case with two classes to spot the pattern.}, yielding,
 
 $$\mathbf{H}(\mathbf{W}) =  \begin{bmatrix}
 \frac{\partial}{\partial \mathbf{w}_{11}} g(\mathbf{W}) \\
@@ -2195,7 +2195,6 @@ this is clearly the arithmetic mean of the points in the cluster. With this in m
 where $\mathbf{I}$ is the identity matrix. This shows that K-means is fitting $K$ Gaussian densities with unit variance. So, despite the initially simple algorithm, we see the deeper probabilistic meaning behind K-means. Because the clusters are all based on spherical Gaussians of fixed size and shape, the technique can alternatively be viewed as clustering points by nearness in Euclidean space. It is useful, however, to take note of the probabilistic notions, as these are expanded upon in the more powerful Gaussian mixture models.
 
 \subsubsection{Gaussian Mixture Models}
-A more powerful technique, Gaussian mixture models (GMM) improve on two major shortcomings of K-means. Firstly, GMM fits elliptical Gaussian densities, optimising over the choice of $\Sigma$, the covariance matrix. Secondly, the parameters, $r_{nk}$, are replaced by random variables, $r_n$, of a special kind called \emph{latent} random variables. These act as a bridge between each observation $x_n$ (also a random variable), and its class, $k$. Thus, rather than hard binary values, the values $r_{nk} = p(r_n = k)$ indicate the probabilities of $\mathbf{x_n}$ belonging to cluster $k$. This is useful both for the fact that the parameters no longer grow with the size of the data, and also to quantify an uncertainty about $x_n$, which can be used for analysis of outliers, and for example the selection of $K$. However, the complexity of the algorithm is far greater than K-means. Again, problem-specific considerations must be made when choosing the most suitable algorithm. Note that unlike spatial clustering algorithm DBSCAN, GMMs are capable of clustering densities that overlap, but are less useful when the data are not linearly separable. Thus, GMMs are good at clustering populations that are likely to be normally distributed in their features, but not, for example, geospatial data that exhibit irregular shapes.
 
 \begin{figure}
 \centering
@@ -2209,7 +2208,7 @@ A more powerful technique, Gaussian mixture models (GMM) improve on two major sh
 \label{fig:gmm}
 \end{figure}
 
-The likelihood function for GMMs is maximised using an iterative algorithm called expectation maximisation (EM) (Figure \ref{fig:gmm}), which, similar to K-means, consists of two alternating steps, the $E$ and $M$ steps. In general this is,
+A more powerful technique, Gaussian mixture models (GMM) improve on two major shortcomings of K-means. Firstly, GMM fits elliptical Gaussian densities, optimising over the choice of $\Sigma$, the covariance matrix. Secondly, the parameters, $r_{nk}$, are replaced by random variables, $r_n$, of a special kind called \emph{latent} random variables. These act as a bridge between each observation $x_n$ (also a random variable), and its class, $k$. Thus, rather than hard binary values, the values $r_{nk} = p(r_n = k)$ indicate the probabilities of $\mathbf{x_n}$ belonging to cluster $k$. This is useful both for the fact that the parameters no longer grow with the size of the data, and also to quantify an uncertainty about $x_n$, which can be used for analysis of outliers, and for example the selection of $K$. However, the complexity of the algorithm is far greater than K-means. Again, problem-specific considerations must be made when choosing the most suitable algorithm. Note that unlike spatial clustering algorithm DBSCAN, GMMs are capable of clustering densities that overlap, but are less useful when the data are not linearly separable. Thus, GMMs are good at clustering populations that are likely to be normally distributed in their features, but not, for example, geospatial data that exhibit irregular shapes. The likelihood function for GMMs is maximised using an iterative algorithm called expectation maximisation (EM) (Figure \ref{fig:gmm}), which, similar to K-means, consists of two alternating steps, the $E$ and $M$ steps. In general this is,
 
 $$\arg \max_\theta \mathbb{E}_{p(z_n)}[\log p(x_n, r_n | \theta)].$$
 
