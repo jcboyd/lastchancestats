@@ -19,13 +19,6 @@ X3 = mvnrnd(mu3,sigma3,N/3);
 
 X = [X1; X2; X3];
 
-% plot(X1(:,1), X1(:,2), 'o', 'red', col(1), 'MarkerSize', 6, 'MarkerFaceColor', 'red');
-% hold on;
-% plot(X2(:,1), X2(:,2), 'o', 'green', col(2), 'MarkerSize', 6, 'MarkerFaceColor', 'green');
-% hold on;
-% plot(X3(:,1), X3(:,2), 'o', 'blue', col(3), 'MarkerSize', 6, 'MarkerFaceColor', 'blue);
-% hold on;
-
 grid on;
 
 % EM algorithm
