@@ -2035,7 +2035,7 @@ Bayes model averaging may be performed for linear regression to obtain a more ro
 
 \subsection{Logistic Regression}
 
-Logistic regression is a class of classification models. It can be thought of . There is also a strong connection between logistic regression and linear discriminant analysis. In fact logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably exposes the student to the quintessential optimisation techniques of machine learning.
+Logistic regression is a class of classification models. Learning a logistic regression can be thought of as fitting a multivariate Bernoulli distribution. There is also a strong connection between logistic regression and linear discriminant analysis. In fact logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions\footnote{This is often hard to do, especially when the input data is vector-valued, and is a limitation on generative models. In contrast, discriminative models allow for arbitrary basis function expansion and feature engineering. On the other hand, generative models are usually easier to fit, more robust to changes in the dataset (discriminative models must be retrained), and better facilitate semi-supervised learning.}. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably exposes the student to the quintessential optimisation techniques of machine learning.
 
 \subsubsection{Binary Logistic Regression}
 
@@ -2169,6 +2169,30 @@ $$I_{split}(p) = h_2(p) = -p\log p - (1-p)\log (1-p).$$
 \subsubsection{More Advanced Techniques}
 
 An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done by aggregating the predictions of individual trees. This is an example of ensemble learning and \emph{bagging} (bootstrap aggregating). The advantage of random forests is that it reduces the variance of the prediction.
+
+\subsection{Dimensionality Reduction and PCA}
+
+The curse of dimensionality motivates techniques to transform high-dimensional data, given by $N \times D$ matrix $\mathbf{X}$, to a lower rank approximation. This can be achieved by choosing lower dimensionality, $M  < D$, and finding $D \times M$ matrix $\mathbf{W}$ and $N \times M$ matrix $\mathbf{Z}$ such that,
+
+$$\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$$
+
+and where the \emph{reconstruction error} is minimised. This leads to the objective function,
+
+$$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1}^N||\mathbf{x}_i - \hat{\mathbf{x}}_i||^2,$$
+
+where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction. It can be shown that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$ for orthonormal $\mathbf{W}$, then $\mathbf{W}^T\mathbf{X}^T \approx \mathbf{W}^T\mathbf{W}\mathbf{Z}^T \implies \mathbf{X}\mathbf{W}  \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional form. When the transformation is made, a model may be trained, perhaps more successfully than with the full data. The reconstruction error function can be minimised (and the optimal decomposition found) with a technique known as alternating least squares (AWS).
+
+\subsubsection{Singular Value Decomposition}
+
+Singular Value Decomposition (SVD) is to rectangular matrices what eigenvalue decomposition is to square matrices. This factorisation of matrix $\mathbf{X}$ can be written,
+
+$$\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T,$$
+
+where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ is the diagonal matrix of \emph{singular values}. This decomposition may be arrived at by various techniques. Since $\mathbf{U}\mathbf{S}\mathbf{V}^T = \sum_i s_ii \mathbf{u}_i\mathbf{v}_i^T$, it is possible to obtain a lower-rank approximation to $\mathbf{X}$ just be dropping the less significant (lower singular value) terms in the sum. This is called truncated SVD, and is the basis of information retrieval techniques such as latent semantic indexing (LSI). To relate SVD back to PCA, note that the empirical covariance matrix,
+
+$$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{V}^T =  \mathbf{V}\mathbf{S}^2\mathbf{V}^T,$$
+
+that is, the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T = \mathbf{U}\mathbf{S}$.
 
 \subsection{Unsupervised Machine Learning}
 
