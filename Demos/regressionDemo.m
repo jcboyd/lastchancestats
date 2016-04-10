@@ -31,7 +31,7 @@ while iters < maxIters && grad' * grad > tol
     y = y(idx, :);
     % Run over epoch
     for i = 1 : N
-        grad = ((tX(i, :) * theta - y(i, :))' * tX(i, :))';
+        grad = (tX(i, :) * theta - y(i, :)) * tX(i, :)';
         theta = gradientDescent(alpha, theta, grad);
     end
     % Report cost
