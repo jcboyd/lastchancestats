@@ -2180,7 +2180,7 @@ and where the \emph{reconstruction error} is minimised. This leads to the object
 
 $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1}^N||\mathbf{x}_i - \hat{\mathbf{x}}_i||^2,$$
 
-where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction. It can be shown that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$ for orthonormal $\mathbf{W}$, then $\mathbf{W}^T\mathbf{X}^T \approx \mathbf{W}^T\mathbf{W}\mathbf{Z}^T \implies \mathbf{X}\mathbf{W}  \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional form. When the transformation is made, a model may be trained, perhaps more successfully than with the full data. The reconstruction error function can be minimised (and the optimal decomposition found) with a technique known as alternating least squares (AWS).
+where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction. The reconstruction error function can be minimised (and the optimal decomposition found) with a technique known as alternating least squares (AWS). It can be shown that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$ for orthonormal $\mathbf{W}$, then $\mathbf{W}^T\mathbf{X}^T \approx \mathbf{W}^T\mathbf{W}\mathbf{Z}^T \implies \mathbf{X}\mathbf{W}  \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional form. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
 
 \subsubsection{Singular Value Decomposition}
 
@@ -2192,7 +2192,7 @@ where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ i
 
 $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{V}^T =  \mathbf{V}\mathbf{S}^2\mathbf{V}^T,$$
 
-that is, the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T = \mathbf{U}\mathbf{S}$.
+that is, the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T = \mathbf{U}\mathbf{S}$. Thus, SVD is an alternative way to perform PCA.
 
 \subsection{Unsupervised Machine Learning}
 
