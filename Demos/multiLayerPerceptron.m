@@ -15,7 +15,8 @@ classdef multiLayerPerceptron < handle
         layers  % number of network layers
         h       % activation function
         dh      % derivative of activation function
-        mode    % output mode - classification or regression
+        L       % loss function  
+        dL      % derivative of loss function
     end
     
     methods
@@ -24,14 +25,15 @@ classdef multiLayerPerceptron < handle
             obj.X = X;
             obj.y = y;
             [obj.N, obj.D] = size(X);
-            % initialise parameters
+            % initialise network
             hiddens = [hiddens, 1];
             obj.layers = length(hiddens);
             for i = 1 : obj.layers
-                obj.a{i} = zeros(hiddens(i), 1);
+                obj.a{i} = rand(hiddens(i), 1);
                 obj.z{i} = zeros(hiddens(i), 1);
             end
             network = [obj.D, hiddens];
+            % initialise parameters
             for i = 1 : length(network) - 1
                 obj.W{i} = zeros(network(i + 1), network(i));
                 obj.grad{i} = zeros(network(i + 1), network(i));
@@ -39,15 +41,20 @@ classdef multiLayerPerceptron < handle
             % initialise activation function and derivative
             if strcmp(activation, 'tanh')
                 obj.h = @(x) tanh(x);
-                obj.dh = @(x) 1 - tanh(x)^2;
+                obj.dh = @(x) 1 - tanh(x).^2;
             elseif strcmp(activation, 'sigma')
                 obj.h = @(x) sigma(x);
                 obj.dh = @(x) dSigma(x);
             else
                 error('Invalid activation function');
             end
-            if strcmp(mode, 'regression') || strcmp(mode, 'classification')
-                obj.mode = mode;
+            % set cost functions
+            if strcmp(mode, 'regression')
+                obj.L = @(y, yhat) (y - yhat)^2;
+                obj.dL = @(y, z) -2 * (y - z)';
+            elseif strcmp(mode, 'classification')
+                obj.L = 1;
+                obj.dL = 1;
             else
                 error('Invalid mode');
             end
@@ -62,26 +69,26 @@ classdef multiLayerPerceptron < handle
                 obj.z{i} = obj.h(obj.a{i});
             end
         end
-        function backPropagate(obj, index)
+        function backPropagate(obj, index, alpha)
             % compute gradients with back propagation
-            d = diag(obj.dh(obj.a{obj.layers}));
-            % set leading delta
-            if strcmp(obj.mode, 'regression')
-                d = -d * 2 * (obj.y(index) - obj.z{obj.layers})';
-            else % TODO classification
-                d = d * 1;
+            K = obj.layers;
+            del = diag(obj.dh(obj.a{K})) * obj.dL(obj.y(index), obj.z{K});
+            obj.grad{obj.layers} = del * obj.z{obj.layers - 1}';
+            obj.updateWeights(alpha, obj.layers);
+            % compute interior gradients
+            for i = obj.layers - 1 : -1 : 2
+                del = diag(obj.dh(obj.a{i})) * obj.W{i + 1}' * del;
+                obj.grad{i} = del * obj.z{i - 1}';
+                obj.updateWeights(alpha, i);
             end
-            for i = obj.layers : -1 : 2
-                obj.grad{i} = d * obj.z{i - 1}';
-                d = diag(obj.dh(obj.a{i})) * obj.W{i}' * d;
-            end
-            obj.grad{1} = d * obj.X(index, :);
+            % compute base gradient
+            del = diag(obj.dh(obj.a{1})) * obj.W{2}' * del;
+            obj.grad{1} = del * obj.X(index, :);
+            obj.updateWeights(alpha, 1);
         end
-        function updateWeights(obj, alpha)
+        function updateWeights(obj, alpha, i)
             % perform (stochastic) gradient descent step on weights
-            for i = 1 : obj.layers
-                obj.W{i} = gradientDescent(alpha, obj.W{i}, obj.grad{i});
-            end
+            obj.W{i} = gradientDescent(alpha, obj.W{i}, obj.grad{i});
         end
         function train(obj, maxIters, alpha)
             % learn model weights
@@ -95,23 +102,23 @@ classdef multiLayerPerceptron < handle
                 % run over epoch
                 for i = 1 : obj.N
                     obj.forwardPropagate(i);
-                    obj.backPropagate(i);
-                    obj.updateWeights(alpha);
-                    cost = cost + (obj.y(i) - obj.predict(obj.X(i)));
+                    obj.backPropagate(i, alpha);
+                    yhat = obj.predict(obj.X(i, :));
+                    cost = cost + obj.L(obj.y(i), yhat);
                 end
-                fprintf('Cost: %f\n', cost / obj.N);
+                fprintf('\rCost: %f\n', cost / obj.N);
                 iters = iters + 1;
             end
         end
-        function yhat = predict(obj, x)
+        function yhat = predict(obj, xhat)
             % make prediction by propagating forwards
-            yhat = obj.h(obj.W{1} * x');
+            yhat = obj.h(obj.W{1} * xhat');
             for i = 2 : obj.layers
                 yhat = obj.h(obj.W{i} * yhat);
             end
-            if strcmp(obj.mode, 'classification')
-                yhat = sigma(yhat);
-            end
+%             if strcmp(obj.mode, 'classification')
+%                 yhat = sigma(yhat);
+%             end
         end
     end
 end
