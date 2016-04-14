@@ -1,6 +1,6 @@
 classdef multiLayerPerceptron < handle
     %MULTILAYERPERCEPTRON for regression or binary classification
-    % implementation of multi-layer perceptron (MLP),  also known as 
+    % implementation of multi-layer perceptron (MLP), also known as 
     % feed-forward neural network
     
     properties
@@ -10,34 +10,35 @@ classdef multiLayerPerceptron < handle
         D       % data dimensionality
         W       % model weights
         grad    % current gradients
-        a       % current hidden variable states
-        z       % current non-linear hidden variable states
-        layers  % number of network layers
+        z       % current hidden variable states
+        L       % number of network layers
         h       % activation function
         dh      % derivative of activation function
-        L       % loss function  
-        dL      % derivative of loss function
+        J       % loss function
+        dJ      % derivative of loss function
+        output  % output function
+        alpha   % step size for gradient descent
+        lambda  % regularisation parameter
     end
     
     methods
-        function obj = multiLayerPerceptron(X, y, hiddens, activation, mode)
+        function obj = multiLayerPerceptron(X, y, graph, activation, mode)
             % initialise data
             obj.X = X;
             obj.y = y;
             [obj.N, obj.D] = size(X);
             % initialise network
-            hiddens = [hiddens, 1];
-            obj.layers = length(hiddens);
-            for i = 1 : obj.layers
-                obj.a{i} = rand(hiddens(i), 1);
-                obj.z{i} = zeros(hiddens(i), 1);
+            obj.L = length(graph);
+            for i = 1 : obj.L
+                obj.z{i} = [zeros(graph(i) - 1, 1) ; 1];
             end
-            network = [obj.D, hiddens];
             % initialise parameters
-            for i = 1 : length(network) - 1
-                obj.W{i} = zeros(network(i + 1), network(i));
-                obj.grad{i} = zeros(network(i + 1), network(i));
+            for i = 1 : obj.L - 2
+                obj.W{i} = rand(graph(i + 1) - 1, graph(i));
+                obj.grad{i} = zeros(graph(i + 1) - 1, graph(i));
             end
+            obj.W{obj.L - 1} = rand(graph(obj.L), graph(obj.L - 1));
+            obj.grad{obj.L - 1} = zeros(graph(obj.L), graph(obj.L - 1));
             % initialise activation function and derivative
             if strcmp(activation, 'tanh')
                 obj.h = @(x) tanh(x);
@@ -50,48 +51,55 @@ classdef multiLayerPerceptron < handle
             end
             % set cost functions
             if strcmp(mode, 'regression')
-                obj.L = @(y, yhat) (y - yhat)^2;
-                obj.dL = @(y, z) -2 * (y - z)';
+                obj.J = @(y, yhat) (y - yhat)^2;
+                obj.dJ = @(y, z) -(y - z)';
+                obj.output = @(z) z;
             elseif strcmp(mode, 'classification')
-                obj.L = 1;
-                obj.dL = 1;
+                obj.J = @(y, yhat) y * yhat - log(1 + exp(yhat));
+                obj.dJ = @(y, z) y - sigma(z);
+                obj.output = @(z) sigma(z);
             else
                 error('Invalid mode');
             end
         end
         function forwardPropagate(obj, index)
-            % update hidden variables with forward propagation
-            obj.a{1} = obj.W{1} * obj.X(index, :)';
-            obj.z{1} = obj.h(obj.a{1});
+            %FORWARDPROPAGATE updates hidden variables with forward
+            %propagation
+            % include additional unit for bias term
+            obj.z{1} = [obj.X(index, :)' ; 1];
             % update interior layers
-            for i = 2 : obj.layers
-                obj.a{i} = obj.W{i} * obj.z{i - 1};
-                obj.z{i} = obj.h(obj.a{i});
+            for i = 2 : obj.L - 1
+                obj.z{i} = [obj.h(obj.W{i - 1} * obj.z{i - 1}) ; 1];
             end
+            obj.z{obj.L} = obj.h(obj.W{obj.L - 1} * obj.z{obj.L - 1});
         end
-        function backPropagate(obj, index, alpha)
-            % compute gradients with back propagation
-            K = obj.layers;
-            del = diag(obj.dh(obj.a{K})) * obj.dL(obj.y(index), obj.z{K});
-            obj.grad{obj.layers} = del * obj.z{obj.layers - 1}';
-            obj.updateWeights(alpha, obj.layers);
-            % compute interior gradients
-            for i = obj.layers - 1 : -1 : 2
-                del = diag(obj.dh(obj.a{i})) * obj.W{i + 1}' * del;
-                obj.grad{i} = del * obj.z{i - 1}';
-                obj.updateWeights(alpha, i);
+        function backPropagate(obj, index)
+            %BACKPROPAGATE computes gradients with back propagation
+            % final gradient incorporates cost function
+            a = obj.W{obj.L - 1} * obj.z{obj.L - 1};
+            del = diag(obj.dh(a)) * obj.dJ(obj.y(index), obj.z{obj.L});
+            % update gradient
+            penalty = obj.lambda * obj.W{obj.L - 1};
+            obj.grad{obj.L - 1} = del * obj.z{obj.L - 1}' + penalty;
+            obj.updateWeights(obj.alpha, obj.L - 1);
+            % compute other gradients
+            for i = obj.L - 2 : -1 : 1
+                a = obj.W{i} * obj.z{i};
+                del = diag(obj.dh(a)) * obj.W{i + 1}(:,1:end-1)' * del;
+                % update gradient
+                penalty = obj.lambda * obj.W{i};
+                obj.grad{i} = [del * obj.z{i}(1:end-1)', del] + penalty;
+                obj.updateWeights(obj.alpha, i);
             end
-            % compute base gradient
-            del = diag(obj.dh(obj.a{1})) * obj.W{2}' * del;
-            obj.grad{1} = del * obj.X(index, :);
-            obj.updateWeights(alpha, 1);
         end
         function updateWeights(obj, alpha, i)
-            % perform (stochastic) gradient descent step on weights
+            %UPDATEWEIGHTS performs gradient descent step on weights
             obj.W{i} = gradientDescent(alpha, obj.W{i}, obj.grad{i});
         end
-        function train(obj, maxIters, alpha)
-            % learn model weights
+        function train(obj, maxIters, alpha, lambda)
+            %TRAIN learns model weights with stochastic gradient descent
+            obj.alpha = alpha;
+            obj.lambda = lambda;
             iters = 0;
             while iters < maxIters
                 cost = 0;
@@ -102,23 +110,21 @@ classdef multiLayerPerceptron < handle
                 % run over epoch
                 for i = 1 : obj.N
                     obj.forwardPropagate(i);
-                    obj.backPropagate(i, alpha);
+                    obj.backPropagate(i);
                     yhat = obj.predict(obj.X(i, :));
-                    cost = cost + obj.L(obj.y(i), yhat);
+                    cost = cost + obj.J(obj.y(i), yhat);
                 end
-                fprintf('\rCost: %f\n', cost / obj.N);
+                fprintf('Epoch: %d -> Cost: %f\r', [iters, cost / obj.N]);
                 iters = iters + 1;
             end
         end
         function yhat = predict(obj, xhat)
-            % make prediction by propagating forwards
-            yhat = obj.h(obj.W{1} * xhat');
-            for i = 2 : obj.layers
-                yhat = obj.h(obj.W{i} * yhat);
+            %PREDICT makes prediction by propagating forwards
+            yhat = xhat';
+            for i = 1 : obj.L - 1
+                yhat = obj.h(obj.W{i} * [yhat; 1]);
             end
-%             if strcmp(obj.mode, 'classification')
-%                 yhat = sigma(yhat);
-%             end
+            yhat = obj.output(yhat);
         end
     end
 end
