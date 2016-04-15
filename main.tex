@@ -1947,7 +1947,7 @@ y_n &\approx \beta_1x_{n1} + \beta_2x_{n2} + \cdots + \beta_Dx_{nD} \notag \\
 
 for all $n = 1, \dots, N$. Each of the $D$ dimensions of $\mathbf{x_n}$ is known as an indicator. The greater the corresponding coefficient in the parameter vector, $\boldsymbol\beta$, the more weight this dimension has in determining the output, $y_n$. We can formulate the above as an optimisation problem,
 
-$$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2N}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
+$$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) = \frac{1}{2N}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
 
 where $\mathcal{L}(\boldsymbol\beta)$ is the ``loss'' function, expressing a \emph{mean square error} (MSE) for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm minimise this function. It is also typical to write $\text{MSE} = \text{RSS}/N$, where RSS stands for \emph{residual sum of squares}, the non-weighted sum. Note we could have chosen any sort of loss function, but our reasons for choosing mean square error will be revealed in the following section.
 
@@ -1957,19 +1957,19 @@ The method of least squares (MLS) is a closed-form solution to a linear regressi
 
 $$\frac{\delta\mathcal{L}}{\delta\boldsymbol\beta} = -\frac{1}{N}X^T(\mathbf{y} - X\boldsymbol\beta),$$
 
-where $X \in \mathbb{R}^{N\times D}$ is the matrix whose $i$th row is the $i$th $D$-dimensional vector, $x_i$, and $\mathbf{y} \in \mathbb{R}^D$ is the vector whose $i$th element is the $i$th scalar, $y_i$. We can therefore minimise $\mathcal{L}(\boldsymbol\beta)$ by setting its derivative to 0, giving the normal equation,
+where $\mathbf{X} \in \mathbb{R}^{N\times D}$ is the matrix whose $i$th row is the $i$th $D$-dimensional vector, $\mathbf{x}_i$, and $\mathbf{y} \in \mathbb{R}^D$ is the vector whose $i$th element is the $i$th scalar, $y_i$. We can therefore minimise $\mathcal{L}(\boldsymbol\beta)$ by setting its derivative to 0, giving the normal equation,
 
-$$X^T(X\boldsymbol\beta - \mathbf{y}) = 0,$$
+$$\mathbf{X}^T(\mathbf{X}\boldsymbol\beta - \mathbf{y}) = 0,$$
 
 and finally, the optimal parameter vector,
 
-$$\boldsymbol\beta^* = (X^TX)^{-1}X^T\mathbf{y}.$$
+$$\boldsymbol\beta^* = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}.$$
 
-MLS also has a nice geometric interpretation. According to the normal equation, the error, $X\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $X^T$. This makes sense, because it means the choice of prediction, $X\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly ``below'' it on the hyperplane, $X^T$. This solution is known as the ordinary least squares (OLS) solution.
+MLS also has a nice geometric interpretation. According to the normal equation, the error, $\mathbf{X}\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $\mathbf{X}^T$. This makes sense, because it means the choice of prediction, $\mathbf{X}\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly ``below'' it on the hyperplane, $\mathbf{X}^T$. This solution is known as the ordinary least squares (OLS) solution.
 
 \subsubsection{Gradient Descent}
 
-In most cases, the closed-form method of least squares cannot be used, as it requires the matrix $X^TX$ to have an inverse. This depends on some conditions on $X$ that are in practice rarely met. Therefore, we have recourse to sure-fire numerical methods. The most fundamental of these is the method of gradient descent. The convenient form of our loss function makes it a differentiable function that is furthermore \emph{convex}. It therefore has a unique global minimum. We can approach this optimal point iteratively from an arbitrary starting point by taking steps in the direction of the gradient (Figure \ref{fig:gradientdescent}). The algorithm is defined as,
+In most cases, the closed-form method of least squares cannot be used, as it requires the \emph{gram} matrix $\mathbf{X}^T\mathbf{X}$ to be numerically well-conditioned enough to for inversion. This depends on some conditions on the data, $\mathbf{X}$, that are in practice rarely met. Therefore, we have recourse to sure-fire numerical methods. The most fundamental of these is the method of gradient descent. The convenient form of our loss function makes it a differentiable function that is furthermore \emph{convex}. It therefore has a unique global minimum. We can approach this optimal point iteratively from an arbitrary starting point by taking steps in the direction of the gradient (Figure \ref{fig:gradientdescent}). The algorithm is defined as,
 
 $$\boldsymbol\beta^{k+1} = \boldsymbol\beta^{k} - \alpha \nabla\mathcal{L}(\boldsymbol\beta^k),$$
 
@@ -2029,9 +2029,9 @@ One drawback of using a Gaussian likelihood is that it is sensitive to outliers.
 
 $$\text{NLL} = \frac{1}{N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \lambda\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{N}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \lambda\sum_{d=1}^D\beta_d^2.$$
 
-Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$ in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions. This is useful for high-dimensional data with many noisy indicators. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes (albeit not beyond recognition).
+Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions. This is useful for high-dimensional data with many noisy indicators. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes (albeit not beyond recognition).
 
-A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer convex, but with a reformulation trick can be made into a linear programming problem, which can then be solved with any linear solver. For example, the simplex algorithm, designed by American mathematician George Dantzig\footnote{There is famous anecdote from Dantzig's time as a doctoral student at Berkley. Arriving late to class, Dantzig copied down two important unsolved statistics problems the professor had earlier written on the blackboard, taking them to be set for homework. With some effort, he managed to solve both problems, and submitted them to the professor for review. It was not until some weeks later that the professor looked at his solutions, to great excitement. Dantzig then had the rare privilege of submitting his homework as his doctoral thesis.} (1914-2005), which works by taking successive upward steps along the edges of an $N$-dimensional convex solid. The convexity guarantees a maximum is eventually reached.
+A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem, which can then be optimised with any linear solver, for example, the simplex algorithm, designed by American mathematician George Dantzig\footnote{There is famous anecdote from Dantzig's time as a doctoral student at Berkley. Arriving late to class, Dantzig copied down two important unsolved statistics problems the professor had earlier written on the blackboard, taking them to be set for homework. With some effort, he managed to solve both problems, and submitted them to the professor for review. It was not until some weeks later that the professor looked at his solutions, to great excitement. Dantzig then had the rare privilege of submitting his homework as his doctoral thesis.} (1914-2005), which works by taking successive upward steps along the edges of an $N$-dimensional convex solid. The convexity guarantees a maximum is eventually reached.
 
 \subsubsection{Bayesian Linear Regression}
 
@@ -2060,7 +2060,7 @@ is the sigmoid or logistic function. Thus, in training a logistic regression mod
 
 Due to the logistic function, it is no longer possible to obtain a least-squares solutions. We therefore have recourse to numerical techniques. Because the function is convex, vanilla gradient descent will do the trick. However, more powerful techniques exist. Newton's method is a similar algorithm incorporating second order information into the descent step. It comes from considering the second order Taylor polynomial for the NLL function, around a point $\boldsymbol\beta_k$,
 
-$$p(\boldsymbol\beta) = NLL(\boldsymbol\beta_k) + g_k^T(\boldsymbol\beta - \boldsymbol\beta_k) + \frac{1}{2}(\boldsymbol\beta - \boldsymbol\beta_k)\mathbf{H}_k(\boldsymbol\beta - \boldsymbol\beta_k).$$
+$$NLL(\boldsymbol\beta) \approx NLL(\boldsymbol\beta_k) + g_k^T(\boldsymbol\beta - \boldsymbol\beta_k) + \frac{1}{2}(\boldsymbol\beta - \boldsymbol\beta_k)\mathbf{H}_k(\boldsymbol\beta - \boldsymbol\beta_k).$$
 
 This quadratic expression is minimised for $\boldsymbol\beta = \boldsymbol\beta_k - \mathbf{H}^{-1}g_k$. This constitutes the Newton step. Now we will derive expressions for the gradient and Hessian of our logistic regression model. The gradient is the vector of partial derivatives,
 
@@ -2096,7 +2096,7 @@ $$\mathbf{H} = \begin{bmatrix}
 = \sum_i \sigma_i(1 - \sigma_i)\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{S}\mathbf{X},
 $$
 
-where $S = \text{diag}[\sigma(\boldsymbol\beta^T\mathbf{x}_1), \sigma(\boldsymbol\beta^T\mathbf{x}_2), \dots, \sigma(\boldsymbol\beta^T\mathbf{x}_N)]$. The Newton step may be rewritten as a least squares problem. In such a formulation, the optimisation algorithm is known as iterative reweighted least squares (IRLS). Due to the computational complexity of computing the Hessian, quasi-Newton techniques exist that create an approximation iteratively. The most common is the BFGS algorithm (Broyden, Fletcher, Goldfarb and Shanno). The $\mathcal{O}(D^2)$ space complexity of the Hessian gave rise to a further approximation in the limited memory or L-BFGS algorithm. This is the usual weapon of choice for modelling high-dimensional data. Just as with linear regression, $l_2$ regularisation may be used. Unlike linear regression, however, the full posterior distribution is not directly computable due to the absence of a conjugate prior. Approximation techniques, such as Markov chain Monte Carlo (MCMC), are therefore used. An object-oriented logistic regression model is solved with both gradient descent and Newton's method in \texttt{logRegDemo.m}.
+where $S = \text{diag}([\sigma(\boldsymbol\beta^T\mathbf{x}_1), \sigma(\boldsymbol\beta^T\mathbf{x}_2), \dots, \sigma(\boldsymbol\beta^T\mathbf{x}_N)])$. The Newton step may be rewritten as a least squares problem. In such a formulation, the optimisation algorithm is known as iterative reweighted least squares (IRLS). Due to the computational complexity of computing the Hessian, quasi-Newton techniques exist that create an approximation iteratively. The most common is the BFGS algorithm (Broyden, Fletcher, Goldfarb and Shanno). The $\mathcal{O}(D^2)$ space complexity of the Hessian gave rise to a further approximation in the limited memory or L-BFGS algorithm. This is the usual weapon of choice for modelling high-dimensional data. Just as with linear regression, $l_2$ regularisation may be used. Unlike linear regression, however, the full posterior distribution is not directly computable due to the absence of a conjugate prior. Approximation techniques, such as Markov chain Monte Carlo (MCMC), are therefore used. An object-oriented logistic regression model is solved with both gradient descent and Newton's method in \texttt{logRegDemo.m}.
 
 \subsubsection{Multinomial Logistic Regression}
 
@@ -2160,7 +2160,7 @@ A neural network may be used for both regression and classification, the output 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/universalapproximater.pdf}
-\caption{ A simple example of a neural network fitting an absolute value function. Generated by \texttt{mlpDemo.m}.}
+\caption{ A simple example of a neural network fitting an absolute value function. Generated with \texttt{mlpDemo.m}.}
 \label{fig:universalapproximater}
 \end{figure}
 
@@ -2168,7 +2168,7 @@ A neural network may be used for both regression and classification, the output 
 
 Classification is also a predictive action, but predicts \emph{membership} in one of a finite number of classes, rather than a continuous value. Many techniques exist for classification. One of the most common is \emph{logistic regression}, which has a similar MLE derivation as presented above, albeit replacing the Gaussian pdf with a (binary) Bernoulli pdf. Other well-known techniques for classification include \emph{support vector machines} (SVM) and \emph{neural networks}. Decision trees are distinct from these techniques in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data.
 
-\subsubsection{Decision Trees Learning}
+\subsubsection{Learning Decision Trees}
 
 Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups iteratively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree.
 
@@ -2195,7 +2195,7 @@ The curse of dimensionality motivates techniques to transform high-dimensional d
 
 $$\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$$
 
-and where the \emph{reconstruction error} is minimised. This leads to the objective function,
+and such that the \emph{reconstruction error} is minimised. This leads to the objective function,
 
 $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1}^N||\mathbf{x}_i - \hat{\mathbf{x}}_i||^2,$$
 
@@ -2207,7 +2207,7 @@ Singular Value Decomposition (SVD) is to rectangular matrices what eigenvalue de
 
 $$\mathbf{X} = \mathbf{U}\mathbf{S}\mathbf{V}^T,$$
 
-where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ is the diagonal matrix of \emph{singular values}. This decomposition may be arrived at by various techniques. Since $\mathbf{U}\mathbf{S}\mathbf{V}^T = \sum_i s_{ii} \mathbf{u}_i\mathbf{v}_i^T$, it is possible to obtain a lower-rank approximation to $\mathbf{X}$ just be dropping the less significant (lower singular value) terms in the sum. This is called truncated SVD, and is the basis of information retrieval techniques such as latent semantic indexing (LSI). To relate SVD back to PCA, note that the empirical covariance matrix,
+where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ is the diagonal matrix of \emph{singular values}. This decomposition may be arrived at by various techniques. Since $\mathbf{U}\mathbf{S}\mathbf{V}^T = \sum_i s_{ii} \mathbf{u}_{:,i}\mathbf{v}_{:,i}^T$, it is possible to obtain a lower-rank approximation to $\mathbf{X}$ just be dropping the less significant (lower singular value) terms in the sum. This is called truncated SVD, and is the basis of information retrieval techniques such as latent semantic indexing (LSI). To relate SVD back to PCA, note that the empirical covariance matrix,
 
 $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{V}^T =  \mathbf{V}\mathbf{S}^2\mathbf{V}^T,$$
 
