@@ -512,21 +512,21 @@ $$
 
 These are entire functions, hence the Taylor series converge for all real numbers.
 
-%\subsubsection{Bernoulli Numbers}
-%
-%The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (such as $\pi$ and $e$). They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
-%
-%$$B_0 = 1, B_1 = \pm \frac{1}{2}, B_2 = \frac{1}{6}, B_3 = 0, B_4 = -\frac{1}{30}, B_5 = 0, B_6 = \frac{1}{42}, B_7 = 0, B_8 = -\frac{1}{30}.$$
-%
-%Curiously, the second Bernoulli number, $B_1$, may be plus or minus $\frac{1}{2}$. Therefore, there are strictly speaking \emph{two} sequences, the \emph{first} Bernoulli numbers ($B_1 = -\frac{1}{2}$) and the \emph{second} Bernoulli numbers ($B_1 = \frac{1}{2}$). The numbers may be defined by a recurrence relation. For example, the second Bernoulli numbers are related by,
-%
-%$$B_n = 1 - \sum_{k=0}^{n-1}{{{n}\choose{k}}}\frac{B_k}{n - k + 1}, B_0 = 1.$$
-%
-%The sequence appears in many places within number theory, for example some Taylor expansions, such as the hyperbolic function, $\tanh x$, whose Taylor expansion is,
-%
-%$$\tanh x = x - \frac{1}{3}x^3 + \frac{2}{15}x^5 - \frac{17}{315}x^7 + \cdots = \sum_{n=1}^{\infty}\frac{B_{2n}4^n(4^n-1)}{(2n)!}x^{2n-1}.$$
-%
-%The Bernoulli numbers also appear in the Euler-Maclaurin formula, and hence, the error term of the trapezoidal rule.
+\subsubsection{Bernoulli Numbers}
+
+The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (such as $\pi$ and $e$). They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
+
+$$B_0 = 1, B_1 = \pm \frac{1}{2}, B_2 = \frac{1}{6}, B_3 = 0, B_4 = -\frac{1}{30}, B_5 = 0, B_6 = \frac{1}{42}, B_7 = 0, B_8 = -\frac{1}{30}.$$
+
+Curiously, the second Bernoulli number, $B_1$, may be plus or minus $\frac{1}{2}$. Therefore, there are strictly speaking \emph{two} sequences, the \emph{first} Bernoulli numbers ($B_1 = -\frac{1}{2}$) and the \emph{second} Bernoulli numbers ($B_1 = \frac{1}{2}$). The numbers may be defined by a recurrence relation. For example, the second Bernoulli numbers are related by,
+
+$$B_n = 1 - \sum_{k=0}^{n-1}{{{n}\choose{k}}}\frac{B_k}{n - k + 1}, B_0 = 1.$$
+
+The sequence appears in many places within number theory, foremostly as the coefficients of the Bernoulli polynomials, for example some Taylor expansions, such as the hyperbolic tangent function, $\tanh x$, whose Taylor expansion is,
+
+$$\tanh x = x - \frac{1}{3}x^3 + \frac{2}{15}x^5 - \frac{17}{315}x^7 + \cdots = \sum_{n=1}^{\infty}\frac{B_{2n}4^n(4^n-1)}{(2n)!}x^{2n-1}.$$
+
+The Bernoulli numbers also appear in the Euler-Maclaurin formula, which describes the error between sums and integrals, and hence, the error term of the trapezoidal rule.
 
 \subsection{$\pi$ as an Infinite Series}
 
@@ -2027,7 +2027,7 @@ If we wish to fit a non-linear function to our data, we can simply transform our
 
 One drawback of using a Gaussian likelihood is that it is sensitive to outliers. This makes it likely to overfit in practice. There are several ways of mitigating this effect. The most crude is known as ``early stopping'', where training is terminated before convergence, and before the model has a chance to overfit. The most ideal option is to train on more data, taking density away from outliers, but data is usually hard to come by. The most common approach is to \emph{regularise} the cost function by introducing a prior distribution on the model parameters. This gives us the posterior distribution, just as it was with the beta-binomial model, and the optimal parameters are the MAP estimate, $\theta_{MAP} = \argmax_{\theta} \text{NLL}(\theta)$, where NLL is the negative log-likelihood. If we choose another Gaussian for the prior, we are using $l_2$ regularisation, and we get what is known as a \emph{ridge regression},
 
-$$\text{NLL} = \frac{1}{N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \lambda\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{N}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \lambda\sum_{d=1}^D\beta_d^2.$$
+$$\text{NLL} = \frac{1}{2N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \lambda\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{2N}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \lambda\sum_{d=1}^D\beta_d^2.$$
 
 Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions. This is useful for high-dimensional data with many noisy indicators. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes (albeit not beyond recognition).
 
@@ -2058,7 +2058,7 @@ is the sigmoid or logistic function. Thus, in training a logistic regression mod
 &= \sum_i \log(1 + \exp(\boldsymbol\beta^T\mathbf{x}_i)) - y_i\boldsymbol\beta^T\mathbf{x}_i.\notag
 \end{align}
 
-Due to the logistic function, it is no longer possible to obtain a least-squares solutions. We therefore have recourse to numerical techniques. Because the function is convex, vanilla gradient descent will do the trick. However, more powerful techniques exist. Newton's method is a similar algorithm incorporating second order information into the descent step. It comes from considering the second order Taylor polynomial for the NLL function, around a point $\boldsymbol\beta_k$,
+Due to the logistic function, it is no longer possible to obtain a least-squares solution. We therefore have recourse to numerical techniques. Because the function is convex, vanilla gradient descent will do the trick. However, more powerful techniques exist. Newton's method is a similar algorithm incorporating second order information into the descent step. It comes from considering the second order Taylor polynomial for the NLL function, around a point $\boldsymbol\beta_k$,
 
 $$NLL(\boldsymbol\beta) \approx NLL(\boldsymbol\beta_k) + g_k^T(\boldsymbol\beta - \boldsymbol\beta_k) + \frac{1}{2}(\boldsymbol\beta - \boldsymbol\beta_k)\mathbf{H}_k(\boldsymbol\beta - \boldsymbol\beta_k).$$
 

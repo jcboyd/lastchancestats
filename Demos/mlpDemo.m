@@ -5,10 +5,10 @@ X = linspace(-1, 1, 50)';
 y = abs(X);
 
 % initialise model
-m = multiLayerPerceptron(X, y, [2, 3, 3, 1], 'tanh', 'regression');
+m = multiLayerPerceptron(X, y, [1, 3, 3, 1], 'tanh', 'regression');
 
 % train
-m.train(2000, 0.2, 0);
+m.train(2000, 0.35, 0);
 
 % makep predictions
 predictions = zeros(length(X), 1);
@@ -19,4 +19,4 @@ end
 % plot comparison
 plot(X, y, '.', 'color', 'blue');
 hold on;
-plot(X, predictions, '*', 'color', 'red');
+plot(X, predictions, 'color', 'red');
