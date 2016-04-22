@@ -33,6 +33,7 @@ classdef multiLayerPerceptron < handle
         end
         function train(obj, maxIters, alpha, lambda)
             % TRAIN learns model weights with stochastic gradient descent
+            figure;
             iters = 0;
             learningCurve = nan(maxIters, 1);
             while iters < maxIters
@@ -56,7 +57,7 @@ classdef multiLayerPerceptron < handle
                 learningCurve(iters) = cost / obj.N;
                 plot(learningCurve);
                 xlabel('Epoch'); ylabel('Cost'); xlim([1, maxIters]);
-                drawnow;
+                grid on; drawnow;
             end
         end
         function yhat = predict(obj, xhat)

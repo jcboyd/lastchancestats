@@ -6,7 +6,6 @@ load('mlp_regression_data.mat');
 m = multiLayerPerceptron(X, y, [1, 3, 3, 1], 'tanh', 'regression');
 
 % train
-figure
 m.train(2000, 0.3, 0);
 
 % make predictions
@@ -17,6 +16,7 @@ end
 
 % plot comparison
 figure
+grid on;
 plot(X, y, '.', 'color', 'blue');
 hold on;
 plot(X, predictions, 'color', 'red');
@@ -29,7 +29,6 @@ load('mlp_classification_data.mat');
 m = multiLayerPerceptron(X, y, [2, 3, 3, 1], 'tanh', 'classification');
 
 % train
-figure
 m.train(100, 0.1, 0);
 
 % plot comparison
