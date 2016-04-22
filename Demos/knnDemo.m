@@ -1,3 +1,4 @@
+clear all;
 rng default;
 
 % Set model parameters

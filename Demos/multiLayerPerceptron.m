@@ -6,6 +6,8 @@ classdef multiLayerPerceptron < handle
     properties
         X       % input data
         y       % output data
+        s1      % standardisation term 1
+        s2      % standardisation term 2
         N       % number of data samples
         W       % model weights
         grad    % current gradients
@@ -20,50 +22,19 @@ classdef multiLayerPerceptron < handle
     
     methods
         function obj = multiLayerPerceptron(X, y, graph, activation, mode)
-            % MULTILAYERPERCEPTRON assumes graph parameter is given without
-            % bias terms
             % initialise data
-            obj.X = X;
-            obj.y = y;
-            [obj.N, ~] = size(X);
+            obj.initialiseData(X, y);
             % initialise network
-            obj.L = length(graph);
-            % append bias units
-            for i = 1 : obj.L - 1
-                obj.z{i} = [zeros(graph(i), 1) ; 1];
-            end
-            obj.z{obj.L} = zeros(graph(obj.L), 1);
-            % initialise parameters
-            for i = 1 : obj.L - 1
-                obj.W{i} = rand(graph(i + 1), graph(i) + 1);
-                obj.grad{i} = zeros(graph(i + 1), graph(i) + 1);
-            end
-            % initialise activation function and derivative
-            if strcmp(activation, 'tanh')
-                obj.h = @(x) tanh(x);
-                obj.dh = @(x) 1 - tanh(x).^2;
-            elseif strcmp(activation, 'sigma')
-                obj.h = @(x) sigma(x);
-                obj.dh = @(x) dSigma(x);
-            else
-                error('Invalid activation function');
-            end
+            obj.initialiseNetwork(graph)
+            % set activation function and derivative
+            obj.setActivation(activation);
             % set cost functions
-            if strcmp(mode, 'regression')
-                obj.J = @(y, yhat) (y - yhat)^2;
-                obj.dJ = @(y, z) -(y - z)';
-                obj.output = @(z) z;
-            elseif strcmp(mode, 'classification')
-                obj.J = @(y, yhat) y * yhat - log(1 + exp(yhat));
-                obj.dJ = @(y, z) y - sigma(z);
-                obj.output = @(z) sigma(z);
-            else
-                error('Invalid mode');
-            end
+            obj.setMode(mode);
         end
         function train(obj, maxIters, alpha, lambda)
             % TRAIN learns model weights with stochastic gradient descent
             iters = 0;
+            learningCurve = nan(maxIters, 1);
             while iters < maxIters
                 cost = 0;
                 % randomly permute data
@@ -75,10 +46,17 @@ classdef multiLayerPerceptron < handle
                     obj.forwardPropagate(i);
                     obj.backPropagate(i);
                     obj.updateWeights(alpha, lambda);
-                    cost = cost + obj.J(obj.y(i), obj.predict(obj.X(i, :)));
+                    % standardise prediction
+                    p = (obj.predict(obj.X(i, :)) - obj.s1)/(obj.s2 - obj.s1);
+                    cost = cost + obj.J(obj.y(i), p);
                 end
                 iters = iters + 1;
-                fprintf('Epoch: %d -> Cost: %f\r', [iters, cost / obj.N]);
+                fprintf('Epoch: %d -> Cost: %.4f\r', [iters, cost / obj.N]);
+                % plot learning curve
+                learningCurve(iters) = cost / obj.N;
+                plot(learningCurve);
+                xlabel('Epoch'); ylabel('Cost'); xlim([1, maxIters]);
+                drawnow;
             end
         end
         function yhat = predict(obj, xhat)
@@ -87,10 +65,61 @@ classdef multiLayerPerceptron < handle
             for i = 1 : obj.L - 1
                 yhat = obj.h(obj.W{i} * [yhat; 1]);
             end
-            yhat = obj.output(yhat);
+            yhat = (obj.s2 - obj.s1) * obj.output(yhat) + obj.s1;
         end
     end
     methods(Access = private)
+        function initialiseData(obj, X, y)
+            % INITIALISEDATA sets and standardises data
+            obj.X = X;
+            obj.y = y;
+            [obj.N, ~] = size(X);
+            % standardise output
+            obj.s1 = min(y);
+            obj.s2 = max(y);
+            obj.y = (obj.y - obj.s1)/(obj.s2 - obj.s1);
+        end
+        function initialiseNetwork(obj, graph)
+            % INITIALISENETWORK initialise hidden units and weights. N.B.
+            % assumes graph parameter is given without bias terms
+            obj.L = length(graph);
+            % append bias units
+            for i = 1 : obj.L - 1
+                obj.z{i} = [zeros(graph(i), 1) ; 1];
+            end
+            obj.z{obj.L} = zeros(graph(obj.L), 1);
+            % initialise parameters
+            for i = 1 : obj.L - 1
+                obj.W{i} = rand(graph(i + 1), graph(i) + 1);
+                obj.grad{i} = zeros(graph(i + 1), graph(i) + 1);
+            end
+        end
+        function setActivation(obj, activation)
+            % SETACTIVATION sets the non-linear activation function
+            if strcmp(activation, 'tanh')
+                obj.h = @(x) tanh(x);
+                obj.dh = @(x) 1 - tanh(x).^2;
+            elseif strcmp(activation, 'sigma')
+                obj.h = @(x) sigma(x);
+                obj.dh = @(x) dSigma(x);
+            else
+                error('Invalid activation function');
+            end
+        end
+        function setMode(obj, mode)
+            % SETMODE allocates cost functions according to mode
+            if strcmp(mode, 'regression')
+                obj.J = @(y, yhat) (y - yhat)^2;
+                obj.dJ = @(y, z) -(y - z)';
+                obj.output = @(z) z;
+            elseif strcmp(mode, 'classification')
+                obj.J = @(y, yhat) y ~= yhat; % -y * yhat + log(1 + exp(yhat));
+                obj.dJ = @(y, z) -y + sigma(z);
+                obj.output = @(z) round((z + 1) / 2); % round(sigma(z));
+            else
+                error('Invalid mode');
+            end
+        end
         function forwardPropagate(obj, datum)
             % FORWARDPROPAGATE updates hidden variables with forward
             % propagation
@@ -116,7 +145,7 @@ classdef multiLayerPerceptron < handle
             end
         end
         function updateWeights(obj, alpha, lambda)
-            %UPDATEWEIGHTS performs gradient descent step on weights
+            % UPDATEWEIGHTS performs gradient descent step on weights
             for i = 1 : length(obj.W)
                 gradient = obj.grad{i} + lambda * obj.W{i};
                 obj.W{i} = gradientDescent(alpha, obj.W{i}, gradient);

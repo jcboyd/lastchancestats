@@ -2157,10 +2157,13 @@ $$\hat{y} = h(\mathbf{B}^{(K-1)}h(\mathbf{B}^{(K-2)}(\cdots(h(\mathbf{B}^{(1)})\
 
 A neural network may be used for both regression and classification, the output passed through the logistic function in the latter case. Despite the complexity, this model can be trained with standard gradient descent techniques. There are some complications however, as the loss function is not convex. The gradients, $\frac{\partial\mathcal{L}}{\partial\mathbf{B}^{(k)}}$, are obtained by application of the chain rule, in an algorithm called \emph{back propagation}. Feed-forward neural networks, and other variants, have seen a great amount of success, especially with the advent of deep learning in recent years. Neural networks are very powerful non-linear models, which are in fact capable of fitting any smooth function given enough layers, making them \emph{universal approximaters}. A simple example of a neural network fitting an absolute value function is given in Figure \ref{fig:universalapproximater}.
 
-\begin{figure}[!ht]
+\begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{Figures/universalapproximater.pdf}
-\caption{ A simple example of a neural network fitting an absolute value function. Generated with \texttt{mlpDemo.m}.}
+\begin{tabular}{cc}
+\subfloat[]{\includegraphics[width=0.49\textwidth]{Figures/universalapproximater.pdf}} & 
+\subfloat[]{\includegraphics[width=0.5\textwidth]{Figures/sgd.pdf}}
+\end{tabular}
+\caption{ A simple example of a neural network fitting an absolute value function (A) and the corresponding learning curve for stochastic gradient descent (B). Generated with \texttt{mlpDemo.m}.}
 \label{fig:universalapproximater}
 \end{figure}
 
