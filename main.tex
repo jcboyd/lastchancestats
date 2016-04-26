@@ -42,13 +42,6 @@ This section presents an assortment of mathematical problems, each embodying an 
 
 Consider a square with sides of length $c$ rotated inside a larger square with sides of length $(a + b)$, such that the four corners of the smaller square meet a distinct edge of the larger. The area of the four resulting right-angled triangles that fill the empty space are $\frac{1}{2}ab$ apiece. Thus, we have it that, $$(a + b)^2 = c^2 + 4 \cdot \frac{1}{2}ab,$$ expanding to, $$a^2 + 2ab + b^2 = c^2 + 2ab,$$ and finally, $$a^2 + b^2 = c^2.$$
 
-%\begin{figure}[!ht]
-%\centering
-%\includegraphics[width=0.5\textwidth]{Figures/pythagoras.pdf}
-%\caption{A square rotated inside of a larger square.}
-%\label{fig:squares}
-%\end{figure}
-
 \subsection{Irrationality of $\sqrt{2}$}
 
 Suppose $\sqrt{2}$ is rational. Then there exists $a, b \in \mathbb{Z}$, with $a > b$ and $gcd(a, b) = 1$\footnote{That is, $\frac{a}{b}$ is an irreducible fraction} such that, $$\frac{a}{b} = \sqrt{2}.$$
@@ -1727,12 +1720,7 @@ If one of the functions, say $f(x)$, is linear, it is sufficient to note that $f
 \subsection{Lagrange Multipliers}
 Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), are a powerful technique for solving a constrained optimisation problem of the form,
 
-$$
-\begin{array}{rl}
-\text{maximise} & f(x_1, \dots, x_n) \\
-\text{subject to} & g(x_1, \dots, x_n) = 0,
-\end{array}
-$$
+I
 
 noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. The constraint, $g$, restricts solutions to a path traced across the hyper-surface defined by $f$, similar to how a partial derivative describes a cross-section of a surface. The key realisation is that once this path runs parallel to a contour of $f$, we are at a critical point, where the gradients of $f$ and $g$ (running perpendicular to the contour) is in the same direction. At this point,
 
@@ -2031,7 +2019,90 @@ $$\text{NLL} = \frac{1}{2N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y
 
 Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions. This is useful for high-dimensional data with many noisy indicators. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes (albeit not beyond recognition).
 
-A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem, which can then be optimised with any linear solver, for example, the simplex algorithm, designed by American mathematician George Dantzig\footnote{There is famous anecdote from Dantzig's time as a doctoral student at Berkley. Arriving late to class, Dantzig copied down two important unsolved statistics problems the professor had earlier written on the blackboard, taking them to be set for homework. With some effort, he managed to solve both problems, and submitted them to the professor for review. It was not until some weeks later that the professor looked at his solutions, to great excitement. Dantzig then had the rare privilege of submitting his homework as his doctoral thesis.} (1914-2005), which works by taking successive upward steps along the edges of an $N$-dimensional convex solid. The convexity guarantees a maximum is eventually reached.
+A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem, which can then be optimised with any linear solver, for example, the simplex algorithm.
+
+\subsubsection{The Simplex Algorithm}
+
+The simplex algorithm was designed by American mathematician George Dantzig\footnote{There is famous anecdote from Dantzig's time as a doctoral student at Berkley. Arriving late to class, Dantzig copied down two important unsolved statistics problems the professor had earlier written on the blackboard, taking them to be set for homework. With some effort, he managed to solve both problems, and submitted them to the professor for review. It was not until some weeks later that the professor looked at his solutions, to great excitement. Dantzig then had the rare privilege of submitting his homework as his doctoral thesis.} (1914-2005). It is an optimisation algorithm for linear programming problems, that is, a problem of the form,
+
+\begin{align}
+\begin{array}{rl}
+\text{maximise} & z = \mathbf{c}^T\mathbf{x} \\
+\text{subject to} & \mathbf{A}\mathbf{x} = \mathbf{b}, x_i \geq 0
+\end{array}
+\label{eq:linprog}
+\end{align}
+
+where $z$ is known as the objective function, and the linear system specifies a set of linear constraints on the values of the input variables, $x_i$, which are further non-negative. The program specifies an N-dimensional convex solid \footnote{If we take a spherical fruit such as an apple to be our unconstrained convex function, adding linear constraints corresponds to slicing it at some position at a fixed angle. Intuitively, the fruit remains convex after the cut, despite losing its smoothness (roundness).}. The simplex algorithm works by moving along the edges of the convex shape from corner to corner. As any optimal solution must be on the surface, we can discard all points interior to the solid. This greatly reduces the feasible solution space. Furthermore, the convexity of the solid guarantees that as long as we repeatedly take upward steps along the surface edges, we will arrive at an optimum in a finite number of steps. In practice the algorithm is very efficient, though there are a special class of problems for which the algorithm will run in exponential time. Take, for example, the simple program,
+
+$$
+\begin{array}{rl}
+\text{maximise} & z = 2x_1 + x_2 \\
+\text{subject to} & x_1 + x_2 \leq 5 \\
+& 5x_1 + 2x_2 \leq 10 \\
+& x_1, x_2 \geq 0
+\end{array},
+$$
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/simplex.pdf}
+\caption{The convex surface of a simple linear programming problem.}
+\label{fig:simplex}
+\end{figure}
+
+
+depicted in Figure \ref{fig:simplex}. The first phase of optimisation involves reformulating the linear program into the \emph{standard} form expressed in (\ref{eq:linprog}). First, any unrestricted variables are eliminated from the program. Then, any variable with a non-zero lower bound are replaced with a variable specifying an offset. Finally, \emph{slack} variables are introduced to change any inequality constraint to an equality constraint. In our problem, two slack variables are required giving,
+
+$$
+\begin{array}{rl}
+\text{maximise} & z = 2x_1 + x_2 \\
+\text{subject to} & x_1 + x_2 + s_1 = 5 \\
+& 5x_1 + 2x_2 + s_2 = 10 \\
+& x_1, x_2, s_1, s_2 \geq 0
+\end{array}
+$$
+
+The convenient way to apply the algorithm is to write the problem into a \emph{tableau}. This can be written,
+
+$$
+\begin{array}{rrrrr|r}
+x_1&x_2&s_2&s_2&z&c \\
+\hline
+1&1&1&0&0&5 \\
+\mathbf{5}&2&0&1&0&10 \\
+\hline
+-2&-1&0&0&1&0 \\
+\end{array}
+$$
+
+The tableau form permits the execution of the algorithm to follow a sequence of simple row reductions. We begin by considering the final line of the tableau. This indicates the rate of increase of the objective function with respect to a change in each variable. As a simple heuristic, we select the variable yielding the greatest increase--$x_1$. We then select the constraint which most restricts increasing this variable--the second. The choice of row and column defines the \emph{pivot} variable for the current iteration. The task now is to render the $x_1$ column an elementary vector with the unit in the pivot position. This can be achieved first by scaling the second row by $1/5$ ($R_2^* \leftarrow \frac{1}{5}R_1 $), then subtracting it from the first row ($R_1^* \leftarrow R_1 - R_2^*$), and adding twice that to the final row ($R_3^* \leftarrow R_3 + 2R_2^*$), yielding,
+
+$$
+\begin{array}{rrrrr|r}
+x_1&x_2&s_2&s_2&z&c \\
+\hline
+0&3/5&1&-1/5&0&3 \\
+1&\mathbf{2/5}&0&1/5&0&2 \\
+\hline
+0&-1/5&0&2/5&0&4 \\
+\end{array}
+$$
+
+Now we are at a point on the surface $(2, 0, 4)$ at which increases in $x_1$ yield $0$ improvement to $z$. Hence, we are at a corner on the surface. The non-basic columns indicate those variables are equal to $0$ at the current point. The presence of negative coefficients in the final row indicates further improvement can be made. Identifying the next pivot element and repeating the process gives,
+
+$$
+\begin{array}{rrrrr|r}
+x_1&x_2&s_2&s_2&z&c \\
+\hline
+-3/2&0&1&-1/2&0&0 \\
+5/2&1&0&1/2&0&5 \\
+\hline
+1/2&0&0&11/25&0&5 \\
+\end{array}
+$$
+
+Now we see the final row contains only non-negatives, hence we have arrived at an optimal solution. The basic columns indicate the non-zero variables, thus the solution is $x_1 = 0, x_2 = 5, s_1 = 0, s_2 = 0$, as seen in Figure \ref{fig:simplex}.
 
 \subsubsection{Bayesian Linear Regression}
 
@@ -2039,7 +2110,7 @@ Bayes model averaging may be performed for linear regression to obtain a more ro
 
 \subsection{Logistic Regression}
 
-Logistic regression is a class of classification models. Learning a logistic regression can be thought of as fitting a multivariate Bernoulli distribution. There is also a strong connection between logistic regression and linear discriminant analysis. In fact, logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions\footnote{This is often hard to do, especially when the input data is vector-valued, and is a limitation on generative models. In contrast, discriminative models allow for arbitrary basis function expansion and feature engineering. On the other hand, generative models are usually easier to fit, more robust to changes in the dataset (discriminative models must be retrained), and better facilitate semi-supervised learning.}. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably exposes the student to the quintessential optimisation techniques of machine learning.
+Logistic regression is a class of classification models. Learning a logistic regression can be thought of as fitting a multivariate Bernoulli distribution. There is also a strong connection between logistic regression and linear discriminant analysis. In fact, logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions\footnote{This is often hard to do, especially when the input data is vector-valued, and is a limitation on generative models. In contrast, discriminative models allow for arbitrary basis function expansion and feature engineering. On the other hand, generative models are usually easier to fit, more robust to changes in the dataset (discriminative models must be retrained), and better facilitate semi-supervised learning.}. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably exposes the student to the quintessential optimisation techniques of machine learning. Linear and logistic regressions are part of a wider family of models called \emph{generalised linear models}. This is a family of models modelling exponential densities over output variables, and where the mean is a linear combination of the parameters, in some cases passed through a non-linear function.
 
 \subsubsection{Binary Logistic Regression}
 
@@ -2051,7 +2122,7 @@ where,
 
 $$\sigma(\boldsymbol\beta^T\mathbf{x}) = \frac{\exp(\boldsymbol\beta^T\mathbf{x})}{1 + \exp(\boldsymbol\beta^T\mathbf{x})},$$
 
-is the sigmoid or logistic function. Thus, in training a logistic regression model we are fitting a multivariate Bernoulli distribution. In this binary case, we encode the class variable as a binary variable, that is, $y_i \in \{0, 1\}$, and we have $p(y = 1) = \sigma(\boldsymbol\beta^T\mathbf{x})$ and $p(y = 0) = 1 - \sigma(\boldsymbol\beta^T\mathbf{x})$. The negative log likelihood for our model is therefore,
+is the sigmoid or logistic function\footnote{This may be substituted by an function mapping $(-\infty, +\infty) \to [0, 1]$, for example the Gaussian CDF, giving what is known as a \emph{probit} regression.}. Thus, in training a logistic regression model we are fitting a multivariate Bernoulli distribution. In this binary case, we encode the class variable as a binary variable, that is, $y_i \in \{0, 1\}$, and we have $p(y = 1) = \sigma(\boldsymbol\beta^T\mathbf{x})$ and $p(y = 0) = 1 - \sigma(\boldsymbol\beta^T\mathbf{x})$. The negative log likelihood for our model is therefore,
 
 \begin{align}
 \text{NLL}(\boldsymbol\beta) &= -\log\prod_i \sigma(\boldsymbol\beta^T\mathbf{x}_i)^{y_i}(1 - \sigma(\boldsymbol\beta^T\mathbf{x}_i))^{(1 - y_i)} \notag \\
