@@ -26,7 +26,7 @@ clear all;
 load('mlp_classification_data.mat');
 
 % initialise model
-m = multiLayerPerceptron(X, y, [2, 3, 3, 1], 'tanh', 'classification');
+m = multiLayerPerceptron(X, y, [2, 5, 5, 1], 'tanh', 'classification');
 
 % train
 m.train(100, 0.1, 0);
@@ -46,6 +46,7 @@ for i = 1 : length(w)
 end
 
 contourf(hx, wx, predictions, 1);
+colormap(winter);
 % plot indiviual data points
 hold on;
 blue = [0.05 0.05 1];

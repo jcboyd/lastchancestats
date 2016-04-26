@@ -2082,27 +2082,27 @@ $$
 \begin{array}{rrrrr|r}
 x_1&x_2&s_2&s_2&z&c \\
 \hline
-0&3/5&1&-1/5&0&3 \\
-1&\mathbf{2/5}&0&1/5&0&2 \\
+0&\mathbf{3/5}&1&-1/5&0&3 \\
+1&2/5&0&1/5&0&2 \\
 \hline
 0&-1/5&0&2/5&0&4 \\
 \end{array}
 $$
 
-Now we are at a point on the surface $(2, 0, 4)$ at which increases in $x_1$ yield $0$ improvement to $z$. Hence, we are at a corner on the surface. The non-basic columns indicate those variables are equal to $0$ at the current point. The presence of negative coefficients in the final row indicates further improvement can be made. Identifying the next pivot element and repeating the process gives,
+Now we are at a point on the surface $(2, 0, 4)$ at which increases in $x_1$ yield $0$ improvement to $z$. Hence, we are at a corner on the surface. The presence of negative coefficients in the final row indicates further improvement can be made. Identifying the next pivot element and repeating the process gives,
 
 $$
 \begin{array}{rrrrr|r}
 x_1&x_2&s_2&s_2&z&c \\
 \hline
--3/2&0&1&-1/2&0&0 \\
-5/2&1&0&1/2&0&5 \\
+0&1&5/3&-1/3&0&5\\
+1&0&-2/3&1/3&0&0\\
 \hline
-1/2&0&0&11/25&0&5 \\
+0&0&1/3&-1/15&0&5\\
 \end{array}
 $$
 
-Now we see the final row contains only non-negatives, hence we have arrived at an optimal solution. The basic columns indicate the non-zero variables, thus the solution is $x_1 = 0, x_2 = 5, s_1 = 0, s_2 = 0$, as seen in Figure \ref{fig:simplex}.
+Now we see the final row contains non-negatives for $x_1$ and $x_2$, therefore no improvement can be made by varying either variable, and hence we have arrived at an optimal solution. Because the state of $R_3$ (the objective function) has been arrived at as a combination of its previous state and the new first constraint, $R_1$, any solution which satisfies the under-determined $R_1$ satisfies its contribution to $R_3$. Hence, we choose the trivial solution, $(x_1, 5, 0, 0, 0)$. This may not be the only optimal solution (in our problem it is), but it is indeed optimal. Because of the linearly independent basis vectors, this leaves the trivial solution available in the second constraint, $R_2$, that is, $(0, x_2, 0, 0, 0)$. Combining these yields the optimal solution, $x_1 = 0, x_2 = 5, s_1 = 0, s_2 = 0$, as seen in Figure \ref{fig:simplex}. Thus, in general, our method brings us to a state wherein the optimal solution can be read directly from the final tableau as the basic columns, with other variables equal to 0. As noted, this method verifiably gives us an optimal solution, though others may be available.
 
 \subsubsection{Bayesian Linear Regression}
 
