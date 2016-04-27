@@ -2033,7 +2033,7 @@ The simplex algorithm was designed by American mathematician George Dantzig\foot
 \label{eq:linprog}
 \end{align}
 
-where $z$ is known as the objective function, and the linear system specifies a set of linear constraints on the values of the input variables, $x_i$, which are further non-negative. The program specifies an N-dimensional convex solid \footnote{If we take a spherical fruit such as an apple to be our unconstrained convex function, adding linear constraints corresponds to slicing it at some position at a fixed angle. Intuitively, the fruit remains convex after the cut, despite losing its smoothness (roundness).}. The simplex algorithm works by moving along the edges of the convex shape from corner to corner. As any optimal solution must be on the surface, we can discard all points interior to the solid. This greatly reduces the feasible solution space. Furthermore, the convexity of the solid guarantees that as long as we repeatedly take upward steps along the surface edges, we will arrive at an optimum in a finite number of steps. In practice the algorithm is very efficient, though there are a special class of problems for which the algorithm will run in exponential time. Take, for example, the simple program,
+where $z$ is known as the objective function, and the linear system specifies a set of linear constraints on the values of the input variables, $x_i$, which are further non-negative. The program specifies an N-dimensional convex solid\footnote{If we take a spherical fruit such as an apple to be our unconstrained convex function, adding a linear constraint corresponds to slicing it at some position at a fixed angle. Intuitively, the fruit remains convex after the cut, despite losing its smoothness (roundness).}, and the algorithm works by moving along the edges of this shape from corner to corner. As any optimal solution must be on the surface, we can discard all points interior to the solid. This greatly reduces the feasible solution space. Furthermore, the convexity of the solid guarantees that as long as we repeatedly take upward steps along the surface edges, we will arrive at an optimum in a finite number of steps. In practice the algorithm is very efficient, though there are a special class of problems for which the algorithm will run in exponential time. Take, for example, the simple program,
 
 $$
 \begin{array}{rl}
@@ -2060,7 +2060,7 @@ $$
 \text{subject to} & x_1 + x_2 + s_1 = 5 \\
 & 5x_1 + 2x_2 + s_2 = 10 \\
 & x_1, x_2, s_1, s_2 \geq 0
-\end{array}
+\end{array}.
 $$
 
 The convenient way to apply the algorithm is to write the problem into a \emph{tableau}. This can be written,
@@ -2102,7 +2102,7 @@ x_1&x_2&s_2&s_2&z&c \\
 \end{array}
 $$
 
-Now we see the final row contains non-negatives for $x_1$ and $x_2$, therefore no improvement can be made by varying either variable, and hence we have arrived at an optimal solution. Because the state of $R_3$ (the objective function) has been arrived at as a combination of its previous state and the new first constraint, $R_1$, any solution which satisfies the under-determined $R_1$ satisfies its contribution to $R_3$. Hence, we choose the trivial solution, $(x_1, 5, 0, 0, 0)$. This may not be the only optimal solution (in our problem it is), but it is indeed optimal. Because of the linearly independent basis vectors, this leaves the trivial solution available in the second constraint, $R_2$, that is, $(0, x_2, 0, 0, 0)$. Combining these yields the optimal solution, $x_1 = 0, x_2 = 5, s_1 = 0, s_2 = 0$, as seen in Figure \ref{fig:simplex}. Thus, in general, our method brings us to a state wherein the optimal solution can be read directly from the final tableau as the basic columns, with other variables equal to 0. As noted, this method verifiably gives us an optimal solution, though others may be available.
+Now we see the final row contains non-negatives for $x_1$ and $x_2$, therefore no improvement can be made by varying either variable, and hence we have arrived at an optimal solution. Because the state of $R_3$ (the objective function) has been arrived at as a combination of its previous state and the new first constraint, $R_1$, any solution which satisfies the under-determined $R_1$ satisfies its contribution to $R_3$. Hence, we choose the trivial solution, $(x_1, 5, 0, 0, 0)$. This may not always be the only optimal solution (though in our problem it is), but it is indeed optimal. Because of the linearly independent basis vectors, this leaves the trivial solution available in the second constraint, $R_2$, that is, $(0, x_2, 0, 0, 0)$. Combining these yields the optimal solution, $x_1 = 0, x_2 = 5, s_1 = 0, s_2 = 0$, as seen in Figure \ref{fig:simplex}. Thus, in general, our method brings us to a state wherein the optimal solution can be read directly from the final tableau as the basic columns, with other variables equal to 0. As noted, this method verifiably gives us an optimal solution, though others may exist.
 
 \subsubsection{Bayesian Linear Regression}
 
@@ -2323,10 +2323,14 @@ where $\mathbf{I}$ is the identity matrix. This shows that K-means is fitting $K
 \begin{figure}
 \centering
 \begin{tabular}{cc}
-\subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.png}} & 
-\subfloat[10 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm10.png}}\\
-\subfloat[20 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm15.png}}&
-\subfloat[30 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm30.png}} \\
+%\subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.png}} & 
+%\subfloat[10 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm10.png}}\\
+%\subfloat[20 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm15.png}}&
+%\subfloat[30 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm30.png}} \\
+\subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.pdf}} & 
+\subfloat[3 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm2.pdf}}\\
+\subfloat[6 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm6.pdf}}&
+\subfloat[10 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm10.pdf}} \\
 \end{tabular}
 \caption{Expectation maximisation (EM) algorithm in action over 30 iterations for Gaussian mixture models with $K = 3$. Colour coding reflects the ratio of probabilities for each cluster--note that points in overlapping positions are more ambiguous. Contour plot of sample Gaussians given in final iteration. Created with \texttt{gmmDemo.m}.}
 \label{fig:gmm}
