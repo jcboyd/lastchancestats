@@ -2,7 +2,7 @@ clear all;
 load('knn_data.mat');
 
 % set model parameters
-k = 1;
+k = 7;
 
 % create test data
 [teX1, teX2] = meshgrid(-3.75:0.25:3.75, -3.75:0.25:3.75);

@@ -1767,14 +1767,14 @@ The following schemes refer to how the data is \text{used}, rather than the natu
 \begin{figure}
 \centering
 \begin{tabular}{cc}
-\subfloat[$k = 1$]{\includegraphics[width=0.5\textwidth]{Figures/knn1.png}} & 
-\subfloat[$k = 7$]{\includegraphics[width=0.5\textwidth]{Figures/knn7.png}}
+\subfloat[$k = 1$]{\includegraphics[width=0.5\textwidth]{Figures/knn1.pdf}} & 
+\subfloat[$k = 7$]{\includegraphics[width=0.5\textwidth]{Figures/knn7.pdf}}
 \end{tabular}
 \caption{Visualisation of overfitting with k-nearest neighbours (kNN) (non-parametric model). A data point is classified as the majority class of the $k$ geometrically closest data points. Note the steadier decision boundary formed for $k = 7$. Created with \texttt{knnDemo.m}.}
-\label{fig:gmm}
+\label{fig:knn}
 \end{figure}
 
-\textbf{Overfitting} is a constant danger when training models. This is the effect of \emph{fitting the noise instead of the signal}. All data contains noise, and when the dataset is sufficiently small and the model sufficiently complex (e.g. a high degree polynomial), the model can fit the training data perfectly, only to be useless on test data. There are various solutions to this. The most ideal is to increase the amount of data for available training, but this is rarely an option. A more typical approach is \emph{regularisation}. This usually takes the form of a penalty term, but really corresponds to imposing a prior distribution on the parameter set. A prior distribution assigns low probabilities to large parameter values. Complex models that overfit usually require large parameter values to make a fit, so regularisation curtails this tendency. Another, more drastic approach, is to change the form of the likelihood function of the model to insulate it from outliers in the data. An example of this is robust regression, where a Laplace likelihood replaces a Gaussian. A variant of overfitting is the zero count (sparse data) problem, where specific data that ought to be modelled has not appeared in the dataset and leads to a zero probability prediction. \emph{Underfitting} occurs when the complexity of the model is insufficient to capture the trends of the data. This can be addressed by modifying the choice of basis function or kernel, otherwise by choosing a different technique.
+\textbf{Overfitting} is a constant danger when training models. This is the effect of \emph{fitting the noise instead of the signal}. All data contains noise, and when the dataset is sufficiently small and the model sufficiently complex (e.g. a high degree polynomial), the model can fit the training data perfectly, only to be useless on test data. Take for example a k-nearest neighbours classifier (kNN) (Figure \ref{fig:knn}). For small $k$, outliers have unreasonable influence on local test data, creating discontinuous decision boundaries. There are various strategies to attenuate overfitting. The most ideal is to increase the amount of data for available training, but this is rarely an option. A more typical approach is \emph{regularisation}. This usually takes the form of a penalty term, but really corresponds to imposing a prior distribution on the parameter set. A prior distribution assigns low probabilities to large parameter values. Complex models that overfit usually require large parameter values to make a fit, so regularisation curtails this tendency. Another, more drastic approach, is to change the form of the likelihood function of the model to insulate it from outliers in the data. An example of this is robust regression, where a Laplace likelihood replaces a Gaussian. A variant of overfitting is the zero count (sparse data) problem, where specific data that ought to be modelled has not appeared in the dataset and leads to a zero probability prediction. \emph{Underfitting} occurs when the complexity of the model is insufficient to capture the trends of the data. This can be addressed by modifying the choice of basis function or kernel, otherwise by choosing a different technique.
 
 \subsubsection{Philosophical Ideas}
 
@@ -2329,7 +2329,7 @@ where $\mathbf{I}$ is the identity matrix. This shows that K-means is fitting $K
 %\subfloat[30 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm30.png}} \\
 \subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.pdf}} & 
 \subfloat[3 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm2.pdf}}\\
-\subfloat[6 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm4.pdf}}&
+\subfloat[5 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm4.pdf}}&
 \subfloat[10 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm10.pdf}} \\
 \end{tabular}
 \caption{Expectation maximisation (EM) algorithm in action over 30 iterations for Gaussian mixture models with $K = 3$. Colour coding reflects the ratio of probabilities for each cluster--note that points in overlapping positions are more ambiguous. Contour plot of sample Gaussians given in final iteration. Created with \texttt{gmmDemo.m}.}
