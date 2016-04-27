@@ -22,6 +22,7 @@ P = zeros(N, K);
 numiters = 0; maxiters = 10;
 
 while numiters < maxiters
+    hold off;
     % E-step
     for n = 1 : N
         for k = 1 : K
@@ -29,14 +30,13 @@ while numiters < maxiters
         end
         P(n, :) = P(n, :) ./ sum(P(n, :));
         % Plot observations
-        hold on; grid on;
         plot(X(n, 1), X(n, 2), 'o', 'MarkerSize', 8, 'LineWidth', 1, ...
             'Color', [P(n, 1), P(n, 2), P(n, 3)], ...
             'MarkerFaceColor', [P(n, 1), P(n, 2), P(n, 3)], ...
             'MarkerEdgeColor', [0.5 * P(n, 1), 0.5 * P(n, 2), 0.5 * P(n, 3)]);
+        hold on; grid on;
     end
-    hold off;
-    pause
+    drawnow; pause;
     % M-step
     for k = 1 : K
         % Optimise each parameter
