@@ -1935,7 +1935,7 @@ y_n &\approx \beta_1x_{n1} + \beta_2x_{n2} + \cdots + \beta_Dx_{nD} \notag \\
 
 for all $n = 1, \dots, N$. Each of the $D$ dimensions of $\mathbf{x_n}$ is known as an indicator. The greater the corresponding coefficient in the parameter vector, $\boldsymbol\beta$, the more weight this dimension has in determining the output, $y_n$. We can formulate the above as an optimisation problem,
 
-$$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) = \frac{1}{2N}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
+$$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) = \frac{1}{2}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
 
 where $\mathcal{L}(\boldsymbol\beta)$ is the ``loss'' function, expressing a \emph{mean square error} (MSE) for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm minimise this function. It is also typical to write $\text{MSE} = \text{RSS}/N$, where RSS stands for \emph{residual sum of squares}, the non-weighted sum. Note we could have chosen any sort of loss function, but our reasons for choosing mean square error will be revealed in the following section.
 
@@ -2015,11 +2015,19 @@ If we wish to fit a non-linear function to our data, we can simply transform our
 
 One drawback of using a Gaussian likelihood is that it is sensitive to outliers. This makes it likely to overfit in practice. There are several ways of mitigating this effect. The most crude is known as ``early stopping'', where training is terminated before convergence, and before the model has a chance to overfit. The most ideal option is to train on more data, taking density away from outliers, but data is usually hard to come by. The most common approach is to \emph{regularise} the cost function by introducing a prior distribution on the model parameters. This gives us the posterior distribution, just as it was with the beta-binomial model, and the optimal parameters are the MAP estimate, $\theta_{MAP} = \argmax_{\theta} \text{NLL}(\theta)$, where NLL is the negative log-likelihood. If we choose another Gaussian for the prior, we are using $l_2$ regularisation, and we get what is known as a \emph{ridge regression},
 
-$$\text{NLL} = \frac{1}{2N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \lambda\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{2N}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \lambda\sum_{d=1}^D\beta_d^2.$$
+$$\text{NLL} = \frac{1}{2}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \frac{\lambda}{2}\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{2}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \frac{\lambda}{2}\sum_{d=1}^D\beta_d^2.$$
 
-Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions. This is useful for high-dimensional data with many noisy indicators. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes (albeit not beyond recognition).
+Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions, and encouraging sparsity is a form of \emph{feature selection}. This is useful for high-dimensional data with many noisy indicators, otherwise known as the small $N$, large $D$ problem. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes--the most common are coordinate descent algorithms such as the ``shooting'' algorithm.
 
-A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem, which can then be optimised with any linear solver, for example, the simplex algorithm.
+A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem. For example, given a Laplace likelihood,
+
+$$\text{NLL}(\mathbf{w}) \propto -\log\prod_n\exp\big({-|y_n- \mathbf{w}^T\mathbf{x}_n|}\big) = \sum_n |y_n- \mathbf{w}^T\mathbf{x}_n|.$$
+
+We can remove the absolute value sign using the \emph{split variable trick}, that is, by introducing artificial positive and negative variables, $r_n^+$ and $r_n^-$, such that,
+
+$$\text{NLL}(\mathbf{w}) =  \sum_n r_n^+ - r_n^-,$$
+
+where $r_n^+ - r_n^- = y_n- \mathbf{w}^T\mathbf{x}_n$ with the \emph{type} constraint that $r_n^+r_n^- = 0$ (ensuring only one variable is activated at a time), and $r_n^+, r_n^- \geq 0$. The type constraint can be omitted, as at optimality it will be satisfied as a matter of course. Now we have a constrained convex optimisation problem, which can be optimised with any linear solver, for example, the simplex algorithm.
 
 \subsubsection{The Simplex Algorithm}
 
@@ -2237,6 +2245,57 @@ A neural network may be used for both regression and classification, the output 
 \caption{ A simple example of a neural network fitting an absolute value function (A) and the corresponding learning curve for stochastic gradient descent (B). Generated with \texttt{mlpDemo.m}.}
 \label{fig:universalapproximater}
 \end{figure}
+
+\subsection{Kernel Methods and Support Vector Machines}
+\subsubsection{Kernels}
+
+Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi^T\boldsymbol\Phi$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}.
+
+\subsubsection{Kernelised kNN}
+
+The $k$ nearest neighbours algorithm classifies a data point as the majority vote of the classes of the $k$ closest training data points. By default, the distance metric is Euclidean distance, $||\mathbf{x} - \mathbf{x}'||_2^2 = \mathbf{x}^T\mathbf{x} + \mathbf{x}'^T\mathbf{x}' - 2\mathbf{x}\mathbf{x}'$. It is therefore clear we can replace the inner products with any kernel function of our choosing.
+
+\subsubsection{Duality}
+
+Optimisation problems in general have two forms, a primal and a dual. In general, the solution to the primal gives an upper bound to the dual solution, and the dual solution gives a lower bound to the solution of the primal. This is known as the duality gap,
+
+$$\sup_{y\in\mathcal{Y}}-F^*(0, y) \leq \inf_{x\in\mathcal{X}}F(x, 0),$$
+
+where $F^*$ is the convex conjugate of $F$, $\sup$ is the supremum (least upper bound) and $\inf$ is the infimum (greatest lower bound). For certain convex problems, this bound goes to $0$, and the primal and dual solutions correspond. It is often useful to consider the dual to a primal problem. For one thing, it may yield a more efficient (kernelised) representation. Furthermore, however, it may change the nature of the problem to one more easily solvable with numerical techniques, as we will see for support vector machines (SVMs). Note there are various forms of duality, for example Wolfe duality, named after American mathematician Philip Wolfe (1927-), a pioneer in the fields of convex optimisation theory and mathematical programming.
+
+\subsubsection{Matrix Inversion Lemma}
+
+We will here derive a result that we will use below, known as the Woodbury matrix identity, or the matrix inversion lemma. Given matrices $\mathbf{X} \in \mathbb{R}^{M\times N}$ and $\mathbf{Y} \in \mathbb{R}^{N\times M}$, consider,
+
+\begin{align}
+\mathbf{X}\mathbf{Y}\mathbf{X} + \mathbf{X} &= \mathbf{X}(\mathbf{Y}\mathbf{X} + \mathbf{I}_N) \label{eq:mli1} \\
+&= (\mathbf{Y}\mathbf{X} + \mathbf{I}_M)\mathbf{X} \label{eq:mli2}
+\end{align}
+
+Equating (\ref{eq:mli1}) and (\ref{eq:mli2}),
+
+\begin{align}
+(\mathbf{Y}\mathbf{X} + \mathbf{I}_M)\mathbf{X} = \mathbf{X}(\mathbf{Y}\mathbf{X} + \mathbf{I}_N) &\implies \mathbf{X}^{-1}(\mathbf{Y}\mathbf{X} + \mathbf{I}_M)^{-1} = (\mathbf{Y}\mathbf{X} + \mathbf{I}_N)^{-1}\mathbf{X}^{-1}\notag\\
+&\implies (\mathbf{Y}\mathbf{X} + \mathbf{I}_M)^{-1}\mathbf{X} =  \mathbf{X}(\mathbf{Y}\mathbf{X} + \mathbf{I}_N)^{-1},\notag
+\end{align}
+
+where the final step is achieved by multiplying both sides by $\mathbf{X}$ to the left and right.
+
+\subsubsection{Reformulating Ridge Regression}
+
+If we apply the matrix inversion lemma to the optimal parameters of a ridge regression, we obtain,
+
+$$\boldsymbol{\beta}^* = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}_D)^{-1}\mathbf{X}^T\mathbf{y} = \mathbf{X}^T(\mathbf{X}\mathbf{X}^T + \lambda\mathbf{I}_N)^{-1}\mathbf{y} = \mathbf{X}^T\boldsymbol\alpha,$$
+
+where $\boldsymbol\alpha = (\mathbf{X}\mathbf{X}^T + \lambda\mathbf{I}_N)^{-1}\mathbf{y}$ is a vector of \emph{dual} variables. This demonstrates that the optimal primal parameters $\boldsymbol\beta^*$ lie in the \emph{row} space of $\mathbf{X}$. By contrast, the output $\mathbf{y} = \mathbf{X}\boldsymbol\beta$ lies in the \emph{column} space of $\mathbf{X}$. There is a useful result called the \emph{representer theorem} which states that the primal and dual solutions are always related in this way for models of like form, that is, models with a loss function and penalty term. This is useful, as it is easier to solve the dual problem for support vector machines.
+
+\subsubsection{Support Vector Machines}
+
+As previously discussed, sparsity is a desirable outcome for models, as it is a form of feature selection. Support vector machines (SVMs) build sparsity into the model by choosing a ``hinge'' loss function. This assigns a (linear) penalty not only to incorrectly classified data, but also to data too close to the decision boundary. Thus, rather than placing a boundary between data, SVMs place a \emph{margin}. For this reason, SVMs belong to a category called maximum margin methods. This is a desirable outcome, as a decision boundary may be placed in many equally optimal ways when training data is limited, but without reference to the tendencies of the data near to that boundary. Another useful property of SVMs are that they are naturally kernelised. The SVM primal problem is reformulated to the dual form using the minimax theorem,
+
+$$\min_{x \in \mathcal{X}} \max_{y \in \mathcal{Y}} f(x, y) = \max_{y \in \mathcal{Y}}\min_{x \in \mathcal{X}} f(x, y),$$
+
+an important result from John von Neumann (1903-1957), which holds provided $\mathcal{X}$ and $\mathcal{Y}$ are convex sets, and that $f(x, y)$ is convex for fixed $y$ and concave for fixed $x$. This dual is a quadratic convex optimisation problem, and may be solved with a variety of methods. A breakthrough in the SVM community was the discovery of the sequential minimisation optimisation (SMO) algorithm, allowing for faster training of SVM models. This is one of reasons for the popularity of SVMs, in spite of comparable vector machine methods, including those with sound probabilistic roots. The support vectors themselves are the data (rows of $\mathbf{X}$) on or over the margin. The dual variables will be non-zero only for these points, hence the optimal primal parameters, and hence the decision boundary, are a linear combination of these support vectors. Variants of support vector machines exist for regression (SVR), as well as multi-(vector-)output regression. Multi-class classification SVMs also exist conceptually, but are difficult to model and train.
 
 \subsection{Decision Trees}
 
