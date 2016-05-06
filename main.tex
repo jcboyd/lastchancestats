@@ -40,23 +40,23 @@ This section presents an assortment of mathematical problems, each embodying an 
 
 \subsection{Proof of Pythagorean Theorem}
 
-Consider a square with sides of length $c$ rotated inside a larger square with sides of length $(a + b)$, such that the four corners of the smaller square meet a distinct edge of the larger. The area of the four resulting right-angled triangles that fill the empty space are $\frac{1}{2}ab$ apiece. Thus, we have it that, $$(a + b)^2 = c^2 + 4 \cdot \frac{1}{2}ab,$$ expanding to, $$a^2 + 2ab + b^2 = c^2 + 2ab,$$ and finally, $$a^2 + b^2 = c^2.$$
+Consider a square with sides of length $c$ rotated inside a larger square, such that the four corners of the smaller square meet a distinct edge of the larger at a point $a$ units along that edge. The sides of the larger square are therefore of length $a + b$ for some $a, b > 0$. The area of the four resulting right-angled triangles that fill the empty space are $\frac{1}{2}ab$ apiece. Thus, we have it that, $$(a + b)^2 = c^2 + 4 \cdot \frac{1}{2}ab,$$ expanding to, $$a^2 + 2ab + b^2 = c^2 + 2ab,$$ and finally, $$a^2 + b^2 = c^2.$$
 
 \subsection{Irrationality of $\sqrt{2}$}
 
-Suppose $\sqrt{2}$ is rational. Then there exists $a, b \in \mathbb{Z}$, with $a > b$ and $gcd(a, b) = 1$\footnote{That is, $\frac{a}{b}$ is an irreducible fraction} such that, $$\frac{a}{b} = \sqrt{2}.$$
+Suppose $\sqrt{2}$ is rational. Then there exist $a, b \in \mathbb{Z}$, with $a > b$ and $gcd(a, b) = 1$\footnote{That is, $\frac{a}{b}$ is an irreducible fraction} such that, $$\frac{a}{b} = \sqrt{2}.$$
 
-Now, $$\frac{a^2}{b^2} = 2.$$ This implies that $a^2$ is even, and therefore that $a$ is even. That is, $$a = 2k,$$ for some $k \in \mathbb{Z}$. So, by substitution, $$\frac{4k^2}{b^2} = 2.$$ Rearranging, $$b^2 = 2k^2.$$ However, this now implies that $b^2$ is even, hence $b$ also, implying a common factor between $a$ and $b$. This contradiction proves $\sqrt{2}$ is irrational.
+Consequently, $$\frac{a^2}{b^2} = 2.$$ This implies that $a^2$ is even, and therefore that $a$ is even. That is, $$a = 2k,$$ for some $k \in \mathbb{Z}$. So, by substitution, $$\frac{4k^2}{b^2} = 2.$$ Rearranging, $$b^2 = 2k^2.$$ However, this now implies that $b^2$ is even, hence $b$ also, implying a common factor between $a$ and $b$, though by assumption they have no common factors, and clearly we can repeat the argument ad infinitum. This contradiction proves $\sqrt{2}$ is irrational.
 
 \subsection{Euclid's Proof of the Infinitude of Primes}
 
-Take any finite set of primes, $p_1, p_2, \dots, p_n$. Then, the number, $q = p_1 \times p_2 \times \cdots \times p_n + 1$, is either prime or not prime. If it is prime, we have generated a new prime, not in our set. If it is not, it has a prime factor not in our set, as $q \equiv 1 \ (\text{mod}\ p_i)$ for $i = 1, 2, \dots, n$. It follows that there are infinitely many primes\footnote{This is an example of a constructive proof.}.
+Take any finite set of primes, $p_1, p_2, \dots, p_n$. Then, the number, $q = p_1 \times p_2 \times \cdots \times p_n + 1$, is either prime or not prime. If it is prime, we have generated a new prime not in our set. If it is not, it has a prime factor not in our set, as $q \equiv 1 \ (\text{mod}\ p_i)$ for $i = 1, 2, \dots, n$. It follows that there are infinitely many primes\footnote{This is an example of a constructive proof.}.
 
 \subsection{The Potato Paradox}
 
 A potato that is $99\%$ water weighs 100g. It is dried until it is only $98\%$ water. It now weighs only 50g. How can this be?
 
-The mistake people typically make is assuming there has been a $1\%$ reduction in the volume of water, rather than a change to the ratio itself. In fact, the ratio of water to non-water content has changed from $1:99$ to $2:98$ or $1:49$. Since the non-water content of the potato is unchanged, the water must have lost $50\%$ of its volume, and so the potato now weighs half as much!
+The mistake people typically make is to assume there has been a $1\%$ reduction in the volume of water, rather than a change to the water/non-water ratio. In fact, the ratio of water to non-water content has changed from $1:99$ to $2:98$ or $1:49$. Since the non-water content of the potato has not changed, the water must have lost $50\%$ of its volume, and so the potato now weighs half as much!
 
 \subsection{The Monty Hall Problem}
 
@@ -64,11 +64,11 @@ This famous paradox, named after an American game show host, has the following p
 
 \emph{A game show presents you with the choice of selecting one of three doors. Two of the doors contain a goat (undesirable), whilst the third contains a car. Upon your choice, the game show host, who knows the contents of each of the doors, opens one of the two remaining doors to reveal a goat. He then gives you the option of either sticking with your initial choice, or switching to the one remaining door. The question is, is it advantageous to switch doors?}
 
-The answer is that it \emph{is} advantageous, increasing winning chances from $1/3$ to $2/3$. The essential realisation is that the host (Monty Hall) has knowledge of the door contents and will always reveal a goat, whether you have chosen the car or not.
+The answer is that it \emph{is} advantageous, increasing your winning chances from $1/3$ to $2/3$. The essential realisation is that the host (Monty Hall) has knowledge of the door contents and will always reveal a goat, whether you have chosen the car or not.
 
 The solution can be understood as a decision theory problem. We designate two strategies: changing and not changing doors. In either case, there is a $2/3$ chance of initially having a goat. Because the other goat is eliminated independently by the host, changing wins whenever a goat was initially chosen, that is, with probability $2/3$. Not changing wins only if the car was initially chosen, that is, with probability $1/3$. Therefore changing will double your winning chances!
 
-Another (admittedly more complicated) way to solve the problem is using Bayes' theorem. Here we designate $C_1, C_2, C_3$ as the events the car is behind doors 1, 2, and 3 respectively; $X_1$ the event the player chooses door 1; and $H_3$ the event the host opens door 3. Note the numbering of the doors does not matter, for example `door 2' simply refers to `the other door'. First, $\text{Pr}(H_3|C_1,X_1) = 1/2$, $\text{Pr}(H_3|C_2,X_1) = 1$, and $\text{Pr}(H_3|C_3,X_1) = 0$, reflecting the knowledge that the host always opens a goat door (never the car). Then,
+Another (admittedly more complicated) way to solve the problem is using Bayes' theorem. Here we designate $C_1, C_2$, and $C_3$ as the events the car is behind doors 1, 2, and 3 respectively; $X_1$ the event the player chooses door 1; and $H_3$ the event the host opens door 3. Note the numbering of the doors does not matter, for example `door 2' simply refers to `the other door'. First, $\text{Pr}(H_3|C_1,X_1) = 1/2$, $\text{Pr}(H_3|C_2,X_1) = 1$, and $\text{Pr}(H_3|C_3,X_1) = 0$, reflecting the knowledge that the host always opens a goat door (never the car). Then,
 
 \begin{align}
 \text{Pr}(C_2|X_1,H_3) &= \frac{\text{Pr}(H_3|C_2,X_1)\text{Pr}(C_2|X_1)}{\text{Pr}(H_3|X_1)} \notag \\
@@ -81,7 +81,7 @@ so the winning odds for changing doors is $2/3$, hence not changing only $1/3$.
 
 \subsection{Finding Hamlet in the Digits of $\pi$}
 
-It is supposed, though not know for certain, that $\pi$ is a normal number. This means that in all the infinite decimal digits of $\pi$, every sequence of $n$ digits appears as often as every other $n$-length sequence. So, 123 occurs as often as 321 or 666, but more often than 123456789, because it is a shorter sequence. In this way, the behaviour of the sequences is indistinguishable to what would arise from a uniform random distribution. Of course, the digits of $\pi$ are not random, as many formulas exist for generating them. The same rules of normality apply if $\pi$ is converted to a different base, for example, binary code--the language of computing. The number $\pi$ in binary is,
+It is supposed, though not known for certain, that $\pi$ is a normal number. This means that in all the infinite decimal digits of $\pi$, every sequence of $n$ digits appears as often as every other length $n$ sequence. So, 123 occurs as often as 321 or 666, but more often than 123456789, because it is a shorter sequence. In this way, the behaviour of the digits of $\pi$ is indistinguishable to what would arise from a uniform random distribution. Of course, the digits of $\pi$ are not random, as many formulas exist for generating them. The same rules of normality apply if $\pi$ is converted to a different base, for example, binary code--the arithmetic system of computers. The number $\pi$ in binary is,
 
 \begin{align}
 \pi &= 3.14... \notag \\
@@ -89,7 +89,7 @@ It is supposed, though not know for certain, that $\pi$ is a normal number. This
 &= 11.001001... \notag
 \end{align}
 
-Note that to express $\pi$ in binary rather than decimal notation requires more digits, because it takes $\log_2(10) \approx 3.3$ binary digits (bits) to express a power of ten. Nevertheless, the same properties about the normality of $\pi$ hold in its binary form--$000$ is just as likely as $111$, and so on.
+Note that to express $\pi$ in binary rather than decimal notation requires more digits, because it takes $\log_2(10) \approx 3.3$ binary digits (bits) to express each power of ten. Nevertheless, the same properties about the normality of $\pi$ hold in its binary form--$000$ is just as likely as $111$, and so on.
 
 Now, to find Hamlet, we would need to start with a common base. Hamlet is written in Latin characters. One way to convert Latin characters to numbers is to use a character encoding standard, such as ASCII (American Standard Code for Information Interchange). People use ASCII indirectly every day--it is how our data comes to be represented by computers and communication systems. ASCII gives a representation of each character in 8 binary digits. For example, in ASCII,
 
@@ -97,11 +97,11 @@ $$\text{``pie''} = 01110000 \ 01101001 \ 01100101.$$
 
 So, Hamlet, like any text, has an ASCII, and therefore binary representation. Without specifying exactly what it is we can determine its length. There are 186,391 characters in the 31,842 word Hamlet, including spaces and indentation. At 8 bits per character, this is 1,491,128 bits.
 
-To develop a formula, we first consider a simpler problem: What is the expected number of digits we need to pass over a random binary sequence before we encounter a specific binary sub-sequence, say, 11? If we consider a binary tree covering all the possibilities, and let the expected length to find 11 be denoted by $\mathbb{E}_{11}$, then we may first see 0 with probability $\frac{1}{2}$, in which case we are back where we started. That is, the first digit is a ``failure'', because it is not the one we are looking for. The expected length from there is therefore $1 + \mathbb{E}_{11}$. We might alternatively see 1 in the first digit--a match--also with probability $\frac{1}{2}$. In this case, the next digit is 0 with probability $\frac{1}{2}$, which would mean a failure on the second digit, and again, we return to the starting point, with expected length now $2 + \mathbb{E}_{11}$. Otherwise, we could get a 1 in the second digit, and we have found the match straight away. In this case, the expected length is simply 2. Therefore we may write,
+To develop a formula, we first consider a simpler problem: what is the expected number of digits we should pass over in a random binary sequence before we encounter a specific binary sub-sequence, say, 11? If we consider a binary tree covering all the possibilities, and let the expected length to find 11 be denoted by $\mathbb{E}_{11}$, then we may first see 0 with probability $\frac{1}{2}$, in which case we are back to where we started. That is, the first digit is a ``failure'', because it is not the one we are looking for. The expected length from there is therefore $1 + \mathbb{E}_{11}$. We might alternatively see 1 in the first digit--a match--also with probability $\frac{1}{2}$. In this case, the next digit is 0 with probability $\frac{1}{2}$, which would mean a failure on the second digit, and again, we return to the starting point, with expected length now $2 + \mathbb{E}_{11}$. Otherwise, we could get a 1 in the second digit, and we have found the match straight away. In this case, the expected length is simply 2. Therefore we may write,
 
 $$\mathbb{E}_{11} = \frac{1}{2}\times(1 + \mathbb{E}_{11}) + \frac{1}{4}\times (2 + \mathbb{E}_{11}) + \frac{1}{4}\times 2,$$
 
-and so $\mathbb{E}_{11} = 6$. That is, we expect to pass over $6$ binary digits (on average) before we see the particular sequence, 11. We see that in general, it is possible to ``fail'' on each of the $n$ digits in the sequence. Thus, we have the following expression for the general $n$-bit sequence,
+which we may solve to find $\mathbb{E}_{11} = 6$. That is, we expect to pass over $6$ binary digits (on average) before we see the particular sequence, 11. We see that in general, it is possible to ``fail'' on each of the $n$ digits in the sequence. Thus, we have the following expression for the general $n$-bit sequence,
 
 $$\frac{1}{2^n}\mathbb{E}_{\{0, 1\}^n} = 1\times\frac{1}{2^1} + 2\times\frac{1}{2^2} + 3\times\frac{1}{2^3} + \cdots + 2n\times\frac{1}{2^{n}}.$$
 
@@ -116,7 +116,7 @@ hence, $\mathbb{E}_{\{0, 1\}^n} = 2^{n+1} - 2$. Applying this formula, we can ex
 
 \section{Differential Calculus}
 
-This section presents the fundamental definitions of differential calculus: first the formal definition of a limit, then that of a derivative. In particular, we note the relationship between the binomial theorem and the differentiation of polynomials. The section culminates with a proof of the mean value theorem.
+This section presents the fundamental results of differential calculus: first the formal definition of a limit, then that of a derivative. In particular, we note the relationship between the binomial theorem and the differentiation of polynomials. The section culminates with a proof of the mean value theorem.
 
 \subsection{Binomial Theorem}
 
@@ -124,7 +124,7 @@ The binomial theorem expresses a formula for expanding powers of a binomial\foot
 
 $$(x + y)^n = \sum_{k = 0}^{n}{{n}\choose{k}}x^ky^{n-k},$$
 
-where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coefficient. Note the binomial coefficient is symmetrical, that is, ${{n}\choose{k}} = {{n}\choose{n-k}}$. This symmetry may be seen in Pascal's triangle:
+where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coefficient. Note the binomial coefficient is symmetric, that is, ${{n}\choose{k}} = {{n}\choose{n-k}}$. This symmetry may be seen in Pascal's triangle:
 
 \begin{center}
 \begin{tabular}{ccccccccccccc}
@@ -138,7 +138,7 @@ where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coeff
 \end{tabular}
 \end{center}
 
-Pascal's triangle, named after French mathematician Blaise Pascal (1623-1662) embodies a recurrence relation for the coefficients of a binomial expansion. The numbers of each row are generated by summing the two numbers diagonally above it in the previous row. In terms of binomial expansion, this is equivalent to collecting like terms after expanding. To illustrate, consider the coefficients for the quadratic expansion, $x^2 + 2xy + y^2$,
+Pascal's triangle, named after French mathematician Blaise Pascal (1623-1662) embodies a recurrence relation for the coefficients of a binomial expansion. The numbers of each row are generated by summing the two numbers diagonally above in the previous row. In terms of binomial expansion, this is equivalent to collecting like terms after expanding. To illustrate, consider the coefficients for the quadratic expansion, $x^2 + 2xy + y^2$,
 
 \begin{center}
 \begin{tabular}{ccccc}
@@ -162,23 +162,23 @@ which corresponds to $x^3 + x^2y + 2x^2y + 2xy^2 + xy^2 + y^3$, and clearly each
 \end{tabular}
 \end{center}
 
-In general, this process is reflected in Pascal's rule,
+In general, this relation is reflected in Pascal's rule,
 
 $${{n}\choose{k}} = {{n-1}\choose{k-1}} + {{n-1}\choose{k}},$$
 		
 for $1 \leq k \leq n$. Isaac Newton (1642-1727) extended the notion of binomial expansion to real powers in 1665. This was an important stepping-stone towards the definition of a derivative, as we will see.
 
-\subsection{($\epsilon$-$\delta$) Defintion of a Limit}
+\subsection{($\epsilon$-$\delta$) Definition of a Limit}
 
 The standard formal ($\epsilon$-$\delta$) definition of a limit is due to German mathematician, Karl Weierstrass (1815-1897). We say that, $$\lim_{x \to a} f(x) = L,$$
 
-if for any value, $\epsilon > 0$, specifically, where $\epsilon$ is arbitrarily small, we can find a $\delta > 0$ such that,
+if for any value, $\epsilon > 0$, specifically where $\epsilon$ is arbitrarily small, we can find a value $\delta > 0$ such that,
 
 $$0 < |x - a| < \delta \implies |f(x) - L| < \epsilon.$$
 
-This somewhat off-putting notation captures the notion of a function approaching a limiting value continuously. It states that however close (within an infinitesimal $\epsilon$ units) we wish to get to the limiting value, $L$, we can always find a correspondingly tiny interval of radius $\delta$ around a point $a$ such that the function is closer.
+This somewhat off-putting notation captures the notion of a function approaching a limiting value continuously. It states that however close (within an infinitesimal $\epsilon$ units) we wish to get to the limiting value, $L$, we can always find a correspondingly tiny interval of radius $\delta$ around a point $a$ such that the function is closer. Note that this accounts also for the case where $f(x)$ is undefined at $x = a$.
 
-An example is always useful for such subtle ideas. Therefore, let $f(x) = 2x^2 + 2$. Then clearly, $\lim_{x \to 1} f(x) = 4$. To satisfy the inequality, $|2x^2 + 2 - 4| < \epsilon$, we can select $\delta = \sqrt{\epsilon/2 + 1} - 1$. Clearly this is always possible, no matter how small we take $\epsilon$ to be, and so the limit exists. A function is said to be \emph{continuous} at a point $a$ if the limit $L$ exists, and $f(a) = L$, which is not necessarily the case, though true for our function. A function that is \emph{differentiable} at a point, $a$, implies continuity at $a$, but not vice-versa.
+An example is always useful for such subtle ideas. Therefore, let $f(x) = 2x^2 + 2$. Then clearly, $\lim_{x \to 0} f(x) = 2$. To satisfy the inequality, $|2x^2 + 2 - 4| < \epsilon$, we can select $\delta = \sqrt{\epsilon/2 + 1}$. Clearly this is always possible, no matter how small we take $\epsilon$ to be, and so the limit exists. A function is said to be \emph{continuous} at a point $a$ if the limit $L$ exists, and $f(a) = L$, which is not always the case. Suppose $g(x) = 1$ for $x <0$ and $g(x) = 2$ for $x \geq 0$. Such a function makes an instantaneous jump at $x = 0$ to a value distinct from the limit to which it was approaching. A function is continuous if it is continuous at all points in its domain. A function that is \emph{differentiable} at a point, $a$, implies continuity at $a$, but not vice-versa.
 
 \subsection{Differentiating From First Principles}
 
@@ -186,7 +186,7 @@ The gradient of a linear function, $y = f(x)$, over an interval, $[x, \Delta x]$
 
 $$\frac{\mathop{d}}{\mathop{dx}} f(x) = \lim_{\Delta x \to 0} \frac{f(x  + \Delta x) - f(x)}{\Delta x},$$
 
-and it is clear this is just ``rise over run'', taken on an infinitesimal interval. It represents the gradient of a line tangent to the curve at $x$. To see how we can differentiate a polynomial, consider the general $n$th degree polynomial\footnote{Note that the powers of a polynomial are non-negative integers by definition.}, $f(x) = a_nx^n + a_{n-1}x^{n-1} + \cdots + a_1x + a_0$. Then, from the definition,
+and it is clear this is just ``rise over run'', albeit taken on an infinitesimal interval. It represents the gradient of a line tangent to the curve at $x$. To see how we can differentiate a polynomial, consider the general $n$th degree polynomial\footnote{Note that the powers of a polynomial are non-negative integers by definition.}, $f(x) = a_nx^n + a_{n-1}x^{n-1} + \cdots + a_1x + a_0$. Then, from the definition,
 
 \begin{align}
 \frac{\mathop{d}}{\mathop{dx}} f(x) &= \lim_{\Delta x \to 0} a_n\frac{(x + \Delta x)^n - x^n}{\Delta x} + \cdots + a_1\frac{(x + \Delta x) - x}{\Delta x} + a_0\frac{1 - 1}{\Delta x}\notag \\
@@ -194,11 +194,11 @@ and it is clear this is just ``rise over run'', taken on an infinitesimal interv
 &= na_nx^{n-1} + (n-1)a_{n-1}x^{n-2} + \cdots + a_1, \notag
 \end{align}
 
-and it is clear that only the second term of each expansion survives cancelation, or annihilation by the infinitesimal $\Delta x$. From this we can infer that $\frac{\mathop{d}}{\mathop{dx}} a_kx^k = ka_kx^{k-1}$, the rule that every student of calculus is familiar with, though many (if not most) do not realise it is a consequence of the binomial theorem! It is only when one tries to ``plug and play'' from first principles that the connection becomes apparent. As noted before, Newton extended the definition of the binomial theorem to real-valued powers.
+and it is clear that only the second term of each expansion survives cancelation, or annihilation by the infinitesimal $\Delta x$. From this we can infer that $\frac{\mathop{d}}{\mathop{dx}} a_kx^k = ka_kx^{k-1}$, the rule that every student of calculus is familiar with, though usually does not realise it to be a consequence of the binomial theorem! It is only when one tries to ``plug and play'' from first principles that these connections become apparent. As noted before, Newton extended the definition of the binomial theorem to real-valued powers.
 
 \subsection{Chain Rule}
 
-The chain rule for differentiation describes how to differentiate function compositions, $f \cdot u = f(u(x))$. Assuming $u(x)$ is differentiable at $a$, and $f(u)$ is differentiable at $u(a)$, the derivative,
+The chain rule for differentiation describes how to differentiate function compositions, $f \cdot u \triangleq f(u(x))$. Assuming $u(x)$ is differentiable at $a$, and $f(u)$ is differentiable at $u(a)$, the derivative,
 
 \begin{align}
 (f \cdot u)'(a) &= \lim_{x \to a}\frac{f(u(x)) - f(u(a))}{x - a} \notag \\
@@ -206,7 +206,7 @@ The chain rule for differentiation describes how to differentiate function compo
 &= f'(u(a))u'(a). \notag
 \end{align}
 
-An extension to this expression is needed for a rigorous proof, as a function may oscillate as it tends towards a limit, and $u(x)$ may equal $u(a)$ infinitely many times, resulting in a inexhaustible number of undefined points as $x \to a$.
+An extension to this expression is needed for a rigorous proof, as a function may oscillate as it tends towards a limit, and $u(x)$ may equal $u(a)$ infinitely many times, resulting in a inexhaustible number of undefined points as $x \to a$, but we will leave it as a sketch.
 
 In general, the chain rule may be applied repeatedly for any number of nested functions,
 
@@ -237,7 +237,7 @@ The corresponding technique for anti-differentiation is integration by parts.
 
 \subsection{Rolle's Theorem}
 
-Rolle's theorem by Michel Rolle (1652-1719) asserts that for a differentiable function, $f(x)$, if $f(a) = f(b)$ for some $a$ and $b$, then there must be a stationary point on the interval $[a, b]$, unless $f = c$ for some constant, $c$. Plainly speaking, it says that if a curve returns to its starting point at the end of an interval, there must be at least one turning point somewhere in that interval. To prove this, first consider that there must be at least one extreme point $c$ on the interval $[a, b]$, be it maximum or minimum. For brevity, we assume the case that $c$ is a maximum. So, for all points after the interior point, $c$, $c + h$, such that $h > 0$, the function is upper-bound by $f(c)$. That is,
+Rolle's theorem by Michel Rolle (1652-1719) asserts that for a differentiable function, $f(x)$, if $f(a) = f(b)$ for some $a$ and $b$, then there must be a stationary point on the interval $[a, b]$, unless $f = c$ for some constant, $c$. Plainly speaking, it says that if a curve returns to its starting point at the end of an interval, there must be at least one turning point somewhere in that interval. To prove this, first consider that there must be at least one extreme point $c$ on the interval $[a, b]$, be it maximum or minimum. For brevity, we assume that $c$ is a maximum. So, for all points after the interior point, $c$, $c + h$, such that $h > 0$, the function is upper-bound by $f(c)$. That is,
 
 $$\frac{f(c + h) - f(c)}{h} \leq 0.$$
 
@@ -253,9 +253,9 @@ from which it follows that the derivative of the function, $f'(x)$, is 0 at $c$.
 
 \subsection{Mean Value Theorem}
 
-The mean value theorem states that for a differentiable function defined on an interval $[a, b]$, at least one point on the curve must have gradient equal to that of the chord connecting the endpoints, $(a, f(a))$ and $(b, f(b))$. It is an intuitive result, as any curve which succeeds in climbing (or descending) from $f(a)$ to $f(b)$, must at least at some point match that slope, else it will never make the ascent.
+The mean value theorem states that for a differentiable function defined on an interval $[a, b]$, at least one point on the curve must have gradient equal to that of the chord connecting the endpoints, $(a, f(a))$ and $(b, f(b))$. It is an intuitive result, as any curve which succeeds in climbing (or descending) from $f(a)$ to $f(b)$, must match the rise over run of that slope at least at one point, otherwise it will never make the ascent.
 
-First define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since $f(x)$ is by construction. We choose $r$ such that $g(x)$ satisfies Rolle's theorem, that is, $g(a) = g(b)$, hence $f(a) - ra = f(b) - rb$, and $r = (f(a) - f(b))/(a - b)$, that is, the slope of the chord. Because of Rolle's theorem, for some $c \in [a, b], g'(c) = 0,$ hence $f'(c) = r$, and the proof is complete.
+First define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since $f(x)$ is by construction. We choose $r$ such that $g(x)$ satisfies Rolle's theorem, that is, $g(a) = g(b)$, hence $f(a) - ra = f(b) - rb$, and $r = (f(a) - f(b))/(a - b)$, that is, the slope of the chord connecting the endpoints. Because of Rolle's theorem, for some $c \in [a, b], g'(c) = 0,$ hence $f'(c) = r$, and the proof is complete.
 
 \section{Vector Calculus}
 
@@ -302,7 +302,7 @@ $$\sum_{i} \mathbf{a}_i\mathbf{b}_i^T = \mathbf{A}^T\mathbf{B}.$$
 
 \subsubsection{Transposition Chain Rule}
 
-For matrices \textbf{A} and \textbf{B}, the elements of their product, \textbf{AB}, are formed by multiplying each row of \textbf{A} with each column of \textbf{B}. Thus, $(\textbf{AB})_{ij} = A(i, :) \cdot B(:, j)$, that is, the dot product of row $i$ of matrix \textbf{A} with column $j$ of matrix \textbf{B}. By definition, this is then equivalent to $A(i, :)^T \cdot B(:, j)= B(j, :)^T \cdot A(:,i)$, from which the rule,
+For matrices \textbf{A} and \textbf{B}, the elements of their product, \textbf{AB}, are formed by multiplying each row of \textbf{A} with each column of \textbf{B}. Thus, $(\textbf{AB})_{ij} = A(i, :) \cdot B(:, j)$, that is, the dot product of row $i$ of matrix \textbf{A} with column $j$ of matrix \textbf{B}. Clearly, $A^T(i, :) \cdot B(:, j)= B^T(j, :) \cdot A(:,i)$, from which the rule,
 
 $$(\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}^T.$$
 
@@ -334,7 +334,7 @@ The trace of a matrix product is $\text{tr}(\mathbf{A}\mathbf{B}) = \sum_{j=1}^N
 &= \sum_{k=1}^N\sum_{j=1}^N\sum_{i=1}^Na_{ki}b_{ij}c_{jk}. \notag
 \end{align}
 
-Repeating for the permutation,
+Now consider the trace of the permutation of this matrix product,
 
 \begin{align}
 \text{tr}(\mathbf{C}\mathbf{A}\mathbf{B}) &= \sum_{k=1}^N\sum_{j=1}^N\sum_{i=1}^Na_{ji}b_{ik}c_{kj} \notag \\
@@ -349,7 +349,7 @@ The single most important principle of vector calculus is the definition of what
 
 $$\nabla\mathbf{f} \triangleq \frac{\partial f}{\partial(x_1, \dots, x_n)} = \bigg[\frac{\partial f}{\partial x_{1}}, \frac{\partial f}{\partial x_{2}}, \dots, \frac{\partial f}{\partial x_{n}}\bigg].$$
 
-With this principle in mind, it is easy to derive some basic formulae of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
+With this principle in mind, it is easy to derive some of the fundamental formulae of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
 
 $$\mathbf{J} \triangleq \frac{\partial (f_1, \dots, f_m)}{\partial(x_1, \dots, x_n)} = \begin{bmatrix}
 \frac{\partial f_1}{\partial x_{1}}&\frac{\partial f_1}{\partial x_{2}}&\cdots&\frac{\partial f_1}{\partial x_{n}}\\
@@ -358,7 +358,7 @@ $$\mathbf{J} \triangleq \frac{\partial (f_1, \dots, f_m)}{\partial(x_1, \dots, x
 \frac{\partial f_m}{\partial x_{1}}&\frac{\partial f_m}{\partial x_{2}}&\cdots&\frac{\partial f_m}{\partial x_{n}}\\
 \end{bmatrix},$$
 
-that is, the matrix of partial derivatives corresponding to each of the input and output pairs. In the case that $f$ is scalar-valued, the Jacobian becomes a row vector. The Jacobian features as the first-order term in the Taylor expansion of a multivariate function. For a \emph{scalar}-valued function, $f$, the Hessian matrix is the matrix of all second order partial derivatives, written,
+that is, the matrix of partial derivatives corresponding to each of the input and output pairs. In the case that $f$ is scalar-valued, the Jacobian becomes the row vector given above. The Jacobian features as the first-order term in the Taylor expansion of a multivariate function. For a \emph{scalar}-valued function, $f$, the Hessian matrix is the matrix of all second order partial derivatives, written,
 
 $$\mathbf{H} \triangleq \nabla^2\mathbf{f} = \mathbf{J}(\nabla\mathbf{f}(\mathbf{x})) = \begin{bmatrix}
 \frac{\partial^2 f}{\partial x_{1}^2}&\frac{\partial^2 f}{\partial x_{1}\partial x_{2}}&\cdots&\frac{\partial^2 f}{\partial x_{1}\partial x_{n}}\\
@@ -436,26 +436,26 @@ $$\frac{\partial}{\partial \mathbf{A}}\log|\mathbf{A}| = \frac{1}{|\mathbf{A}|}\
 
 \section{Series}
 
-This section introduces series and infinite sums. Notably, it presents Taylor series, a technique with many uses. The section culminates in deriving an infinite sum for $\pi$.
+This section introduces series and infinite sums. Notably, it presents Taylor series, a technique with many uses in the material to come. The section culminates in deriving an infinite sum for $\pi$.
 
 \subsection{Geometric Series}
 
-A geometric series\footnote{A series is the sum of a sequence of terms.} is a series, $s$, of the form, $$s = a + ar + ar^2 + ar^3 + \cdots + ar^{n-1} = \sum_{k=0}^{n-1}ar^k,$$ for some choice of a, r, and n. Multiplying this sum by the factor $r$ and adding $a$ to it gives, $$a + rs = a + ar + arr + ar^2r + \cdots + ar^{n-1}r = s + ar^n.$$ Therefore, $$s = a\frac{1 - r^n}{1 - r},$$ $r \neq 1$. Thus we have a closed-form expression\footnote{A closed-form expression is one that may be evaluated in a finite number of operations.} for the value of a geometric series, which will converge provided $|r| < 1$.
+A geometric series\footnote{A series is the sum of a sequence of terms.} is a series, $s$, of the form, $$s = a + ar + ar^2 + ar^3 + \cdots + ar^{n-1} = \sum_{k=0}^{n-1}ar^k,$$ for some choice of a, r, and n. Multiplying this sum by the factor $r$ and adding $a$ gives, $$rs + a = a + ar + arr + ar^2r + \cdots + ar^{n-1}r = s + ar^n.$$ Therefore, $$s = a\frac{1 - r^n}{1 - r},$$ $r \neq 1$. Thus we have a closed-form expression\footnote{A closed-form expression is one that may be evaluated in a finite number of operations.} for the value of a geometric series, which will converge provided $|r| < 1$.
 
 \subsection{Taylor Series}
 
-A Taylor series, named after English mathematician Brook Taylor (1685-1731), is a technique for writing an infinitely differentiable function\footnote{A function is infinitely differentiable at a point if all its derivatives exist}, $f(x)$ as an infinite order polynomial,
+A Taylor series, named after English mathematician Brook Taylor (1685-1731), is a technique for writing an infinitely differentiable function\footnote{A function is infinitely differentiable at a point if all its derivatives exist}, $f(x)$, as an infinite order polynomial,
 
 \begin{align}
 f(x) &= \sum_{i = 0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n \notag \\
 &= f(a) + \frac{f'(a)}{1!}(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f'''(a)}{3!}(x - a)^3 + \cdots \notag,
 \end{align}
 
-for some choice of $a$. A Taylor series is an example of a power series. When $a = 0$, we have what is called a Maclaurin series, named after Scottish mathematician Colin Maclaurin (1698 - 1746). The first $n$ terms of the series may then be used to compute an approximation to the function at a point. For example, a calculator (which is only capable of addition and multiplication) will use a Taylor series approximation for its trigonometric functions. As we will see, Taylor series allow us to manipulate functions that have no closed-form, and are in fact the most important technique to our analysis.
+for some choice of $a$. A Taylor series is an example of a power series. When $a = 0$, we have what is called a Maclaurin series, named after Scottish mathematician Colin Maclaurin (1698 - 1746). The first $n$ terms of the series may then be used to compute an approximation to the function at a point. For example, a calculator (which is only capable of addition and multiplication) will use a Taylor series approximation for its trigonometric functions. As we will see, Taylor series allow us to manipulate functions that have no closed form, and are in fact the most important technique to our analysis.
 
 \subsubsection{Taylor's Theorem}
 
-The technique follows from Taylor's theorem, which gives quantifies the remainder term for a $k$th order Taylor polynomial to a function. The theorem states that given a $k$ times differentiable function $f : R \to R$ at point $a \in \mathcal{R}$, then there exists a function $h_k : R \to R$ such that,
+Taylor series follow from Taylor's theorem, which quantifies the remainder term for a $k$th order Taylor polynomial of a function. The theorem states that given a function $f : \mathbb{R} \to \mathbb{R}$ is $k$ times differentiable at point $a \in \mathbb{R}$, then there exists a function $h_k : \mathbb{R} \to \mathbb{R}$ such that,
 
 $$f(x) = f(a) + \frac{f'(a)}{1!}(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \cdots  + \frac{f(k)(a)}{k!}(x - a)^k + h_k(x)(x - a)^k,$$
 
@@ -475,9 +475,7 @@ where (\ref{eq:taylor}) comes from the definition of a limit. Thus, we have show
 
 \subsubsection{Convergence}
 
-Holomorphic functions are a key interest in complex analysis, the study of functions of complex variables. Holomorphic functions are functions that are complex differentiable at every point on their domain. A consequence of complex differentiability is that the the function is both infinitely differentiable and equal to its own Taylor series on that domain. A major result from complex analysis is that all hyperbolic function are analytic.
-
-A function is analytic if and only if its Taylor series converges to the function in some neighbourhood of points around $x_0$ for every $x_0$ in the function's domain. That is, there is always a locally convergent power series for the function. The radius of convergence of a power series,
+Holomorphic functions are a key interest in complex analysis, the study of functions of complex variables. Holomorphic functions are functions that are complex differentiable at every point on their domain. A consequence of complex differentiability is that the function is both infinitely differentiable and equal to its own Taylor series on that domain. A major result from complex analysis is that all hyperbolic functions are analytic. A function is analytic if and only if its Taylor series converges to the function in some neighbourhood of points around $x_0$ for every $x_0$ in the function's domain. That is, there is always a locally convergent power series for the function. The radius of convergence of a power series,
 
 $$f(z) = \sum_{n=0}^{\infty}c_n(z - a)^n$$
 
@@ -485,7 +483,7 @@ defined around a point $a$ is $r$, defined to be,
 
 $$r = \sup\Bigg\{|z - a| \ \Bigg| \ \sum_{n=0}^{\infty}c_n(z - a)^n \ \text{converges} \Bigg\},$$
 
-beyond which the series diverges. An elementary function is a function in one variable expressible in terms of a finite number of arithmetic operators, exponentials, logarithms and roots. This includes trigonometric and hyperbolic functions, as these are expressible as complex exponential functions. Elementary functions are analytic at all but a finite number of points (singularities). Functions that are analytic everywhere (on all complex points) are said to be \emph{entire} functions, and have no singularities. These include polynomials (whose Taylor expansions are of course equal to themselves), trigonometric, hyperbolic, exponential, and many others. Such functions have an infinite radius of convergence.
+beyond which the series diverges. An elementary function is a function in one variable expressible in terms of a finite number of arithmetic operators, exponentials, logarithms and roots. This includes trigonometric and hyperbolic functions, as these are expressible as complex exponential functions. Elementary functions are analytic at all but a finite number of points (singularities). Functions that are analytic everywhere (on all complex points) are said to be \emph{entire} functions, and have no singularities. These include polynomials (whose Taylor expansions are of course equal to themselves), trigonometric, hyperbolic, and exponential functions, and many others. Such functions have an infinite radius of convergence.
 
 \subsubsection{Taylor Expansions of Sine and Cosine}
 
@@ -507,19 +505,19 @@ These are entire functions, hence the Taylor series converge for all real number
 
 \subsubsection{Bernoulli Numbers}
 
-The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (such as $\pi$ and $e$). They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
+The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (such as $\pi$ and $e$). They originate as the coefficients of the Bernoulli polynomials, but make various other appearances in number theory. They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
 
 $$B_0 = 1, B_1 = \pm \frac{1}{2}, B_2 = \frac{1}{6}, B_3 = 0, B_4 = -\frac{1}{30}, B_5 = 0, B_6 = \frac{1}{42}, B_7 = 0, B_8 = -\frac{1}{30}.$$
 
-Curiously, the second Bernoulli number, $B_1$, may be plus or minus $\frac{1}{2}$. Therefore, there are strictly speaking \emph{two} sequences, the \emph{first} Bernoulli numbers ($B_1 = -\frac{1}{2}$) and the \emph{second} Bernoulli numbers ($B_1 = \frac{1}{2}$). The numbers may be defined by a recurrence relation. For example, the second Bernoulli numbers are related by,
+Curiously, the second Bernoulli number, $B_1$, may be plus or minus $\frac{1}{2}$. Therefore, there are strictly speaking \emph{two} sequences, the \emph{first} Bernoulli numbers (with $B_1 = -\frac{1}{2}$) and the \emph{second} Bernoulli numbers (with $B_1 = \frac{1}{2}$). The numbers may be defined by a recurrence relation. For example, the second Bernoulli numbers are related by,
 
 $$B_n = 1 - \sum_{k=0}^{n-1}{{{n}\choose{k}}}\frac{B_k}{n - k + 1}, B_0 = 1.$$
 
-The sequence appears in many places within number theory, foremostly as the coefficients of the Bernoulli polynomials, for example some Taylor expansions, such as the hyperbolic tangent function, $\tanh x$, whose Taylor expansion is,
+The Bernoulli numbers appear within some Taylor expansions, such as that of the hyperbolic tangent function, $\tanh x$,
 
 $$\tanh x = x - \frac{1}{3}x^3 + \frac{2}{15}x^5 - \frac{17}{315}x^7 + \cdots = \sum_{n=1}^{\infty}\frac{B_{2n}4^n(4^n-1)}{(2n)!}x^{2n-1}.$$
 
-The Bernoulli numbers also appear in the Euler-Maclaurin formula, which describes the error between sums and integrals, and hence, the error term of the trapezoidal rule.
+The Bernoulli numbers also appear in the Euler-Maclaurin formula, which specifies the error incurred by approximating integrals with sums, for example, the error term of the trapezoidal rule.
 
 \subsection{$\pi$ as an Infinite Series}
 
@@ -549,7 +547,7 @@ so,
 
 $$\frac{dy}{dx} = \cos^2(\arctan{x}).$$
 
-Rearranging the Pythagorean trigonometric identity, we have $\cos^2 x = 1 - \sin^2x$, and squaring and rearranging our other identity, $\cos^2{x} = \frac{\sin^2{x}}{\tan^2{x}}$. Equating these gives, $\cos^2x = \frac{1}{1 + \tan^2x}$. Thus, we have,
+Rearranging the Pythagorean trigonometric identity, we have $\cos^2 x = 1 - \sin^2x$, and squaring and rearranging our other identity, $\sin^2{x} = \cos^2{x}\tan^2{x}$. By substitution we obtain, $\cos^2x = \frac{1}{1 + \tan^2x}$. Thus, we have,
 
 \begin{align}
 \frac{d}{dx}\arctan{x} &= \frac{1}{1 + \tan^2(\arctan{x})} \notag \\
@@ -573,7 +571,7 @@ Though pretty, this series is extremely slow to converge. Other series represent
 
 \section{Infinite Products}
 
-Infinite products are defined for an sequence of (complex) numbers, $a_1, a_2, a_3, \dots$, as
+Infinite products are defined for a sequence of (complex) numbers, $a_1, a_2, a_3, \dots$, as
 
 $$\prod_{n=1}^{\infty}a_n = a_1a_2a_3.$$
 
@@ -581,9 +579,9 @@ Just like infinite sums they may converge or diverge. The product converges if t
 
 \subsection{Vi\`ete's Formula}
 
-The first recorded infinite product was formulated by French mathematician Fran\c cois Vi\`ete (1540-1603), and gives an expression for $\pi$. The expression derives from a method for approximating the area of a circle: suppose we have a circle with radius 1. Its area is $\pi$ units. Suppose then that we inscribe a square within this circle. The area of the square (4-sided polygon) is $(\sqrt{2})^2 = 2$. This gives a (very) rough approximation to the area of the circle. If we then inscribe a hexagon (8-sided polygon) in the circle, it is clear we get a better approximation. A hexadecahedron (16-sided polygon) would give a better approximation again, and so on. As the number of sides goes to infinity, the inscribed shapes ``telescope'' to the shape of the circle.
+The first recorded infinite product was formulated by French mathematician Fran\c cois Vi\`ete (1540-1603), and gives an expression for $\pi$. The expression derives from an old method for approximating the area of a circle: suppose we have a circle with radius 1. Its area is $\pi$ units. Suppose then that we inscribe a square within this circle. The area of the square (4-sided polygon) is $(\sqrt{2})^2 = 2$. This gives a (very) rough approximation to the area of the circle. If we then inscribe a hexagon (8-sided polygon) in the circle, it is clear we get a better approximation. A hexadecahedron (16-sided polygon) would give a better approximation again, and so on. As the number of sides goes to infinity, the inscribed shapes ``telescope'' to the shape of the circle.
 
-We can derive the area of the circle, $\pi$, by taking the area of the square and scaling it by the ratio of the area of the octagon to the area of the square, and scaling this result by the ratio of hexadecahedron to octagon, icosidodecahedron to hexadecahedron, and so on. We choose shapes whose number of sides are powers of two because there is a useful relation between these, as we shall see. For brevity, we will denote the area of the $2^n$-sided polygon as $A_n$. Thus, $A_2$ is the area of the square, $A_3$ the octagon, and so on. Our technique for calculating the area of the circle is therefore described by,
+We can therefore derive an expression for the area of the circle, $\pi$, by taking the area of the square and scaling it by the ratio of the area of the octagon to the area of the square, and scaling this result by the ratio of hexadecahedron to octagon, icosidodecahedron to hexadecahedron, and so on. We choose shapes whose number of sides are powers of two because there is a useful relation between these, as we shall see. For brevity, we will denote the area of the $2^n$-sided polygon as $A_n$. Thus, $A_2$ is the area of the square, $A_3$ the octagon, and so on. Our technique for calculating the area of the circle is therefore described by,
 
 $$
 \pi = 2 \cdot \frac{A_3}{A_2} \cdot \frac{A_4}{A_3} \cdot \frac{A_5}{A_4} \cdot \cdots
@@ -607,11 +605,11 @@ $$
 \frac{2}{\pi} = \frac{\sqrt{2}}{2} \cdot \cos(\pi/8) \cdot \cos(\pi/16) \cdot \cos(\pi/32) \cdot \cdots
 $$
 
-A useful trigonometric identity can be derived from the angle sum identity, $\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta$. Therefore, $\cos x = \cos^2(x/2) - \sin^2(x/2)$. Applying the pythagorean identity, $\cos x = 2\cos^2(x/2) - 1$. Finally, rearranging gives,
+A useful trigonometric identity can be derived from the angle sum identity, $\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta$. Namely that $\cos x = \cos^2(x/2) - \sin^2(x/2)$. Applying the pythagorean identity, $\cos x = 2\cos^2(x/2) - 1$. Finally, rearranging gives,
 
 $$\cos \Big(\frac{x}{2}\Big) = \pm\sqrt{\frac{1 + \cos x}{2}}.$$
 
-Employing this identity gives us a recurrence relationship from $\cos x$ to $\cos(x/2)$, finally yielding the startling,
+Exploiting this identity gives us a recurrence relationship from $\cos x$ to $\cos(x/2)$, finally yielding the startling,
 
 $$
 \frac{2}{\pi} = \frac{\sqrt{2}}{2} \cdot \frac{\sqrt{2 + \sqrt{2}}}{2} \cdot \frac{\sqrt{2 + \sqrt{2 + \sqrt{2}}}}{2} \cdot \cdots
@@ -622,7 +620,7 @@ In 1734, Leonhard Euler (1707-1783), found the elegant solution to the sum,
 
 $$\sum_{n=0}^{\infty}\frac{1}{n^2} = 1 + \frac{1}{4} + \frac{1}{9} + \cdots,$$
 
-a problem posed 90 years earlier by Italian mathematician, Pietro Mengoli (1626-1686). Its solution had previously defied the attempts of the eminent Bernoulli dynasty of mathematicians. The problem is named after Euler's hometown, and first place of employment in Switzerland. The solution involves infinite products, and a mathematical leap of faith, that was only later confirmed rigorously. Incidentally, this is the value of $\zeta(2)$, where $\zeta(s)$ is the then undiscovered Riemann zeta function\footnote{The Riemann zeta function, defined over the complex numbers, formulated by Bernhard Riemann (1826-1866) has proven to be of great mathematical interest. The Riemann hypothesis, which conjectures the placement of zeta function roots has great implications for number theory, particularly the distribution of prime numbers. The hypothesis is the subject of one of the seven Millennium problems.}. Euler's solution starts by considering the function,
+a problem posed 90 years earlier by Italian mathematician, Pietro Mengoli (1626-1686). Its solution had previously defied the attempts of the eminent Bernoulli dynasty of mathematicians. The problem is named after Euler's hometown, and first place of employment in Switzerland. The solution involves infinite products, and a mathematical leap of faith, that was only later confirmed rigorously. Incidentally, this sum is the value of $\zeta(2)$, where $\zeta(s)$ is the then undiscovered Riemann zeta function\footnote{The Riemann zeta function, defined over the complex numbers, formulated by Bernhard Riemann (1826-1866) has proven to be of great mathematical interest. The Riemann hypothesis, which conjectures the placement of zeta function roots has great implications for number theory, particularly the distribution of prime numbers. The hypothesis is the subject of one of the seven Millennium problems.}. Euler's solution starts by considering the function,
 
 \begin{align}
 \frac{\sin x}{x} &= \frac{ x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots}{x}  \notag \\
@@ -636,13 +634,13 @@ Having written the infinite series expansion of this function, it is obvious tha
 &= \Big(1 - \frac{x}{\pi}\Big)\Big(1 + \frac{x}{\pi}\Big)\Big(1 - \frac{x}{2\pi}\Big)\Big(1 + \frac{x}{2\pi}\Big)\Big(1 - \frac{x}{3\pi}\Big)\Big(1 + \frac{x}{3\pi}\Big)\cdots \notag
 \end{align}
 
-reasoning that the infinitely many roots ($\pm\pi, \pm2\pi, \pm3\pi, \dots $) of the left- and right-hand functions were the same, hence the functions themselves. This was not an entirely rigorous piece of reasoning, but it was later confirmed to be correct\footnote{See the Weierstrass factorisation theorem.}. Multiplying out this product shows that the coefficient for $x^2$ is,
+reasoning that the infinitely many roots ($\pm\pi, \pm2\pi, \pm3\pi, \dots $) of the left- and right-hand functions were the same, hence the functions themselves. This was not an entirely rigorous piece of reasoning, but it was later confirmed to be correct\footnote{See the Weierstrass factorisation theorem.}. Multiplying this product out shows that the coefficient for $x^2$ is,
 
 $$
 -\frac{1}{\pi^2}\Big(1 + \frac{1}{4} + \frac{1}{9} + \cdots \Big)= -\frac{1}{\pi^2}\sum_{n=0}^{\infty}\frac{1}{n^2}.
 $$
 
-But we know from (\ref{eq:sinx}) that the coefficient for $x^2$ is $-\frac{1}{3!}$, hence, equating these gives,
+But we know from (\ref{eq:sinx}) that the coefficient for $x^2$ is $-\frac{1}{3!}$, hence, equating the two gives,
 
 $$
 \sum_{n=0}^{\infty}\frac{1}{n^2} = \frac{\pi^2}{6}.
@@ -650,7 +648,7 @@ $$
 
 \subsection{Wallis' Product}
 
-Wallis's product is an infinite product expression for $\pi$ discovered by the English mathematician John Wallis (1616-1703). It can be derived from the expression from the Basel problem,
+Wallis's product is an infinite product expression for $\pi$ discovered by the English mathematician John Wallis (1616-1703). It can be derived starting from the same expression from the Basel problem,
 
 $$
 \frac{\sin x}{x} = \prod_{k=1}^{\infty}1 - \frac{x^2}{k^2\pi^2}.
@@ -677,7 +675,7 @@ as $k \to \infty$.
 
 \subsection{The Method of Eratosthenes}
 
-The method of Eratosthenes is a prime number sieve algorithm discovered by Eratosthenes of Cyrene (c. 276 BC - 195/194 BC). It is central to the derivation of the Euler product formula. It is a method of identifying all primes up to some natural number, $N$. An example of the algorithm is given here. Let $N = 15$, then we have the list of candidate primes,
+The method of Eratosthenes is a prime number sieve algorithm discovered by Eratosthenes of Cyrene (c. 276 BC - 195/194 BC). It is central to the derivation of the Euler product formula. It is a method for identifying all primes up to some natural number, $N$. An example of the algorithm is given here. Let $N = 15$, then we have the list of candidate primes,
 
 $$2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15$$
 
@@ -726,7 +724,7 @@ which is an infinite product, since we know from Euclid that there are infinitel
 
 \section{Deriving the Golden Ratio}
 
-The section presents the concept of continued fractions and the distinctive continued fraction expression for the golden ratio.
+This section presents the concept of continued fractions and the distinctive continued fraction expression for the golden ratio.
 
 \subsection{Continued Fractions}
 Continued fractions are a way of specifying fractional numbers as a sequence of nested fractions,
@@ -741,7 +739,7 @@ f = \cfrac{387}{259}
 = 1 + \cfrac{1}{2 + \cfrac{1}{42 + \cfrac{1}{1 + \cfrac{1}{2}}}}.
 $$
 
-Standard notation takes the constants on the leftmost diagonal and writes them as, $f = [1; 2, 42, 1, 2]$.
+Standard notation takes the values on the diagonal and writes them as, $f = [1; 2, 42, 1, 2]$.
 
 \subsection{Fibonacci Sequences}
 
@@ -764,7 +762,7 @@ the fraction continuing for $n - 1$ levels.
 
 \subsection{The Golden Ratio}
 
-The golden ratio is a number with many interesting properties, and with some mysterious connections to the natural world. It is the ratio that arises when for two numbers, $a$ and $b$, $a : b = (a + b) : a$. It is also the limiting value of the ratio of successive terms in a Fibonacci sequence. We may discover the self-referential golden-ratio, $\varphi$, by looking at the self-referential infinite continued fraction, $\varphi = [1; 1, 1, 1, \dots]$. That is, the ratio of $F_{n+1}/F_n$ as $n \to \infty$.
+The golden ratio is a number with many interesting properties, and with some mythical connections to the natural world. It is the ratio that arises between two numbers, $a$ and $b$, when $a : b = (a + b) : a$. It is also the limiting value of the ratio of successive terms in a Fibonacci sequence. We may discover the self-referential golden-ratio, $\varphi$, by looking at the self-referential infinite continued fraction, $\varphi = [1; 1, 1, 1, \dots]$. That is, the ratio of $F_{n+1}/F_n$ as $n \to \infty$.
 
 $$
 \varphi = 1 + \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{\ddots}}} = 1 + \frac{1}{\varphi},
@@ -776,7 +774,7 @@ $$\varphi = \frac{1 \pm \sqrt{5}}{2}.$$
 
 \section{The Exponential Function}
 
-The exponential function is a transcendental entire function, its base, $e$ a transcendental number\footnote{A transcendental number is one that is not algebraic. An algebraic number is a number that is the root of a non-zero polynomial function with rational coefficients, and is a generalisation of the ancient Greek concept of \emph{constructible} numbers. Another way of putting this is that if a number is transcendental there exists no expression containing a finite number of integers and elementary operations that can express the number. To illustrate, $\sqrt{17/4}$ is not transcendental (though it is irrational) as it is the square root of a quotient of integers. Formally, it would solve the expression, $4x^2 = 17$. It is known that most numbers are transcendental.}. It makes many appearances throughout number theory and statistics.
+The exponential function is a transcendental entire function, with its base $e$ a transcendental number\footnote{A transcendental number is one that is not algebraic. An algebraic number is a number that is the root of a non-zero polynomial function with rational coefficients, and is a generalisation of the ancient Greek concept of \emph{constructible} numbers. Another way of putting this is that if a number is transcendental there exists no expression containing a finite number of integers and elementary operations that can express the number. To illustrate, $\sqrt{17/4}$ is not transcendental (though it is irrational) as it is the square root of a quotient of integers. Formally, it would solve the expression, $4x^2 = 17$. It is known that most numbers are transcendental.}. It makes many appearances throughout number theory and statistics.
 
 \subsection{Deriving the Exponential Function}
 
@@ -790,7 +788,7 @@ $$f(1) = \sum_{n=0}^{\infty} \frac{1}{n!} = 1 + \frac{1}{1!} + \frac{1}{2!} + \f
 
 $$e = \lim_{n \to +\infty} \bigg(1 + \frac{1}{n}\bigg)^n.$$
 
-This form is particularly famous in financial modelling. Compound interest gives an expression for the future value of a device, $F$, based on its present value, $P$, the interest rate, $r$, and the the compounding frequency, $n$, over $t$ time periods, with $F = P(1 + r/n)^{nt}$. As $n\to\infty$, we have what is called \emph{continuous} compound interest, and the formula clearly converges to $F = Pe^{rt}$.
+This form is particularly useful in financial modelling. Compound interest gives an expression for the future value of a financial device, $F$, based on its present value, $P$, the interest rate, $r$, and the compounding frequency, $n$, over $t$ time periods, with $F = P(1 + r/n)^{nt}$. As $n\to\infty$, we have what is called \emph{continuous} compound interest, and the formula clearly converges to $F = Pe^{rt}$.
 
 The closed form of the function may be deduced by considering how it grows. Consider,
 
@@ -828,13 +826,13 @@ e^{ix} &= 1 + ix + \frac{(ix)^2}{2!} + \frac{(ix)^3}{3!} + \frac{(ix)^4}{4!} + \
 &= 1 + ix - \frac{x^2}{2!} - i\frac{x^3}{3!} + \frac{x^4}{4!} + i\frac{x^5}{5!} - \cdots \notag
 \end{align}
 
-The reader may now confirm that the even terms correspond with $\cos x$, and the odd terms with $i\sin x$. Thus, $$e^{ix} = \cos x + i\sin x,$$ a fantastic result! Now, just as coordinates $(\cos x, \sin x)$ trace a unit circle on the real plane, the complex numbers arising from $e^{ix} = \cos x + i\sin x$ do so on the complex plane (Figure \ref{fig:eulersformula}). Thus, we have basis on which to perform complex exponentiation, for example, $z^{a + bi} = z^a \cdot (e^{\ln z\cdot bi}) = z^a \cdot (\cos(b\ln z) + i\sin(b\ln z))$. Furthermore, for any integer $k$,
+The reader may now confirm that the even terms correspond with $\cos x$, and the odd terms with $i\sin x$. Thus, $$e^{ix} = \cos x + i\sin x,$$ a fantastic result! Now, just as coordinates $(\cos x, \sin x)$ trace a unit circle on the real plane, the complex numbers arising from $e^{ix} = \cos x + i\sin x$ do so on the complex plane (Figure \ref{fig:eulersformula}). Thus, we have a basis on which to perform complex exponentiation, for example, $z^{a + bi} = z^a \cdot (e^{\ln z\cdot bi}) = z^a \cdot (\cos(b\ln z) + i\sin(b\ln z))$. Furthermore, for any integer $k$,
 
 $$
 e^{i(k\pi)} = \cos (k\pi) + i\sin (k\pi) \notag = -1.
 $$
 
-For the case of $k = 1$, we may rearrange to acquire Euler's\footnote{Euler (1707-1783) was Swiss mathematician, considered one of the greatest of all time.} identity,
+For the case of $k = 1$, we may rearrange to acquire Euler's\footnote{Euler (1707-1783) was a Swiss mathematician, considered one of the greatest of all time.} identity,
 
 $$
 e^{i\pi} + 1 = 0,
@@ -905,7 +903,7 @@ Then,
 \begin{align}
 \mathcal{L}\{\cos(kt)\} &= \int_{0}^{\infty} \frac{1}{2}e^{kit}e^{-st} \mathop{dx} + \int_{0}^{\infty} \frac{1}{2}e^{-kit}e^{-st} \mathop{dt} \notag \\
 &= \int_{0}^{\infty} \frac{1}{2}e^{(-s + ki)t} \mathop{dx} + \int_{0}^{\infty} \frac{1}{2}e^{(-s - ki)t}\mathop{dt} \notag \\
-&= \frac{1/2}{s - ki} + \frac{1/2}{s + ki} = \frac{s}{s^2 + k^2} \notag
+&= \frac{1/2}{s - ki} + \frac{1/2}{s + ki} = \frac{s}{s^2 + k^2}. \notag
 \end{align}
 
 If we are to apply the Laplace transform to differential equations, it is useful to establish a result for the transform of a derivative. By parts,
@@ -931,17 +929,17 @@ hence $$y = \mathcal{L}^{-1}\bigg\{\frac{4}{s - 2}\bigg\} - \mathcal{L}^{1}\bigg
 
 \section{The Factorial Function}
 
-The factorial function, written $n!$ for a positive integer $n$ is the product of all natural numbers less than or equal to n. That is, $$n! = n \times (n - 1) \times (n - 2) \times \cdots \times 1.$$ The value of $0!$ is 1, not as a matter of mathematical necessity, but because it continues the pattern: $0! = (n - n)! = n!/n! = 1$. Otherwise, we can note that the factorial function models the number of permutations of $n$ objects, that is, $^nP_n = n!$. The number of ways of permuting \emph{no} objects is assuredly 1, as no reorderings of \emph{no} objects are possible. There is such a thing as \emph{double} factorial,
+The factorial function, written $n!$, for a positive integer $n$ is the product of all natural numbers less than or equal to n. That is, $$n! = n \times (n - 1) \times (n - 2) \times \cdots \times 1.$$ The value of $0!$ is 1, not as a matter of mathematical necessity, but because it continues the pattern: $0! = (n - n)! = n!/n! = 1$. Otherwise, we can note that the factorial function models the number of permutations of $n$ objects, that is, $^nP_n = n!$. The number of ways of permuting \emph{no} objects is assuredly 1, as no reorderings of \emph{no} objects are possible. There is also such a thing as the \emph{double} factorial function,
 
 $$n!! = n \times (n - 2) \times (n - 4) \times \cdots,$$
 
-which multiples all even numbers $\leq n$ if n is even, and all odd numbers $\leq n$ if n is odd.  The factorial function is undefined for non-natural numbers, whereas the gamma function extends it to all real and complex numbers. The factorial function grows faster than exponentiation, but not as fast as double exponentiation or tetration, that is, the hyperoperation of repeated exponentiation. That is,
+which multiples all even numbers $\leq n$ if n is even, and all odd numbers $\leq n$ if n is odd.  The factorial function is undefined for non-natural numbers, but the gamma function extends it to all real and complex numbers. The factorial function grows faster than exponentiation, but not as fast as double exponentiation or tetration, the hyperoperation of repeated exponentiation. That is,
 
 $$\mathcal{O}(a^x) < \mathcal{O}(x!) < \mathcal{O}(a^{b^x}) < \mathcal{O}(^nx = x^{x^{\iddots^{x}}})$$
 
 \subsection{Stirling's Approximation}
 
-Stirling's approximation is a powerful approximation for the factorial function that converges as $n \to \infty$. It was first found by de Moivre, but Scottish mathematician James Stirling (1692-1770) found a nice simplification. Its derivation begins by taking the log of the function,
+Stirling's approximation is a powerful approximation for the factorial function that converges as $n \to \infty$. It was first discovered by de Moivre, but Scottish mathematician James Stirling (1692-1770) found a nice simplification. Its derivation begins by taking the log of the factorial function,
 
 $$\ln(n!) = \ln(1) + \ln(2) + \ln(3) + \cdots + \ln(n).$$
 
@@ -952,7 +950,7 @@ Now we notice that subtracting $\frac{1}{2}(\ln(1) + \ln(n))$ gives the trapezoi
 &\approx \int_{1}^{n} \ln{x} \mathop{dx} = n\ln n - n + 1 + \sum_{k=2}^{m} \frac{(-1)^kB_k}{k(k-1)}\Bigg(\frac{1}{n^{k-1}} - 1\Bigg) + R_{m,n}. \notag
 \end{align}
 
-The error term is expressed in terms of Bernoulli numbers, $B_k$ and the remainder term, $R_{m,n}$, from the Euler-Maclaurin formula. The index, $m$, may be chosen freely. We next consider the behaviour of the error term as $n$ tends to $\infty$,
+The error term is expressed in terms of Bernoulli numbers, $B_k$ and the remainder term, $R_{m,n}$, from the Euler-Maclaurin formula. The index, $m$, may be chosen freely, with $R_{m, n} \to 0$ as $m \to \infty$. We next consider the behaviour of the error term as $n$ tends to $\infty$,
 
 $$\lim_{n \to \infty}\Big(\ln(n!) - \frac{1}{2}\ln n - n\ln n + n\Big) = 1 - \sum_{k=2}^{m} \frac{(-1)^kB_k}{k(k-1)} + \lim_{n \to \infty}R_{m,n},$$
 
@@ -978,7 +976,7 @@ $$n! \to \sqrt{2\pi n}\Bigg(\frac{n}{e}\Bigg)^n.$$
 
 \subsection{The Gamma Function}
 
-The gamma function is a function that interpolates the factorial function (Figure \ref{fig:factorial}), and extends its domain from the natural numbers to the real and complex numbers. It is defined as,
+The gamma function is a continuous function that interpolates the factorial function (Figure \ref{fig:factorial}), and extends its domain from the natural numbers to the real and complex numbers. It is defined as,
 
 $$\Gamma(t) = \int_0^{\infty} x^{t-1}e^{-x}\mathop{dx}.$$
 
@@ -989,19 +987,15 @@ To show its connection to the factorial function, we integrate by parts,
 &= (n-1)\Gamma(n-1).\notag
 \end{align}
 
-Noting that $\Gamma(1) = 1$, it is clear that $\Gamma(n) = (n - 1)!$ for all positive integers, $n$. However, the gamma function is defined for all complex numbers, $t$. It is worth nothing that there exists a related function, the pi function, $\Pi(t) = \Gamma(t + 1)$, that does away with the offset term, so as to coincide exactly with the factorial function. Another related function, the beta function, is a composite of the gamma function, where $B(x, y) = \Gamma(x)\Gamma(y)/\Gamma(x+y)$.
+Noting that $\Gamma(1) = 1$, it is clear that $\Gamma(n) = (n - 1)!$ for all positive integers, $n$. However, the gamma function is further defined for all complex numbers, $t$. It is worth nothing that there exists a related function, the pi function, $\Pi(t) = \Gamma(t + 1)$, that does away with the offset term, so as to coincide exactly with the factorial function. Another related function, the beta function, is a composite of the gamma function, where $B(x, y) = \Gamma(x)\Gamma(y)/\Gamma(x+y)$. The gamma function makes many appearances in the domain of statistics, for example in Student's t-distribution. There is also an intimate link to the Normal distribution, which we can show by first observing that the form of the function $\varphi(x) = e^{-x^2}$ is that of the bell curve. Now, the infinite integral\footnote{An integral taken over an infinite integral is known as \emph{improper} and is an abuse of notation to do away with limit notation.} of this function is,
 
-It makes many appearances in the domain of statistics, for example in the Student's t-distribution. This is because of an intimate link to the Normal distribution, which we can show by first observing that the form of the function $\varphi(x) = e^{-x^2}$ is that of the bell curve. Now, the infinite integral\footnote{An integral taken over an infinite integral is known as \emph{improper} and is an abuse of notation to do away with limit notation.} of this function is,
-
-$$\int_{-\infty}^{\infty} e^{-t^2} tx = 2\cdot\int_{0}^{\infty} e^{-t^2} \mathop{dt}.$$
+$$\int_{-\infty}^{\infty} e^{-t^2} \mathop{dt} = 2\cdot\int_{0}^{\infty} e^{-t^2} \mathop{dt}.$$
 
 Defining $t = u^{1/2}$, we have it that $\mathop{dt} = \frac{1}{2}u^{-1/2}\mathop{du}$ and integrating by substitution gives,
 
-$$\int_{-\infty}^{\infty} e^{-t^2} tx = 2\cdot\frac{1}{2}\cdot\int_{0}^{\infty}u^{1/2 - 1} e^{-u}\mathop{du} = \Gamma(1/2).$$
+$$\int_{-\infty}^{\infty} e^{-t^2} \mathop{dt} = 2\cdot\frac{1}{2}\cdot\int_{0}^{\infty}u^{1/2 - 1} e^{-u}\mathop{du} = \Gamma(1/2).$$
 
-Given that we know the area under the non-normalised bell curve to be $\sqrt{\pi}$, we may write, $\Gamma(1/2) = \sqrt{\pi}$. Though there exist many such identities for points on the gamma function, to evaluate the gamma function at any positive real point, the Stirling approximation was historically used as a good approximation. Its use has been supplanted in recent decades by the numerical algorithm, Lanczos approximation.
-
-An interesting property of the gamma function (that has implications for machine learning), is that it is the only function that interpolates the factorial function that is also log-convex. This is according to a result known as the Bohr-Mollerup theorem.
+Given that we know the area under the non-normalised bell curve to be $\sqrt{\pi}$, we may write, $\Gamma(1/2) = \sqrt{\pi}$. Though there exist many such identities for points on the gamma function, to evaluate the gamma function at any positive real point, the Stirling approximation was historically used as a good approximation. Its use has been supplanted in recent decades by the numerical algorithm, the Lanczos approximation. An interesting property of the gamma function is that it is the only function that interpolates the factorial function that is also log-convex. This is according to a result known as the Bohr-Mollerup theorem.
 
 \begin{figure}[!ht]
 \centering
@@ -2017,7 +2011,7 @@ One drawback of using a Gaussian likelihood is that it is sensitive to outliers.
 
 $$\text{NLL} = \frac{1}{2}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \frac{\lambda}{2}\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{2}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \frac{\lambda}{2}\sum_{d=1}^D\beta_d^2.$$
 
-Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions, and encouraging sparsity is a form of \emph{feature selection}. This is useful for high-dimensional data with many noisy indicators, otherwise known as the small $N$, large $D$ problem. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes--the most common are coordinate descent algorithms such as the ``shooting'' algorithm.
+Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a \emph{lasso\footnote{Acronym for least absolute shrinkage and selection operator} regression}. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for a small subset of the dimensions, and encouraging sparsity is a form of \emph{feature selection}. This is useful for high-dimensional data with many noisy indicators, otherwise known as the small $N$, large $D$ problem. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes, greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes--the most common are coordinate descent algorithms\footnote{Coordinate descent algorithms are similar to gradient descent, but where at each step the function is optimised with respect to one variable.} such as the ``shooting'' algorithm.
 
 A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby amounting to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem. For example, given a Laplace likelihood,
 
@@ -2429,6 +2423,7 @@ There are simply no conceivable analogies to describe or relativise this number,
 \item A M\"obius strip is a three dimensional shape with a single surface and one edge. It can be emulated by twisting a ribbon by a half-turn and connecting its ends. A Klein bottle is a \emph{four}-dimensional solid with a single surface and \emph{no} edges! It is formed by fusing two M\"obius strips along their edges.
 \emph Skewes' number, $10^{10^{10^{34}}}$ is another famous large number, and the record holder before Graham's number. Named after one of John Littlewood's students, Stanley Skewes, it gives an upper bound on the smallest number for which Gauss' prime-counting function, $\pi(n)$ is greater than the logarithmic integral function, $\text{li}(n)$ (another prime-counting function initially thought to always be greater than Gauss').
 \item Graph theory was invented by Euler in 1736 when he solved the \emph{Seven Bridges of K\"onigsberg} problem. He demonstrated no walk could be made over the seven bridges connecting the islands of the town, K\"onigsberg (then Prussia, now Kaliningrad, Russia), such that each bridge was crossed exactly once.
+\item The harmonic series, $h = \sum_n 1/n$ is (surprisingly) divergent. Clearly, $h = 1 + 1/2 + 1/3 + 1/4 > 1 + 1/2 + (1/4 + 1/4) + (1/8 + 1/8 + 1/8 + 1/8) \cdots = 1 + 1/2 + 1/2 + \cdots$, which is clearly divergent.
 \end{itemize}
 
 \begin{thebibliography}{9}
