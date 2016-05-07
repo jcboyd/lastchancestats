@@ -1019,25 +1019,29 @@ Discrete random variables take values in a finite or countably infinite set (suc
 
 $$\Bigg(\sum_{k = 1}^{K} p(X = k)\Bigg) = 1.$$
 
-Continuous probability distributions express probabilities for random variables taking values in a continuum. For this reason, it no longer makes sense to model probabilities of the form $p(X = k)$. Such an event taken apart has an infinitesimal probability. Rather, we compute the probability of intervals, such as $p(X \leq k)$. The starting point is the probability density function (pdf), $p(x)$, a function that expresses \emph{densities}. A density is a quantity related to probability by the expression,
-
-$$P(x \leq X \leq x+dx) \approx p(x)dx.$$
-
-The value of $p(x)$ defines the relative weight of probabilities measured on intervals local to $x$. The function that gives probabilities, the cumulative density function (cdf), is the integral of the pdf, defined as,
+Continuous probability distributions express probabilities for random variables taking values in a continuum. For this reason, it no longer makes sense to model probabilities of the form $p(X = k)$. Such an event taken apart has an infinitesimal probability. Rather, we compute the probability of intervals, such as $p(X \leq k)$. The function that gives probabilities is the cumulative density function (cdf),
 
 $$
-P(X \leq a) = \int_{-\infty}^{a} p(x) \mathop{dx},
+P(X \leq a) = \int_{-\infty}^{a} p(x) \mathop{dx}.
 $$
 
-For this reason, the pdf must be non-negative, and must integrate to $1$. Should we wish to compute the probability of a closed integral, we require, $$P(a \leq X \leq b) = P(X \leq b) - P(X \leq a).$$
+Should we wish to compute the probability of a closed interval, we take,
+
+$$P(a \leq X \leq b) = P(X \leq b) - P(X \leq a).$$
+
+The cdf is the integral of the \emph{probability density function} (pdf), written $p(x)$, a function that expresses \emph{densities}. A density is a quantity related to probability by the expression, $P(x \leq X \leq x+dx) \approx p(x)dx$, so that the value of $p(x)$ can be though of as the relative weight of probabilities measured on intervals local to $x$. In actual fact, the pdf is the derivative of the cdf with,
+
+$$p(x) = \lim_{\Delta x \to 0} \frac{P(x + \Delta x) - P(x)}{\Delta x},$$
+
+and for this reason, the pdf must be non-negative, and must integrate to $1$.
 
 \subsubsection{Union of Events}
 
-The probability of a union of events $A$ and $B$, that is, the probability $A$ \emph{or} $B$ occurs is, $$p(A \lor B) = p(A) + p(B) - p(A \land B).$$ When $A$ and $B$ are \emph{mutually exclusive}, the joint probability, $p(A \land B) = 0$. Mutually exclusive events are events that cannot happen simultaneously, such as $A$, the event of rolling a 2 on a die, and $B$, the event of rolling a 3 on a die. An example of events that are \emph{not} mutually exclusive is $A$, the event we draw a king from a deck of cards, and $B$, the event we draw a diamond. The events can happen both separately and together. Measuring the probability of the union of events seems rarely to be of interest, however.
+The probability of a union of events $A$ and $B$, that is, the probability that $A$ \emph{or} $B$ occurs is, $$p(A \lor B) = p(A) + p(B) - p(A \land B).$$ When $A$ and $B$ are \emph{mutually exclusive}, the joint probability, $p(A \land B) = 0$. Mutually exclusive events are events that cannot happen simultaneously, such as $A$, the event of rolling a 2 on a die, and $B$, the event of rolling a 3 on a die. An example of events that are \emph{not} mutually exclusive is $A$, the event we draw a king from a deck of cards, and $B$, the event we draw a diamond. The events can happen both separately and together. Measuring the probability of the union of events seems rarely to be of interest, however.
 
 \subsubsection{Inclusion-Exclusion Principle}
 
-The generalisation to the union of events formula is arrived at using the inclusion-exclusion principle, used for counting unions of sets. The case corresponding to the union of events probability is,
+The generalisation to the union of events formula is arrived at using the inclusion-exclusion principle, used for counting unions of sets. The case corresponding to the probability of the union of two events stated above is,
 
 $$|A \cup B| = |A| + |B| - |A \cap B|,$$
 
@@ -1045,35 +1049,43 @@ for sets $A$ and $B$. If we include a third set, $C$, we acquire,
 
 $$|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C|,$$
 
-These ideas are most easily understand by looking at Venn diagrams (Figure \ref{fig:inclusionexclusion}), where the probability spaces of the events are depicted as sets. The $n$th case of the union of events is,
+These ideas are most easily understand by looking at Venn diagrams (Figure \ref{fig:inclusionexclusion}), where the probability spaces of the events are depicted as sets. In general, the probability of the union of $n$ events is,
 
 $$p(X_1 \lor \dots \lor X_N) = \sum_{i = 1}^{N}p(X_i) - \sum_{1 \leq i < j \leq N}p(X_i \land X_j) + \sum_{1 \leq i < j < k \leq N}p(X_i \land X_i \land X_j) - \cdots + (-1)^{N-1}p(X_1 \land \dots \land X_N)$$
 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/inclusionexclusion.png}
-\caption{The inclusion-exclusion principle is best understood with Venn diagrams\cite{inclusionexclusion}}
+\caption{The inclusion-exclusion principle is best understood with Venn diagrams\cite{inclusionexclusion}.}
 \label{fig:inclusionexclusion}
 \end{figure}
 
 \subsubsection{Intersection of Events}
 
-The joint distribution, $p(A \land B)$, or simply, $p(A, B)$, is the probability events $A$ and $B$ occur together. The joint distribution is factorised in accordance with the dependencies of the events. If two events, $A$ and $B$, are independent, we write $A \indep B$. Independence is distinct from mutual exclusivity, which is exclusive or. Independent events may occur apart or together, but the essence of independence is that the occurrence of one event does not affect the occurrence of the other. Hence, the joint distribution of independent $A$ and $B$ is,
+The joint distribution, $p(A \land B)$, or simply, $p(A, B)$, is the probability that events $A$ and $B$ occur together. The joint distribution is factorised in accordance with the dependencies of the events. If two events, $A$ and $B$, are independent, we write $A \indep B$. Independence is distinct from mutual exclusivity, which is exclusive or. Independent events may occur apart or together, but the essence of independence is that the occurrence of one event does not affect the occurrence of the other. Hence, the joint distribution of independent $A$ and $B$ is,
 
 $$p(A, B) = p(A)p(B),$$
 
 that is, the product of the probabilities of the events taken separately. When $A$ and $B$ are \emph{dependent}, the occurrence of one changes the probability of the other occurring. In this case we write,
 
 \begin{align}
-p(A, B) &= p(A|B)p(B) \notag \\
-&= p(B|A)p(A). \notag
+p(A, B) &= p(A|B)p(B) \label{eq:condition1} \\
+&= p(B|A)p(A). \label{eq:condition2}
 \end{align}
 
-The probability, $p(A|B)$, is the conditional probability of the event $A$ \emph{given} the occurrence of event $B$. Notice the symmetry of the conditioning; we can condition on any variable we like. The definition of independence is that $p(A|B) = p(A)$.
+The probability, $p(A|B)$, is the conditional probability of the event $A$ \emph{given} the occurrence of event $B$. Notice the symmetry of the conditioning--we can condition on any variable we like. The definition of independence is that $p(A|B) = p(A)$.
+
+\subsection{Bayes' Theorem}
+
+We may derive the all-important Bayes' theorem by equating equations (\ref{eq:condition1}) and (\ref{eq:condition2}) and rearranging,
+
+$$p(A | B) = \frac{p(B | A)p(A)}{p(B)}.$$
+
+Bayesians interpret this as an expression relating event $A$ and evidence $B$. The probability $p(A)$ is known as the `prior' distribution for the event taken alone (that is, `before' the evidence is presented). The `posterior' distribution, $p(A | B)$, represents the change in the uncertainty of the event after the evidence of the likelihood, $p(B | A)$, has been presented.
 
 \subsubsection{Chain Rule}
 
-Extending the factorisation gives us a general result for $N$ random variables, $X_!, X_2, \dots, X_N$--the chain rule. The joint distribution may be factorised,
+Extending the intersection rule gives us a general result for $N$ random variables, $X_!, X_2, \dots, X_N$, known as the chain rule. The joint distribution may be factorised,
 
 \begin{align}
 p(X_1, X_2, X_3,\dots,X_N) &= p(X_1)p(X_2, X_3, \dots, X_N|X_1) \notag \\
@@ -1093,7 +1105,7 @@ p(X=x) &= \sum_{y \in Y} p(X=x, Y=y) \notag \\
 This is called the marginal distribution on $X$, and we say that $Y$ has been `marginalised out'.
 
 \subsubsection{Markov Chain}
-A Markov chain is a sequence of random variables, $X_!, X_2, \dots, X_N$ written,
+A Markov chain is a sequence of random variables, $X_1, X_2, \dots, X_N$ written,
 
 $$X_1 - X_2 - \cdots - X_N.$$
 
@@ -1104,7 +1116,7 @@ p(X_1, X_2, X_3,\dots,X_N) &= p(X_1)p(X_2|X_1)P(X_3|X_1, X_2)\cdots P(X_N|X_1, X
  &= p(X_1)p(X_2|X_1)P(X_3|X_2)\cdots P(X_N|X_{N-1}) \notag
 \end{align}
 
-To give an example of what a Markov chain might model: let $X$ be the event we see clouds on the horizon this morning; $Y$ it is raining by noon; $Z$ it is raining this evening. These events form a Markov chain, $X-Y-Z$. The probability of rain at noon, $Y$, is clearly dependent on there being clouds in the morning, $X$. That it rains in the evening, $Z$, also depends on there being clouds in the morning, $X$, but not once we have knowledge of $Y$. Thus, $Z$ is independent of $X$ given (conditioned on) $Y$.
+To give an example of what a Markov chain might model, let $X$ be the event that we see clouds on the horizon this morning; $Y$ it is raining by noon; $Z$ it is raining this evening. These events form a Markov chain, $X-Y-Z$. The probability of rain at noon, $Y$, is clearly dependent on there being clouds in the morning, $X$. That it rains in the evening, $Z$, also depends on there being clouds in the morning, $X$, but not once we have knowledge of $Y$. Thus, $Z$ is independent of $X$ given (conditioned on) the more recent and informative event $Y$.
 
 \subsection{Quantiles}
 
@@ -1125,17 +1137,17 @@ $$
 
 \subsection{Moments}
 
-Moments are quantitative measures (statistics) of distribution first formulated by English statistician Karl Pearson (1857-1936). The general form is,
+Moments are quantitative measures (statistics) of a distribution first formulated by English statistician Karl Pearson (1857-1936). The general form is,
 
 $$
 \mathbb{E}[(X - c)^N],
 $$
 
-for some constants, $c$ and $N$. When $c = 0$, we have what is called the \emph{raw} moment. Usually $c = \mathbb{E}[X]$, as we are chiefly interested in how $X$ moves about its mean, and these are called \emph{central} moments. Further, standardised moments are used in higher orders.
+for some constants, $c$ and $N$. When $c = 0$, we have what is called the \emph{raw} moment. Usually $c = \mathbb{E}[X]$, as we are chiefly interested in how $X$ moves about its mean, and these are called \emph{central} moments. Further, standardised moments are normally used in higher orders, presumably to moderate the effect of higher powers.
 
 \subsubsection{Expected Value}
 
-The expected value (or mean, or average), denoted $\mu$, of a discrete random variable is the average of the random variable, weighted by probabilities. It is the first-order ($N=1$) \emph{raw} moment (the central moment is 0 by definition). It is defined as,
+The expected value (or mean, or average), denoted $\mu$, of a discrete random variable is the average of the random variable, weighted by its probabilities. It is the first-order ($N=1$) \emph{raw} moment (the central moment is 0 by definition). It is defined as,
 
 $$
 \mathbb{E}[X] \triangleq \sum_{x} p(x) x.\\
@@ -1151,13 +1163,13 @@ In general, the expectation of a transformation, $f(X)$, is $\mathbb{E}[f(X)] = 
 
 \subsubsection{Variance}
 
-Variance, $\text{Var}$ or $\sigma^2$, is the expected (average) squared deviation from the mean, and therefore a measure of spread. Clearly, we need a second order measure to indicate spread since the first moment will be 0 for a symmetric distribution (the negative scores cancelling out the positive scores). Thus, variance,
+Variance, $\text{Var}[X]$, or $\sigma^2$, is the expected (average) squared deviation from the mean, and therefore a measure of spread. Clearly, we need a second order measure to indicate spread since the first moment will be 0 for a symmetric distribution (the negative scores cancelling out the positive scores). Thus, variance,
 
 \begin{align}
 \text{Var}[X] &= \mathbb{E}[(X - \mathbb{E}[X])^2] \notag \\
 &= \mathbb{E}[X^2 - 2\mathbb{E}[X]X + \mathbb{E}[X]^2] \notag \\
 &= \mathbb{E}[X^2] - 2\mathbb{E}[X]^2 + \mathbb{E}[X]^2 \notag \\
-&= \mathbb{E}[X^2] - \mathbb{E}[X]^2 \notag
+&= \mathbb{E}[X^2] - \mathbb{E}[X]^2. \notag
 \end{align}
 
 Another measure of spread is the standard deviation, $\sigma$, defined as the square root of the variance, $\sqrt{\sigma^2}$.
@@ -1184,7 +1196,7 @@ Given a set of sample data $x_1, x_2, \dots, x_N$, we can compute estimates of t
 
 $$\bar{x} = \frac{1}{N}\sum_{i=1}^N x_i.$$
 
-At first it may appear that through the $\frac{1}{N}$ term that we are assuming a uniform distribution. This is not the case, however. Wherever non-uniformity exist, the data will `find' the right proportion as a matter of course. That is, the higher probabilities will feature more heavily, and receive more weight, effecting higher probabilities. The sample variance is a lot more curious. We might take the sample variance in a similar way to the mean,
+At first it may appear that through the $\frac{1}{N}$ term that we are assuming a uniform distribution. This is not the case, however. Wherever non-uniformity exists, the data will `find' the right proportion as a matter of course, by supplying more likely scores in greater number. That is, the higher probabilities will feature more heavily, and receive more weight, effecting higher probabilities. The sample variance is a lot more curious. We might take the sample variance in a similar way to the mean,
 
 $$\sigma_x^2 = \frac{1}{N}\sum_{i=1}^N (x_i - \bar{x})^2$$
 
@@ -1195,10 +1207,10 @@ This would be, surprisingly, only \emph{almost} correct. This is due to the fact
 &=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[x_i^2 - \frac{2}{N}x_i\sum_{j=1}^N x_j + \frac{1}{N^2}\sum_{j=1}^N x_j \sum_{k=1}^N x_k\Bigg] \notag \\
 &=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[\frac{N-2}{N}\mathbb{E}[x_i^2] - \frac{2}{N}\sum_{j\neq i}^N \mathbb{E}[x_ix_j] + \frac{1}{N^2}\sum_{j=1}^N \sum_{k\neq j}^N \mathbb{E}[x_jx_k] + \frac{1}{N^2}\sum_{j=1}^N \mathbb{E}[x_j^2]\Bigg] \notag \\
 &=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[\frac{N-2}{N}(\sigma^2 + \mu^2) - \frac{2(N - 1)}{N} \mu^2 + \frac{N(N-1)}{N^2} \mu^2 + \frac{1}{N} (\sigma^2 + \mu^2)\Bigg] \notag \\
-&= \frac{N-1}{N}\sigma^2 \notag
+&= \frac{N-1}{N}\sigma^2, \notag
 \end{align}
 
-Note the substitution in the second to last step comes from the definition of variance, $\text{Var}[X] = \mathbb{E}[X^2] - \mathbb{E}[X]^2$. Thus, our formula becomes,
+where $\sigma^2$ and $\mu$ are the true variance and mean. Note the substitution in the second to last step comes from the definition of variance, $\text{Var}[X] = \mathbb{E}[X^2] - \mathbb{E}[X]^2$. Thus, our formula becomes,
 
 $$\sigma_x^2 = \frac{1}{N-1}\sum_{i=1}^N (x_i - \bar{x})^2.$$
 
@@ -1211,7 +1223,7 @@ Covariance measures the interaction between random variables, that is, it quanti
 \begin{align}
 \text{Cov}[X, Y] &= \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] \notag \\
 &= \mathbb{E}[X^2 - \mathbb{E}[Y]X - \mathbb{E}[X]Y + \mathbb{E}[X]\mathbb{E}[Y]] \notag \\
-&= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] \notag
+&= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]. \notag
 \end{align}
 
 In the multivariate case, we have the covariance matrix,
@@ -1228,7 +1240,7 @@ In the multivariate case, we have the covariance matrix,
 
 \subsection{Correlation}
 
-Correlation is covariance normalised by. It measures the extent to which two variables are \emph{linearly} related and computes a correlation coefficient in the range $[-1, 1]$. A correlation coefficient of 0 indicates no relation. The formula for correlation is,
+Correlation is covariance normalised by the variance of each of the variables taken apart. It measures the extent to which two variables are \emph{linearly} related and computes a correlation coefficient in the range $[-1, 1]$. A correlation coefficient of 0 indicates no relation. The formula for correlation is,
 
 $$\text{corr}(X, Y) = \frac{\text{Cov}[X, Y]}{\sqrt{\text{Var}[X]\text{Var}[Y]}}.$$
 
@@ -1240,23 +1252,10 @@ $$
 \text{Corr}[X_2, X_1] & \text{Corr}[X_2, X_2] & \dots & \text{Corr}[X_2, X_n] \\
 \vdots & \vdots & \ddots & \vdots \\
 \text{Corr}[X_n, X_1] & \text{Corr}[X_n, X_2] &\dots & \text{Corr}[X_n, X_n]
-\end{bmatrix} \notag
+\end{bmatrix}. \notag
 $$
 
-\subsection{Bayes' Theorem}
-
-We may derive Bayes' theorem using our definitions of joint probabilities,
-
-\begin{align}
-p(x, y) &= p(x | y)p(y) \notag \\
-&= p(y | x)p(x). \notag
-\end{align}
-
-Equating these gives Bayes' theorem,
-
-$$p(x | y) = \frac{p(y | x)p(x)}{p(y)}.$$
-
-Bayesians interpret this as an expression relating event $x$ and evidence $y$. The probability $p(x)$ is known as the `prior' distribution for the event taken alone (that is, `before' the evidence is presented). The `posterior' distribution, $p(x | y)$, represents the uncertainty of the event `after' the evidence has been presented.
+The diagonal elements of this matrix will of course be 1.
 
 \subsection{Transformation of Random Variables}
 
@@ -1276,7 +1275,7 @@ The same result is arrived at for continuous random variables. This effect is kn
 &= a^2\text{Var}[X] \notag
 \end{align}
 
-Thus, adding a constant to a random variable does not change its variance, but scaling a random variable scales its variance by the square.
+Thus, adding a constant to a random variable does not change its variance, but scaling a random variable scales its variance by the square of that factor.
 
 \subsection{Change of Variables}
 
@@ -1284,7 +1283,7 @@ In the general case, given transformation, $Y = f(X)$, a discrete distribution c
 
 $$p_y(y) = \sum_{x:f(x)=y} p_x(x),$$
 
-that is, by mapping the probabilities of the values of x corresponding to y via the mapping. This is not the case for continuous random variables, in which case, we must address the cdf. Being a cumulative function, it is monotonic\footnote{A monotonic function holds the property that $f(b) > f(a)$ for any $b > a$.}. If it is monotonic, it is bijective\footnote{If $f$ is bijective, it is a one-to-one mapping.}, and if it is bijective, it is invertible. Therefore, we can write the cumulative distribution,
+that is, by mapping the probabilities of the values of x corresponding to y via the mapping. Things are not so simple for continuous random variables, in which case we must address the cdf. Being a cumulative function, it is monotonic\footnote{A monotonic function holds the property that $f(b) > f(a)$ for any $b > a$.}. If it is monotonic, it is bijective\footnote{If $f$ is bijective, it is a one-to-one mapping.}, and if it is bijective, it is invertible. Therefore, we can write the cumulative distribution,
 
 $$P_y(y) = P(f(X) \leq y) = P(X \leq f^{-1}(y) = P_x(f^{-1}(y))$$
 
@@ -1294,7 +1293,7 @@ $$
 p_y(y) \triangleq \frac{d}{dy}P_y(y) = \frac{d}{dy}P_x(f^{-1}(y)) = \frac{dx}{dy}\frac{d}{dx}P_x(x),
 $$
 
-giving us the change of variables formula,
+giving us the \emph{change of variables} formula,
 
 $$p_y(y) = p_x(x)\Big|\frac{dx}{dy}\Big|.$$
 
@@ -1318,17 +1317,17 @@ $$p_y(\mathbf{y}) = p_x(\mathbf{x})\big|\det \Bigg(\frac{\partial\mathbf{x}}{\pa
 
 \subsection{Monte Carlo Statistics}
 
-Monte Carlo statistics are a branch of numerical techniques for providing estimations using random sampling. The name comes from the famous casino in the city in the principality of Monaco near the south of France. One famous example of applying Monte Carlo techniques is that of sampling from a unit circle inscribed inside a $2 \times 2$ unit square. The ratio of the areas of circle to square is $\pi : 4$. We can estimate the value of $\pi$ by randomly sampling points within the square, and comparing the number of points that fall inside and outside the circle (Figure \ref{fig:montecarlo}). A sufficiently large sample would converge to the correct result by the law of large numbers.
+Monte Carlo statistics are a branch of numerical techniques for providing estimations using random sampling. The name comes from the famous casino in the city in the principality of Monaco near the south of France. One famous example of applying Monte Carlo techniques is that of sampling from a unit circle inscribed inside a $2 \times 2$ unit square. The ratio of the areas of circle to square is $\pi : 4$. We can therefore estimate the value of $\pi$ by randomly sampling points within the square, and comparing the number of points that fall inside and outside the circle (Figure \ref{fig:montecarlo}). A sufficiently large sample would converge to the correct result by the law of large numbers.
 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/montecarlo.pdf}
-\caption{Monte Carlo approach to estimating $\pi$. 1963 of the 2500 random points landed in the circle, giving an estimation of $\pi \approx 3.1408$. Generated by \texttt{monteCarloDemo.m}.}
+\caption{Monte Carlo approach to estimating $\pi$. 1963 of the 2500 random points landed in the circle, giving an estimation of $\pi \approx 3.1408$. Generated with \texttt{monteCarloDemo.m}.}
 \label{fig:montecarlo}
 \end{figure}
 
 \subsubsection{Buffon's Needles}
-An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line give an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that the these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, $p_x = 1/L$, and $\theta$, which varies between $0$ $p_{\theta} = 2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These condition alone are enough to calculate the probability,
+An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line gives us an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, has probability function $p_x = 1/L$, and $\theta$, which varies between $0$, $p_{\theta} = 2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These conditions alone are enough to calculate the probability,
 
 $$
 p = \int_{0}^{\pi/2}\int_{0}^{\frac{L}{2}\sin\theta}p_xp_{\theta}\mathop{dx}\mathop{d\theta} = \frac{2}{L\pi}\int_{0}^{\pi/2}\frac{L}{2}\sin\theta\mathop{d\theta} = \frac{1}{\pi}.
@@ -1344,7 +1343,7 @@ A uniform distribution models a coin toss, or a die roll, or any other probabili
 
 $$p(k) = \frac{1}{K}.$$
 
-The mean of this distribution is, $\mu = \frac{a + b}{2}$. Note there is also a continuous uniform distribution. Laplace's \emph{principle of insufficient reason} argues to assume a uniform distribution for a discrete variable in the absence of further information (Gaussian for continuous variables).
+The mean of this distribution is, $\mu = \frac{a + b}{2}$. Note there is also a continuous version of the uniform distribution. Laplace's \emph{principle of insufficient reason} argues to assume a uniform distribution for a discrete variable in the absence of further information (Gaussian for continuous variables).
 
 \subsection{Bernoulli Distribution}
 
@@ -1370,9 +1369,9 @@ Note the resemblance in form to the Bernoulli distribution. The multinomial dist
 
 The Laplace pdf resembles two opposing exponential functions that meet in the middle, and is written,
 
-$$f(x ; \mu, b) = \frac{1}{2b}\exp\Bigg\{-\frac{|x - \mu|}{b}\Bigg\}.$$
+$$f(x ; \mu, b) = \frac{1}{2b}\exp\Bigg\{-\frac{|x - \mu|}{b}\Bigg\},$$
 
-It is similar in form to the Gaussian distribution, but the exponent is linear, and so the log probability decreases linearly, whereas a Gaussian's ``tails'' decrease quadratically. Thus, we say the Laplace distribution has ``heavy'' tails. This has implications when we fit a distribution to data (such as in machine learning), where the Laplace distribution is less sensitive to outliers, as extreme events have higher probability than in a Gaussian. One advantage is it is easily integrable, whereas the Gaussian has no closed-form solution, as we shall see. Integrating the pdf gives,
+where $b$ is a normalising constant. This distribution is similar in form to the Gaussian distribution, but the exponent is linear, and so the log probability decreases linearly, whereas a Gaussian's ``tails'' decrease quadratically. Thus, we say the Laplace distribution has ``heavy'' tails. This has implications when we fit a distribution to data (such as in machine learning), where the Laplace distribution is less sensitive to outliers, as extreme events have higher probability in a Laplace distribution than in a Gaussian. One advantage is it is easily integrable, whereas the Gaussian has no closed-form solution, as we shall see. Integrating the pdf gives,
 
 \begin{align}
 F(x) &= \int_{-\infty}^{+\infty} \frac{1}{2b}\exp\Bigg\{-\frac{|x - \mu|}{b}\Bigg\}dx \notag \\
@@ -1386,23 +1385,23 @@ which confirms its validity as a probability distribution.
 
 \subsection{Gaussian Distribution}
 
-The Gaussian or Normal distribution was first proposed by Karl Frederich Gauss (1777-1855) in 1809. In the same paper, he presented other fundamental tenets of statistics--the method of least squares (for fitting data with Gaussian error), and the method of maximum likelihood. The pdf of the Gaussian distribution is,
+The Gaussian or Normal distribution was first proposed by Karl Frederich Gauss (1777-1855) in 1809. In the same paper, he presented other fundamental tenets of statistics--the method of least squares (for fitting data with Gaussian error), and maximum likelihood estimation. The pdf of a Gaussian distribution is,
 
-$$f(x;\mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}}\exp\Bigg\{\frac{-(x - \mu)^2}{2\sigma^2}\Bigg\}$$
+$$f(x;\mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}}\exp\Bigg\{\frac{-(x - \mu)^2}{2\sigma^2}\Bigg\}.$$
 
-Its shape is the well-known bell curve, the distribution so often seen in real-world data (the profound central limit theorem offers an explanation for why that is). The CDF for a Gaussian distribution,
+Its shape is the well-known bell curve, the distribution so often seen in real-world data (the profound central limit theorem offers an explanation for why that is). The cdf for a Gaussian distribution,
 
-$$\Phi({x;\mu,\sigma^2}) = \int_{-\infty}^{x}\mathcal{N}(z | \mu, \sigma^2)\mathop{dz}. \notag$$
+$$\Phi({z;\mu,\sigma^2}) = \int_{-\infty}^{x}\mathcal{N}(z | \mu, \sigma^2)\mathop{dz}. \notag$$
 
-Defining $u = \frac{z - u}{\sqrt{2\sigma}}$, and so $du = dz/\sqrt{2\sigma}$, we can integrate by substitution,
+Defining $u = \frac{z - u}{\sqrt{2}\sigma}$, and so $du = dz/\sqrt{2}\sigma$, we can integrate by substitution,
 
 \begin{align}
-\Phi({z;\mu,\sigma^2}) &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\frac{x - \mu}{\sqrt{2\sigma}}} e^{-u} \sqrt{2\sigma}\mathop{du} \notag \\
-&= \frac{1}{2}\big(\text{erf}(u)\big)_{u=-\infty}^{u=(x-\mu)/\sqrt{2\sigma}} \notag \\
-&= \frac{1}{2}\big(1 + \text{erf}(u)\big), \notag
+\Phi({z;\mu,\sigma^2}) &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\frac{z - \mu}{\sqrt{2}\sigma}} e^{-u^2} \sqrt{2}\sigma\mathop{du} \notag \\
+&= \frac{1}{2}\Big[\text{erf}(u)\Big]_{u=-\infty}^{u=(z-\mu)/\sqrt{2}\sigma} \notag \\
+&= \frac{1}{2}\Bigg(1 + \text{erf}\Bigg(\frac{z - u}{\sqrt{2}\sigma}\Bigg)\Bigg), \notag
 \end{align}
 
-where $\text{erf}(x) = \frac{2}{\sqrt{\pi}}\int_{0}^{x}e^{-t^2}\mathop{dt}$ is the error function. This is a dead-end for a closed-form solution, and we must have recourse to an infinite series. Substituting the Taylor expansion for $e^{-t^2}$,
+where $\text{erf}(x) = \frac{2}{\sqrt{\pi}}\int_{0}^{x}e^{-t^2}\mathop{dt}$ is the error function. This is a dead-end for closed-form solutions, and we must have recourse to an infinite series. Substituting the Taylor expansion for $e^{-t^2}$,
 
 \begin{align}
 \text{erf}(x) &= \frac{2}{\sqrt{\pi}}\int_{0}^{x} \sum_{k=0}^{\infty} \frac{(-t^2)^k}{k!} \mathop{dt} \notag \\
@@ -1410,11 +1409,11 @@ where $\text{erf}(x) = \frac{2}{\sqrt{\pi}}\int_{0}^{x}e^{-t^2}\mathop{dt}$ is t
 &= \frac{2}{\sqrt{\pi}}\sum_{k=0}^{\infty} \frac{(-1)^kx^{2k + 1}}{k!(2k + 1)}, \notag
 \end{align}
 
-giving us an infinite series for the error function. Thus, approximations to the Gaussian CDF can be computed by statistical software, or placed in statistics tables.
+giving us an infinite series for the error function. Thus, approximations to the Gaussian CDF can be computed by statistical software, and placed in those mysterious statistics tables with which every student of statistics is familiar.
 
 \subsubsection{Standardisation}
 
-The standard Normal distribution is the Normal distribution with mean $0$ and variance $1$, $\mathcal{N}(0, 1)$. It is possible to \emph{standardise} a random variable, $X \sim \mathcal{N}(\mu, \sigma^2)$, by first subtracting its mean, $\mu$ (which adjusts the mean to 0 without changing the variance), then dividing by its standard deviation, $\sigma$, (which does not change the mean ($\mu = 0$, but shrinks the variance from $\sigma^2$ to 1), yielding,
+The standard Normal distribution is the Normal distribution with mean $0$ and variance $1$, $\mathcal{N}(0, 1)$. It is possible to \emph{standardise} a random variable, $X \sim \mathcal{N}(\mu, \sigma^2)$, by first subtracting its mean, $\mu$ (which adjusts the mean to 0 without changing the variance), then dividing by its standard deviation, $\sigma$, (which does not change the mean but shrinks the variance from $\sigma^2$ to 1), yielding,
 
 $$Z = \frac{X - \mu}{\sigma}.$$
 
@@ -1422,13 +1421,13 @@ Since these transformations do not change the type of distribution, and a Gaussi
 
 \subsection{Chi-squared Distribution}
 
-The chi-squared ($\chi^2$) distribution expresses a probability distribution over the sums of squares of normally distributed random variables. That is, the distribution of $Y$ where $Y = X_1^2 + X_2^2 + \dots + X_k^2$ for $k$, and where the $X_i \sim \mathcal{N}(0, 1)$ are i.i.d random variables. Note that by the central limit theorem, the chi-squared distribution converges to a normal distribution as $k \to \infty$. We write $Y \sim \chi^2_k$ where $k$ is the number of variables in the sum, also known as the \emph{degrees of freedom}. When the random variable $Y$ takes on a value, that value is like the dial of radius of a $k$-dimensional sphere, where the $k$ random variables are free to vary. The chi-squared distribution is the basis of some common statistical tests, and is also crucial to the derivation of other distributions, such as Student's t-distribution. The pdf of a chi-squared distribution is,
+The chi-squared ($\chi^2$) distribution expresses a probability distribution over the sums of squares of $k$ normally distributed random variables. That is, the distribution of $Y$ where $Y = X_1^2 + X_2^2 + \dots + X_k^2$ for $k$, and where the $X_i \sim \mathcal{N}(0, 1)$ are i.i.d\footnote{independent and identically distributed} random variables. Note that by the central limit theorem, the chi-squared distribution converges to a normal distribution as $k \to \infty$. We write $Y \sim \chi^2_k$ where $k$ is the number of variables in the sum, also known as the \emph{degrees of freedom}. When the random variable $Y$ takes on a value, that value is like the dial of radius of a $k$-dimensional sphere, where the $k$ random variables are free to vary. The chi-squared distribution is the basis of some common statistical tests, and is also crucial to the derivation of other distributions, such as Student's t-distribution. The pdf of a chi-squared distribution is,
 
 $$p(y; k) = \frac{1}{2^{\frac{k}{2}}\Gamma\big(\frac{k}{2}\big)}y^{\frac{k}{2} - 1}e^{-\frac{y}{2}},$$
 
-where the parameter, $k$, are the degrees of freedom (number of variables in the sum), and $\Gamma$ is the gamma function. In the unique case that $k = 2$, the expression simplifies to $p(y; 2) = \frac{1}{2}e^{-y/2}$. We take the time to derive the pdf of the chi-squared distribution, as it involves several of the topics we have covered already.
+where the parameter, $k$, is the number of degrees of freedom (number of variables in the sum), and $\Gamma$ is the gamma function. In the unique case that $k = 2$, the expression simplifies to $p(y; 2) = \frac{1}{2}e^{-y/2}$. We take the time to derive the pdf of the chi-squared distribution, as it involves several of the topics we have covered already.
 
-In the simplest case, $k = 1$, we have $Y = X^2$. Since, $X$ is a standardised Gaussian variable, its square makes all previously negative values positive. The shape of the pdf is hence something like a half bell curve. We can derive the pdf of the transformed variable using the change of variables formula. Because of the symmetry of the squared variable, we have, $f_Y(y) = 2f_X(f^{-1}(y))\Big|\Big(\frac{\mathop{dx}}{\mathop{dy}}\Big)\Big|$. Now, $X = \sqrt{Y}$, so $dx/dy = 1/2y^{-1/2} $. Hence,
+In the simplest case, $k = 1$, we have $Y = X^2$. Since $X$ is a standardised Gaussian variable, its square makes all previously negative values positive. The shape of the pdf is hence something like a stretched half bell curve. We can derive the pdf of the transformed variable using the change of variables formula. Because of the symmetry of the squared variable, we have, $f_Y(y) = 2f_X(f^{-1}(y))\Big|\Big(\frac{\mathop{dx}}{\mathop{dy}}\Big)\Big|$. Now, $X = \sqrt{Y}$, so $dx/dy = 1/2y^{-1/2} $. Hence,
 
 $$f(y; 1) = 2\frac{1}{\sqrt{2\pi}}e^{-(\sqrt{y})^2/2}\frac{1}{2}y^{-1/2} = \frac{1}{\sqrt{2}\Gamma(1/2)}e^{-y/2}y^{-1/2},$$
 
@@ -1440,21 +1439,21 @@ This is how the gamma function comes to be part of the function.
 
 \subsection{Student's T-Distribution}
 
-The Student's t-distribution has an interesting history. Student is a pseudonym for the English mathematician who discovered it, William Sealy Gosset (1876-1937), unable to attribute his true name due to his employment as a statistician at Guiness Brewery in Dublin. According to Gosset, the t-distribution expresses a distribution of the sample mean given the true standard deviation of the samples if unknown. The probability density function is,
+The Student's t-distribution has an interesting history. Student is a pseudonym for the English mathematician who designed it, William Sealy Gosset (1876-1937), unable to attribute his true name due to his employment as a statistician at the Guiness brewery in Dublin. According to Gosset, the t-distribution expresses a distribution of the value of the sample mean of a Gaussian variable given the true standard deviation of the samples is unknown. The probability density function is,
 
 $$f(t) = \frac{\Gamma(\frac{\nu + 1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\Bigg(1 + \frac{t^2}{\nu}\Bigg)^{-\frac{\nu + 1}{2}},$$
 
-where $\Gamma(v)$ is the gamma function, and $\nu$, the Greek letter ``nu'', are the degrees of freedom. The variable, $t = \frac{\hat{x} - \mu}{s/\sqrt{n}}$, where $\hat{x} = (x_1 + \cdots + x_n)/n$ is the sample mean, $\mu$ is the true mean, $s^2 = \frac{1}{N - 1}\sum_{i=1}^{n} (x_i - \hat{x})^2$ is the sample variance, and $n$ is the sample size. The degrees of freedom is therefore $\nu = n - 1$. Thus, the Student's t-distribution distributes $t$, the sample mean.
+where $\Gamma(v)$ is the gamma function, and $\nu$, the Greek letter \emph{nu}, are the degrees of freedom. The variable, $t = \frac{\hat{x} - \mu}{s/\sqrt{n}}$, where $\hat{x} = (x_1 + \cdots + x_n)/n$ is the sample mean, $\mu$ is the true mean, $s^2 = \frac{1}{N - 1}\sum_{i=1}^{n} (x_i - \hat{x})^2$ is the sample variance, and $n$ is the sample size. The degrees of freedom is therefore $\nu = n - 1$. Thus, the Student's t-distribution distributes $t$, the sample mean.
 
 \section{Hypothesis Testing}
 
 \subsection{Standard Error}
 
-Standard error is the standard deviation of the sample mean, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots X_n)$ from $n$ independent samples, $X_1, X_2, \dots, X_n$, with standard deviation $\sigma$. The total, $$T = X_1 + X_2 + \dots + X_n,$$ has variance, $\sigma_T^2 = n\sigma^2$. Then, the variance of $\bar{X} = T/n$, $$\sigma_{\bar{X}}^2 = \frac{1}{n^2}n\sigma^2 = \sigma^2/n.$$ We write, finally the standard error as, $$\text{SE}_{\bar{X}} = \sigma/\sqrt{n}.$$ Note that in practice $\sigma$ must be approximated by the sample variance.
+Standard error is the standard deviation of the sample mean, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots X_n)$ from $n$ independent samples, $X_1, X_2, \dots, X_n$, where the true standard deviation $\sigma$ is known. The total, $$T = X_1 + X_2 + \dots + X_n,$$ has variance, $\sigma_T^2 = n\sigma^2$. Then, the variance of $\bar{X} = T/n$ is therefore, $$\sigma_{\bar{X}}^2 = \frac{1}{n^2}n\sigma^2 = \sigma^2/n.$$ We write finally the standard error as, $$\text{SE}_{\bar{X}} = \sigma/\sqrt{n}.$$ Clearly as $n \to \infty$, the standard error goes to $0$, reflecting that the sample mean converges to the true mean. Note that in practice $\sigma$ must be approximated by the sample variance.
 
 \subsection{Confidence Intervals}
 
-A confidence interval is the interval, expressed in standard deviations, around a sample mean, $\bar{X}$, known to contain the true mean, $\mu$, to a desired degree of certainty. Because of the central limit theorem, we know the sum of n random variables is normally distributed, hence the sample mean also. The standard error statistic tells us the standard deviation of this distribution. Because the Normal CDF has no closed form, it must be computed numerically. In practice, it is necessary to have a lookup table of precomputed probabilities from a standard normal distribution. The value of our variable can then be normalised and the corresponding probability retrieved. In a standard Normal distribution, $Pr(Z \leq 1.96) = 0.9775$ (approximately), and due to symmetry, $Pr(Z \geq - 1.96) = 0.9775$. That is, $95\%$ of the distribution sits in the interval $[-1.96, 1.96]$. In other words, $Z$ has a 95\% chance of being within 1.96 standard deviations ($\sigma = 1$) of the mean. Thus, we may solve for our own $95\%$ confidence interval by writing,
+A confidence interval is the interval, expressed in standard deviations, around a sample mean, $\bar{X}$, known to contain the true mean, $\mu$, to a desired degree of certainty. Because of the central limit theorem, we know the sum of n random variables is normally distributed, hence the sample mean also. The standard error statistic tells us the standard deviation of this distribution. Because the Normal cdf has no closed form, it must be computed numerically. In practice, it is necessary to have a lookup table of precomputed probabilities from a standard normal distribution. The value of our variable can then be normalised and the corresponding probability retrieved. In a standard Normal distribution, $Pr(Z \leq 1.96) = 0.9775$ (approximately), and due to symmetry, $Pr(Z \geq - 1.96) = 0.9775$. That is, $95\%$ of the distribution sits in the interval $[-1.96, 1.96]$. In other words, $Z$ has a 95\% chance of being within 1.96 standard deviations ($\sigma = 1$ when standardised) of the mean. Thus, we may solve for our own $95\%$ confidence interval by writing,
 
 $$1.96 = \frac{\bar{X} - \mu}{\sigma}.$$
 
@@ -1462,7 +1461,7 @@ Rearranging gives,
 
 $$\mu = [\bar{X} - 1.96\times\text{SE}, \bar{X} + 1.96\times\text{SE}],$$
 
-which is the general form for a $95\%$ confidence interval. Confidence intervals of alternative sizes can be constructed by looking up the normalised value of the desired probability.
+which is the general form for a $95\%$ confidence interval. Confidence intervals of arbitrary size can be constructed by looking up the normalised value of the desired probability.
 
 \subsection{Hypothesis Testing}
 
@@ -1470,11 +1469,11 @@ We can use our knowledge of statistics to perform tests on sample data. The form
 
 \subsubsection{Z-test}
 
-Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution. The calculations are similar to creating a confidence interval, as it involves computing the SE and Z-score. This score is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, ``can this data reasonably be believed to have been drawn from our distribution?''
+Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution, by calculating the probability of the sample mean. The calculations are similar to creating a confidence interval, as it involves computing the SE and the Z-score (implying the true mean and standard deviation be known), $Z = (\hat{X} - \mu)/\text{SE}$. The value of $Z$ is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, ``can this data reasonably be believed to have been drawn from our distribution?''
 
 \subsubsection{Pearson's Chi-Squared Test}
 
-This test checks for bias in categorical variables. The null hypothesis is that the $n$ categories of a variable are uniformly distributed. If, for example, we have a die producing a set of sample data from $N$ throws, we can compute the difference between the observed total of each category, $O_i$, $i = 1, \dots, 6$, and the expected total for a fair die, $E_i = \frac{1}{6}\times N$. This difference is assumed to be a continuous, normally distributed random variable. The normalised squared error for each variable is $(O_i - E_i)^2/E_i$. We can therefore sum these squared errors and use a chi-squared with $k = 5$ degrees of freedom\footnote{In such problems, the degrees of freedom is $n - 1$, where $n$ is the number of categories. This is due to the fact that once the first $n-1$ variables are given, the final one is determined because the sum is constant.} to provide us with a probability for the null hypothesis.
+This test checks for bias in categorical variables. The null hypothesis is that the $n$ categories of a variable are uniformly distributed. If, for example, we have a die producing a set of sample data from $N$ throws, we can compute the difference between the observed total of each category, $O_i$, $i = 1, \dots, 6$, and the expected total for a fair die, $E_i = \frac{1}{6}\times N$. This difference is assumed to be a continuous, normally distributed random variable. The normalised squared error for each variable is $(O_i - E_i)^2/E_i$. We can therefore sum these squared errors and use a chi-squared distribution with $k = 5$ degrees of freedom\footnote{In such problems, the degrees of freedom is $n - 1$, where $n$ is the number of categories. This is due to the fact that once the first $n-1$ variables are given, the final one is determined because the sum is constant.} to give us a probability for the null hypothesis.
 
 \section{The Central Limit Theorem}
 \subsection{Moment-Generating Functions}
@@ -1486,7 +1485,7 @@ M_X(t) = \mathbb{E}[e^{tX}] &= \mathbb{E}\Bigg[\sum_{k = 0}^{\infty} \frac{(tX)^
 &= \sum_{k = 0}^{\infty} \frac{\mathbb{E}[X^k]t^k}{k!}. \notag
 \end{align}
 
-Such a function is an alternative specification of a distribution to a pdf. By L\'evy's continuity theorem, convergence in MGF implies convergence in distribution, a result that underpins our proof of the central limit theorem. The function is `moment-generating' in that the coefficients of the series expansion are the central moments of the distribution. The MGF of a sum of N i.i.d variables, $T = X_1 + X_2 + \cdots + X_N$ is,
+Such a function is an alternative specification of a distribution to a pdf. By L\'evy's continuity theorem, convergence in MGF implies convergence in distribution, a result that underpins the proof of the central limit theorem. The function is `moment-generating' in that the coefficients of the series expansion are the central moments of the distribution. The MGF of a sum of N i.i.d variables, $T = X_1 + X_2 + \cdots + X_N$ is,
 
 \begin{align}
 M_T(t) = \mathbb{E}[e^{tX_1 + tX_2 + \cdots + tX_N}] &= \mathbb{E}[e^{tX_1}]\mathbb{E} [e^{tX_2}] \cdots\mathbb{E}[e^{tX_N}] \notag \\
@@ -1508,7 +1507,7 @@ since the integrated expression defines $\mathcal{N}(z | t, 1)$.
 
 \subsection{Proof of the Central Limit Theorem}
 
-The central limit theorem (CLT) is the crowning jewel of statistics; a profound result, with far-reaching applications. It explains, at least in part, the uncanny ubiquitousness of the bell curve in nature. Its proof is therefore the demonstration of a universal constant. This is where Laplace's statement that ``probability is common sense reduced to calculations'' resonates most strongly. The theorem states that the sum of $n$ random variables, whatever their individual distributions, converges to a Gaussian distribution as $n \to \infty$. If we suppose natural phenomena to be aggregations of many random events, the result is inevitable.
+The central limit theorem (CLT) is the crowning jewel of statistics--a profound result, with far-reaching applications. It explains, at least in part, the uncanny ubiquitousness of the bell curve in nature. Its proof is therefore the demonstration of a universal truth. This is where Laplace's statement that ``probability is common sense reduced to calculations'' resonates most strongly. The theorem states that the sum of $n$ random variables, whatever their individual distributions, converges to a Gaussian distribution as $n \to \infty$. If we then suppose natural phenomena to be aggregations of many random events, the central limit theorem explains how the bell curve appears with such regularity.
 
 Given $X_1, X_2, ... X_n$ are i.i.d. random variables with mean 0, variance $\sigma^2$, and moment-generating function, $M_x(t)$, denote their standardised sum, $Z = (X_1 + X_2 + \cdots X_n)/\sqrt{n\sigma^2}$. Therefore,
 
@@ -1518,7 +1517,7 @@ A Taylor approximation for $M_x$ is,
 
 $$M_x(s) = M_x(0) + sM_x(0) + \frac{1}{2}s^2M_x''(0) + o(s^2),$$
 
-where $o(s^2)$ is a function that shrinks faster than a quadratic function as $s \to 0$. By definition, $M_x(0) = 0$, $M_x'(0) = 1$, and $M_x''(0) = \sigma^2$. Combining these results gives,
+where $o(s^2)$ indicates a function that shrinks faster than a quadratic function as $s \to 0$. By definition, $M_x(0) = 0$, $M_x'(0) = 1$, and $M_x''(0) = \sigma^2$. Combining these results gives,
 
 \begin{align}
 M_Z(t) &= \Bigg(1 + \frac{t^2/2}{n} + o\Bigg(\frac{t^2}{n\sigma^2}\Bigg)\Bigg)^n \notag \\
@@ -1533,13 +1532,13 @@ In this section we prove one of the fundamental laws of statistics--the law of l
 
 \subsection{Markov Inequality}
 
-The Markov inequality expresses a general property of probability distributions. An elegant proof exists, but it may be derived simply by the following observation: it is not possible for $\frac{1}{n}\textsuperscript{th}$ of a population to be greater than $n$ times the average value. Expressed mathematically this is,
+The Markov inequality expresses a general property of probability distributions. An elegant proof exists, but it may be derived simply by the following observation: it is not possible for $(1/n)$th of a population to be greater than $n$ times the average value. Expressed mathematically this is,
 
 $$\text{Pr}(X \geq a) \leq \frac{\mathbb{E}[X]}{a}$$
 
 \subsection{Chebyshev Inequality}
 
-The Chebyshev inequality is another general result for probabilities, expressing a bound on the probability of a random variable, $X$, straying from its mean, $\mu$, by more than $k$ standard deviations. To dervie this, we first define a random variable, $Y = (X - \mu)^2$, and constant, $a = (k\sigma)^2$. Then, by the Markov inequality,
+The Chebyshev inequality is another general result for probabilities, expressing a bound on the probability of a random variable, $X$, straying from its mean, $\mu$, by more than $k$ standard deviations. To derive this, we first define a random variable, $Y = (X - \mu)^2$, and constant, $a = (k\sigma)^2$. Then, by the Markov inequality,
 
 $$\text{Pr}((X - \mu)^2 \geq (k\sigma)^2) \leq \frac{\mathbb{E}[(X - \mu)^2]}{(k\sigma)^2},$$
 
@@ -1552,7 +1551,7 @@ which we may rewrite as,
 
 \subsection{Law of Large Numbers}
 
-The law of large numbers states that given a sequence $X_1, X_2, \dots, X_N$ of i.i.d\footnote{independent and identically distributed} random variables, the sample average, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots + X_n)$ converges to the true mean, $\mu$, as n grows. That is, $\bar{X}_n \rightarrow \mu$ as $n \rightarrow \infty$.
+The law of large numbers states that given a sequence $X_1, X_2, \dots, X_N$ of i.i.d random variables, the sample average, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots + X_n)$ converges to the true mean, $\mu$, as n grows. That is, $\bar{X}_n \rightarrow \mu$ as $n \rightarrow \infty$.
 
 Note first that,
 
@@ -1566,7 +1565,7 @@ Note first that,
 Now, by the Chebyshev inequality,
 
 $$
-\text{Pr}(|\bar{X}_n - \mu| \geq k\frac{\sigma}{\sqrt{n}}) \leq \frac{1}{k^2}
+\text{Pr}(|\bar{X}_n - \mu| \geq k\frac{\sigma}{\sqrt{n}}) \leq \frac{1}{k^2}.
 $$
 
 Choosing $k = \frac{\sqrt{n}}{\sigma}\epsilon$ for any arbitrary choice of $\epsilon$,
@@ -1589,7 +1588,7 @@ This section presents the basics of information theory.
 
 \subsection{Entropy}
 
-The entropy of a random variable, $X$, is a measure of its uncertainty. It is a core tenet of information theory, the science underpinning coding signal processing. Entropy measures the average number of bits required to encode an alphabet, and is the lower bound on compression (coding). Entropy is defined as,
+The entropy of a random variable, $X$, is a measure of its uncertainty. It is a core tenet of information theory, the science underpinning coding and signal processing. Entropy measures the average number of bits required to encode an alphabet, and is the lower bound on compression (coding). Entropy is defined as,
 
 $$\mathcal{H}(X) = \sum_{x \in X}p(x)\log\frac{1}{p(x)}.$$
 
@@ -1599,23 +1598,23 @@ $$h_2(p) = -p\log p - (1-p)\log p.$$
 
 \subsection{Kullback-Liebler Divergence}
 
-Kullback-Liebler (KL) divergence is a measure of the disparity between two probability distributions, p and q, written,
+Kullback-Liebler (KL) divergence is a measure of the disparity between two probability distributions, $p$ and $q$, written,
 
 \begin{align}
 \mathcal{D}(p || q) &= \sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag \\
 &= \mathcal{H}(p, q) - \mathcal{H}(p). \notag
 \end{align}
 
-The KL divergence can therefore be interpreted as the average number of additional bits required to encode an alphabet with chosen distribution $q$, given true distribution $p$. Like entropy, divergence must be greater than zero. To see this, write,
+KL divergence can therefore be interpreted as the average number of \emph{additional} bits required to encode an alphabet with chosen distribution $q$, given true distribution $p$. Like entropy, divergence must be greater than zero. To see this, write,
 
 \begin{align}
 -\mathcal{D}(p || q) &= -\sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag \\
 &= \sum_{k=1}^K p_k \log\frac{q_k}{p_k} \notag \\
-&\leq \log\Bigg(\sum_{k=1}^K p_k\frac{q_k}{p_k}\Bigg) \notag \\
+&\leq \log\Bigg(\sum_{k=1}^K p_k\frac{q_k}{p_k}\Bigg) \label{eq:jensen} \\
 &= \log 1 = 0, \notag
 \end{align}
 
-where the inequality comes from applying Jensen's inequality, since $\log$ is a convex function. A corollary to this is that the distribution maximising entropy for discrete variables is the uniform distribution, since,
+where the inequality in (\ref{eq:jensen}) comes from applying Jensen's inequality, since $\log$ is a concave function. A corollary to this is that the distribution maximising entropy for discrete variables is the uniform distribution, since,
 
 \begin{align}
 0 \leq -\mathcal{D}(p || u) &= \sum_{k=1}^K p_k \log\frac{p_k}{u_k} \notag \\
@@ -1633,11 +1632,11 @@ I(X; Y) &\triangleq \mathcal{D}(p(X, Y) || p(X)p(Y)) = \sum_x \sum_y p(x, y) \lo
 &= \mathcal{H}(X) - \mathcal{H}(X|Y) \notag,
 \end{align}
 
-and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is removed from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}, hence can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
+and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is lifted from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}. For this reason, mutual information can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
 
 \section{Convex Optimisation}
 \subsection{Convex Sets}
-A set of points, $S$, in a vector space is convex if for any two points $x_1$ and $x_2$ in $S$, all points in-between, that as, all points on the straight line connecting $x_1$ and $x_2$ are also in $S$. In a sense, it is a region that does not have any ``holes''. For example, a circular region is convex, but a doughnut is not, nor is a crescent. A line passing through points $x_1$ and $x_2$ can be written, $x_1 + c(x_2 - x_1)$, for some constant $c$. Formally, a set $S$ is convex if,
+A set of points, $S$, in a vector space is convex if for any two points $x_1$ and $x_2$ in $S$, all points in-between, that is, all points on the straight line connecting $x_1$ and $x_2$ are also in $S$. In a sense, it is a region that does not have any ``holes''. For example, a circular region is convex, but a doughnut is not, nor is a crescent. A line passing through points $x_1$ and $x_2$ can be written, $x_1 + c(x_2 - x_1)$, for some constant $c$. Formally, a set $S$ is convex if,
 
 $$S = \Big\{x_1, x_2 \in S \implies (1 - \lambda) x_1 + \lambda x_2 \in S \Big\},$$
 
@@ -1651,7 +1650,7 @@ $$
 f((1 - \lambda)x_1 + \lambda x_2) \leq (1 - \lambda) f(x_1) + \lambda f(x_2),
 $$
 
-for all $\lambda \in [0, 1]$. That is, the curve lies below a line drawn $x_1$ and $x_2$. A function with more than one turning point in a domain cannot be convex. Examples of convex functions are $e^x$, $x^2$, etc. \emph{Strict} convexity occurs when there is a strict inequality. Concavity is the same property with the inequality reversed. Hence, $f(x)$ convex $\Longleftrightarrow$ $-f(x)$ concave. A linear function is both concave and convex.
+for all $\lambda \in [0, 1]$. That is, the curve lies below a line drawn $x_1$ and $x_2$. A function with more than one turning point in a domain cannot be convex. Examples of convex functions are $e^x$, $x^2$, etc. \emph{Strict} convexity occurs when there is a strict inequality. \emph{Concavity} is the same property with the inequality reversed. Hence, $f(x)$ convex $\Longleftrightarrow$ $-f(x)$ concave. A linear function is both concave and convex.
 
 \subsection{Jensen's Inequality}
 
@@ -1670,7 +1669,7 @@ $$
 for any $\lambda_1, \lambda_2$ such that $\lambda_1 + \lambda_2 = 1$ (definition of convexity). Then suppose,
 
 $$
-f\Bigg(\sum_{i=1}^k\lambda_i x_i\Bigg) \leq \sum_{i=1}^k \lambda_if(x_i)
+f\Bigg(\sum_{i=1}^k\lambda_i x_i\Bigg) \leq \sum_{i=1}^k \lambda_if(x_i).
 $$
 
 Define,
@@ -1700,7 +1699,7 @@ f\Bigg(\sum_{i=1}^{k+1}\lambda_i x_i\Bigg) &= f\Bigg(\sum_{j=1}^{k}\lambda_j x_j
 and Jensen's inequality follows from the principle of mathematical induction.
 
 \subsubsection{Sums of Convex Functions}
-An important result is that if we sum two convex functions, the result is convex also. To see this in two dimensions, define $f(x)$ and $g(x)$ convex, and their sum $h(x)$. Then,
+An important result is that if we sum two convex functions, the result is convex also. To see this in two dimensions, define convex functions $f(x)$ and $g(x)$, and their sum $h(x)$. Then,
 
 \begin{align}
 h((1 - \lambda)x_1 + \lambda x_2) &= f((1 - \lambda)x_1 + \lambda x_2) + g((1 - \lambda)x_1 + \lambda x_2) \notag \\
@@ -1712,9 +1711,14 @@ h((1 - \lambda)x_1 + \lambda x_2) &= f((1 - \lambda)x_1 + \lambda x_2) + g((1 - 
 If one of the functions, say $f(x)$, is linear, it is sufficient to note that $f((1 - \lambda)x_1 + \lambda x_2) = (1 - \lambda)f(x_1) + \lambda f(x_2) \leq (1 - \lambda)f(x_1) + \lambda f(x_2)$, and the proof holds as before. In fact, a linear function satisfies the definition for convexity \emph{and} concavity.
 
 \subsection{Lagrange Multipliers}
-Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), are a powerful technique for solving a constrained optimisation problem of the form,
+The method of Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), is a powerful technique for solving a constrained optimisation problem of the form,
 
-I
+\begin{align}
+\begin{array}{rl}
+\text{maximise} & f(x, y)\\
+\text{subject to} & g(x, y) = 0
+\end{array} \notag,
+\end{align}
 
 noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. The constraint, $g$, restricts solutions to a path traced across the hyper-surface defined by $f$, similar to how a partial derivative describes a cross-section of a surface. The key realisation is that once this path runs parallel to a contour of $f$, we are at a critical point, where the gradients of $f$ and $g$ (running perpendicular to the contour) is in the same direction. At this point,
 
