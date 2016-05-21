@@ -190,7 +190,7 @@ and it is clear this is just `rise over run', albeit taken on an infinitesimal i
 
 \begin{align}
 \frac{\mathop{d}}{\mathop{dx}} f(x) &= \lim_{\Delta x \to 0} a_n\frac{(x + \Delta x)^n - x^n}{\Delta x} + \cdots + a_1\frac{(x + \Delta x) - x}{\Delta x} + a_0\frac{1 - 1}{\Delta x}\notag \\
-&= \lim_{\Delta x \to 0} a_n\frac{{{n}\choose{0}}x^n + {{n}\choose{1}}x^{n-1}\Delta x + \cdots + {{n}\choose{n}}(\Delta x)^n - x^n}{\Delta x} + \cdots + a_1\frac{\Delta x}{\Delta x} + a_0\frac{0}{\Delta x} \notag \\
+&= \lim_{\Delta x \to 0} a_n\frac{{{n}\choose }x^n + {{n}\choose{1}}x^{n-1}\Delta x + \cdots + {{n}\choose{n}}(\Delta x)^n - x^n}{\Delta x} + \cdots + a_1\frac{\Delta x}{\Delta x} + a_0\frac{0}{\Delta x} \notag \\
 &= na_nx^{n-1} + (n-1)a_{n-1}x^{n-2} + \cdots + a_1, \notag
 \end{align}
 
@@ -345,11 +345,11 @@ where $j$ and $k$ are swapped. This result is called the trace cyclic permutatio
 
 \subsection{Vector Calculus}
 
-The single most important principle of vector calculus is the definition of what it means to differentiate with respect to a vector. In general, the derivative of a multi-variate function is the vector of partial derivatives, that is,
+The single most important principle of vector calculus is the definition of what it means to differentiate with respect to a vector. In general, the gradient of a multi-variate function is the vector of partial derivatives, that is,
 
 $$\nabla\mathbf{f} \triangleq \frac{\partial f}{\partial(x_1, \dots, x_n)} = \bigg[\frac{\partial f}{\partial x_{1}}, \frac{\partial f}{\partial x_{2}}, \dots, \frac{\partial f}{\partial x_{n}}\bigg].$$
 
-With this principle in mind, it is easy to derive some of the fundamental formulae of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
+From our definition of gradient, it is easy to derive some of the fundamental formulae of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
 
 $$\mathbf{J} \triangleq \frac{\partial (f_1, \dots, f_m)}{\partial(x_1, \dots, x_n)} = \begin{bmatrix}
 \frac{\partial f_1}{\partial x_{1}}&\frac{\partial f_1}{\partial x_{2}}&\cdots&\frac{\partial f_1}{\partial x_{n}}\\
@@ -1634,16 +1634,18 @@ I(X; Y) &\triangleq \mathcal{D}(p(X, Y) || p(X)p(Y)) = \sum_x \sum_y p(x, y) \lo
 
 and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is lifted from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}. For this reason, mutual information can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
 
-\section{Convex Optimisation}
-\subsection{Convex Sets}
+\section{Optimisation}
+\subsection{Convexity}
+Convexity is a useful property in optimisation because it guarantees that any local optimum is a \emph{global} optimum.
+
+\subsubsection{Convex Sets}
 A set of points, $S$, in a vector space is convex if for any two points $x_1$ and $x_2$ in $S$, all points in-between, that is, all points on the straight line connecting $x_1$ and $x_2$ are also in $S$. In a sense, it is a region that does not have any `holes'. For example, a circular region is convex, but a doughnut is not, nor is a crescent. A line passing through points $x_1$ and $x_2$ can be written, $x_1 + c(x_2 - x_1)$, for some constant $c$. Formally, a set $S$ is convex if,
 
 $$S = \Big\{x_1, x_2 \in S \implies (1 - \lambda) x_1 + \lambda x_2 \in S \Big\},$$
 
 for all $\lambda \in [0, 1]$. A convex hull of a set of points is the smallest convex region enclosing those points.
 
-\subsection{Convex Functions}
-
+\subsubsection{Convex Functions}
 A function, $f(x)$, is convex on an interval if,
 
 $$
@@ -1652,7 +1654,7 @@ $$
 
 for all $\lambda \in [0, 1]$. That is, the curve lies below a line drawn $x_1$ and $x_2$. A function with more than one turning point in a domain cannot be convex. Examples of convex functions are $e^x$, $x^2$, etc. \emph{Strict} convexity occurs when there is a strict inequality. \emph{Concavity} is the same property with the inequality reversed. Hence, $f(x)$ convex $\Longleftrightarrow$ $-f(x)$ concave. A linear function is both concave and convex.
 
-\subsection{Jensen's Inequality}
+\subsubsection{Jensen's Inequality}
 
 Jensen's inequality essentially extrapolates the definition of convexity to $n$ dimensions, stating,
 
@@ -1666,27 +1668,17 @@ $$
 f(\lambda_1 x_1 + \lambda_2 x_2) \leq \lambda_1f(x_1) + \lambda_2f(x_2),
 $$
 
-for any $\lambda_1, \lambda_2$ such that $\lambda_1 + \lambda_2 = 1$ (definition of convexity). Then suppose,
+for any $\lambda_1, \lambda_2$ such that $\lambda_1 + \lambda_2 = 1$ (definition of convexity). Then suppose, $f\big(\sum_{i=1}^k\lambda_i x_i\big) \leq \sum_{i=1}^k \lambda_if(x_i).$ Define, $
+\lambda_j = \begin{cases}
+\ \ \ \ \lambda_i & j = 1, ..., k-1 \\
+\lambda_k + \lambda_{k+1} & j = k
+\end{cases} $ and 
 
-$$
-f\Bigg(\sum_{i=1}^k\lambda_i x_i\Bigg) \leq \sum_{i=1}^k \lambda_if(x_i).
-$$
-
-Define,
-
-\[\lambda_j = \begin{cases} 
-      \ \ \ \ \lambda_i & j = 1, ..., k-1 \\
-      \lambda_k + \lambda_{k+1} & j = k
-   \end{cases}
-\]
-
-and \[x_j = \begin{cases} 
-      \ \ \ \ \ \ \ \ \ \ \ \ \ \  x_i & j = 1, ..., k-1 \\
-      \frac{\lambda_k}{\lambda_k + \lambda_{k+1}}x_k + \frac{\lambda_{k+1}}{\lambda_k + \lambda_{k+1}}x_{k+1} & j = k
-   \end{cases}
-\]
-
-Then,
+$
+x_j = \begin{cases} 
+\ \ \ \ \ \ \ \ \ \ \ \ \ \  x_i & j = 1, ..., k-1 \\
+\frac{\lambda_k}{\lambda_k + \lambda_{k+1}}x_k + \frac{\lambda_{k+1}}{\lambda_k + \lambda_{k+1}}x_{k+1} & j = k
+\end{cases}$. Then,
 
 \begin{align}
 f\Bigg(\sum_{i=1}^{k+1}\lambda_i x_i\Bigg) &= f\Bigg(\sum_{j=1}^{k}\lambda_j x_j\Bigg) \notag \\
@@ -1710,17 +1702,56 @@ h((1 - \lambda)x_1 + \lambda x_2) &= f((1 - \lambda)x_1 + \lambda x_2) + g((1 - 
 
 If one of the functions, say $f(x)$, is linear, it is sufficient to note that $f((1 - \lambda)x_1 + \lambda x_2) = (1 - \lambda)f(x_1) + \lambda f(x_2) \leq (1 - \lambda)f(x_1) + \lambda f(x_2)$, and the proof holds as before. In fact, a linear function satisfies the definition for convexity \emph{and} concavity.
 
-\subsection{Lagrange Multipliers}
-The method of Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), is a powerful technique for solving a constrained optimisation problem of the form,
+\subsection{Necessary and Sufficient Conditions for Optimality}
+
+A basis for designing optimisation algorithms are the sets of conditions that tell us when we have found a local or global optimum. Necessity and sufficiency are logical terms. If a condition $S$ implies a condition $N$, we write $S \implies N$, meaning if $S$ is true, then $N$ is also. Thus, we say $S$ is a \emph{sufficient} condition for $N$, even though $N$ may be true without $S$. It also means that if $N$ is not true, $S$ cannot be true, even though $N$ may be true independent when $S$ is false. Thus, we say $N$ is a \emph{necessary} condition for $S$. When the implication runs both ways (if and only if), we write $S \iff N$, and say that $S$ is a \emph{necessary and sufficient} condition for $N$, and vice versa.
+
+\subsection{Unconstrained Problems}
+
+When we have a differentiable objective function and no constraints, the optimality conditions are simplified. Consider the second derivative test for one-dimensional problems. From first principles, the second derivative is at a stationary point ($f'(x^*) = 0$) is,
+
+$$f''(x^*) = \lim_{h \to 0}\frac{f'(x^* + h) - \cancelto{0}{f(x^*)}}{h} = \lim_{h \to 0}\frac{f'(x^* + h)}{h}.$$
+
+If this quantity is positive, we must be at a minimum, as the function is increasing to the right of $x^*$. If negative, $x^*$ is a maximum. Similar conditions exist in the multi-dimensional setting. First, we must have a zero gradient,
+
+$$\nabla_{\mathbf{x}}f(\mathbf{x}^*) = \mathbf{0},$$
+
+and we must have a positive semi-definite Hessian matrix, that is,
+
+$$\mathbf{v}^T\cdot\nabla_{\mathbf{xx}}f(\mathbf{x}^*)\cdot\mathbf{v} \geq 0, \forall \ \mathbf{v} \in \mathbb{R}^N,$$
+
+the intuition being that in every direction outward from $\mathbf{x}^*$, the gradient will be positive, indicating a minimum--just as it was in the one-dimensional case. For a maximum, we rather require a negative semi-definite Hessian.
+
+\subsection{Equality Constraints}
+
+Note that geometrically, the gradient at a point is normal to the \emph{level curve} or contour. The directional derivative of \emph{differentiable} $f$ in the direction of some vector, $\mathbf{v}$ is,
+
+\begin{align}
+\nabla_{\mathbf{v}}\mathbf{f}(\mathbf{x}) &= \lim_{h \to 0} \frac{f(\mathbf{x} + h\mathbf{v}) - f(\mathbf{x})}{h} \label{eq:dirdiv} \\
+&= \nabla\mathbf{f}(\mathbf{x})\cdot\mathbf{v} = \Delta x_1\frac{\partial f}{\partial x_{1}} + \Delta x_2\frac{\partial f}{\partial x_{2}} + \cdots + \Delta x_n\frac{\partial f}{\partial x_{n}}. \notag
+\end{align}
+
+If we choose $\mathbf{v}$ in the direction of a contour, then by definition $f(\mathbf{x} + h\mathbf{v}) = f(\mathbf{x})$, hence the directional derivative is $0$, and so $\nabla\mathbf{f}(\mathbf{x})\cdot\mathbf{v} = 0$, hence the gradient is normal to the contour. Now consider an optimisation problem with a single equality constraint,
 
 \begin{align}
 \begin{array}{rl}
-\text{maximise} & f(x, y)\\
-\text{subject to} & g(x, y) = 0
+\displaystyle \min_{\mathbf{x} \in \mathcal{X}} & f(\mathbf{x})\\
+\text{subject to} & h(\mathbf{x}) = 0
 \end{array} \notag,
 \end{align}
 
-noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. The constraint, $g$, restricts solutions to a path traced across the hyper-surface defined by $f$, similar to how a partial derivative describes a cross-section of a surface. The key realisation is that once this path runs parallel to a contour of $f$, we are at a critical point, where the gradients of $f$ and $g$ (running perpendicular to the contour) is in the same direction. At this point,
+noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible (satisfying the constraint) point, $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x} + \delta\mathbf{x}) < f(\mathbf{x})$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) = \mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})$ for some scalar $\mu$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
+
+$$\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*)) = \delta\mathbf{x}\cdot\mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*) = 0$$
+
+At such a point $\mathbf{x}^*$, we have it that the next feasible point (normal to the constraint surface) will not further minimise the objective function. This stopping condition is incorporated in the method of Lagrange multipliers.
+
+\subsection{The Method of Lagrange Multipliers}
+
+The method of Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), takes the constrained problem and creates a new, \emph{unconstrained} objective function that incorporates these conditions. Solving it will solve the original, constrained problem.
+
+
+The constraint, $g$, restricts solutions to a path traced across the hyper-surface defined by $f$, similar to how a partial derivative describes a cross-section of a surface. The key realisation is that once this path runs parallel to a contour of $f$, we are at a critical point, where the gradients of $f$ and $g$ (running perpendicular to the contour) is in the same direction. At this point,
 
 \begin{align}\nabla f = \bigg[\frac{\delta f}{\delta x}, \frac{\delta f}{\delta y}\bigg] = -\lambda\bigg[\frac{\delta g}{\delta x}, \frac{\delta g}{\delta y}\bigg] = -\lambda\nabla g \label{eq:lagrange},
 \end{align}
@@ -1953,7 +1984,7 @@ MLS also has a nice geometric interpretation. According to the normal equation, 
 
 \subsubsection{The Gram Matrix}
 
-For the closed-form method of least squares, we require the \emph{gram} matrix $\mathbf{X}^T\mathbf{X}$ to be invertible. If $\mathbf{X}$ is full rank\footnote{A matrix is full rank if its columns are linearly independent. By the rank-nullity theorem, full rank implies a zero-dimensional null space or kernel.} then $\mathbf{X}\mathbf{a} = \mathbf{0}$ iff $\mathbf{a} = \mathbf{0}$. Therefore, $\mathbf{a}^T\mathbf{X}^T\mathbf{X}\mathbf{a} \geq 0$, implying the gram matrix is positive-definite, and therefore invertible. Note that when $N < D$ and we have a `fat' $\mathbf{X}$, $\mathbf{X}$ is often rank deficient. Even when the gram matrix is invertible, it may still be ill-conditioned. This arises when a high degree of \emph{multilinearity} is present in the data. This refers to high degrees of correlation between features. Ill-conditioning is a concept common in numerical analysis, and in linear algebra it is captured by the \emph{condition number} of a matrix. This provides an upper bound on the relative error between solutions for changes in the data. A high condition number indicates parameters may vary significantly for small changes in the data. This can lead to problems in practice, when floating point arithmetic introduces small inaccuracies. It can be shown that the condition number, $\kappa({\mathbf{A}}) = ||\mathbf{A}||\cdot||\mathbf{A}^{-1}|| = \boldsymbol\sigma_{max}/\boldsymbol\sigma_{min}$, that is, the ratio of the largest and smallest eigenvalues of $\mathbf{A}$. Geometrically, this makes sense. Consider the way a matrix transforms a unit circle of vectors in two dimensions. When one eigenvalue dominates the other, vectors are mostly `stretched' in the direction of the first eigenvector. We would find that a small change in the direction of the second eigenvector corresponds to a much larger change in the direction of the first. `Lifting' the eigenvalues (thereby reducing the condition number) is a convenient outcome of ridge regression.
+For the closed-form method of least squares, we require the \emph{gram} matrix $\mathbf{X}^T\mathbf{X}$ to be invertible. If $\mathbf{X}$ is full rank\footnote{A matrix is full rank if its columns are linearly independent. By the rank-nullity theorem, full rank implies a zero-dimensional null space or kernel.} then $\mathbf{X}\mathbf{a} = \mathbf{0}$ iff $\mathbf{a} = \mathbf{0}$. Therefore, $\mathbf{a}^T\mathbf{X}^T\mathbf{X}\mathbf{a} \geq 0$, implying the gram matrix is positive-definite, and therefore invertible. Note that when $N < D$ and we have a `fat' $\mathbf{X}$, $\mathbf{X}$ is often rank deficient. Even when the gram matrix is invertible, it may still be ill-conditioned. This arises when a high degree of \emph{multilinearity} is present in the data. This refers to high degrees of correlation between features. Ill-conditioning is a concept common in numerical analysis, and in linear algebra it is captured by the \emph{condition number} of a matrix. This provides an upper bound on the relative error between solutions for changes in the data. A high condition number indicates parameters may vary significantly for small changes in the data. This can lead to problems in practice, when floating point arithmetic introduces small inaccuracies. It can be shown that the condition number, $\kappa({\mathbf{A}}) = ||\mathbf{A}||\cdot||\mathbf{A}^{-1}|| = \boldsymbol\sigma_{max}/\boldsymbol\sigma_{min}$, that is, the ratio of the largest and smallest eigenvalues of $\mathbf{A}$. Geometrically, this makes sense. Consider the way a matrix transforms a unit circle of vectors in two dimensions. When one eigenvalue dominates the other, vectors are mostly `stretched' in the direction of the first eigenvector. We would find that a small change in the direction of the second eigenvector corresponds to a much larger change in the direction of the first. `Lifting' the eigenvalues (thereby reducing the condition number) is a convenient outcome of ridge regression. This is easily seen by considering the eigenvalue decomposition of the gram matrix, then $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I} = \mathbf{U}\boldsymbol\Sigma\mathbf{U}^T + \lambda\mathbf{I} = \mathbf{U}(\boldsymbol\Sigma + \lambda\mathbf{I})\mathbf{U}^T$.
 
 \subsubsection{Gradient Descent}
 
