@@ -1668,17 +1668,17 @@ $$
 f(\lambda_1 x_1 + \lambda_2 x_2) \leq \lambda_1f(x_1) + \lambda_2f(x_2),
 $$
 
-for any $\lambda_1, \lambda_2$ such that $\lambda_1 + \lambda_2 = 1$ (definition of convexity). Then suppose, $f\big(\sum_{i=1}^k\lambda_i x_i\big) \leq \sum_{i=1}^k \lambda_if(x_i).$ Define, $
-\lambda_j = \begin{cases}
-\ \ \ \ \lambda_i & j = 1, ..., k-1 \\
-\lambda_k + \lambda_{k+1} & j = k
-\end{cases} $ and 
+for any $\lambda_1, \lambda_2$ such that $\lambda_1 + \lambda_2 = 1$ (definition of convexity). Then suppose, $f\big(\sum_{i=1}^k\lambda_i x_i\big) \leq \sum_{i=1}^k \lambda_if(x_i).$ We define,
 
 $
+\lambda_j = \begin{cases}
+\ \ \ \ \lambda_i & j = 1: k-1 \\
+\lambda_k + \lambda_{k+1} & j = k
+\end{cases} $ and $
 x_j = \begin{cases} 
-\ \ \ \ \ \ \ \ \ \ \ \ \ \  x_i & j = 1, ..., k-1 \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \  x_i & j = 1: k-1 \\
 \frac{\lambda_k}{\lambda_k + \lambda_{k+1}}x_k + \frac{\lambda_{k+1}}{\lambda_k + \lambda_{k+1}}x_{k+1} & j = k
-\end{cases}$. Then,
+\end{cases}$, then,
 
 \begin{align}
 f\Bigg(\sum_{i=1}^{k+1}\lambda_i x_i\Bigg) &= f\Bigg(\sum_{j=1}^{k}\lambda_j x_j\Bigg) \notag \\
@@ -1704,13 +1704,13 @@ If one of the functions, say $f(x)$, is linear, it is sufficient to note that $f
 
 \subsection{Necessary and Sufficient Conditions for Optimality}
 
-A basis for designing optimisation algorithms are the sets of conditions that tell us when we have found a local or global optimum. Necessity and sufficiency are logical terms. If a condition $S$ implies a condition $N$, we write $S \implies N$, meaning if $S$ is true, then $N$ is also. Thus, we say $S$ is a \emph{sufficient} condition for $N$, even though $N$ may be true without $S$. It also means that if $N$ is not true, $S$ cannot be true, even though $N$ may be true independent when $S$ is false. Thus, we say $N$ is a \emph{necessary} condition for $S$. When the implication runs both ways (if and only if), we write $S \iff N$, and say that $S$ is a \emph{necessary and sufficient} condition for $N$, and vice versa.
+A basis for designing optimisation algorithms are the sets of conditions that tell us when we have found a local or global optimum. Necessity and sufficiency are logical terms. If a condition $S$ implies a condition $N$, we write $S \implies N$, meaning if $S$ is true, then $N$ is also. Thus, we say $S$ is a \emph{sufficient} condition for $N$, even though $N$ may be true without $S$. It also means that if $N$ is not true, $S$ cannot be true, even though $N$ may be true independently when $S$ is false. Thus, we say $N$ is a \emph{necessary} condition for $S$. When the implication runs both ways (if and only if), we write $S \iff N$, and say that $S$ is a \emph{necessary and sufficient} condition for $N$, and vice versa.
 
 \subsection{Unconstrained Problems}
 
-When we have a differentiable objective function and no constraints, the optimality conditions are simplified. Consider the second derivative test for one-dimensional problems. From first principles, the second derivative is at a stationary point ($f'(x^*) = 0$) is,
+When we have a differentiable objective function and no constraints, the optimality conditions are simplified. Consider the second derivative test for one-dimensional problems. From first principles, the second derivative at a stationary point ($f'(x^*) = 0$) is,
 
-$$f''(x^*) = \lim_{h \to 0}\frac{f'(x^* + h) - \cancelto{0}{f(x^*)}}{h} = \lim_{h \to 0}\frac{f'(x^* + h)}{h}.$$
+$$f''(x^*) = \lim_{h \to 0}\frac{f'(x^* + h) - \cancelto{0}{f'(x^*)}}{h} = \lim_{h \to 0}\frac{f'(x^* + h)}{h}.$$
 
 If this quantity is positive, we must be at a minimum, as the function is increasing to the right of $x^*$. If negative, $x^*$ is a maximum. Similar conditions exist in the multi-dimensional setting. First, we must have a zero gradient,
 
@@ -1720,7 +1720,7 @@ and we must have a positive semi-definite Hessian matrix, that is,
 
 $$\mathbf{v}^T\cdot\nabla_{\mathbf{xx}}f(\mathbf{x}^*)\cdot\mathbf{v} \geq 0, \forall \ \mathbf{v} \in \mathbb{R}^N,$$
 
-the intuition being that in every direction outward from $\mathbf{x}^*$, the gradient will be positive, indicating a minimum--just as it was in the one-dimensional case. For a maximum, we rather require a negative semi-definite Hessian.
+the intuition being that in every direction outward from $\mathbf{x}^*$, the gradient will be positive, indicating a minimum--just as it was in the one-dimensional case. For a maximum, we instead require a negative semi-definite Hessian. These are necessary and sufficient conditions for optimality.
 
 \subsection{Equality Constraints}
 
@@ -1740,27 +1740,73 @@ If we choose $\mathbf{v}$ in the direction of a contour, then by definition $f(\
 \end{array} \notag,
 \end{align}
 
-noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible (satisfying the constraint) point, $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x} + \delta\mathbf{x}) < f(\mathbf{x})$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) = \mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})$ for some scalar $\mu$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
+noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible point (satisfying the constraint), $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x} + \delta\mathbf{x}) < f(\mathbf{x})$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})$ for some scalar $\lambda$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
 
-$$\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*)) = \delta\mathbf{x}\cdot\mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*) = 0$$
+$$\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*)) = \delta\mathbf{x}\cdot\lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*) = 0$$
 
 At such a point $\mathbf{x}^*$, we have it that the next feasible point (normal to the constraint surface) will not further minimise the objective function. This stopping condition is incorporated in the method of Lagrange multipliers.
 
 \subsection{The Method of Lagrange Multipliers}
 
-The method of Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), takes the constrained problem and creates a new, \emph{unconstrained} objective function that incorporates these conditions. Solving it will solve the original, constrained problem.
+The method of Lagrange multipliers, discovered by Italian-French mathematician Joseph Louis Lagrange (1736-1813), takes the constrained problem and creates a new, \emph{unconstrained} objective function that incorporates these conditions, by introducing auxiliary variables called the Lagrange multipliers. Solving it will solve the original, constrained problem. We define the \emph{Lagrangian},
 
+$$\mathcal{L}(\mathbf{x}, \lambda) = f(\mathbf{x}) + \lambda h(\mathbf{x}).$$
 
-The constraint, $g$, restricts solutions to a path traced across the hyper-surface defined by $f$, similar to how a partial derivative describes a cross-section of a surface. The key realisation is that once this path runs parallel to a contour of $f$, we are at a critical point, where the gradients of $f$ and $g$ (running perpendicular to the contour) is in the same direction. At this point,
+Clearly, at an optimum, $\mathcal{L}(\mathbf{x}^*, \lambda^*) = f(\mathbf{x}^*)$, since $\nabla_{\mathbf{x}}\mathcal{L}(\mathbf{x}^*, \lambda^*) = \mathbf{0} \implies -\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*)$, the optimality condition from above, and $\nabla_{\lambda}\mathcal{L}(\mathbf{x}, \lambda) = 0 \implies h(\mathbf{x}) = 0$, the equality constraint. We finally require $\mathbf{v}^T\cdot\nabla_{\mathbf{xx}}f(\mathbf{x}^*)\cdot\mathbf{v} \geq 0, \forall \ \mathbf{v} : \nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*)^T\mathbf{v} = 0$, that is, positive semi-definiteness for the Hessian (though we need only consider vectors $\mathbf{v}$ along the constraint contour). To illustrate, consider maximising the Shannon entropy equation, $f(p_1, \dots, p_n) = -\sum_i p_i \log p_i$, for some probability distribution, $\mathbf{p}$, subject to the constraint $\sum_i p_i = 1$. Introducing a Lagrange multiplier for the constraint gives us,
 
-\begin{align}\nabla f = \bigg[\frac{\delta f}{\delta x}, \frac{\delta f}{\delta y}\bigg] = -\lambda\bigg[\frac{\delta g}{\delta x}, \frac{\delta g}{\delta y}\bigg] = -\lambda\nabla g \label{eq:lagrange},
+$$\mathcal{L}(\mathbf{x}, \lambda) =  -\sum_i p_i \log p_i + \lambda\bigg(\sum_i p_i - 1\bigg),$$
+
+which may be differentiated, giving us an equation for each $p_i$ that show (as before) that the maximising distribution is the uniform distribution, that is, $p_i = 1/n$. It is easy to extend this method to multiple equality constraints. In this case we can write the Lagrangian,
+
+$$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \boldsymbol\lambda^T \mathbf{h}(\mathbf{x}),$$
+
+and the optimality condition $\nabla_{\lambda}\mathcal{L}(\mathbf{x}^*, \boldsymbol\lambda^*) = \mathbf{0} \implies h_i(\mathbf{x}^*) = 0$ for each constraint $i$.
+
+\subsection{Inequality Constraints}
+
+Consider an optimisation problem with a single inequality constraint,
+
+\begin{align}
+\begin{array}{rl}
+\displaystyle \min_{\mathbf{x} \in \mathcal{X}} & f(\mathbf{x})\\
+\text{subject to} & g(\mathbf{x}) \leq 0
+\end{array} \notag.
 \end{align}
 
-and where the constant $\lambda$, known as the Lagrange multiplier, represents the ratio of the magnitudes of the gradients. The superfluous minus sign is kept for historical reasons. Note we have confined our study to two dimensions for simplicity. From this we introduce the auxiliary equation,
+Such a constraint may be either \emph{active} or \emph{inactive}. When it is inactive, the local optimum falls within the feasible region. In this case, the optimality conditions are identical to the unconstrained case. Recall, our conditions do not tell us how to predetermine whether a constraint is active, nor do they (as previously noted) tell us how to find the optimum. At most, the optimality conditions inform the design of optimisation algorithms by telling us what to look for. When the constraint is active, the local optimum lies outside of the feasible region. We note first that the constrained optimum must lie on the constraint surface, as this is closest to the local optimum. So in this case we effectively have an equality constraint as before. The optimality condition is therefore,
 
-$$\mathcal{L}(x, y, \lambda) = f(x, y) + \lambda g(x, y).$$
+\begin{align}-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}) = \mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})\label{eq:inequalityconstraint},\end{align}
 
-Maximising this function would satisfy the conditions in (\ref{eq:lagrange}), and clearly at the maximum, $$\frac{\delta\mathcal{L}}{\delta\lambda} = g(x, y) = 0,$$ satisfying the constraint. It is further possible to combine constraints of this form for multiple Lagrange multipliers. The Karush-Kuhn-Tucker (KKT) conditions describe a generalisation of the Lagrange multipliers for non-linear programming problems with equality or inequality constraints.
+for $\mu > 0$. The scalar must be positive as it ensures the gradient is facing `outwards' of the feasible region, indicating that we are at the extreme point closest to the local optimum. The Karush-Kuhn-Tucker (KKT) conditions capture these two cases in a general set of conditions.
+
+\subsection{The KKT Conditions}
+
+The Karush-Kuhn-Tucker (KKT) conditions are a general set of necessary and sufficient conditions for optimisation problems constrained by multiple equality and inequality constraints. For optimisation problem,
+
+\begin{align}
+\begin{array}{rl}
+\displaystyle \min_{\mathbf{x} \in \mathcal{X}} & f(\mathbf{x})\\
+\text{subject to} & g(\mathbf{x}) \leq 0
+\end{array} \notag,
+\end{align}
+
+we form the Lagrangian,
+
+$$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \mu^T g(\mathbf{x}),$$
+
+and necessary and sufficient conditions for optimality are,
+
+\begin{enumerate}
+\item $\nabla_{\mathbf{x}}\mathcal{L}(\mathbf{x}^*, \mu^*) = \mathbf{0}$. Thus, when the inequality constraint is inactive, $\mu^{*} = 0$ and $\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}) = \mathbf{0}$. When the constraint is active, $\mu^* > 0$ and $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}) = \mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})$ as in equation (\ref{eq:inequalityconstraint}).
+\item $\mu^* \geq 0$, with equality for an inactive constraint.
+\item $g(\mathbf{x}^*) \leq 0$ with equality for an active constraint.
+\item $\mu^*g(\mathbf{x}^*) = 0 \implies g(\mathbf{x}^*) = 0$ when $\mu^* > 0$ for an active constraint.
+\item Positive semi-definite constraints on $\nabla_{\mathbf{x}\mathbf{x}}\mathcal{L}(\mathbf{x}^*, \mu^*)$.
+\end{enumerate}
+
+Clearly, extending this to multiple inequality constraints, and further incorporating equality constraints is a trivial matter, giving a Lagrangian function,
+
+$$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \boldsymbol\mu^T \mathbf{g}(\mathbf{x}) + \boldsymbol\lambda^T \mathbf{h}(\mathbf{x}).$$
 
 \section{Introduction to Machine Learning}
 
