@@ -17,11 +17,18 @@
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 % \setlength\parindent{0pt}
 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
 \let\biconditional\leftrightarrow
 \newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
 \newcommand{\p}{\text{p}}
 
 \DeclareMathOperator*{\argmax}{\arg\!\max}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
 
 \title{Last Chance Stats}
 \author{Joseph Boyd}
@@ -1634,7 +1641,7 @@ I(X; Y) &\triangleq \mathcal{D}(p(X, Y) || p(X)p(Y)) = \sum_x \sum_y p(x, y) \lo
 
 and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is lifted from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}. For this reason, mutual information can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
 
-\section{Optimisation}
+\section{Continuous Optimisation}
 \subsection{Convexity}
 Convexity is a useful property in optimisation because it guarantees that any local optimum is a \emph{global} optimum.
 
@@ -1807,6 +1814,139 @@ and necessary and sufficient conditions for optimality are,
 Clearly, extending this to multiple inequality constraints, and further incorporating equality constraints is a trivial matter, giving a Lagrangian function,
 
 $$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \boldsymbol\mu^T \mathbf{g}(\mathbf{x}) + \boldsymbol\lambda^T \mathbf{h}(\mathbf{x}).$$
+
+
+\section{Computability and Complexity}
+
+\subsection{Decision Problems}
+
+Decision problems, as studied in computability and computational complexity theory, are characterised by a question posed on some arbitrary inputs that has a boolean (true-false/yes-no) answer. The question itself is the decision \emph{problem}, which when paired with a parameter set is called a problem \emph{instance}. For example, a decision \emph{problem} might be to determine if some number $x$ is prime or not. A particular problem \emph{instance} might be very trivial, for example, `is the number 2 prime?'. Exact methods of primality testing do exist, however, making primality testing a \emph{decidable} problem, that is, primality is \emph{computable} for any input, though it may take a long time to compute. On the other hand, there are decision problems that are \emph{undecidable}. An example of this is the \emph{halting problem}. It was in demonstrating the undecidability of the halting problem that the great English mathematician, Alan Turing (1912-1954), devised an abstract model of the computer, the Turing machine.
+
+\subsection{The Halting Problem}
+
+The halting problem was one of the first problems shown to be undecidable, that is, no algorithm exists to solve it for all possible inputs. The halting problem is concerned with determining whether an arbitrary algorithm (in the form of some description), provided with arbitrary inputs, will terminate (halt) or not. For example, a trivial input algorithm might be `divide the input by 2'. This single-instruction algorithm can conceivably be analysed by any number of halting `analysers' and successfully be shown to terminate for any input. However, an algorithm solving the halting problem will need to decide termination for \emph{any} algorithm. It is tempting to suggest simply simulating the input algorithm and declaring a halt when it terminates. The problem here is that the algorithm may never terminate, and it is impossible to know whether it will \emph{not} terminate in a finite amount of time (as it might just be mistaken for a very long-running--yet finite--algorithm). Waiting an infinitely long time to determine the halting problem is against the rules.
+
+\begin{algorithm}
+\caption{Pseudocode illustrating a paradox arising from a halting algorithm.}\label{alg:haltingproblem}
+\begin{algorithmic}[1]
+\Procedure{Halt}{algorithm, parameters}
+\If { \//*algorithm halts with parameters*\// }
+\State \Return true
+\Else
+\State \Return false
+\EndIf
+\EndProcedure
+\Procedure{Halt+}{algorithm}
+\If {\textsc{Halt}(algorithm, algorithm)}
+\State \//*loop forever*\// 
+\Else
+\State \//*halt*\// 
+\EndIf
+\EndProcedure
+\State \textsc{Halt+}(\textsc{Halt+}) \//*undecidable*\// 
+\end{algorithmic}
+\end{algorithm}
+
+Turing showed the halting problem to be undecidable with the following proof by contradiction. Suppose there is an algorithm \textsc{Halt} that takes as input some complete description of an algorithm along with some compatible parameters (Algorithm \ref{alg:haltingproblem}) and solves the halting problem, that is, determines in finite time whether this arbitrary algorithm terminates given the set of inputs. Imagine another algorithm \textsc{Halt+} that first runs this \textsc{Halt} algorithm, and if the result is `true' (halts), it loops forever (does not halt), otherwise, if `false' (does not halt), it halts. Finally, consider calling \textsc{Halt+} on itself. Now we see the contradiction--if the \textsc{Halt} subroutine returns `true' for \textsc{Halt+}(\textsc{Halt+}), then \textsc{Halt+}(\textsc{Halt+}) loops forever and does not halt. If \textsc{Halt} returns `false', then \textsc{Halt+}(\textsc{Halt+}) instead terminates. So, \textsc{Halt+} always negates whatever decision \textsc{Halt} makes, making its behaviour undecidable by \textsc{Halt}, and therefore \textsc{Halt} does not solve the halting problem, making the problem undecidable.
+
+\subsection{Turing Machines}
+
+To complete his proof on the halting problem, Turing required an abstract model of computation on which to base his formal reason. Clearly, it would be infeasible to make assertions about the behaviours of algorithms without a clear definition of what an algorithm actually is. Turing therefore came up with the Turing machine, an abstract computing model generalising the finite state machine (FSM) or automaton\footnote{A finite state machine is an abstract model of computation consisting of a finite number of states, representing actions. Movement between states is dictated by the conjunction of an input value and the identity of the current state. Finite state machines are usually visualised with a diagram.}, sufficiently general to simulate any computer program or algorithm. A Turing machine consists of an infinitely (arbitrarily) long tape divided into cells. A read-write head focuses on one cell at a time, and depending on the cell contents (symbol) and the current internal state of the machine, the machine writes a symbol, moves the tape left or right, and transitions to a new internal state. Formally, the transition function, $\delta$, of a Turing machine can be written,
+
+$$\delta : S \times Q \to S \times \{\text{left}, \text{right}\} \times Q,$$
+
+that is, given a current read symbol $\in S$ and internal state $\in Q$, the transition function defines a write symbol, left or right movement of the tape, and a new internal state. Any symbol set may be used (though binary code is regularly used to illustrate) without changing the computing power of the machine. Intuitively, the tape is providing the machine with memory, and the transition function defines conditional instruction sets to be performed. It may still be a stretch, however, to fathom that this simple design is capable of performing any algorithm, procedure, or computation imaginable.
+
+\subsubsection{Universal Turing Machines}
+
+If we take a Turing machine to be a model of computation for some function, a \emph{universal Turing machine} (UTM) is a Turing machine whose instruction set is configured to be able to run any Turing machine (whose own instruction sets can be encoded as strings in the UTM symbol set) and any arbitrary input. Thus, we would have an interpreter for any Turing machine, and with it a model for a stored-program \emph{computer}, rather than the more abstract model \emph{computation} that Turing machines represent. This model is the original concept behind all computer code (software) as executed on computer hardware. In fact, almost all modern computers can be described as universal Turing machines. A programming language is said to be \emph{Turing complete} if it is capable of simulating any Turing machine, making it a universal Turing machine. All imperative programming languages (\textsc{Python}, C++, \textsc{Java}) have this property--all that is required is the ability to execute instructions conditionally (for example with `if' statement) and to allocate an arbitrary amount of memory. It is strongly argued that the universal Turing machine prefaced John von Neumann's design for the stored-program computer, the von Neumann architecture, the basis of all modern computers.
+
+\subsubsection{Non-deterministic Turing Machines}
+
+A non-deterministic Turing machine (NTM) is a Turing machine for which multiple operations may exist for each input-state pair. The NTM can pursue each of these alternatives simultaneously and at no extra cost. Thus, an operation with exponentially growing alternative paths, such as a tree search, can be computed in linear time (in the depth of the search). It is crucial to note the direct equivalence between how a NTM finds a solution and how a solution can be verified. By pursuing each alternative, the NTM is \emph{guessing} its way through the solution space, without incurring the cost of erring. If a specific solution is provided, a deterministic Turing machine can verify it in the same time (by \emph{guessing} its way through a single solution). Thus, NTM problem solving is exactly equivalent to TM problem verification. Further note that any computation completed on an NTM can also be computed on a deterministic Turing machine, though perhaps not as efficiently. NTMs have no real-world implementation (unlike Turing machines), and remain a purely theoretical idea. Rather, they exist as a model of \emph{solution verification}, a key concept for classifying algorithm complexities.
+
+\subsubsection{Other Turing Machines}
+
+Many other Turing machines exist, such as Quantum Turing machines, which model the behaviour of a quantum computer. An important unresolved question in physics asks whether such a computing model could efficiently simulate any physical system.
+
+\subsection{P versus NP}
+
+P versus NP is one of the most well-known unresolved problems in computer science, and is in fact one of the seven Clay Institute Millennium problems. It refers to whether all problems that may be verified in polynomial time may be solved in polynomial time, and thus whether complexity class P is a subset of NP (P $\neq$ NP) or that they are the same class (P = NP). The former case is widely considered to be more likely, although theorists as eminent as Donald Knuth (1938-) side with the latter, albeit with the catch that the degree of polynomial may be astronomical.
+
+\subsection{Complexity Classes}
+
+Turing machines also provide the basis for discussing computational complexity classes. Complexity classes are most commonly discussed for decision problems, but equivalents exist for functional problems (for example the FP class), counting problems (\#P class), and others.
+
+\subsubsection{Reducibility}
+
+We say that one problem, $A$, may be reduced to another problem, $B$, if an algorithm solving $B$ could be used as a subroutine in an algorithm solving $A$. For example, if we had such an algorithm for $B$, we could write our algorithm for $A$ in terms of a sequence of executions of an \emph{oracle} (black box) executing the algorithm for $B$. If a polynomial number of executions were required, we could say $A$ is polynomially reducible to $B$, formally $A \leq_p B.$ This is an important property for comparing algorithms of different complexity classes.
+
+\subsubsection{P class}
+
+The P class is the set of decision problems decidable in polynomial time on a deterministic Turing machine. Polynomial is a desirable, \emph{tractable} complexity that, as a rule, indicates algorithm run time does not increase \emph{too quickly} (think exponentially) with the size of the problem\footnote{A problem's size is usually expressed in the number of variables.}.
+
+\subsubsection{NP class}
+
+A common misconception is that NP stands for `non-polynomial' time. Ironically, that would be to beg the question of P versus NP\footnote{It is true that known algorithms for NP problems run in super-polynomial (exponential) time on deterministic Turing machines, but the whole point of P versus NP is that it is not yet known if faster algorithms exist.}. In actual fact, NP stands for \emph{non-deterministic polynomial time}, that is, \emph{NP is the class of algorithms that run in polynomial time on a non-deterministic Turing machine}. However, as noted above, algorithms that run polynomially on an NTM are algorithms whose solution may be verified in polynomial time on a deterministic Turing machine. Hence, the NP class can be alternatively stated as \emph{algorithms that can be verified in polynomial time by a deterministic Turing machine}. Note that all P time algorithms are in the NP class, as whatever can be done polynomially on a deterministic Turing machine can be done polynomially on a NTM, though not necessarily vice versa. This disjunction is the subject of one of the most famous unsolved problems in mathematics. A problem can be shown to be in the NP class if it can be shown that all candidate solutions can be verified in polynomial time.
+
+\subsubsection{NP-hard class}
+
+NP-hard (non-deterministic polynomial time \emph{hard}) problems are those problems that can are \emph{at least as hard as the hardest problems in NP}. In formal terms, this means an NP-hard problem can be reduced to any problem in NP in polynomial time. Note that a problem may be purely NP-hard (not in NP), whereas problems in the intersection between NP and NP-hard are known as NP-complete.
+
+\subsubsection{NP-complete class}
+
+The NP-complete class is the intersection of NP and NP-hard, that is, it contains problems that are reducible to all NP problems, and are additionally verifiable in P time. To prove the NP-completeness of a problem, it is necessary to,
+
+\begin{enumerate}
+\item Show it is in NP, by showing its solutions may be efficiently verified
+\item Show it is NP-hard, by showing it can be efficiently reduced to another known NP-complete problem.
+\end{enumerate}
+
+The first decision problem proved to be NP-complete is the boolean satisfiability problem or SAT (see the Cook-Levin theorem, 1971), which aims to find a combination of values for literals in a boolean expression such that the overall expression evaluates TRUE. The expression is taken to be in conjunctive normal form (a conjunction of disjunctions or an AND of ORs), for example, $$(X_1 \lor X_2 \lor \dots \lor X_N) \land (\neg X_1 \lor \dots) \land \dots$$ There are some special cases of SAT where computation is easy, for example if each variable features in exactly one clause, but in general, no efficient algorithm is known to exist. From a purely intuitive perspective, the task lends itself to an exponential runtime, as there are $2^N$ possible interpretations of an expression with $N$ variables. Until P versus NP is resolved, it is not known whether there is a reliable shortcut. Richard Karp used this result to find and categorise 21 NP-complete problems, beginning with the 3SAT problem, a variant of SAT in which all clauses contain three literals. It is easy to transform a CNF expression to the 3SAT form, with the introduction of dummy variables. The expression loses logical equivalency, but retains equisatisfiability, meaning that solutions in the 3SAT form are necessary and sufficient for solutions in the original form. The length of the expression triples, hence the reduction step is polynomial. Karp's 21 NP-complete problems further include problems from graph theory (such as clique selection) and 0-1 integer programming. Note that if a problem in the NP-hard or NP-complete classes could be shown to have an efficient, polynomial-time solution algorithm, it would imply all problems in NP have efficient solutions.
+
+\section{Discrete Optimisation}
+
+\subsection{Integer Programming Problems}
+
+Integer programming is a branch of discrete optimisation. It is closely related to combinatorial optimisation. When we talk about integer programming, we usually refer to \emph{integer linear programming} (ILP), a variant of linear programming with the restriction that decision variables must be integers. Zero-one integer linear programming is a special case where variables take on binary values, and there is no objective function to optimise, only constraints to satisfy. Zero-one ILP is NP-complete, on the other hand ILP in general is NP-hard\footnote{The decision version of ILP will also be NP-complete. For example, `is there a feasible value of $\mathbf{x}$ such that $z \geq k$?' for some value $k$. Clearly, this can be verified in polynomial time.}. An integer programming problem may be formulated as,
+
+\begin{align}
+\begin{array}{rl}
+\text{maximise} & z = \mathbf{c}^T\mathbf{x} \\
+\text{subject to} & \mathbf{A}\mathbf{x} = \mathbf{b}, x_i \geq 0, x_i \in \mathbb{Z}
+\end{array}.
+\label{eq:intprog}
+\end{align}
+
+There are many famous problems that may be modelled as an integer program.
+
+\subsubsection{The assignment problem}
+
+The assignment problem models the allocation of machines to tasks such that each machine performs exactly one task and each task is performed, minimising a function subject to costs incurred from job-machine pairings. Unlike most ILPs, the assignment problem is in the P class, the famous Hungarian algorithm solving it in cubic time.
+
+\subsubsection{The knapsack problem}
+
+The knapsack problem as an integer programming model for maximising the summed benefit of a range of items, subject to a weight constraint. Each item has an associated value and weight parameter. The decision variables represent the number of each item selected.
+
+\subsubsection{The travelling salesman problem}
+
+The travelling salesman problem (TSP) models a route plan between a set of destinations, each of which must be visited once and only once\footnote{Clearly, visiting any city more than once must be suboptimal anyway, as by simple geometry it cannot be faster to visit one destination via another than to visit that destination directly.}. The destinations may be represented as vertices on a fully connected graph whose arcs provide the costs of moving between each pair. As an integer programming problem, the objective function minimises the total route cost and the boolean decision variables $x_{ij}$ indicate if destination $j$ is visited from destination $i$. There are \emph{sum to one} constraints to ensure each vertex is arrived at and departed from exactly once.
+
+\subsection{Solution Methods}
+
+Of the exact solution methods for integer programming problems, the branch and bound algorithm is the most prevalent. However, as integer programming is NP-hard, computing exact solutions is often infeasible, and heuristic techniques are used to approximate optimal solutions efficiently. A variety of other approaches exist, including dynamic programming.
+
+\subsubsection{Branch and bound}
+
+The branch and bound method is an exact algorithm, improving upon an exhaustive approach. For example, in an assignment minimisation problem, it is easy to establish a rough lower bound on the optimal solution, simply by ignoring the constraints and taking the minimising value for each variable. Thus, an initial iteration will consider all possible assignments for a first variable, and calculate the (possibly infeasible) lower bound for solutions arising from that. The algorithm continues to consider all possible alternatives for a second variable, and a third, and so on. Once an exact feasible solution is found, it can be used to eliminate all branches with a lower bound exceeding that solution, as even in the best (possibly infeasible) case a solution will be inferior. There are some similarities between branch and bound and the alpha-beta pruning algorithm used in computer chess, and others.
+
+\subsubsection{Simulated annealing}
+
+Simulated annealing is a popular meta-heuristic algorithm. The aim is to reach a \emph{near-optimal} solution efficiently. Exact solutions may be acquired by chance, though this becomes increasingly unlikely for larger problems. Simulated annealing facilitates both incremental improvement and exploration, according to a schedule of \emph{temperatures} (annealing is a metallurgical term) that decrease linearly to zero round by round. In each round, update steps are taken on the objective function. Improvements are always retained, but updates that reduce the objective function are adopted according to some probability function (such as softmax), for which the probability of accepting inferior updates reduces as the schedule plays out. As a meta-heuristic, it describes an exploration strategy for non-convex objective functions without specifying the update step. It is therefore compatible with many problems.
+
+\subsubsection{Tabu Search}
+
+Tabu (taboo\footnote{From the Tongan word for \emph{prohibited}.}) search is a meta-heuristic algorithm for discrete optimisation problems. From an initial solution, the algorithm considers all possible updates in the solution's neighbourhood. It chooses the best amongst them, even if it is inferior (though it tracks the best overall solution). This update is memorised and from it, a new neighbourhood is generated. Any update that would undo the previous update is regarded as \emph{tabu}, except if it beats the best overall solution. The algorithm proceeds thus, with continued local aspiration until some stopping condition is met. Various stopping conditions are possible, for example if no improvement is made for a streak of iterations.
 
 \section{Introduction to Machine Learning}
 
@@ -2258,7 +2398,7 @@ Going beyond binary logistic regression requires some adjustments--the sigma fun
 
 $$p(y_i = c | \mathbf{x}_i, \mathbf{W}) = \frac{\exp(\mathbf{w}_c^T\mathbf{x})}{\sum_{c' = 1}^C \exp(\mathbf{w}_{c'}^T\mathbf{x})},$$
 
-just as with linear discriminant analysis. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes\footnote{This, incidentally leads to an identifiability issue. Identifiability is a property of statistical models whereby a model (the distribution) is defined by a unique parameter set, that is, there is a one-to-one mapping between parameters and models. It is important for precise statistical inference. In this instance the model is clearly not identifiable, as adding any constant vector to each of the parameter vectors gives the same model probabilities. To address this, the parameters are usually offset to eliminate the ambiguity.}. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a `one-of-C encoding' binary vector of length $C$. Thus, the negative log likelihood is,
+just as with linear discriminant analysis. We now have the generalised multinomial or softmax regression. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes\footnote{This, incidentally leads to an identifiability issue. Identifiability is a property of statistical models whereby a model (the distribution) is defined by a unique parameter set, that is, there is a one-to-one mapping between parameters and models. It is important for precise statistical inference. In this instance the model is clearly not identifiable, as adding any constant vector to each of the parameter vectors gives the same model probabilities. To address this, the parameters are usually offset to eliminate the ambiguity.}. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a `one-of-C encoding' binary vector of length $C$. Thus, the negative log likelihood is,
 
 $$\text{NLL}(\mathbf{W}) = -\sum_i \bigg[\bigg(\sum_{c = 1}^Cy_{ic}\mathbf{w}_c^T\mathbf{x}_i\bigg) - \log\bigg(\sum_{c'=1}^C\exp(\mathbf{w}_{c'}^T\mathbf{x}_i)\bigg)\bigg].$$
 
@@ -2305,7 +2445,7 @@ The perceptron is an historically important algorithm. It is one of the earliest
 
 \subsection{Neural Networks}
 
-Several types of neural networks exist, but we will consider the most common--the feed-forward neural network. Neural networks extend the structure of the simple perceptron by stacking a number of perceptrons into $K$ layers, such that the output of each layer propagates into the next. For this reason, a feed-forward neural network is also known as a \emph{multi-layer perceptron}. Each layer, $k$, has a number of `hidden' units, $\mathbf{z}^{(k)}$, and is a linear combination of the last layer of variables, $\mathbf{z}^{(k-1)}$, and a set of weights, $\mathbf{B}^{(k-1)}$, finally passed through a non-linear `activation' function, $h$ (usually a sigmoid or hyperbolic tangent). That is, $\mathbf{z}^{(k+1)} = h(\mathbf{B}^{(k)}\mathbf{z}^{(k)})$ In this way, the states of each of the hidden units are a culmination of the previous layers. Thus, a neural network makes a prediction as,
+Several types of neural networks exist\footnote{See for instance auto-encoders, which reconstruct the input from a reduced number of hidden states--a form of unsupervised learning; or convolutional neural networks, a neural network with a sliding window designed for pattern recognition within high resolution images.}, but we will consider the most common--the feed-forward neural network. Neural networks extend the structure of the simple perceptron by stacking a number of perceptrons into $K$ layers, such that the output of each layer propagates into the next. For this reason, a feed-forward neural network is also known as a \emph{multi-layer perceptron}. Each layer, $k$, has a number of `hidden' units, $\mathbf{z}^{(k)}$, and is a linear combination of the last layer of variables, $\mathbf{z}^{(k-1)}$, and a set of weights, $\mathbf{B}^{(k-1)}$, finally passed through a non-linear `activation' function, $h$ (usually a sigmoid or hyperbolic tangent). That is, $\mathbf{z}^{(k+1)} = h(\mathbf{B}^{(k)}\mathbf{z}^{(k)})$ In this way, the states of each of the hidden units are a culmination of the previous layers. Thus, a neural network makes a prediction as,
 
 $$\hat{y} = h(\mathbf{B}^{(K-1)}h(\mathbf{B}^{(K-2)}(\cdots(h(\mathbf{B}^{(1)})\hat{\mathbf{x}})))).$$
 
@@ -2418,7 +2558,7 @@ where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ i
 
 $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{V}^T =  \mathbf{V}\mathbf{S}^2\mathbf{V}^T,$$
 
-which is the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. Thus, SVD (which may be done with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA.
+which is the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. Thus, SVD (which may be done with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. We can choose the dimensionality by taking the $M$ most significant singular values.
 
 \subsection{Unsupervised Machine Learning}
 
