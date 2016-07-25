@@ -1831,16 +1831,16 @@ The halting problem was one of the first problems shown to be undecidable, that 
 \begin{algorithmic}[1]
 \Procedure{Halt}{algorithm, parameters}
 \If { \//*algorithm halts with parameters*\// }
-\State \Return true
+\State \Return TRUE
 \Else
-\State \Return false
+\State \Return FALSE
 \EndIf
 \EndProcedure
 \Procedure{Halt+}{algorithm}
 \If {\textsc{Halt}(algorithm, algorithm)}
-\State \//*loop forever*\// 
+\State LoopForever()
 \Else
-\State \//*halt*\// 
+\State Terminate()
 \EndIf
 \EndProcedure
 \State \textsc{Halt+}(\textsc{Halt+}) \//*undecidable*\// 
@@ -1947,6 +1947,104 @@ Simulated annealing is a popular meta-heuristic algorithm. The aim is to reach a
 \subsubsection{Tabu Search}
 
 Tabu (taboo\footnote{From the Tongan word for \emph{prohibited}.}) search is a meta-heuristic algorithm for discrete optimisation problems. From an initial solution, the algorithm considers all possible updates in the solution's neighbourhood. It chooses the best amongst them, even if it is inferior (though it tracks the best overall solution). This update is memorised and from it, a new neighbourhood is generated. Any update that would undo the previous update is regarded as \emph{tabu}, except if it beats the best overall solution. The algorithm proceeds thus, with continued local aspiration until some stopping condition is met. Various stopping conditions are possible, for example if no improvement is made for a streak of iterations.
+
+\section{Graph Theory}
+Graphs are mathematical objects with many interesting properties, as well as a vast range of applications. A graph, G = (V, E), consists of a set of vertices (or nodes, or points), $V$, and a set of edges (or arcs, or lines), $E$, that connect them. Edges consist of distinct start and end vertices. In general, a graph's properties do not depend on the \emph{placement} of its vertices, nor on the curvature of its edges. As a result, it does not matter how a graph might be drawn. Its \emph{structure} does not vary as long as all edges and vertices are correctly connected. It can be of mathematical interest, however, to compare the ways a graph can be drawn, for example: given a graph, $G$, can it be drawn without intersecting edges?
+
+There are many structural properties of graphs that may be of interest. A graph is \emph{connected} if every node is reachable from every other node via some path of one or more edges. A disconnected graph may have several \emph{islands} of vertices with no edges to bridge them. A graph of $N$ vertices is \emph{complete} when each of its nodes share an edge with every other node, thus amounting to $1 + 2 + 3 + \cdots + N = N(N - 1)/2$ edges\footnote{The same formula used in the legend of the schoolboy Gauss, who summed the arithmetic series $1 + 2 + 3 + \cdots + 100$.}.  The density of a graph reflects the degree to which it is complete. Density is therefore given by the number of edges divided by the above formula (the maximum). A graph is \emph{bipartite} if its vertices are in two disjoint sets, with every node of each set connected to at least one node in the other set, but with no arcs between nodes of the same set. A graph is \emph{complete} bipartite if each node connects to every node in the opposite set. A graph is \emph{planar} if it can be drawn in two dimensions such that its edges intersect only at vertices, that is, no criss-crossing. It may therefore be \emph{embedded} on a two-dimensional plane. Graphs are taxonomised in various other ways according to the number of their vertices and the manner by which they are connected.
+
+The edges of a graph may embed information such as direction and weight. If a graph has directed edges (commonly depicted with an arrowhead), it is known as a \emph{directed} graph or \emph{digraph}, otherwise, undirected. If some arcs are bidirectional, the graph is known as a directed multigraph, and, for example, a weight may be stored in each direction (upstream and downstream). A directed acyclic graph (DAG) is a directed graph with no cycles. For example, a tree is always directed and acyclic. If a graph has edge weights, it is called a \emph{weighted} graph, and may model things such as route distances and network flows for which paths of accumulating length are of interest.
+
+\subsection{The Seven Bridges of K\"onigsberg}
+
+A celebrated early result in graph theory is by Euler in 1736, when he solved the \emph{Seven Bridges of K\"onigsberg} problem. He demonstrated no walk could be made over the seven bridges connecting the islands of the town, K\"onigsberg (then Prussia, now Kaliningrad, Russia), such that each bridge was crossed exactly once. Euler reduced the layout of the town from a detailed cartographical map to a graph, with four vertices to represent the four land masses and seven arcs between them for the bridges. He then made the simple observation that apart from the first and last land masses in a tour, each land mass must have an outbound arc for every inbound arc in order to meet the requirement of crossing every bridge exactly once. As every land mass had an odd number of bridges, the problem was logically unsolvable. Of course, Euler could have performed this same reasoning without this novel formalism, but a neat graph depiction brought about some mathematical rigour.
+
+\subsection{The Three Cottages Problem}
+
+The Three Cottages Problem is an old problem of unknown origin whose solution constitutes a fundamental result in graph theory. The problem statement reads:
+
+\emph{Suppose we have three cottages in a small village, and three utility stations (for example, water, drainage, and electricity). Is it possible to connect each cottage with each utility with paths that do not cross?}
+
+Thus, the cottages and stations form a complete bipartite graph, with three nodes in each set. In the Kuratowski\footnote{Kazimierz Kuratowski (1896-1980) was a Polish mathematician.} notation, this is $K_{3, 3}$, so the problem is asking whether $K_{3, 3}$ is planar. A relatively simple solution exists. Note first that because the graph is bipartite, any face has at least four edges, as we cannot draw arcs between nodes of the same set. Thus, we may write $E^{*} \geq 4F$, where $F$ is the number of faces and $E^{*}$ is an upper bound on $E$, the number of edges, noting that an edge may be shared between multiple faces. In fact, we may observe also that each edge is in exactly two faces, as it shares a vertex with two other edges. Thus, $E^{*} = 2E$, giving $E \geq F/2$. Now, by the Euler characteristic\footnote{The Euler characteristic states for any convex polyhedron (any shape in any dimensions that is outward-facing like a circle, triangle, cube, sphere, etc.), or planar graph, $V - E + F = 2$, where $V$ is the number of vertices, $E$ is the number of edges, and $F$ is the number of faces. This equation is regularly voted as one of the most beautiful in mathematics, usually right behind Euler's identity.}, $V - E + F = 2$, where finally $V$ is the number of vertices. By substitution, we obtain $E \leq 2V - 4$. Since in our problem $V = 6$ and $E = 9$, we have found a contradiction, hence the problem has no solution. Wagner's theorem is a fundamental result for planar graphs, stating that no planar graph may contain the \emph{utility graph}, $K_{3,3}$, or $K_5$ (the fully-connected graph in fives node) as a minor\footnote{A graph minor is, roughly speaking, a graph formed from a subset of the vertices in a graph. Specifically, a minor can be formed from an initial graph by \emph{deleting} some number of vertices and edges, or \emph{contracting} edges, that is merging two vertices such that the edge between them disappears.}.
+
+\subsection{NP-complete Graph Problems}
+
+Many graph-related problems are NP-complete. Here we briefly detail the clique problem and the minimum vertex cover problem, both members of Karp's 21 NP-complete problems.
+
+\subsubsection{The Clique Problem}
+
+A clique is a subset of the vertices of a graph whose subgraph is complete. In a social network, this could represent a group of people who all know each other.  Finding a clique of a certain size is an NP-complete problem, as demonstrated graphically in Figure \ref{fig:clique}. For the 3SAT expression $(y \lor x \lor x) \land (\neg x \lor y \lor y) \land (\neg x \lor \neg y \lor \neg y)$, form the tripartite graph corresponding to the groupings of the three clauses, connecting nodes whose corresponding literals are logically compatible. If three literals are logically compatible, they solve the 3SAT problem, and form a clique. This implies that the clique problem is NP-complete.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.5\textwidth]{Figures/clique.pdf}
+\caption{Graphically showing the equivalence between 3SAT and the clique problem, implying the clique problem is NP-complete.}
+\label{fig:clique}
+\end{figure}
+
+\subsubsection{Minimum Vertex Cover}
+
+The goal of the minimum vertex cover problem is to find a subset, $V'$, of vertices of a graph such that every edge in the graph has at least one endpoint in $V'$, and such that the sum of the costs of the chosen vertices is minimised. This can be formulated as an integer linear program,
+
+\begin{align}
+\begin{array}{rl}
+\text{minimise} & z = \sum_v c(v)x_v \\
+\text{subject to} & x_u + x_v \geq 1, \forall \{u, v\} \in E, \\
+& x_i \in \{0, 1\}
+\end{array}
+\label{eq:vertexcover}
+\end{align}
+
+where $c(v)$ denotes a cost function for a vertex $v$ and $x_v$ is set to one if the vertex $v$ is selected for the cover.
+
+\subsection{Graph Traversal}
+
+The act of traversing a graph is to visit each of its nodes exactly once, according to some traversal ordering. Two main strategies may be used: depth-first search (DFS) and breadth-first search (BFS). A DFS visits the descendants of a node before visiting its siblings, that is, traversing sub-branch by sub-branch. A BFS visits the siblings of a nodes before visiting its descendants, that is, traversing depth by depth. Pseudo-code for DFS and BFS is given in Algorithms \ref{alg:dfs} and \ref{alg:bfs} respectively. When the graph has a tree structure (only branching, no converging), there is a single path to each node from the root, hence marking nodes as visited is unnecessary. Traversal may, for example, be used to exhaustively locate a particular node in the graph. A BFS has the potential advantage of facilitating a depth cutoff, searching each depth exhaustively and one at a time. However, there is then a space requirement to queue descendants in some internal memory structure, and for a ballooning tree structure such as in a chess \emph{game tree}, storing more than a few levels or \emph{ply} is infeasible.
+
+\begin{algorithm}
+\caption{Pseudocode for a depth-first search (DFS).}\label{alg:dfs}
+\begin{algorithmic}[1]
+\Procedure{InitDFS}{graph}
+\State DFS(graph$\rightarrow$root)
+\EndProcedure
+\Procedure{DFS}{node}
+\State node$\rightarrow$MarkAsRead()
+\For {child in node$\rightarrow$children}
+\If{NOT child$\rightarrow$AlreadyRead()}
+\State DFS(child)
+\EndIf
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Pseudocode for a breadth-first search (BFS).}\label{alg:bfs}
+\begin{algorithmic}[1]
+\Procedure{BFS}{graph}
+\State queue $\leftarrow$ [ ]  \//* initialise FIFO queue *\//
+\For {child in graph$\to$root$\to$children}
+\State queue$\rightarrow$Enqueue(child)
+\EndFor
+\While {NOT queue$\rightarrow$IsEmpty()}
+\For {child in queue$\rightarrow$front$\rightarrow$children}
+\If{NOT child$\rightarrow$AlreadyRead()}
+\State queue$\rightarrow$Enqueue(child)
+\EndIf
+\EndFor
+\State queue$\rightarrow$Dequeue(queue$\rightarrow$front)
+\EndWhile
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Shortest Path Problem}
+
+A common problem to compute over a weighted graph is the shortest path between a source node and sink node within the graph. Perhaps the two most famous shortest path algorithms are Dijkstra's algorithm and the Bellman-Ford algorithm.
+
+\subsubsection{Dijkstra's Algorithm}
+
+Given a weighted graph, Dijkstra's algorithm, discovered by Dutch computer scientist,  Edsger W. Dijkstra (1930-2002), finds the shortest path from a source node to all other nodes in a graph. In practice, the goal is often to find the shortest path from a source node to a unique sink node, but Dijkstra's algorithm computes shortest paths to all nodes as a matter of course. The algorithm consists of visiting each node in order of closeness (initially the source node has zero distance and all others are infinite). Each neighbour of the current node is then inspected and its shortest distances updated, if it happens that a shorter path can reach it via the current node. After a node has been visited, it is discarded, and the algorithm terminates once all nodes have been visited. Aside from their shortest distance, nodes store the node from which its shortest path derives, such that at the end, the shortest path can be traced back from sink to source. The algorithm runs in $O(N\log N)$ time in the worst case, where $N$ is the number of vertices.
 
 \section{Introduction to Machine Learning}
 
@@ -2178,7 +2276,7 @@ As an alternative to closed-form solutions, there are sure-fire numerical method
 
 $$\boldsymbol\beta^{k+1} = \boldsymbol\beta^{k} - \alpha \nabla\mathcal{L}(\boldsymbol\beta^k),$$
 
-where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent can be enhanced with a line search to find the optimal step size for each search direction. When used, the algorithm exhibits a zig-zag path to the optimal point, as each step is perpendicular to the last. Gradient descent also has more sophisticated variants such as Newton's method and quasi-Newton methods, whose application may be warranted for larger data sets.
+where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent can be enhanced with a line search to find the optimal step size for each search direction. When used, the algorithm exhibits a zig-zag path to the optimal point, as each step is perpendicular to the last. Gradient descent also has more sophisticated variants such as Newton's method and quasi-Newton methods, whose application may be warranted for larger data sets. One alternative to gradient descent is the conjugate gradient method, an iterative technique related to direct method Cholesky decomposition for symmetric positive definite matrices, in which the solution vector is built up iteratively as a linear combination of a set of mutually conjugate vectors. This approach may be advantageous in sparse linear systems.
 
 \begin{figure}[!ht]
 \centering
@@ -2628,8 +2726,7 @@ $$\arg \max_\theta \mathbb{E}_{p(z_n)}[\log p(x_n, r_n | \theta)].$$
 \item 23 is the first number at which the Birthday paradox gives a greater than $50\%$ chance of a collision
 \item $2^{20} \approx 10^6$
 \item One googol is $10^{100}$, that is, 1 followed by 100 zeroes. A googolplex is $10^{\text{googol}} = 10^{10^{100}}$. A \emph{googolplexian} is $10^{\text{googolplex}} = 10^{10^{10^{100}}}$.
-\item Graham's number is a famous named number larger by incomprehensible magnitudes. It provides an upper bound to the solution of a problem in graph theory. It is so large, it can only practically be written in terms of amalgamations of hyper-operations, exponentiation being absurdly insufficient. Using the specialised Knuth's arrow notation, Graham's number can be written as the last in a sequence 64 numbers, the first being $g_1 = 3\uparrow\uparrow\uparrow\uparrow3 = g\uparrow^4$, that is, 3 hexation 3 (already unimaginably big), the next being $g_2 = 3\uparrow^{g_1}3$, where $\uparrow^{g_1}$ is a hyperoperation whose order is $g_1$ (recall exponentiation is order 3 and hexation is order 6). It is necessary to pause and try to think what this means (you can't). Thus, the sequence continues, with $g_n = 3\uparrow^{g_{n-1}}$, all the way to $g_{64} = 3\uparrow^{g_{63}}$, and $g_{64}$ is Graham's number.
-There are simply no conceivable analogies to describe or relativise this number, or even the first number in the sequence. If, for example, you wrote 1 digit on every Planck length volume in the universe, once every Planck time unit, from the start to the end of the universe, you would still have completed $0.000000...\%$ (with another (slightly smaller) inconceivably large number of zeroes) of even $g_1$.
+\item Graham's number is a famous named number larger by incomprehensible magnitudes. It provides an upper bound to the solution of a problem in graph theory. It is so large, it can only practically be written in terms of amalgamations of hyper-operations, exponentiation being absurdly insufficient. Using the specialised Knuth's arrow notation, Graham's number can be written as the last in a sequence 64 numbers, the first being $g_1 = 3\uparrow\uparrow\uparrow\uparrow3 = g\uparrow^4$, that is, 3 hexation 3 (already unimaginably big), the next being $g_2 = 3\uparrow^{g_1}3$, where $\uparrow^{g_1}$ is a hyperoperation whose order is $g_1$ (recall exponentiation is order 3 and hexation is order 6). It is necessary to pause and try to think what this means (you can't). Thus, the sequence continues, with $g_n = 3\uparrow^{g_{n-1}}$, all the way to $g_{64} = 3\uparrow^{g_{63}}$, and $g_{64}$ is Graham's number. There are simply no conceivable analogies to describe or relativise this number, or even the first number in the sequence. If, for example, you wrote 1 digit on every Planck length volume in the universe, once every Planck time unit, from the start to the end of the universe, you would still have completed $0.000000...\%$ (with another (slightly smaller) inconceivably large number of zeroes) of even $g_1$.
 \item With 42 folds of a single sheet of paper, you would have a tower high enough to reach the moon. Given the thickness of paper is $1 \times 10^{-4}$ meters (0.1 mm) and the moon is $3.8 \times 10^{9}$ meters (380,000 km) away, the number of folds required solves the equation $10^{-4}\times 2^{\text{folds}} = 3.8\times10^9 \implies \text{folds} \approx 42$. Unfortunately, it is not possible to fold paper more than six or seven times! 103 folds would span the size of the universe.
 \item $1729 = 10^3 + 9^3 = 12^3 + 1^3$ is the smallest number expressible by two positive cubes in two different ways. According to legend, this observation was first made by Ramanujan to G. H. Hardy when Hardy informed him he had travelled in taxi number 1729 to visit him. The number makes a number of other famous appearances in number theory.
 \item The `number of the beast', 666, is likely to have originated from an encoding of the Hebrew name of the Roman emperor, `Nero Caesar'.
@@ -2639,10 +2736,8 @@ There are simply no conceivable analogies to describe or relativise this number,
 \item Most integers contain the digit 3. Consider the numbers before the first power of 10, namely, $0, 1, 2, 3, 4, 5, 6, 7, 8, 9$. Clearly there is only one number containing a 3 (3 itself), and we write $N(1) = 1$, and the proportion is $P(1) = 1/10$. For the first hundred numbers, the pattern is the same, with each group of tens containing one number with a 3, which are $3, 13, 23, \dots, 93$, except for the thirties, which have $30, 31, 32, 33, \dots, 39$. Thus we have $N(2) = 9 \times 1 + 10 = 19$, and $P(2) = 19/100$. For the thousands, the same is true for each hundred, except for the three hundreds, all of which contain a 3. Hence, $N(3) = 9\times(9 \times 1 + 10) + 100 = 199$, and $P(3) = 199/1000$. It is clear that in general, for the $k$th power of 10 we have $N(k) = 10^{k-1} + 9\cdot N(k-1) = 10^{k-1} + 9(10^{k-2} + 9(10^{k-3} \dots 9\cdot N(1))) = \sum_{i=1}^{k}9^{i-1}\cdot10^{k-i} = (9/10^k)\cdot\sum_{i=1}^{k}(9/10)^i$. Thus, we have a geometric series displaced by one term, and so $N(k) =  (9/10^k)\cdot((1-(9/10)^k)/(1-(9/10)) - 1)$, and $P(k) = N(k)/10^k$. As $k \to \infty$, $P(\infty) = \lim_{k \to \infty} P(k) = (1/9)\cdot(10 - 1) = 1$, hence the proportion of numbers containing at least one digit 3 goes to 1. Of course, the same can be shown for the other 9 digits, and the general finding is that almost all numbers contain every digit.
 \item Mill's constant is a number that, conditioned on the (unproven) Riemann hypothesis, is the base of a double exponential function that always yields an integer part that is prime. That is, Mill's number is $A \approx 1.306$ and $\lfloor A^{3^n}\rfloor$ is always prime.
 \item Fractals have very interesting self-similar properties. For example, Koch's snowflake is a geometric shape with infinite perimeter but finite area. By inspection the area is finite, as a circle of finite diameter can be drawn around it provided it is sufficiently large. The perimeter is the result of repeating infinitely many times a procedure that reduces side-length by a factor of three, but nevertheless quadruples the number of sides each time. Repeating ad infinitum therefore results in a perimeter that is $\lim_{N \to \infty}(4/3)^N = \infty$ times the length of the initial perimeter.
-\item The Euler characteristic states for any convex polyhedron (any shape in any dimensions that is outward-facing like a circle, triangle, cube, sphere, etc.) $V - E + F = 2$, where $V$ is the number of vertices, $E$ is the number of edges, and $F$ is the number of faces. This equation is regularly voted as one of the most beautiful in mathematics, usually right behind Euler's identity.
 \item A M\"obius strip is a three dimensional shape with a single surface and one edge. It can be emulated by twisting a ribbon by a half-turn and connecting its ends. A Klein bottle is a \emph{four}-dimensional solid with a single surface and \emph{no} edges! It is formed by fusing two M\"obius strips along their edges.
 \item Skewes' number, $10^{10^{10^{34}}}$ is another famous large number, and the old record holder before the discovery of Graham's number. Named after one of John Littlewood's students, Stanley Skewes, it gives an upper bound on the smallest number for which Gauss' prime-counting function, $\pi(n)$ is greater than the logarithmic integral function, $\text{li}(n)$ (another prime-counting function initially thought to always be greater than Gauss').
-\item Graph theory was invented by Euler in 1736 when he solved the \emph{Seven Bridges of K\"onigsberg} problem. He demonstrated no walk could be made over the seven bridges connecting the islands of the town, K\"onigsberg (then Prussia, now Kaliningrad, Russia), such that each bridge was crossed exactly once.
 \item The harmonic series, $h = \sum_{n=1}^{\infty} 1/n$ is (surprisingly) divergent. Clearly, $h = 1 + 1/2 + (1/3 + 1/4) + (1/5 + 1/6 + 1/7 + 1/8) + \cdots > 1 + 1/2 + (1/4 + 1/4) + (1/8 + 1/8 + 1/8 + 1/8) \cdots = 1 + 1/2 + 1/2 + 1/2 + \cdots$, which is clearly divergent.
 \end{itemize}
 
