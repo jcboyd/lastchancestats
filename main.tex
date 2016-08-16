@@ -39,7 +39,7 @@
 
 \tableofcontents
 
-Statistics are so ubiquitous across the hard and soft sciences that initial undergraduate courses on the topic may attempt to make themselves one-size-fits-all, regardless of the diverse backgrounds of the students in the class. The result therefore may be a course devoid of the mathematical rigour and comprehension expected by a mathematician. This can lead to an irrational hatred of statistics. Last Chance Stats returns to first principles and develops the theory behind statistics step by step. Each section aims to present a new idea, passing through the most essential and interesting mathematics, while sidestepping burdensome secondary details, and building towards a culminating result. The sections are accessible as individual modules, but also aim to contribute to a cohesive picture of statistics in general. Last Chance Stats begins with fundamental results from number theory, and goes on to show the connections to statistics, as well as to answer the nagging questions that often go unanswered in statistics courses--questions such as, `where do probability functions come form?', `what is the error function? what is the gamma function? and how can they be evaluated?', `what theory goes into a hypothesis test?', `what are degrees of freedom?', `what is a p-score?', `why is sample variance weighted by $N-1$ and not $N$ samples?'.
+%Statistics are so ubiquitous across the hard and soft sciences that initial undergraduate courses on the topic may attempt to make themselves one-size-fits-all, regardless of the diverse backgrounds of the students in the class. The result therefore may be a course devoid of the mathematical rigour and comprehension expected by a mathematician. This can lead to an irrational hatred of statistics. Last Chance Stats returns to first principles and develops the theory behind statistics step by step. Each section aims to present a new idea, passing through the most essential and interesting mathematics, while sidestepping burdensome secondary details, and building towards a culminating result. The sections are accessible as individual modules, but also aim to contribute to a cohesive picture of statistics in general. Last Chance Stats begins with fundamental results from number theory, and goes on to show the connections to statistics, as well as to answer the nagging questions that often go unanswered in statistics courses--questions such as, `where do probability functions come form?', `what is the error function? what is the gamma function? and how can they be evaluated?', `what theory goes into a hypothesis test?', `what are degrees of freedom?', `what is a p-score?', `why is sample variance weighted by $N-1$ and not $N$ samples?'.
 
 \section{Warm Up}
 
@@ -263,6 +263,99 @@ from which it follows that the derivative of the function, $f'(x)$, is 0 at $c$.
 The mean value theorem states that for a differentiable function defined on an interval $[a, b]$, at least one point on the curve must have gradient equal to that of the chord connecting the endpoints, $(a, f(a))$ and $(b, f(b))$. It is an intuitive result, as any curve which succeeds in climbing (or descending) from $f(a)$ to $f(b)$, must match the rise over run of that slope at least at one point, otherwise it will never make the ascent.
 
 First define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since $f(x)$ is by construction. We choose $r$ such that $g(x)$ satisfies Rolle's theorem, that is, $g(a) = g(b)$, hence $f(a) - ra = f(b) - rb$, and $r = (f(a) - f(b))/(a - b)$, that is, the slope of the chord connecting the endpoints. Because of Rolle's theorem, for some $c \in [a, b], g'(c) = 0,$ hence $f'(c) = r$, and the proof is complete.
+
+\section{Linear Algebra}
+
+A system of linear equations is a set of $M$ equations in $N$ variables. Each variable may feature in one or more of the $M$ equations. The typical interest in these systems is to find a \emph{simultaneous solution}, that is, values for each of the variables satisfying all the equations at once. If $M < N$ (more variables than equations), the system is \emph{underdetermined}. In this case, there will not be enough information to identify a unique solution, and the solution will be expressed in terms of at least one of the variables, giving an infinite family of solutions. If any equations are mutually contradictory\footnote{For example, the equations $x + y + z = 1$ and $x + y + z = 2$ have no simultaneous solution.}, however, the system will have no solution. If $M > N$, the system is \emph{overdetermined}. Unless the excess equations are in fact linear combinations of others, the solution will necessarily have mutually contradictory equations. A system of linear equations may alternatively be written as a matrix equation,
+
+$$\mathbf{A}\mathbf{x} = \mathbf{b},$$
+
+where $\mathbf{A}$ is the matrix of coefficients, $\mathbf{x}$ is vector form of the simultaneous solution, and $\mathbf{b}$ is the vector of constants. The solution, $\mathbf{x}$, may therefore be found by inverting $\mathbf{A}$. A square matrix $\mathbf{A} \in \mathbb{R}^{N\times N}$ is invertible or non-singular if there is a matrix $\mathbf{A}^{-1} \in \mathbb{R}^{N\times N}$ such that $\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}$. Non-square matrices can have at most distinct left or right inverses. There are many matrix properties necessary and sufficient for invertibility. In particular, the columns of $\mathbf{A}$ are linearly independent and span\footnote{The span of a set of vectors is intuitively its expressiveness as a basis. $N$ linearly independent vectors form a basis for the vector space $\mathbb{R}^{N}$. On the other hand, if there are linear dependencies in the system, the span will be of lower dimension.} the vector space $\mathbb{R}^{N}$. This is equivalent to having full rank, which is in turn equivalent to having zero nullity\footnote{The rank of a matrix, $\mathbf{A}$ is the dimensionality of the vector space spanned with its columns as a basis. This is always equivalent to the span of its rows (row rank of $\mathbf{A}$). The nullity of a matrix is the dimensionality of its null space, that is, the set of all vectors solving $\mathbf{A}\mathbf{x} = \mathbf{0}$.}. These properties are connected in the rank-nullity theorem\footnote{The rank-nullity theorem states that for $N \times N$ matrix, $\mathbf{A}$, its rank and nullity sum to its number of columns, formally, $\text{rank}(\mathbf{A}) + \text{null}(\mathbf{A}) = N$}, and further in the fundamental theorem of linear algebra. If the values of a matrix are randomly sampled from a uniform distribution, the matrix has an infinitesimal chance of having linearly dependent columns, and hence of being singular. For this reason, singular matrices are less a practical concern in least squares regression than is \emph{multi-collinearity}, that is, highly correlated columns that cause ill-conditioning and numerical errors.
+
+\subsection{Analytic Form of Inverse}
+
+Another necessary and sufficient property of a non-singular matrix is a non-zero determinant. The determinant has an analytic form recursive in the \emph{minors} of the matrix, that is, each of the $N$ sub-matrices formed by removing a given row and each of the $N$ columns in turn. Thus, for $\mathbf{A} \in \mathbb{R}^{2 \times 2} \text{det}(\mathbf{A}) =
+\begin{vmatrix}
+a&b\\
+c&d
+\end{vmatrix} =
+ad - bc
+$. For $\mathbf{A} \in \mathbb{R}^{3 \times 3}$,
+
+$$
+\text{det}(\mathbf{A}) =
+\begin{vmatrix}
+a&b&c\\
+d&e&f\\
+g&h&i
+\end{vmatrix} =
+a\begin{vmatrix}
+e&f\\
+h&i
+\end{vmatrix} -
+b\begin{vmatrix}
+d&f\\
+g&i
+\end{vmatrix} +
+c\begin{vmatrix}
+d&e\\
+g&h
+\end{vmatrix},
+$$
+
+and for $\mathbf{A} \in \mathbb{R}^{4 \times 4}$,
+
+$$
+\text{det}(\mathbf{A}) =
+\begin{vmatrix}
+a&b&c&d\\
+e&f&g&h\\
+i&j&k&l\\
+m&n&o&p
+\end{vmatrix} =
+a\begin{vmatrix}
+f&g&h\\
+j&k&l\\
+n&o&p
+\end{vmatrix} -
+b\begin{vmatrix}
+e&g&h\\
+i&k&l\\
+m&o&p
+\end{vmatrix} +
+c\begin{vmatrix}
+e&g&h\\
+i&k&l\\
+m&o&p
+\end{vmatrix} -
+d\begin{vmatrix}
+e&g&h\\
+i&k&l\\
+m&o&p
+\end{vmatrix}.
+$$
+
+A naive approach to computing a determinant would involve $\mathcal{O}(N!)$ operations. However, efficient algorithms exist, and if required, a determinant is computed as a byproduct of inversion. The determinant is not usually needed in practice, however. The analytic form of the inverse of matrix $\mathbf{A} \in \mathbb{R}^{N \times N}$ is,
+
+$$\mathbf{A}^{-1} = \frac{1}{\text{det}(\mathbf{A})}\mathbf{C}^{T},$$
+
+where $\mathbf{C} \in \mathbb{R}^{N \times N}$ is the \emph{cofactor} matrix of $\mathbf{A}$, whose elements are each of the $N^2$ minors of $\mathbf{A}$, that is, the determinants of each of the $(N - 1) \times (N - 1)$ sub-matrices of $\mathbf{A}$, and with alternating signs. The transpose of the cofactor matrix is denoted the \emph{adjugate} matrix. This form rarely has use outside of theory, as its computation is intractable like the analytic determinant.
+
+\subsection{Gaussian Elimination}
+
+Gaussian elimination is an ancient technique for solving systems of linear equations, but has in modern times been erroneously attributed to Gauss, who merely contributed to its notation. The technique consists of performing a series of \emph{elementary row operations} to transform the system into a form where its solution or solutions may be extracted directly. The row operations are: swap two rows; scale a row by a constant factor, and; add one row to another. With a finite sequence of these operations, a system may be reduced to \emph{row echelon form}, where the matrix has an upper-triangular form, allowing solutions to be found by back-substituting each variable. When the system is further reduced to \emph{reduced echelon form}, the technique is known as Gauss-Jordan elimination. It may be seen easily that these row operations correspond with multiplying the matrix by slight modifications of the identity matrix. The technique has a number of useful applications, in particular computing a matrix inverse. This can be found by applying the technique to the system,
+
+$$\mathbf{A}\mathbf{X} = \mathbf{I},$$
+
+and reducing $\mathbf{A}$ to $\mathbf{I}$ transforms $\mathbf{I}$ to $\mathbf{A}$ in a product of elementary row operations matrices. Gaussian elimination can also be used to inform about a matrix rank, as well as to efficiently compute a matrix determinant.
+
+\subsection{Matrix Decompositions}
+
+More efficient algorithms for solving systems of linear equations and inverting matrices come in the form of matrix decompositions. The most widely used, LU decomposition, consists of factorising the matrix into lower and upper triangular matrices. Inverting these triangular matrices may be done very efficiently. QR decomposition is another decomposition where $\mathbf{Q}$ is orthogonal and $\mathbf{R}$ is upper-triangular. In the special case of a Hermitian, positive-definite matrix, we can perform a Cholesky\footnote{Andr\'e-Louis Cholesky was a French mathematician (1875-1918).} decomposition faster than the previous methods. Note that a Hermitian matrix, named after French mathematician, Charles Hermite (1822-1901), is a matrix of complex numbers equal to its transpose in its real parts, and complex conjugate in imaginary parts. Thus, if our domain is the real numbers, a Hermitian matrix is the same as a symmetric matrix. In this case, we can write our matrix as,
+
+$$\mathbf{A} = \mathbf{L}\mathbf{L}^T,$$
+
+where $\mathbf{L}$ is a lower triangular matrix. Solutions can then be derived in the usual way using back-propagation. Symmetric positive-definite matrices arise in machine learning models, thus Cholesky decomposition and the related, iterative conjugate gradient method are of interest.
 
 \section{Vector Calculus}
 
