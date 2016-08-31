@@ -6,3 +6,6 @@ Notes on number theory, probability theory, and machine learning
 
 ## Download
 http://jcboyd.github.io/lastchancestats/main.pdf
+
+## License
+MIT

@@ -1694,18 +1694,17 @@ $$\mathcal{H}(X) = \sum_{x \in X}p(x)\log\frac{1}{p(x)}.$$
 
 Entropy clearly must be positive, and is minimised for a distribution where a single event has probability 1, that is, a deterministic variable. In this case, the entropy of the variable is 0, that is, minimally uncertain. Hence, $\mathcal{H}(X) \geq 0$. When we have binary events, $x \in \{0, 1\}$, we have the binary entropy function, which simplifies to,
 
-$$h_2(p) = -p\log p - (1-p)\log p.$$
+$$h_2(p) = -p\log p - (1-p)\log (1 - p).$$
 
 \subsection{Kullback-Liebler Divergence}
 
 Kullback-Liebler (KL) divergence is a measure of the disparity between two probability distributions, $p$ and $q$, written,
 
 \begin{align}
-\mathcal{D}(p || q) &= \sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag \\
-&= \mathcal{H}(p, q) - \mathcal{H}(p). \notag
+\mathcal{D}(p || q) &= \sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag
 \end{align}
 
-KL divergence can therefore be interpreted as the average number of \emph{additional} bits required to encode an alphabet with chosen distribution $q$, given true distribution $p$. Like entropy, divergence must be greater than zero. To see this, write,
+KL divergence can therefore be interpreted as the average number of \emph{additional} bits required to encode an alphabet with chosen distribution $q$, given true distribution $p$. Like entropy, divergence must be greater than or equal to zero. To see this, write,
 
 \begin{align}
 -\mathcal{D}(p || q) &= -\sum_{k=1}^K p_k \log\frac{p_k}{q_k} \notag \\
@@ -1717,7 +1716,7 @@ KL divergence can therefore be interpreted as the average number of \emph{additi
 where the inequality in (\ref{eq:jensen}) comes from applying Jensen's inequality, since $\log$ is a concave function. A corollary to this is that the distribution maximising entropy for discrete variables is the uniform distribution, since,
 
 \begin{align}
-0 \leq -\mathcal{D}(p || u) &= \sum_{k=1}^K p_k \log\frac{p_k}{u_k} \notag \\
+0 \leq \mathcal{D}(p || u) &= \sum_{k=1}^K p_k \log\frac{p_k}{u_k} \notag \\
 &= \sum_{k=1}^K p_k \log{p_k} - \sum_{k=1}^K p_k \log \frac{1}{K} \notag \\
 &= -\mathcal{H}(p) + \log K \notag
 \end{align}
@@ -1734,16 +1733,16 @@ I(X; Y) &\triangleq \mathcal{D}(p(X, Y) || p(X)p(Y)) = \sum_x \sum_y p(x, y) \lo
 
 and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is lifted from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}. For this reason, mutual information can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
 
-\section{Continuous Optimisation}
+\section{Convex Optimisation}
 \subsection{Convexity}
-Convexity is a useful property in optimisation because it guarantees that any local optimum is a \emph{global} optimum.
+Convexity is a useful property in optimisation because it guarantees that any local optimum of a function is a \emph{global} optimum.
 
 \subsubsection{Convex Sets}
 A set of points, $S$, in a vector space is convex if for any two points $x_1$ and $x_2$ in $S$, all points in-between, that is, all points on the straight line connecting $x_1$ and $x_2$ are also in $S$. In a sense, it is a region that does not have any `holes'. For example, a circular region is convex, but a doughnut is not, nor is a crescent. A line passing through points $x_1$ and $x_2$ can be written, $x_1 + c(x_2 - x_1)$, for some constant $c$. Formally, a set $S$ is convex if,
 
 $$S = \Big\{x_1, x_2 \in S \implies (1 - \lambda) x_1 + \lambda x_2 \in S \Big\},$$
 
-for all $\lambda \in [0, 1]$. A convex hull of a set of points is the smallest convex region enclosing those points.
+for all $\lambda \in [0, 1]$, that is, all points along the chord between the two points are also part of the convex set. A convex hull of a set of points is the smallest convex region enclosing those points.
 
 \subsubsection{Convex Functions}
 A function, $f(x)$, is convex on an interval if,
@@ -1840,11 +1839,11 @@ If we choose $\mathbf{v}$ in the direction of a contour, then by definition $f(\
 \end{array} \notag,
 \end{align}
 
-noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible point (satisfying the constraint), $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x} + \delta\mathbf{x}) < f(\mathbf{x})$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})$ for some scalar $\lambda$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
+noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible point (satisfying the constraint), $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}_F\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x}_F + \delta\mathbf{x}) < f(\mathbf{x}_F)$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve at $0$ on the surface, $h(\mathbf{x})$. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}_F) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}_F)$ for some scalar $\lambda$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
 
-$$\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*)) = \delta\mathbf{x}\cdot\lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*) = 0.$$
+$$\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*)) = \delta\mathbf{x}\cdot\lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*) = 0,$$
 
-At such a point $\mathbf{x}^*$, we have it that the next feasible point (normal to the constraint surface) will not further minimise the objective function. This stopping condition is incorporated in the method of Lagrange multipliers.
+that is, where the gradient of $f(\mathbf{x})$ runs parallel to the gradient of the level curve. At such a point $\mathbf{x}^*$, we have it that the next feasible point (normal to the constraint surface) will not further minimise the objective function. This stopping condition is incorporated in the method of Lagrange multipliers.
 
 \subsection{The Method of Lagrange Multipliers}
 
@@ -1852,7 +1851,7 @@ The method of Lagrange multipliers, discovered by Italian-French mathematician J
 
 $$\mathcal{L}(\mathbf{x}, \lambda) = f(\mathbf{x}) + \lambda h(\mathbf{x}).$$
 
-Clearly, at an optimum, $\mathcal{L}(\mathbf{x}^*, \lambda^*) = f(\mathbf{x}^*)$, since $\nabla_{\mathbf{x}}\mathcal{L}(\mathbf{x}^*, \lambda^*) = \mathbf{0} \implies -\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*)$, the optimality condition from above, and $\nabla_{\lambda}\mathcal{L}(\mathbf{x}, \lambda) = 0 \implies h(\mathbf{x}) = 0$, the equality constraint. We finally require $\mathbf{v}^T\cdot\nabla_{\mathbf{xx}}f(\mathbf{x}^*)\cdot\mathbf{v} \geq 0, \forall \ \mathbf{v} : \nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*)^T\mathbf{v} = 0$, that is, positive semi-definiteness for the Hessian (though we need only consider vectors $\mathbf{v}$ along the constraint contour). To illustrate, consider maximising the Shannon entropy equation, $f(p_1, \dots, p_n) = -\sum_i p_i \log p_i$, for some probability distribution, $\mathbf{p}$, subject to the constraint $\sum_i p_i = 1$. Introducing a Lagrange multiplier for the constraint gives us,
+Clearly, at an optimum, $\mathcal{L}(\mathbf{x}^*, \lambda^*) = f(\mathbf{x}^*)$, since $\nabla_{\mathbf{x}}\mathcal{L}(\mathbf{x}^*, \lambda^*) = \mathbf{0} \implies -\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*)$, the optimality condition from above, and $\nabla_{\lambda}\mathcal{L}(\mathbf{x}^*, \lambda^*) = 0 \implies h(\mathbf{x}) = 0$, the equality constraint. We finally require $\mathbf{v}^T\cdot\nabla_{\mathbf{xx}}f(\mathbf{x}^*)\cdot\mathbf{v} \geq 0, \forall \ \mathbf{v} : \nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*)^T\mathbf{v} = 0$, that is, positive semi-definiteness for the Hessian (though we need only consider vectors $\mathbf{v}$ along the constraint contour). To illustrate, consider maximising the Shannon entropy equation, $f(p_1, \dots, p_n) = -\sum_i p_i \log p_i$, for some probability distribution, $\mathbf{p}$, subject to the constraint $\sum_i p_i = 1$. Introducing a Lagrange multiplier for the constraint gives us,
 
 $$\mathcal{L}(\mathbf{x}, \lambda) =  -\sum_i p_i \log p_i + \lambda\bigg(\sum_i p_i - 1\bigg),$$
 
@@ -1873,7 +1872,7 @@ Consider an optimisation problem with a single inequality constraint,
 \end{array} \notag.
 \end{align}
 
-Such a constraint may be either \emph{active} or \emph{inactive}. When it is inactive, the local optimum falls within the feasible region. In this case, the optimality conditions are identical to the unconstrained case. Recall, our conditions do not tell us how to predetermine whether a constraint is active, nor do they (as previously noted) tell us how to find the optimum. At most, the optimality conditions inform the design of optimisation algorithms by telling us what to look for. When the constraint is active, the local optimum lies outside of the feasible region. We note first that the constrained optimum must lie on the constraint surface, as this is closest to the local optimum. So in this case we effectively have an equality constraint as before. The optimality condition is therefore,
+Such a constraint may be either \emph{active} or \emph{inactive}. When it is inactive, the local optimum falls within the feasible region, and the problem is effectively unconstrained. In this case, the optimality conditions are identical to the unconstrained case. Note, however, our conditions do not tell us how to predetermine whether a constraint is active, nor do they (as previously noted) tell us how to find the optimum. At most, the optimality conditions inform the design of optimisation algorithms by telling us what to look for. When the constraint is \emph{active}, the local optimum lies outside of the feasible region. We note first that the constrained optimum must lie on the constraint surface, as this is closest to the local optimum. If this were not the case, it would imply the existence of another (closer) local optimum inside the feasible region. So, in this case we effectively have an equality constraint as before. The optimality condition is therefore,
 
 \begin{align}-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}) = \mu\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x})\label{eq:inequalityconstraint},\end{align}
 
@@ -1892,7 +1891,7 @@ The Karush-Kuhn-Tucker (KKT) conditions are a general set of necessary and suffi
 
 we form the Lagrangian,
 
-$$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \mu^T g(\mathbf{x}),$$
+$$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \mu g(\mathbf{x}),$$
 
 and necessary and sufficient conditions for optimality are,
 
@@ -2648,11 +2647,15 @@ A neural network may be used for both regression and classification, the output 
 \subfloat[]{\includegraphics[width=0.49\textwidth]{Figures/universalapproximater.pdf}} & 
 \subfloat[]{\includegraphics[width=0.5\textwidth]{Figures/sgd.pdf}}
 \end{tabular}
-\caption{ A simple example of a neural network fitting an absolute value function (A) and the corresponding learning curve for stochastic gradient descent (B). Generated with \texttt{mlpDemo.m}.}
+\caption{A simple example of a neural network fitting an absolute value function (A) and the corresponding learning curve for stochastic gradient descent (B). Generated with \texttt{mlpDemo.m}.}
 \label{fig:universalapproximater}
 \end{figure}
 
-\subsection{Kernel Methods and Support Vector Machines}
+\subsection{Support Vector Machines}
+
+Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin classifier in 1963, which later evolved into the support vector machines (SVM) for non-linear classification.
+
+\subsubsection{Kernels}
 
 Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi^T\boldsymbol\Phi$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}, and it is particularly useful, for example, when we may apply a kernel such as the \emph{radial basis function} whose corresponding basis function is infinite-dimensional, without having to compute the infinite-dimensional basis function itself. Models can be `kernelised' according to some reformulation, and replacing linear kernels (dot products) with another kernel function. In the case of kNN, this can be done quite readily. Kernelising ridge regression requires a reformulation trick known as the matrix inversion lemma. Support vector machines are kernelised by reformulating the problem into its dual problem, by application of the minimax theorem.
 
@@ -2694,13 +2697,82 @@ $$\boldsymbol{\beta}^* = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}_D)^{-1}\mat
 
 where $\boldsymbol\alpha = (\mathbf{X}\mathbf{X}^T + \lambda\mathbf{I}_N)^{-1}\mathbf{y}$ is a vector of \emph{dual} variables. This demonstrates that the optimal primal parameters $\boldsymbol\beta^*$ lie in the \emph{row} space of $\mathbf{X}$. By contrast, the output $\mathbf{y} = \mathbf{X}\boldsymbol\beta$ lies in the \emph{column} space of $\mathbf{X}$. There is a useful result called the \emph{representer theorem} which states that the primal and dual solutions are always related in this way for models of like form, that is, models with a loss function and penalty term. This is useful, as it is easier to solve the dual problem for support vector machines.
 
-\subsubsection{Support Vector Machines}
+\subsubsection{Decision Boundaries}
 
-As previously discussed, sparsity is a desirable outcome for models, as it is a form of feature selection. Support vector machines (SVMs) build sparsity into a model by choosing a `hinge' loss function. This assigns a (linear) penalty not only to incorrectly classified data, but also to data too close to the decision boundary. Thus, rather than placing a boundary between data, SVMs place a \emph{margin}. For this reason, SVMs belong to a category called maximum margin methods. This is a desirable outcome, as a decision boundary may be placed in many equally optimal ways when training data is limited, but without reference to the tendencies of the data near to that boundary. Another useful property of SVMs are that they are naturally kernelised. The SVM primal problem is reformulated to the dual form using the minimax theorem,
+Consider a simple binary classifier,
 
-$$\min_{x \in \mathcal{X}} \max_{y \in \mathcal{Y}} f(x, y) = \max_{y \in \mathcal{Y}}\min_{x \in \mathcal{X}} f(x, y),$$
+\begin{equation}
+f(\mathbf{x}) = \text{sgn}\big(f(\mathbf{x})\big),
+\label{eq:svmprimal}
+\end{equation}
 
-an important result from John von Neumann (1903-1957), which holds provided $\mathcal{X}$ and $\mathcal{Y}$ are convex sets, and that $f(x, y)$ is convex for fixed $y$ and concave for fixed $x$. This dual is a quadratic convex optimisation problem, and may be solved with a variety of methods. A breakthrough in the SVM community was the discovery of the sequential minimal optimisation (SMO) algorithm, allowing for faster training of SVM models. This is one of the reasons for the popularity of SVMs, in spite of comparable vector machine methods, including those with sound probabilistic roots. The support vectors themselves are the data (rows of $\mathbf{X}$) on or over the margin. The dual variables will be non-zero only for these points, hence the optimal primal parameters, and hence the decision boundary, are a linear combination of these support vectors. Variants of support vector machines exist for regression (SVR), as well as multi-(vector-)output regression. Multi-class classification SVMs also exist conceptually, but are difficult to model and train.
+where $f(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + b$, that is, returning $-1$ if $f(\mathbf{x}) < 0$ and $1$ if $f(\mathbf{x}) > 0$. The function is linear and has a linear decision boundary. It is useful to consider how the model parameters relate to decision boundary. The decision boundary are those points $\mathbf{x}$ such that $f(\mathbf{x}) = 0$, thus, on the boundary between the two classes. Consider the two-dimensional case where $f(\mathbf{x}) = w_1x_1 + w_2x_2 + b = 0$ (Figure \ref{fig:decisionboundary}A). For $\mathbf{x} = [x_1, x_2]$ on the decision boundary, consider $x_1 = 0 \implies x_2 = -b/w_2$, and $x_2 = 0 \implies x_1 = -b/w_1$. Then, the vector $\mathbf{x} = [0, -b/w_2] - [-b/w_1, 0] = [b/w_1, -b/w_2]$, runs parallel to the decision boundary. Clearly, $\mathbf{w}$ is orthogonal to $\mathbf{x}$. Furthermore, this result can be shown to hold in higher dimensions. A vector, $\mathbf{x}$, on the decision boundary and running parallel to $\mathbf{w}$, can be expressed as $\mathbf{x} = |\mathbf{x}|\cdot\mathbf{w}/|\mathbf{w}|$. Now, $f(\mathbf{x}) = \mathbf{w}^T|\mathbf{x}|\cdot\mathbf{w}/|\mathbf{w}| + b = 0$, hence $|\mathbf{x}| = -b/|\mathbf{w}|$. Thus, the bias term scales the distance of the decision boundary from the origin.
+
+\begin{figure}
+\centering
+\begin{tabular}{cc}
+\subfloat[]{\includegraphics[width=0.49\textwidth]{Figures/decision.pdf}} & 
+\subfloat[]{\includegraphics[width=0.5\textwidth]{Figures/maximummargin.pdf}}
+\end{tabular}
+\caption{The relationship between a linear decision boundary and model parameters (A) in two dimensions, and comparing a maximum margin, $f_1$, with an alternative, $f_2$ (B).}
+\label{fig:decisionboundary}
+\end{figure}
+
+Among the infinite possible decision boundaries we could create, a promising heuristic for separating data would be to create a decision boundary such that the perpendicular distance between the nearest data points of each class is maximised\footnote{Note that we are assuming temporarily that the data is linearly separable. This will be addressed shortly.}. Unlike the alternatives, this maximises the \emph{space} left for unseen test cases that fall close to the boundary, increasing the accuracy of the classifier (Figure \ref{fig:decisionboundary}B). This principle is embodied in support vector machines (SVM). Therefore, SVMs are not based on statistical assumptions, rather on the rule of thumb that maximum margins perform better.
+
+Now, any point $\mathbf{x}$ can be decomposed into the sum of its projection onto the decision boundary, $\hat{\mathbf{x}}$, and the residual, perpendicular to the boundary (and parallel to $\mathbf{w}$). Thus, $\mathbf{x} = \hat{\mathbf{x}} + r\cdot\mathbf{w}/|\mathbf{w}|$, where $r$ is the length of the residual, hence the size of the margin of $\mathbf{x}$. Thus, $f(\mathbf{x}) = \mathbf{w}(\hat{\mathbf{x}} + r\cdot\mathbf{w}/|\mathbf{w}|) + b =  |\mathbf{w}|\cdot r$, since $f(\hat{\mathbf{x}}) = 0$. Thus, we have $r = f(\mathbf{x})/|\mathbf{w}|$. Maximising the margin between the nearest points can therefore be expressed as the quadratic programming (QP) problem,
+
+$$
+\begin{array}{rl}
+\min_{\mathbf{w}, b} & \frac{1}{2}\mathbf{w}^T\mathbf{w} \\
+\text{subject to} & y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1, \forall i
+\end{array}
+$$
+
+where the constraints ensure each data point is correctly classified. Of course, the assumption of linear separability is in general wrong, so we introduced slack variables, $\xi_i$, to allow for data on the wrong side of the decision boundary, that is, misclassifications. Thus, we replace each constraint with, $y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 - \xi_i$, leaving,
+
+$$
+\begin{array}{rl}
+\min_{\boldsymbol\xi, \mathbf{w}, b} & \frac{1}{2}\mathbf{w}^T\mathbf{w} + C\sum_{i = 1}^{N}\xi_i \\
+\text{subject to} & y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 - \xi_i, \forall i \\
+& \xi_i \geq 0, \forall i
+\end{array}
+$$
+
+%$$
+%\begin{array}{rl}
+%\min_{\boldsymbol\alpha} & \inf_{\boldsymbol\xi, \mathbf{w}, b}\bigg(\frac{1}{2}\mathbf{w}^T\mathbf{w} + C\sum_{i = 1}^{N}\xi_i + \sum_{i=1}^N \alpha_i(1 - \xi_i - y_i(\mathbf{w}^T\mathbf{x}_i + b))\bigg) \\
+%\text{subject to} & \alpha_i \geq 0, \xi_i \geq 0, \forall i
+%\end{array}
+%$$
+
+where $C$ is a weight for classification error. This problem is often expressed in terms of a hinge loss function, following the notation of other regression models. By the principle of convex duality, we can convert this problem into its dual form where the dual variables $\alpha_i$ are the Lagrange multipliers of the earlier constraints. The dual form is then the maximum of the \emph{infimum}\footnote{The infimum of a set is its greatest lower-bound, the counterpart of the \emph{supremum}, the least upper-bound. Some sets have these bounds without having a definable minimum or maximum. For example, the set $\{x : 0 < x < 1\}$ has no minimum or maximum, but its infimum is 0 and supremum is 1.}  of our current problem. We can find the infimum of this expression by taking derivatives of each of the parameters, thus $\frac{\partial f}{\partial \mathbf{w}} = \mathbf{w} - \sum_{i=1}^N \alpha_iy_i\mathbf{x}_i = 0 \implies \mathbf{w}^* = \sum_{i=1}^N \alpha_iy_i\mathbf{x}_i$ at optimality, which may be substituted into the objective function. For the bias term, $\frac{\partial f}{\partial b} = \sum_{i=1}^N \alpha_iy_i = 0$ at optimality. For the slack variables, 
+$\frac{\partial f}{\partial\xi_i} = C - \lambda_i \implies \lambda_i \leq C$ at optimality, where the inequality arises from the positivity constraint on $\xi_i$. Thus, the parameters are eliminated by substitution, and the bias and slack variables correspond with constraints on the dual variables, giving the dual form,
+
+\begin{equation}
+\begin{array}{rl}
+\max_{\boldsymbol\alpha} & \sum_{i = 1}^{N}\alpha_i + \frac{1}{2}\sum_{i}^N\sum_{j}^N \alpha_i\alpha_jy_iy_j\mathbf{x}_i^T\mathbf{x}_j \\
+\text{subject to} & \sum_{i=1}^N \alpha_iy_i = 0 \\
+& 0 \leq \alpha_i \leq C, \forall i
+\end{array}
+\label{eq:dual}
+\end{equation}
+
+thus a quadratic programming (QP) problem in the dual variables. Noting the relation between primal and dual parameters, we can rewrite the classifier (\ref{eq:svmprimal}) in terms of the dual variables as,
+
+\begin{equation}
+f(\mathbf{x}) = \text{sgn}\Bigg(\sum_{i=1}^N \alpha_iy_i\kappa(\mathbf{x}_i, \mathbf{x}) + b\Bigg),
+\label{eq:svmdual}
+\end{equation}
+
+where $\kappa(\cdot, \cdot)$ is a kernel function of our choosing, replacing the dot product from before. Apart from the dual form being conveniently kernelised, it affords an insightful alternative interpretation of the model. From (\ref{eq:svmdual}), we can see how an observation, $\mathbf{x}$ is classified according to its similarity with the training vectors. Each training vector, $\mathbf{x}_i$, casts its vote, $y_i$, be it $-1$ or $1$, with the influence regulated by a similarity measure provided by the kernel function, and the weight provided by the dual variable. Only the support vectors have a (non-zero) weighted vote. It is easy to see why this is such a powerful framework--we can choose between many similarity measures (kernels), though the mathematics restricts us to choosing those that are symmetric positive-definite.
+
+\subsubsection{Sequential Minimal Optimisation}
+
+Our model (\ref{eq:svmdual}) may be solved with any QP solver, which was formerly the standard approach. However, in 1998, John Platt invented sequential minimal optimisation (SMO), an algorithm for analytically optimising the dual variables two at a time. The superiority and simplicity of this algorithm helped bring support vector machines into the forefront of machine learning research. An implementation of support vector machines solved with the SMO algorithm is given in \texttt{supportVectorMachine.m}.
+
+\subsubsection{Support Vector Machine Regression}
+
 
 \subsection{Decision Trees}
 
