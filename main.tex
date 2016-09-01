@@ -2653,23 +2653,23 @@ A neural network may be used for both regression and classification, the output 
 
 \subsection{Support Vector Machines}
 
-Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin classifier in 1963, which later evolved into the support vector machines (SVM) for non-linear classification.
+Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin classifier in 1963, which later evolved into the kernelised support vector machine (SVM).
 
 \subsubsection{Kernels}
 
-Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi^T\boldsymbol\Phi$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}, and it is particularly useful, for example, when we may apply a kernel such as the \emph{radial basis function} whose corresponding basis function is infinite-dimensional, without having to compute the infinite-dimensional basis function itself. Models can be `kernelised' according to some reformulation, and replacing linear kernels (dot products) with another kernel function. In the case of kNN, this can be done quite readily. Kernelising ridge regression requires a reformulation trick known as the matrix inversion lemma. Support vector machines are kernelised by reformulating the problem into its dual problem, by application of the minimax theorem.
+Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. An example of this is tf-idf cosine similarity of a bag of words representation for document classification. Another example are Gaussian kernels, which give a multivariate Gaussian probability for the difference between two observations--the smaller the difference, the greater the probability. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi^T\boldsymbol\Phi$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}, and it is particularly useful, for example, when we may apply a kernel such as the \emph{radial basis function} whose corresponding basis function is infinite-dimensional, without having to compute the infinite-dimensional basis function itself. Models can be `kernelised' according to some reformulation, and replacing linear kernels (dot products) with another kernel function. In the case of kNN, this can be done quite readily. Kernelising ridge regression requires a reformulation trick known as the matrix inversion lemma. Support vector machines are kernelised by reformulating the problem into its dual problem, by application of the minimax theorem. The kernel trick requires a \emph{Mercer} kernel be used, that is, such that the Gram matrix be symmetric positive-definite.
 
 \subsubsection{Kernelised kNN}
 
-The $k$ nearest neighbours algorithm classifies a data point as the majority vote of the classes of the $k$ closest training data points. By default, the distance metric is Euclidean distance, $||\mathbf{x} - \mathbf{x}'||_2^2 = \mathbf{x}^T\mathbf{x} + \mathbf{x}'^T\mathbf{x}' - 2\mathbf{x}\mathbf{x}'$. It is therefore clear we can replace the inner products with any kernel function of our choosing.
+The $k$ nearest neighbours algorithm classifies a data point as the majority vote of the classes of the $k$ closest training data points. By default, the distance metric is Euclidean distance, $||\mathbf{x} - \mathbf{x}'||_2^2 = \mathbf{x}^T\mathbf{x} + \mathbf{x}'^T\mathbf{x}' - 2\mathbf{x}^T\mathbf{x}'$. It is therefore clear we can replace the inner products with any kernel function of our choosing.
 
-\subsubsection{Duality}
-
-Optimisation problems in general have two forms, a primal and a dual. In general, the solution to the primal gives an upper bound to the dual solution, and the dual solution gives a lower bound to the solution of the primal. This is known as the duality gap,
-
-$$\sup_{y\in\mathcal{Y}}-F^*(0, y) \leq \inf_{x\in\mathcal{X}}F(x, 0),$$
-
-where $F^*$ is the convex conjugate of $F$, $\sup$ is the supremum (least upper bound) and $\inf$ is the infimum (greatest lower bound). For certain convex problems, this bound goes to $0$, and the primal and dual solutions correspond. It is often useful to consider the dual to a primal problem. For one thing, it may yield a more efficient (kernelised) representation. Furthermore, however, it may change the nature of the problem to one more easily solvable with numerical techniques, as we will see for support vector machines (SVMs). Note there are various forms of duality, for example Wolfe duality, named after American mathematician Philip Wolfe (1927-), a pioneer in the fields of convex optimisation theory and mathematical programming.
+%\subsubsection{Duality}
+%
+%Optimisation problems in general have two forms, a primal and a dual. In general, the solution to the primal gives an upper bound to the dual solution, and the dual solution gives a lower bound to the solution of the primal. This is known as the duality gap,
+%
+%$$\sup_{y\in\mathcal{Y}}-F^*(0, y) \leq \inf_{x\in\mathcal{X}}F(x, 0),$$
+%
+%where $F^*$ is the convex conjugate of $F$, $\sup$ is the supremum (least upper bound) and $\inf$ is the infimum (greatest lower bound). For certain convex problems, this bound goes to $0$, and the primal and dual solutions correspond. It is often useful to consider the dual to a primal problem. For one thing, it may yield a more efficient (kernelised) representation. Furthermore, however, it may change the nature of the problem to one more easily solvable with numerical techniques, as we will see for support vector machines (SVMs). Note there are various forms of duality, for example Wolfe duality, named after American mathematician Philip Wolfe (1927-), a pioneer in the fields of convex optimisation theory and mathematical programming.
 
 \subsubsection{Matrix Inversion Lemma}
 
@@ -2706,7 +2706,7 @@ f(\mathbf{x}) = \text{sgn}\big(f(\mathbf{x})\big),
 \label{eq:svmprimal}
 \end{equation}
 
-where $f(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + b$, that is, returning $-1$ if $f(\mathbf{x}) < 0$ and $1$ if $f(\mathbf{x}) > 0$. The function is linear and has a linear decision boundary. It is useful to consider how the model parameters relate to decision boundary. The decision boundary are those points $\mathbf{x}$ such that $f(\mathbf{x}) = 0$, thus, on the boundary between the two classes. Consider the two-dimensional case where $f(\mathbf{x}) = w_1x_1 + w_2x_2 + b = 0$ (Figure \ref{fig:decisionboundary}A). For $\mathbf{x} = [x_1, x_2]$ on the decision boundary, consider $x_1 = 0 \implies x_2 = -b/w_2$, and $x_2 = 0 \implies x_1 = -b/w_1$. Then, the vector $\mathbf{x} = [0, -b/w_2] - [-b/w_1, 0] = [b/w_1, -b/w_2]$, runs parallel to the decision boundary. Clearly, $\mathbf{w}$ is orthogonal to $\mathbf{x}$. Furthermore, this result can be shown to hold in higher dimensions. A vector, $\mathbf{x}$, on the decision boundary and running parallel to $\mathbf{w}$, can be expressed as $\mathbf{x} = |\mathbf{x}|\cdot\mathbf{w}/|\mathbf{w}|$. Now, $f(\mathbf{x}) = \mathbf{w}^T|\mathbf{x}|\cdot\mathbf{w}/|\mathbf{w}| + b = 0$, hence $|\mathbf{x}| = -b/|\mathbf{w}|$. Thus, the bias term scales the distance of the decision boundary from the origin.
+where $f(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + b$, that is, returning $-1$ if $f(\mathbf{x}) < 0$ and $1$ if $f(\mathbf{x}) > 0$. The function is linear and has a linear decision boundary. It is useful to consider how the model parameters relate to the decision boundary. The decision boundary are those points $\mathbf{x}$ such that $f(\mathbf{x}) = 0$, thus, on the boundary between the two classes. Consider the two-dimensional case where $f(\mathbf{x}) = w_1x_1 + w_2x_2 + b = 0$ (Figure \ref{fig:decisionboundary}A). For $\mathbf{x} = [x_1, x_2]$ on the decision boundary, consider $x_1 = 0 \implies x_2 = -b/w_2$, and $x_2 = 0 \implies x_1 = -b/w_1$. Then, the vector $\mathbf{x} = [0, -b/w_2] - [-b/w_1, 0] = [b/w_1, -b/w_2]$, runs parallel to the decision boundary. Clearly, $\mathbf{w}$ is orthogonal to $\mathbf{x}$, and this result can be shown to hold in higher dimensions also. A vector, $\mathbf{x}$, on the decision boundary and running parallel to $\mathbf{w}$, can be expressed as $\mathbf{x} = |\mathbf{x}|\cdot\mathbf{w}/|\mathbf{w}|$. Now, $f(\mathbf{x}) = \mathbf{w}^T|\mathbf{x}|\cdot\mathbf{w}/|\mathbf{w}| + b = 0$, hence $|\mathbf{x}| = -b/|\mathbf{w}|$. We thereby see that the bias term scales the distance of the decision boundary from the origin.
 
 \begin{figure}
 \centering
@@ -2718,7 +2718,7 @@ where $f(\mathbf{x}) = \mathbf{w}^T\mathbf{x} + b$, that is, returning $-1$ if $
 \label{fig:decisionboundary}
 \end{figure}
 
-Among the infinite possible decision boundaries we could create, a promising heuristic for separating data would be to create a decision boundary such that the perpendicular distance between the nearest data points of each class is maximised\footnote{Note that we are assuming temporarily that the data is linearly separable. This will be addressed shortly.}. Unlike the alternatives, this maximises the \emph{space} left for unseen test cases that fall close to the boundary, increasing the accuracy of the classifier (Figure \ref{fig:decisionboundary}B). This principle is embodied in support vector machines (SVM). Therefore, SVMs are not based on statistical assumptions, rather on the rule of thumb that maximum margins perform better.
+Among the infinite possible decision boundaries we could create, a promising heuristic for separating data would be to create a decision boundary such that the perpendicular distance between the nearest data points of each class is maximised\footnote{Note that we are assuming temporarily that the data is linearly separable. This will be addressed shortly.}. Unlike the alternatives, this maximises the \emph{space} left for unseen test cases that fall close to the boundary, likely increasing the performance of the classifier (Figure \ref{fig:decisionboundary}B). This principle is embodied in support vector machines (SVM). Therefore, SVMs are not based on statistical assumptions, rather on the rule of thumb that maximum margins perform better.
 
 Now, any point $\mathbf{x}$ can be decomposed into the sum of its projection onto the decision boundary, $\hat{\mathbf{x}}$, and the residual, perpendicular to the boundary (and parallel to $\mathbf{w}$). Thus, $\mathbf{x} = \hat{\mathbf{x}} + r\cdot\mathbf{w}/|\mathbf{w}|$, where $r$ is the length of the residual, hence the size of the margin of $\mathbf{x}$. Thus, $f(\mathbf{x}) = \mathbf{w}(\hat{\mathbf{x}} + r\cdot\mathbf{w}/|\mathbf{w}|) + b =  |\mathbf{w}|\cdot r$, since $f(\hat{\mathbf{x}}) = 0$. Thus, we have $r = f(\mathbf{x})/|\mathbf{w}|$. Maximising the margin between the nearest points can therefore be expressed as the quadratic programming (QP) problem,
 
@@ -2729,7 +2729,7 @@ $$
 \end{array}
 $$
 
-where the constraints ensure each data point is correctly classified. Of course, the assumption of linear separability is in general wrong, so we introduced slack variables, $\xi_i$, to allow for data on the wrong side of the decision boundary, that is, misclassifications. Thus, we replace each constraint with, $y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 - \xi_i$, leaving,
+where the constraints ensure each data point is correctly classified. Of course, the assumption of linear separability is in general untrue, so we introduced slack variables, $\xi_i$, to allow for data on the wrong side of the decision boundary, that is, misclassifications. Thus, we replace each constraint with, $y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 - \xi_i$, leaving,
 
 $$
 \begin{array}{rl}
@@ -2765,14 +2765,41 @@ f(\mathbf{x}) = \text{sgn}\Bigg(\sum_{i=1}^N \alpha_iy_i\kappa(\mathbf{x}_i, \ma
 \label{eq:svmdual}
 \end{equation}
 
-where $\kappa(\cdot, \cdot)$ is a kernel function of our choosing, replacing the dot product from before. Apart from the dual form being conveniently kernelised, it affords an insightful alternative interpretation of the model. From (\ref{eq:svmdual}), we can see how an observation, $\mathbf{x}$ is classified according to its similarity with the training vectors. Each training vector, $\mathbf{x}_i$, casts its vote, $y_i$, be it $-1$ or $1$, with the influence regulated by a similarity measure provided by the kernel function, and the weight provided by the dual variable. Only the support vectors have a (non-zero) weighted vote. It is easy to see why this is such a powerful framework--we can choose between many similarity measures (kernels), though the mathematics restricts us to choosing those that are symmetric positive-definite.
+where $\kappa(\cdot, \cdot)$ is a Mercer kernel of our choosing, replacing the linear inner product from before. Apart from the dual form being conveniently kernelised, it affords an insightful alternative interpretation of the model. From (\ref{eq:svmdual}), we can see how an observation, $\mathbf{x}$ is classified according to its similarity with the training vectors. Each training vector, $\mathbf{x}_i$, casts its vote, $y_i$, be it $-1$ or $1$, with the influence regulated by a similarity measure provided by the kernel function, and the weight provided by the dual variable. Only the support vectors have a (non-zero) weighted vote. It is easy to see why this is such a powerful framework--we can choose between many similarity measures (kernels), though the mathematics restricts us to choosing Mercer kernels.
 
 \subsubsection{Sequential Minimal Optimisation}
 
-Our model (\ref{eq:svmdual}) may be solved with any QP solver, which was formerly the standard approach. However, in 1998, John Platt invented sequential minimal optimisation (SMO), an algorithm for analytically optimising the dual variables two at a time. The superiority and simplicity of this algorithm helped bring support vector machines into the forefront of machine learning research. An implementation of support vector machines solved with the SMO algorithm is given in \texttt{supportVectorMachine.m}.
+Our model (\ref{eq:svmdual}) may be solved with any QP solver, which was formerly the standard approach. However, in 1998, American computer scientist, John Platt (1963-), invented sequential minimal optimisation (SMO), an algorithm for analytically optimising the dual variables two at a time. The superiority and simplicity of this algorithm helped bring support vector machines into the forefront of machine learning research. The algorithm works by iteratively optimising pairs of variables that violate the optimality conditions. These are,
+
+\begin{equation}
+\begin{array}{rcl}
+\alpha_i = 0 & \implies & y_if(\mathbf{x}_i) \geq 1 \\
+0 < \alpha_i < C  & \implies & y_if(\mathbf{x}_i) = 1 \\
+\alpha_i = C & \implies & y_if(\mathbf{x}_i) \leq 1
+\end{array}
+\label{eq:svmkkt}
+\end{equation}
+
+ Optimisation is done in pairs in order to maintain the equality constraint of the problem (\ref{eq:dual}). Thus, for pair $\alpha_i$ and $\alpha_j$, we make updates such that $y_i\Delta\alpha_i + y_j\Delta\alpha_j = 0$. Rearranging gives $\Delta\alpha_j = -\Delta\alpha_iy^{(i)}/y^{(j)} = -\Delta\alpha_iy^{(i)}y^{(j)}$, as since $y_i \in \{-1, 1\}$, division is the same as multiplication, and the cost function becomes,
+
+\begin{align}
+W(\boldsymbol\alpha) &= \sum_{k=1}^N\alpha_k + \Delta\alpha_i -\Delta\alpha_iy_iy_j - \frac{1}{2}\sum_{k=1}^Ny_k\alpha_k(f(\mathbf{x}_k) - b) \notag \\ 
+&- \Delta\alpha_i(f(\mathbf{x}_i) - f(\mathbf{x}_j)) - \Delta\alpha_iy_i(f(\mathbf{x}_i) - f(\mathbf{x}_j)) - \frac{1}{2}\Delta\alpha_i^2(\mathbf{x}_i^T\mathbf{x}_i - 2\mathbf{x}_i^T\mathbf{x}_j + \mathbf{x}_j^T\mathbf{x}_j). \notag 
+\end{align}
+
+Differentiating and solving gives,
+
+$$\Delta\alpha_i^* = \frac{y_i\big(f(\mathbf{x}_j) - y_j - f(\mathbf{x}_i - y_i)\big)}{\mathbf{x}_i^T\mathbf{x}_i - 2\mathbf{x}_i^T\mathbf{x}_j + \mathbf{x}_j^T\mathbf{x}_j},$$
+
+giving us our update step. The value of $\Delta\alpha_j^*$ can then be determined from the initial equality. Note that both variables remain constrained, hence their values must be clipped if they are less than $0$ or greater than $C$. The bias term is then updated to account for the changes. For example, to ensure the classifier now emits $y_i$ for $f(\mathbf{x}_i)$, we rearrange,
+
+$$y_i = \sum_{k=1}^N \alpha_iy_i\mathbf{x}_k^T\mathbf{x}_i + b + \Delta b + \Delta\alpha y_i\mathbf{x}_i^T\mathbf{x}_i + \Delta\alpha y_j\mathbf{x}_i^T\mathbf{x}_j,$$
+
+for $\Delta b^*$. The same is done for $f(\mathbf{x}_j)$, and the expressions are combined according to the convergence conditions (\ref{eq:svmkkt}). Thus, the optimisation steps are done analytically, rather than with linear algebra. The rest of the algorithm is mostly concerned with heuristics for choosing the best $\alpha_i$, $\alpha_j$ pair. An implementation of support vector machines solved with the SMO algorithm is given in \texttt{supportVectorMachine.m}.
 
 \subsubsection{Support Vector Machine Regression}
 
+The ideas of support vector machines can be extended to regression models as well. This is achieved using a modification of the Huber loss function, creating a constrained quadratic programming (QP) problem. One of the shortcomings of SVMs is the difficulty in extending them to multi-class classification. This stems from the fact that they are not probabilistic models. Schemes exist, however, for example, by training multiple classifiers in a hierarchy.
 
 \subsection{Decision Trees}
 
@@ -2931,7 +2958,6 @@ Apart from being free to use, the idea of a GNU operating system was to expand \
 
 At approximately the same time, the systems lab at the University of California, Berkeley, were extending their licensed version of Unix, in particular, extending its TCP/IP functionalities. This came to be known as the Berkeley Software Distribution (BSD) of Unix, but it remained subject to AT\&T licensing restrictions. The Unix parts were gradually rewritten, and BSD and its variants (FreeBSD, OpenBSD, and others) came under the BSD license, a highly permissive license, allowing the full reuse of software, even in proprietary products, provided inclusion of the license text. Many of the operating systems of the present day are descended from Unix via the free alternatives of BSD. For example, BSD forms a large part of Apple's OS X operating system. BSD was the subject of a law suit by the Unix proprietors in the early 90s, during a time nicknamed the ``Unix wars'', with BSD ultimately winning the case. Unlike Linux, BSD does not use GNU, it has its own OS software including, for example, the famous vi editor. Linux is more user-friendly, however, with BSD having a command line interface (CLI) orientation. Thus, whereas GNU reverse engineered Unix, BSD evolved from it directly like the ship of Theseus. Both extended it far beyond its initial capabilities. Because of them, we now have whole families of software that are deemed ``Unix-like''.
 
-\pagebreak
 \section{Useless Maths Facts}
 
 \begin{itemize}
