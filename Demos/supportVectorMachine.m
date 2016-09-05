@@ -52,7 +52,8 @@ classdef supportVectorMachine < handle
         function smo(obj, C, tol, maxIters)
             % SMO sequential minimal optimisation algorithm for training
             % This is the simplified version (without heuristics) detailed
-            % in cs229.stanford.edu/materials/smo.pdf
+            % in cs229.stanford.edu/materials/smo.pdf. For derivations of 
+            % the formulae used, see github.com/jcboyd/lastchancestats.
             iters = 0;
             while iters < maxIters
                 numChanged = 0;
@@ -115,7 +116,8 @@ classdef supportVectorMachine < handle
                 end
                 if numChanged == 0
                     iters = iters + 1;
-                    fprintf('Pass %i \t\t Error: %.4f\r', [iters, 1 - numCorrect / length(obj.a)]);
+                    fprintf('Pass %i \t\t Error: %.4f\r', [iters, ...
+                        1 - numCorrect / length(obj.a)]);
                 else
                     iters = 0;
                 end
