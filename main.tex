@@ -51,13 +51,13 @@ Consider a square with sides of length $c$ rotated inside a larger square, such 
 
 \subsection{Irrationality of $\sqrt{2}$}
 
-Suppose $\sqrt{2}$ is rational. Then there exist $a, b \in \mathbb{Z}$, with $a > b$ and $gcd(a, b) = 1$\footnote{That is, $\frac{a}{b}$ is an irreducible fraction} such that, $$\frac{a}{b} = \sqrt{2}.$$
+Suppose $\sqrt{2}$ is rational. Then there exist $a, b \in \mathbb{Z}$, with $a > b$ and $gcd(a, b) = 1$\footnote{That is, $\frac{a}{b}$ is an irreducible fraction. This can be obtained by cancelling out the common factors. Every integer has a unique prime factorisation due to the fundamental theorem of arithmetic.} such that, $$\frac{a}{b} = \sqrt{2}.$$
 
 Consequently, $$\frac{a^2}{b^2} = 2.$$ This implies that $a^2$ is even, and therefore that $a$ is even. That is, $$a = 2k,$$ for some $k \in \mathbb{Z}$. So, by substitution, $$\frac{4k^2}{b^2} = 2.$$ Rearranging, $$b^2 = 2k^2.$$ However, this now implies that $b^2$ is even, hence $b$ also, implying a common factor between $a$ and $b$, though by assumption they have no common factors, and clearly we can repeat the argument ad infinitum. This contradiction proves $\sqrt{2}$ is irrational\footnote{This is an example of a proof by contradiction.}.
 
 \subsection{Euclid's Proof of the Infinitude of Primes}
 
-Take any finite set of primes, $p_1, p_2, \dots, p_n$. Then, the number, $q = p_1 \times p_2 \times \cdots \times p_n + 1$, is either prime or not prime. If it is prime, we have generated a new prime not in our set. If it is not, it has a prime factor not in our set, as $q \equiv 1 \ (\text{mod}\ p_i)$ for $i = 1, 2, \dots, n$. It follows that there are infinitely many primes\footnote{This is an example of a constructive proof.}.
+Take any finite set of primes, $p_1, p_2, \dots, p_n$. Then, the number, $q = p_1 \times p_2 \times \cdots \times p_n + 1$, is either prime or not prime. If it is prime, we have generated a new prime not in our set. If it is not, it has a prime factor not in our set, as $q \equiv 1 \ (\text{mod}\ p_i)$ for $i = 1, 2, \dots, n$. Using this method we can always generate a new prime\footnote{This is an example of a constructive proof.}.  It follows that there are infinitely many primes.
 
 \subsection{The Potato Paradox}
 
@@ -69,13 +69,13 @@ The mistake people typically make is to assume there has been a $1\%$ reduction 
 
 This famous paradox, named after an American game show host, has the following problem statement:
 
-\emph{A game show presents you with the choice of selecting one of three doors. Two of the doors contain a goat (undesirable), whilst the third contains a car. Upon your choice, the game show host, who knows the contents of each of the doors, opens one of the two remaining doors to reveal a goat. He then gives you the option of either sticking with your initial choice, or switching to the one remaining door. The question is, is it advantageous to switch doors?}
+\emph{A game show presents you with the choice of selecting one of three doors. Two of the doors contain a goat (undesirable), whilst the third contains a car. Upon your choice, the game show host, who knows the contents of each of the doors, opens one of the two remaining doors to reveal a goat. He then gives you the option of either sticking with your initial choice, or switching to the one remaining door. Is it advantageous to switch doors?}
 
 The answer is that it \emph{is} advantageous, increasing your winning chances from $1/3$ to $2/3$. The essential realisation is that the host (Monty Hall) has knowledge of the door contents and will always reveal a goat, whether you have chosen the car or not.
 
 The solution can be understood as a decision theory problem. We designate two strategies: changing and not changing doors. In either case, there is a $2/3$ chance of initially having a goat. Because the other goat is eliminated independently by the host, changing wins whenever a goat was initially chosen, that is, with probability $2/3$. Not changing wins only if the car was initially chosen, that is, with probability $1/3$. Therefore changing will double your winning chances!
 
-Another (admittedly more complicated) way to solve the problem is using Bayes' theorem. Here we designate $C_1, C_2$, and $C_3$ as the events the car is behind doors 1, 2, and 3 respectively; $X_1$ the event the player chooses door 1; and $H_3$ the event the host opens door 3. Note the numbering of the doors does not matter, for example `door 2' simply refers to `the other door'. First, $\text{Pr}(H_3|C_1,X_1) = 1/2$, $\text{Pr}(H_3|C_2,X_1) = 1$, and $\text{Pr}(H_3|C_3,X_1) = 0$, reflecting the knowledge that the host always opens a goat door (never the car). Then,
+Another (admittedly more complicated) way to solve the problem is using Bayes' theorem. Here we designate $C_1, C_2$, and $C_3$ as the events the car is behind doors 1, 2, and 3 respectively; $X_1$ the event the player chooses door 1; and $H_3$ the event the host opens door 3. Note the numbering of the doors does not matter. For example, `door 2' simply refers to `the other door'. First, $\text{Pr}(H_3|C_1,X_1) = 1/2$, $\text{Pr}(H_3|C_2,X_1) = 1$, and $\text{Pr}(H_3|C_3,X_1) = 0$, reflecting the knowledge that the host always opens a goat door (never the car). Then,
 
 \begin{align}
 \text{Pr}(C_2|X_1,H_3) &= \frac{\text{Pr}(H_3|C_2,X_1)\text{Pr}(C_2|X_1)}{\text{Pr}(H_3|X_1)} \notag \\
@@ -88,7 +88,7 @@ so the winning odds for changing doors is $2/3$, hence not changing only $1/3$.
 
 \subsection{Finding Hamlet in the Digits of $\pi$}
 
-It is supposed, though not known for certain, that $\pi$ is a normal number. This means that in all the infinite decimal digits of $\pi$, every sequence of $n$ digits appears as often as every other length $n$ sequence. So, 123 occurs as often as 321 or 666, but more often than 123456789, because it is a shorter sequence. In this way, the behaviour of the digits of $\pi$ is indistinguishable to what would arise from a uniform random distribution. Of course, the digits of $\pi$ are not random, as many formulas exist for generating them. The same rules of normality apply if $\pi$ is converted to a different base, for example, binary code--the arithmetic system of computers. The number $\pi$ in binary is,
+It is supposed, though not known for certain, that $\pi$ is a normal number. This means that in the infinitely many decimal digits of $\pi$, every sequence of $n$ digits appears as often as every other length $n$ sequence. So, 123 occurs as often as 321 or 666, but more often than 123456789, because it is a shorter sequence. In this way, the behaviour of the digits of $\pi$ is indistinguishable to what would arise from a uniform random distribution. Of course, the digits of $\pi$ are not random, as many formulas exist for generating them. The same rules of normalness apply if $\pi$ is converted to a different base, for example, binary code--the number system of computer arithmetic. The number $\pi$ in binary is,
 
 \begin{align}
 \pi &= 3.14... \notag \\
@@ -96,7 +96,7 @@ It is supposed, though not known for certain, that $\pi$ is a normal number. Thi
 &= 11.001001... \notag
 \end{align}
 
-Note that to express $\pi$ in binary rather than decimal notation requires more digits, because it takes $\log_2(10) \approx 3.3$ binary digits (bits) to express each power of ten. Nevertheless, the same properties about the normality of $\pi$ hold in its binary form--$000$ is just as likely as $111$, and so on.
+Note that to express $\pi$ in binary rather than decimal notation requires more digits, because it takes $\log_2(10) \approx 3.3$ binary digits (bits) to express each power of ten. Nevertheless, the same properties about the normalness of $\pi$ hold in its binary form--$000$ is just as likely as $111$, and so on.
 
 Now, to find Hamlet, we would need to start with a common base. Hamlet is written in Latin characters. One way to convert Latin characters to numbers is to use a character encoding standard, such as ASCII (American Standard Code for Information Interchange). People use ASCII indirectly every day--it is how our data comes to be represented by computers and communication systems. ASCII gives a representation of each character in 8 binary digits. For example, in ASCII,
 
@@ -131,7 +131,7 @@ The binomial theorem expresses a formula for expanding powers of a binomial\foot
 
 $$(x + y)^n = \sum_{k = 0}^{n}{{n}\choose{k}}x^ky^{n-k},$$
 
-where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coefficient. Note the binomial coefficient is symmetric, that is, ${{n}\choose{k}} = {{n}\choose{n-k}}$. This symmetry may be seen in Pascal's triangle:
+where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coefficient. Note the binomial coefficient is symmetric, that is, ${{n}\choose{k}} = {{n}\choose{n-k}}$. This symmetry may be seen in Pascal's triangle,
 
 \begin{center}
 \begin{tabular}{ccccccccccccc}
@@ -145,7 +145,7 @@ where, $${{n}\choose{k}} = \frac{n!}{k!(n-k)!},$$ is known as the binomial coeff
 \end{tabular}
 \end{center}
 
-Pascal's triangle, named after French mathematician Blaise Pascal (1623-1662) embodies a recurrence relation for the coefficients of a binomial expansion. The numbers of each row are generated by summing the two numbers diagonally above in the previous row. In terms of binomial expansion, this is equivalent to collecting like terms after expanding. To illustrate, consider the coefficients for the quadratic expansion, $x^2 + 2xy + y^2$,
+where each number is the binomial coefficient with $n$ the row number and $k$ the column. Pascal's triangle is named after French mathematician Blaise Pascal (1623-1662). Note that each number is the sum of the two numbers diagonally above. In terms of binomial expansion, this is equivalent to collecting like terms after expanding. To illustrate, consider the coefficients for the quadratic expansion, $x^2 + 2xy + y^2$,
 
 \begin{center}
 \begin{tabular}{ccccc}
@@ -183,9 +183,11 @@ if for any value, $\epsilon > 0$, specifically where $\epsilon$ is arbitrarily s
 
 $$0 < |x - a| < \delta \implies |f(x) - L| < \epsilon.$$
 
-This somewhat off-putting notation captures the notion of a function approaching a limiting value continuously. It states that however close (within an infinitesimal $\epsilon$ units) we wish to get to the limiting value, $L$, we can always find a correspondingly tiny interval of radius $\delta$ around a point $a$ such that the function is closer. Note that this accounts also for the case where $f(x)$ is undefined at $x = a$.
+This somewhat off-putting notation captures the notion of a function approaching a limiting value continuously. It states that however close (within an infinitesimal $\epsilon$ units) we wish to get to the limiting value, $L$, we can always find a correspondingly tiny interval of radius $\delta$ around the limiting point $a$ such that the function is closer. Note that this accounts also for the case where $f(x)$ is undefined at $x = a$.
 
-An example is always useful for such subtle ideas. Therefore, let $f(x) = 2x^2 + 2$. Then clearly, $\lim_{x \to 0} f(x) = 2$. To satisfy the inequality, $|2x^2 + 2 - 4| < \epsilon$, we can select $\delta = \sqrt{\epsilon/2 + 1}$. Clearly this is always possible, no matter how small we take $\epsilon$ to be, and so the limit exists. A function is said to be \emph{continuous} at a point $a$ if the limit $L$ exists, and $f(a) = L$, which is not always the case. Suppose $g(x) = 1$ for $x <0$ and $g(x) = 2$ for $x \geq 0$. Such a function makes an instantaneous jump at $x = 0$ to a value distinct from the limit to which it was approaching. A function is continuous if it is continuous at all points in its domain. A function that is \emph{differentiable} at a point, $a$, implies continuity at $a$, but not vice-versa.
+An example is always useful for such subtle ideas. Therefore, let $f(x) = 2x^2 + 2$. Then clearly, $\lim_{x \to 0} f(x) = 2$. To satisfy the inequality, $|2x^2 + 2 - 4| < \epsilon$, we can select $\delta = \sqrt{\epsilon/2 + 1}$. Clearly this is always possible, no matter how small we take $\epsilon$ to be, and so the limit exists.
+
+A function is said to be \emph{continuous} at a point $a$ if the limit $L$ exists, and $f(a) = L$, which is not always the case. Suppose $g(x) = 1$ for $x <0$ and $g(x) = 2$ for $x \geq 0$. Such a function makes an instantaneous jump at $x = 0$ to a value distinct from the limit to which it was approaching, and is therefore \emph{discontinuous} and does not satisfy the $\epsilon$-$\delta$ condition. Alternatively, the limit may exist, but the function may not be defined at the limiting point, thus also a discontinuity. A function is continuous if it is continuous at all points in its domain. A function that is \emph{differentiable} at a point, $a$, implies continuity at $a$, but not vice-versa. For example, the absolute value function, $f(x) = \text{abs}(x)$ is continuous but not differentiable. Differentiability of a function at a point roughly means it is possible to measure the \emph{trajectory} of the function at that point, so that it is possible to draw a tangent line at that point.
 
 \subsection{Differentiating From First Principles}
 
@@ -219,7 +221,7 @@ In general, the chain rule may be applied repeatedly for any number of nested fu
 
 $$\frac{\mathop{d}}{\mathop{dx}} f_n(f_{n-1}(\cdots (f_1(x)))) = \frac{\mathop{df_n}}{\mathop{df_{n-1}}}\cdot \frac{\mathop{df_{n-1}}}{\mathop{df_{n-2}}} \cdot \cdots \cdot \frac{\mathop{df_2}}{\mathop{df_1}}\cdot \frac{\mathop{df_1}}{\mathop{dx}}.$$
 
-The corresponding technique for anti-differentiation is integration by substitution.
+The corresponding technique for anti-differentiation is \emph{integration by substitution}.
 
 \subsection{Product Rule}
 
@@ -240,7 +242,7 @@ The quotient rule can be derived by applying both the product rule and the chain
 &= \frac{u'(x)v(x) - u(x)v'(x)}{v(x)^2}. \notag
 \end{align}
 
-The corresponding technique for anti-differentiation is integration by parts.
+The corresponding technique for anti-differentiation is \emph{integration by parts}.
 
 \subsection{Rolle's Theorem}
 
@@ -260,17 +262,17 @@ from which it follows that the derivative of the function, $f'(x)$, is 0 at $c$.
 
 \subsection{Mean Value Theorem}
 
-The mean value theorem states that for a differentiable function defined on an interval $[a, b]$, at least one point on the curve must have gradient equal to that of the chord connecting the endpoints, $(a, f(a))$ and $(b, f(b))$. It is an intuitive result, as any curve which succeeds in climbing (or descending) from $f(a)$ to $f(b)$, must match the rise over run of that slope at least at one point, otherwise it will never make the ascent.
+The mean value theorem states that for a differentiable function defined on an interval $[a, b]$, at least one point on the curve must have gradient equal to that of the chord connecting the endpoints, $(a, f(a))$ and $(b, f(b))$. It is an intuitive result, as any curve which succeeds in climbing (or descending) from $f(a)$ to $f(b)$, must match the rise over run of that slope at least at one point, otherwise it will not complete the ascent.
 
-First define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since $f(x)$ is by construction. We choose $r$ such that $g(x)$ satisfies Rolle's theorem, that is, $g(a) = g(b)$, hence $f(a) - ra = f(b) - rb$, and $r = (f(a) - f(b))/(a - b)$, that is, the slope of the chord connecting the endpoints. Because of Rolle's theorem, for some $c \in [a, b], g'(c) = 0,$ hence $f'(c) = r$, and the proof is complete.
+First, define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since $f(x)$ is by construction. We choose $r$ such that $g(x)$ satisfies Rolle's theorem, that is, $g(a) = g(b)$, hence $f(a) - ra = f(b) - rb$, and $r = (f(a) - f(b))/(a - b)$, that is, the slope of the chord connecting the endpoints. Because of Rolle's theorem, for some $c \in [a, b], g'(c) = 0,$ hence $f'(c) = r$, and the proof is complete.
 
 \section{Linear Algebra}
 
-A system of linear equations is a set of $M$ equations in $N$ variables. Each variable may feature in one or more of the $M$ equations. The typical interest in these systems is to find a \emph{simultaneous solution}, that is, values for each of the variables satisfying all the equations at once. If $M < N$ (more variables than equations), the system is \emph{underdetermined}. In this case, there will not be enough information to identify a unique solution, and the solution will be expressed in terms of at least one of the variables, giving an infinite family of solutions. If any equations are mutually contradictory\footnote{For example, the equations $x + y + z = 1$ and $x + y + z = 2$ have no simultaneous solution.}, however, the system will have no solution. If $M > N$, the system is \emph{overdetermined}. Unless the excess equations are in fact linear combinations of others, the solution will necessarily have mutually contradictory equations. A system of linear equations may alternatively be written as a matrix equation,
+A set of $M$ equations in $N$ variables can be referred to as a \emph{system of linear equations}. Each variable may feature in one or more of the $M$ equations. We are typically interested in finding a \emph{simultaneous solution}, that is, values for each of the variables satisfying all the equations at the same time. If $M < N$ (more variables than equations), the system is \emph{underdetermined}. In this case, there will not be enough information to identify a unique solution, and the solution will be expressed in terms of at least one of the variables, giving an infinite family of solutions. If any equations are mutually contradictory\footnote{For example, the equations $x + y + z = 1$ and $x + y + z = 2$ have no simultaneous solution.}, however, the system will have no solution. If $M > N$, the system is \emph{overdetermined}. Unless the excess equations are in fact linear combinations of others, the solution will necessarily have mutually contradictory equations\footnote{If the left-hand sides of some group of $N$ of the $M$ equations are linearly independent, they form a basis in $\mathbb{R}^N$. Therefore, the left-hand side of any excess equation is some linear combination of this group of $N$. The right-hand side of the excess equation must be equal to the corresponding linear combination of the $N$ right-hand sides, or else it is in contradiction, and the overall system has no solution.}. A system of linear equations may alternatively be written as a matrix equation,
 
 $$\mathbf{A}\mathbf{x} = \mathbf{b},$$
 
-where $\mathbf{A}$ is the matrix of coefficients, $\mathbf{x}$ is vector form of the simultaneous solution, and $\mathbf{b}$ is the vector of constants. The solution, $\mathbf{x}$, may therefore be found by inverting $\mathbf{A}$. A square matrix $\mathbf{A} \in \mathbb{R}^{N\times N}$ is invertible or non-singular if there is a matrix $\mathbf{A}^{-1} \in \mathbb{R}^{N\times N}$ such that $\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}$. Non-square matrices can have at most distinct left or right inverses. There are many matrix properties necessary and sufficient for invertibility. In particular, the columns of $\mathbf{A}$ are linearly independent and span\footnote{The span of a set of vectors is intuitively its expressiveness as a basis. $N$ linearly independent vectors form a basis for the vector space $\mathbb{R}^{N}$. On the other hand, if there are linear dependencies in the system, the span will be of lower dimension.} the vector space $\mathbb{R}^{N}$. This is equivalent to having full rank, which is in turn equivalent to having zero nullity\footnote{The rank of a matrix, $\mathbf{A}$ is the dimensionality of the vector space spanned with its columns as a basis. This is always equivalent to the span of its rows (row rank of $\mathbf{A}$). The nullity of a matrix is the dimensionality of its null space, that is, the set of all vectors solving $\mathbf{A}\mathbf{x} = \mathbf{0}$.}. These properties are connected in the rank-nullity theorem\footnote{The rank-nullity theorem states that for $N \times N$ matrix, $\mathbf{A}$, its rank and nullity sum to its number of columns, formally, $\text{rank}(\mathbf{A}) + \text{null}(\mathbf{A}) = N$}, and further in the fundamental theorem of linear algebra. If the values of a matrix are randomly sampled from a uniform distribution, the matrix has an infinitesimal chance of having linearly dependent columns, and hence of being singular. For this reason, singular matrices are less a practical concern in least squares regression than is \emph{multi-collinearity}, that is, highly correlated columns that cause ill-conditioning and numerical errors.
+where $\mathbf{A}$ is the matrix of coefficients, $\mathbf{x}$ is vector form of the simultaneous solution, and $\mathbf{b}$ is the vector of constants. The solution, $\mathbf{x}$, may therefore be found by inverting $\mathbf{A}$. A square matrix $\mathbf{A} \in \mathbb{R}^{N\times N}$ is invertible or non-singular if there is a matrix $\mathbf{A}^{-1} \in \mathbb{R}^{N\times N}$ such that $\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}$. Non-square matrices can have at most distinct left or right inverses. There are many matrix properties necessary and sufficient for invertibility. In particular, the rows and columns of $\mathbf{A}$ are linearly independent and span\footnote{The span of a set of vectors is intuitively its expressiveness as a basis. $N$ linearly independent vectors form a basis for the vector space $\mathbb{R}^{N}$. On the other hand, if there are linear dependencies in the system, the span will be of lower dimension.} the vector space $\mathbb{R}^{N}$. This is equivalent to having full rank, which is in turn equivalent to having zero nullity\footnote{The rank of a matrix, $\mathbf{A}$ is the dimensionality of the vector space spanned with its columns as a basis. This is always equivalent to the span of its rows (row rank of $\mathbf{A}$). The nullity of a matrix is the dimensionality of its null space, that is, the set of all vectors solving $\mathbf{A}\mathbf{x} = \mathbf{0}$.}. These properties are connected in the rank-nullity theorem\footnote{The rank-nullity theorem states that for $N \times N$ matrix, $\mathbf{A}$, its rank and nullity sum to its number of columns, formally, $\text{rank}(\mathbf{A}) + \text{null}(\mathbf{A}) = N$}, and further in the fundamental theorem of linear algebra. If the values of a matrix are randomly sampled from a uniform distribution, the matrix has an infinitesimal chance of having linearly dependent columns, and hence of being singular. For this reason, singular matrices are less a practical concern in least squares regression than is \emph{multi-collinearity}, that is, highly correlated columns that cause ill-conditioning, risking numerical errors.
 
 \subsection{Analytic Form of Inverse}
 
@@ -343,11 +345,11 @@ where $\mathbf{C} \in \mathbb{R}^{N \times N}$ is the \emph{cofactor} matrix of 
 
 \subsection{Gaussian Elimination}
 
-Gaussian elimination is an ancient technique for solving systems of linear equations, but has in modern times been erroneously attributed to Gauss, who merely contributed to its notation. The technique consists of performing a series of \emph{elementary row operations} to transform the system into a form where its solution or solutions may be extracted directly. The row operations are: swap two rows; scale a row by a constant factor, and; add one row to another. With a finite sequence of these operations, a system may be reduced to \emph{row echelon form}, where the matrix has an upper-triangular form, allowing solutions to be found by back-substituting each variable. When the system is further reduced to \emph{reduced echelon form}, the technique is known as Gauss-Jordan elimination. It may be seen easily that these row operations correspond with multiplying the matrix by slight modifications of the identity matrix. The technique has a number of useful applications, in particular computing a matrix inverse. This can be found by applying the technique to the system,
+Gaussian elimination is an ancient technique for solving systems of linear equations, but has in modern times been erroneously attributed to Gauss, who merely contributed to its notation. The technique consists of performing a series of \emph{elementary row operations} to transform the system into a form where its solution or solutions may be extracted directly. The row operations are: swapping two rows; scaling a row by a constant factor, and; adding one row to another. With a finite sequence of these operations, a system may be reduced to \emph{row echelon form}, where the matrix has an upper-triangular form, allowing solutions to be found by back-substituting each variable. When the system is further reduced to \emph{reduced echelon form}, the technique is known as Gauss-Jordan elimination. It may be seen easily that these row operations correspond with multiplying the matrix by slight modifications of the identity matrix, and that the inverse matrix is just product of these. The technique has a number of useful applications, in particular computing a matrix inverse. This can be found by applying the technique to the system,
 
 $$\mathbf{A}\mathbf{X} = \mathbf{I},$$
 
-and reducing $\mathbf{A}$ to $\mathbf{I}$ transforms $\mathbf{I}$ to $\mathbf{A}$ in a product of elementary row operations matrices. Gaussian elimination can also be used to inform about a matrix rank, as well as to efficiently compute a matrix determinant.
+and reducing $\mathbf{A}$ to $\mathbf{I}$ transforms $\mathbf{I}$ to $\mathbf{A}$ in a product of elementary row operations matrices. Gaussian elimination can also be used to determine the rank of a matrix, as well as to efficiently compute a matrix determinant.
 
 \subsection{Matrix Decompositions}
 
@@ -355,7 +357,7 @@ More efficient algorithms for solving systems of linear equations and inverting 
 
 $$\mathbf{A} = \mathbf{L}\mathbf{L}^T,$$
 
-where $\mathbf{L}$ is a lower triangular matrix. Solutions can then be derived in the usual way using back-propagation. Symmetric positive-definite matrices arise in machine learning models, thus Cholesky decomposition and the related, iterative conjugate gradient method are of interest.
+where $\mathbf{L}$ is a lower triangular matrix. Solutions can then be derived in the usual way using back-propagation. Symmetric positive-definite matrices arise in machine learning models, thus Cholesky decomposition and the related, iterative \emph{conjugate gradient method} are of interest.
 
 \section{Vector Calculus}
 
@@ -365,11 +367,11 @@ Vector calculus is an important tool for understanding multivariate probability 
 
 \subsubsection{Sums and Matrices}
 
-It is useful to note how certain matrix expressions may be written as sums. There are many occasions in machine learning where linear models are written interchangeably using summation notation and with vectors. Consider the simplest case--the dot product,
+It is useful to note how certain matrix expressions may be written as sums. There are many occasions in machine learning where linear models are written interchangeably using summation notation and with vectors. Consider the simplest case--the dot or inner product\footnote{Not to be confused with the outer product, which is simply $\mathbf{a}\mathbf{b}^T$, nor with the cross product, which is used to find a vector normal to the plane spanned by two initial vectors.},
 
 $$\mathbf{a}\cdot\mathbf{b} = \mathbf{a}^T\mathbf{b} = a_1b_1 + a_2b_2 + \cdots + a_nb_n = \sum_i a_ib_i.$$
 
-The geometric interpretation of a dot product is a projection of one vector onto the line defined by another. In machine learning, linear classifiers are log-linear with respect to their parameters. Geometrically, a model prediction amounts to projecting a data point onto a line (or hyperplane) defined by the parameters. This line runs perpendicular to a decision boundary, which determines the classification of the point. Now consider a matrix vector multiplication,
+Geometrically, a dot product relates to how one vector projects onto another. From the cosine formula, $(\mathbf{a}\cdot\mathbf{b})/|\mathbf{b}| = |\mathbf{a}|\cdot\cos\theta$, and $|\mathbf{a}|\cdot\cos\theta$ is the length along the vector $\mathbf{b}$ at which point the perpendicular projection of $\mathbf{a}$ intersects. In machine learning, linear classifiers are log-linear with respect to their parameters, using a dot product to represent log-likelihood. Therefore, a model prediction amounts to projecting a data point onto a line (or hyperplane) defined by the parameters. This line runs perpendicular to a decision boundary, which determines the classification of the point. Now consider a matrix-vector multiplication,
 
 $$\mathbf{A}\mathbf{b} = \big[A_{:, 1}, A_{:, 2}, \dots, A_{:, N}\big]
 \begin{bmatrix}
@@ -445,11 +447,11 @@ where $j$ and $k$ are swapped. This result is called the trace cyclic permutatio
 
 \subsection{Vector Calculus}
 
-The single most important principle of vector calculus is the definition of what it means to differentiate with respect to a vector. In general, the gradient of a multi-variate function is the vector of partial derivatives, that is,
+The foremost definition in vector calculus is the vector derivative or gradient. In general, the gradient of a multi-variate function is the vector of partial derivatives, that is,
 
 $$\nabla\mathbf{f} \triangleq \frac{\partial f}{\partial(x_1, \dots, x_n)} = \bigg[\frac{\partial f}{\partial x_{1}}, \frac{\partial f}{\partial x_{2}}, \dots, \frac{\partial f}{\partial x_{n}}\bigg].$$
 
-From our definition of gradient, it is easy to derive some of the fundamental formulae of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
+The gradient at a point of a multivariate function is the vector lying normal to the \emph{level curve}, the contour on the hyper surface for which the function is constant. From our definition of the gradient, it is easy to derive some of the fundamental formulas of vector calculus. For function $f : \mathbb{R}^{n} \to \mathbb{R}^{m}$, that is, a vector-valued function in $n$ variables, its derivative, known as the Jacobian $\mathbf{J}$, is,
 
 $$\mathbf{J} \triangleq \frac{\partial (f_1, \dots, f_m)}{\partial(x_1, \dots, x_n)} = \begin{bmatrix}
 \frac{\partial f_1}{\partial x_{1}}&\frac{\partial f_1}{\partial x_{2}}&\cdots&\frac{\partial f_1}{\partial x_{n}}\\
@@ -544,7 +546,7 @@ A geometric series\footnote{A series is the sum of a sequence of terms.} is a se
 
 \subsection{Taylor Series}
 
-A Taylor series, named after English mathematician Brook Taylor (1685-1731), is a technique for writing an infinitely differentiable function\footnote{A function is infinitely differentiable at a point if all its derivatives exist}, $f(x)$, as an infinite order polynomial,
+A Taylor series, named after English mathematician Brook Taylor (1685-1731), is a technique for writing an infinitely differentiable function\footnote{A function is infinitely differentiable at a point if all its derivatives exist at that point.}, $f(x)$, as an infinite order polynomial,
 
 \begin{align}
 f(x) &= \sum_{i = 0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n \notag \\
@@ -561,7 +563,7 @@ $$f(x) = f(a) + \frac{f'(a)}{1!}(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \cdots  +
 
 where $$\lim_{a \to 0}h_k(a) = 0.$$
 
-To show this, define $h_k(x) = \frac{f(x) - P(x)}{(x - a)^k}$ for $x \neq a$ and $h_k(x) = 0$ for $x = 0$, where $P(x)$ is the order $k$ Taylor polynomial for $f(x)$ centred on $a$. First note that $f^{(j)} = P^{(k)}$ for $k = 1, \dots k$. Applying L'H\^{o}pital's rule repeatedly,
+To show this, define $h_k(x) = \frac{f(x) - P(x)}{(x - a)^k}$ for $x \neq a$ and $h_k(x) = 0$ for $x = 0$, where $P(x)$ is the order $k$ Taylor polynomial for $f(x)$ centred on $a$. First note that $f^{(j)}(a) = P^{(j)}(a)$ for $j = 1, \dots k$. Applying L'H\^{o}pital's rule\footnote{L'H\^{o}pital's rule, named after French mathematician Guillaume de L'H\^{o}pital (1661-1704), is that $\lim_{x\to a} f(x)/g(x) = \lim_{x\to a} f'(x)/g'(x)$. The rule is useful for evaluating functions with \emph{indeterminate forms}, that is, involving divisions by 0 or infinities. A typical use case is in evaluating the sinc function at 0. The rule might also illustrate the fact that higher order functions ultimately overwhelm lower order functions as $x \to \infty$, regardless of their coefficients, a key point in complexity analysis.} repeatedly,
 
 \begin{align}
 \lim_{x \to a} \frac{f(x) - P(x)}{(x - a)^k} &= \lim_{x \to a} \frac{\frac{d^k}{dx^k}(f(x) - P(x))}{\frac{d^k}{dx^k}(x - a)^k} \notag \\
@@ -571,11 +573,11 @@ To show this, define $h_k(x) = \frac{f(x) - P(x)}{(x - a)^k}$ for $x \neq a$ and
 &= 0, \notag
 \end{align}
 
-where (\ref{eq:taylor}) comes from the definition of a limit. Thus, we have shown the error term converges to 0 as $x \to a$.
+where (\ref{eq:taylor}) comes from the definition of a derivative. Thus, we have shown the error term converges to 0 as $x \to a$.
 
 \subsubsection{Convergence}
 
-Holomorphic functions are a key interest in complex analysis, the study of functions of complex variables. Holomorphic functions are functions that are complex differentiable at every point on their domain. A consequence of complex differentiability is that the function is both infinitely differentiable and equal to its own Taylor series on that domain. A major result from complex analysis is that all homomorphic functions are analytic. A function is analytic if and only if its Taylor series converges to the function in some neighbourhood of points around $x_0$ for every $x_0$ in the function's domain. That is, there is always a locally convergent power series for the function. The radius of convergence of a power series,
+Holomorphic functions are a key interest in complex analysis, the study of functions of complex variables. Holomorphic functions are functions that are complex differentiable at every point on their domain. A consequence of complex differentiability is that the function is both infinitely differentiable and equal to its own Taylor series on that domain. A major result from complex analysis is that all homomorphic functions are analytic. A function is analytic if and only if its Taylor series converges to the function in some neighbourhood of points around $x_0$ for every $x_0$ in the function's domain. That is, there is always a locally convergent power series for the function, and so a local approximation can always be made around any point on the domain. The radius of convergence of a power series,
 
 $$f(z) = \sum_{n=0}^{\infty}c_n(z - a)^n$$
 
@@ -605,7 +607,7 @@ These are entire functions, hence the Taylor series converge for all real number
 
 \subsubsection{Bernoulli Numbers}
 
-The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (such as $\pi$ and $e$). They originate as the coefficients of the Bernoulli polynomials, but make various other appearances in number theory. They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
+The Bernoulli numbers are an infinite sequence of numbers that appear sufficiently often in number theory to merit a name (as do $\pi$ and $e$). They originate as the coefficients of the Bernoulli polynomials, but make various other appearances in number theory. They were first discovered in Europe\footnote{The Bernoulli numbers were independently discovered by the great Japanese mathematician Seki Takakazu around the same time. It is unknown which discovery came first.} by Swiss mathematician, Jakob Bernoulli (1655-1705), a member of the eminent Bernoulli family that produced several noted mathematicians. The first few Bernoulli numbers are,
 
 $$B_0 = 1, B_1 = \pm \frac{1}{2}, B_2 = \frac{1}{6}, B_3 = 0, B_4 = -\frac{1}{30}, B_5 = 0, B_6 = \frac{1}{42}, B_7 = 0, B_8 = -\frac{1}{30}.$$
 
@@ -617,25 +619,25 @@ The Bernoulli numbers appear within some Taylor expansions, such as that of the 
 
 $$\tanh x = x - \frac{1}{3}x^3 + \frac{2}{15}x^5 - \frac{17}{315}x^7 + \cdots = \sum_{n=1}^{\infty}\frac{B_{2n}4^n(4^n-1)}{(2n)!}x^{2n-1}.$$
 
-The Bernoulli numbers also appear in the Euler-Maclaurin formula, which specifies the error incurred by approximating integrals with sums, for example, the error term of the trapezoidal rule.
+The Bernoulli numbers also appear in the Euler-Maclaurin formula, which specifies the error incurred by approximating integrals with sums, such as in the trapezoidal rule.
 
 \subsection{$\pi$ as an Infinite Series}
 
 \subsubsection{Pythagorean Trigonometric Identity}
 
-From the Pythagorean theorem, we may derive an important trigonometric identity. Given a right-angle triangle, we denote the sides $a, b, c$ such that $\sin{x} = \frac{a}{c}$ and $\cos{x} = \frac{b}{c}$. Note that this implies that, $$\tan{x} = \frac{a}{b} = \frac{\sin{x}}{\cos{x}}.$$ Now, dividing the Pythagorean equation by $c^2$ gives,
+From the Pythagorean theorem, we may derive an important trigonometric identity. Given a right-angle triangle, we denote the sides $a, b, c$ such that $\cos{x} = \frac{a}{c}$ and $\sin{x} = \frac{b}{c}$. Note that this implies that, $$\tan{x} = \frac{a}{b} = \frac{\sin{x}}{\cos{x}}.$$ Now, dividing the Pythagorean equation by $c^2$ gives,
 
 $$\frac{a^2}{c^2} + \frac{b^2}{c^2} = \frac{c^2}{c^2},$$
 
 hence,
 
-$$\sin^2x + \cos^2x = 1.$$
+$$\cos^2x + \sin^2x = 1.$$
 
 From this it may be seen that the coordinates $(\cos x, \sin x)$ sketch a unit circle on the real plane.
 
 \subsubsection{Differentiating Inverse Trigonometric Functions}
 
-The function, $\arctan x$ (otherwise written $\tan^{-1}x$) is an inverse trigonometric function, the inverse mapping of the function $\tan{x}$. If we let $y = \arctan{x}$, then we have $\tan{y} = x$. Differentiating both sides gives,
+The function, $\arctan x$ (otherwise written $\tan^{-1}x$) is an inverse trigonometric function, the inverse of the function $\tan{x}$. If we let $y = \arctan{x}$, then we have $\tan{y} = x$. Differentiating both sides gives,
 
 $$\frac{d}{dx} \tan{y} = 1.$$
 
@@ -663,7 +665,7 @@ From the previous result, we have $$\arctan{x} = \int \frac{1}{1 + x^2} dx.$$ Re
 &= \sum_{n=0}^{\infty} \frac{(-1)^n}{2n + 1}x^{2n+1}. \notag
 \end{align}
 
-Now, we know that a right-angle triangle with two $45^{\circ}$ angles has opposite and adjacent sides of equal length. Hence, $\arctan({1}) = \pi/4$. Evaluating our infinite series at $x = 1$ gives,
+Now, we know that an isosceles right triangle has opposite and adjacent sides of equal length. Hence, $\arctan({1}) = \pi/4$. Evaluating our infinite series at $x = 1$ gives,
 
 $$\pi/4 = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \dots$$
 
@@ -671,7 +673,7 @@ Though pretty, this series is extremely slow to converge. Other series represent
 
 \section{Infinite Products}
 
-Infinite products are defined for a sequence of (complex) numbers, $a_1, a_2, a_3, \dots$, as,
+Infinite products are defined for a sequence of numbers, $a_1, a_2, a_3, \dots$, as,
 
 $$\prod_{n=1}^{\infty}a_n = a_1a_2a_3\dots$$
 
@@ -679,7 +681,7 @@ Just like infinite sums they may converge or diverge. The product converges if t
 
 \subsection{Vi\`ete's Formula}
 
-The first recorded infinite product was formulated by French mathematician Fran\c cois Vi\`ete (1540-1603), and gives an expression for $\pi$. The expression derives from an old method for approximating the area of a circle: suppose we have a circle with radius 1. Its area is $\pi$ units. Suppose then that we inscribe a square within this circle. The area of the square (4-sided polygon) is $(\sqrt{2})^2 = 2$. This gives a (very) rough approximation to the area of the circle. If we then inscribe a hexagon (8-sided polygon) in the circle, it is clear we get a better approximation. A hexadecahedron (16-sided polygon) would give a better approximation again, and so on. As the number of sides goes to infinity, the inscribed shapes `telescope' to the shape of the circle.
+The first recorded infinite product was formulated by French mathematician Fran\c cois Vi\`ete (1540-1603), and gives an expression for $\pi$. The expression derives from an old method for approximating the area of a circle: suppose we have a circle with radius 1. Its area is $\pi$ units. Suppose then that we inscribe a square within this circle. The area of the square (4-sided polygon) is $(\sqrt{2})^2 = 2$. This gives a first, rough approximation to the area of the circle. If we then inscribe a hexagon (8-sided polygon) in the circle, it is clear we get a better approximation. A hexadecahedron (16-sided polygon) would give a better approximation again, and so on. As the number of sides goes to infinity, the inscribed shapes `telescope' to the shape of the circle.
 
 We can therefore derive an expression for the area of the circle, $\pi$, by taking the area of the square and scaling it by the ratio of the area of the octagon to the area of the square, and scaling this result by the ratio of hexadecahedron to octagon, icosidodecahedron to hexadecahedron, and so on. We choose shapes whose number of sides are powers of two because there is a useful relation between these, as we shall see. For brevity, we will denote the area of the $2^n$-sided polygon as $A_n$. Thus, $A_2$ is the area of the square, $A_3$ the octagon, and so on. Our technique for calculating the area of the circle is therefore described by,
 
@@ -716,18 +718,18 @@ $$
 $$
 
 \subsection{The Basel Problem}
-In 1734, Leonhard Euler (1707-1783), found the elegant solution to the sum,
+In 1734, Leonhard Euler\footnote{Euler (1707-1783) was a Swiss mathematician, considered one of the greatest of all time.}, found the elegant solution to the sum,
 
 $$\sum_{n=0}^{\infty}\frac{1}{n^2} = 1 + \frac{1}{4} + \frac{1}{9} + \cdots,$$
 
-a problem posed 90 years earlier by Italian mathematician, Pietro Mengoli (1626-1686). Its solution had previously defied the attempts of the eminent Bernoulli dynasty of mathematicians. The problem is named after Euler's hometown, and first place of employment in Switzerland. The solution involves infinite products, and a mathematical leap of faith, that was only later confirmed rigorously. Incidentally, this sum is the value of $\zeta(2)$, where $\zeta(s)$ is the then undiscovered Riemann zeta function\footnote{The Riemann zeta function, defined over the complex numbers, formulated by Bernhard Riemann (1826-1866) has proven to be of great mathematical interest. The Riemann hypothesis, which conjectures the placement of zeta function roots has great implications for number theory, particularly the distribution of prime numbers. The hypothesis is the subject of one of the seven Millennium problems.}. Euler's solution starts by considering the function,
+a problem posed 90 years earlier by Italian mathematician, Pietro Mengoli (1626-1686). Its solution had previously defied the attempts of the eminent Bernoulli dynasty of mathematicians. The problem is named after Euler's hometown, and first place of employment in Switzerland. The solution involves infinite products, and a mathematical leap of faith, that was only later confirmed rigorously. Incidentally, this sum is the value of $\zeta(2)$, where $\zeta(s)$ is the then undiscovered Riemann zeta function\footnote{The Riemann zeta function, defined over the complex numbers, formulated by Bernhard Riemann (1826-1866) has proven to be of great mathematical interest. The Riemann hypothesis, which conjectures the placement of zeta function roots has great implications for number theory, particularly the distribution of prime numbers. The hypothesis is the subject of one of the seven Clay Institute Millennium problems.}. Euler's solution starts by considering the sinc function,
 
 \begin{align}
 \frac{\sin x}{x} &= \frac{ x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots}{x}  \notag \\
 &=  1 - \frac{x^2}{3!} + \frac{x^4}{5!} - \cdots \label{eq:sinx}
 \end{align}
 
-Having written the infinite series expansion of this function, it is obvious that the limit, $\lim_{x\to 0} \sin x / x = 1$. Euler then found an infinite \emph{product} expansion for this function,
+Having written the infinite series expansion of this function, it is obvious that the limit, $\lim_{x\to 0} \sin x / x = 1$\footnote{As noted previously, this can also be found using L'H\^{o}pital's rule.}. Euler then found an infinite \emph{product} expansion for the same function,
 
 \begin{align}
 \frac{\sin x}{x} &= \prod_{k=1}^{\infty}1 - \frac{x^2}{k^2\pi^2}, \notag \\
@@ -740,7 +742,7 @@ $$
 -\frac{1}{\pi^2}\Big(1 + \frac{1}{4} + \frac{1}{9} + \cdots \Big)= -\frac{1}{\pi^2}\sum_{n=0}^{\infty}\frac{1}{n^2}.
 $$
 
-But we know from (\ref{eq:sinx}) that the coefficient for $x^2$ is $-\frac{1}{3!}$, hence, equating the two gives,
+But we know from (\ref{eq:sinx}) that the coefficient for $x^2$ is $-\frac{1}{3!}$, hence, equating the two gives the solution to the Basel problem,
 
 $$
 \sum_{n=1}^{\infty}\frac{1}{n^2} = \frac{\pi^2}{6}.
@@ -775,7 +777,7 @@ as $k \to \infty$.
 
 \subsection{The Method of Eratosthenes}
 
-The method of Eratosthenes is a prime number sieve algorithm discovered by Eratosthenes of Cyrene (c. 276 BC - 195/194 BC). It is central to the derivation of the Euler product formula. It is a method for identifying all primes up to some natural number, $N$. An example of the algorithm is given here. Let $N = 15$, then we have the list of candidate primes,
+The method of Eratosthenes is a prime number sieve algorithm discovered by Eratosthenes of Cyrene (c. 276 BC - 195/194 BC). It is central to the derivation of the Euler product formula. It is a method for identifying all primes up to some natural number, $N$. For example, let $N = 15$, so that we have the list of candidate primes,
 
 $$2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15$$
 
@@ -843,11 +845,11 @@ Standard notation takes the values on the diagonal and writes them as, $f = [1; 
 
 \subsection{Fibonacci Sequences}
 
-A Fibonacci sequence is a sequence of numbers for seed values, $F_0$ and $F_1$, and recurrence relationship,
+A Fibonacci sequence is a sequence of numbers for initial values, $F_0$ and $F_1$, and recurrence relationship,
 
 $$F_n = F_{n-1} + F_{n-2},$$
 
-for $n \geq 2$. If we take the ratio of the $n+1$th and $n$th terms in the sequence we have,
+for $n \geq 2$. If we take the ratio of the $(n+1)$th and $n$th terms in the sequence we have,
 
 $$
 \cfrac{F_{n+1}}{F_n}
@@ -880,7 +882,7 @@ The exponential function is a transcendental entire function, with its base $e$ 
 
 The starting point for deriving the exponential function is to consider the differential equation,
 
-$$f = \frac{df}{dx},$$ that is, a function that is its own derivative. This equation models many common physical problems. One solution to this is the infinite series,
+$$f(x) = \frac{df}{dx},$$ that is, a function that is its own derivative. This equation models many common physical problems. One solution to this is the infinite series,
 
 $$f(x) = \sum_{n=0}^{\infty} \frac{x^n}{n!},$$ since $f'(x) = \sum_{n=1}^{\infty} \frac{x^{n-1}}{(n - 1)!} = \sum_{n=0}^{\infty} \frac{x^{n}}{n!} = f(x)$. Note that this is the Maclaurin series for a function whose derivatives are all equal to 1 at 0. Evaluating the function at 1 gives,
 
@@ -919,20 +921,20 @@ Could any other function solve our differential equation? No, as can be seen fro
 
 \subsection{Euler's Formula}
 
-Here we take the opportunity to derive a very famous equation\footnote{The equation is in fact a special case of a more general result found earlier by de Moivre.}, based on what we have covered so far. Consider the Maclaurin series,
+Here we take the opportunity to derive a very famous equation\footnote{The equation is related to the earlier de Moivre's formula.}, based on what we have covered so far. Consider the Maclaurin series,
 
 \begin{align}
 e^{ix} &= 1 + ix + \frac{(ix)^2}{2!} + \frac{(ix)^3}{3!} + \frac{(ix)^4}{4!} + \frac{(ix)^5}{5!} + \cdots \notag \\
 &= 1 + ix - \frac{x^2}{2!} - i\frac{x^3}{3!} + \frac{x^4}{4!} + i\frac{x^5}{5!} - \cdots \notag
 \end{align}
 
-The reader may now confirm that the even terms correspond with $\cos x$, and the odd terms with $i\sin x$. Thus, $$e^{ix} = \cos x + i\sin x,$$ a fantastic result! Now, just as coordinates $(\cos x, \sin x)$ trace a unit circle on the real plane, the complex numbers arising from $e^{ix} = \cos x + i\sin x$ do so on the complex plane (Figure \ref{fig:eulersformula}). Thus, we have a basis on which to perform complex exponentiation, for example, $z^{a + bi} = z^a \cdot (e^{\ln z\cdot bi}) = z^a \cdot (\cos(b\ln z) + i\sin(b\ln z))$. Furthermore, for any integer $k$,
+The reader may now confirm that the even terms correspond with $\cos x$, and the odd terms with $i\sin x$. Thus, $$e^{ix} = \cos x + i\sin x,$$ a fantastic result! Now, just as coordinates $(\cos x, \sin x)$ trace a unit circle on the real plane, the complex numbers arising from $e^{ix} = \cos x + i\sin x$ do so on the complex plane (Figure \ref{fig:eulersformula}). Thus, we have a basis on which to perform complex exponentiation, for example, $z^{a + bi} = z^a \cdot (e^{\ln z\cdot bi}) = z^a \cdot (\cos(b\ln z) + i\sin(b\ln z))$. Furthermore, for any odd integer $k$,
 
 $$
 e^{i(k\pi)} = \cos (k\pi) + i\sin (k\pi) \notag = -1.
 $$
 
-For the case of $k = 1$, we may rearrange to acquire Euler's\footnote{Euler (1707-1783) was a Swiss mathematician, considered one of the greatest of all time.} identity,
+For the case of $k = 1$, we may rearrange to acquire Euler's identity,
 
 $$
 e^{i\pi} + 1 = 0,
@@ -1017,15 +1019,15 @@ hence $$y = \mathcal{L}^{-1}\bigg\{\frac{4}{s - 2}\bigg\} - \mathcal{L}^{1}\bigg
 
 \subsection{Fourier Series}
 
-A Fourier series, $g(t)$, is a way of representing any periodic function, $f(t)$, as the sum of a possibly infinite set of sines and cosines,
+A Fourier series, $g(t)$, is a way of representing any periodic function, $f(t)$, as the sum of a (possibly infinite) set of sines and cosines,
 
 $$g(t) = \sum_{n=0}^{\infty}a_n\cos\bigg(\frac{2\pi nt}{T}\bigg) + \sum_{m=1}^{\infty}b_m\sin\bigg(\frac{2\pi mt}{T}\bigg),$$
 
-where $a_0$ is an offset term, and $T$ is the fundamental frequency, that is, the lowest value for which the function is periodic, that is the lowest value for which $f(t + T) = f(t)$ for all $t$. Deriving a Fourier series representation involves solving for the $a_n$ and $a_m$ parameters. It is possible to isolate each parameter by multiplying by the corresponding wave and integrating over the fundamental frequency. This eliminates all other terms in the series leaving,
+where $a_0$ is an offset term, and $T$ is the fundamental frequency, that is, the lowest value for which the function is periodic, that is, the lowest value for which $f(t + T) = f(t)$ for all $t$. Deriving a Fourier series representation involves solving for the $a_n$ and $a_m$ parameters. It is possible to isolate each parameter by multiplying by the corresponding wave and integrating over the fundamental frequency. This eliminates all other terms in the series leaving,
 
 $$a_n = \frac{2}{T}\int_0^Tg(t)\cos\bigg(\frac{2\pi nt}{T}\bigg)\mathop{dt}.$$
 
-A Fourier series can also be thought of as a technique for decomposing the harmonics of a wave. For example, a square wave function can be represented as an infinite sum of cosines, each higher frequency part converging asymptotically to the square wave form. A Fourier series is often written in terms of complex exponential function, as this is more elegant and often makes the integration operation easier.
+A Fourier series can also be thought of as a technique for decomposing the harmonics of a wave. For example, a square wave function can be represented as an infinite sum of cosines, each higher frequency part converging asymptotically to the square wave form. A Fourier series is often written in terms of complex exponential function, as this is more elegant and often makes integration less cumbersome.
 
 \subsection{The Fourier Transform}
 
@@ -1037,7 +1039,7 @@ and the inverse Fourier transform is defined as,
 
 $$f(x) = \int_{-\infty}^{\infty}\hat{f}(x)e^{2\pi i\xi x}\mathop{d\xi}.$$
 
-The initial function $f(x)$ is a function of amplitude over time. The transformed function gives the amplitude for a given frequency. For $f(x) = \sin(x)$, the transform becomes a Dirac delta function, that is, a single point on the real plane, corresponding to the single frequency of the function. A more complex sine wave, comprising multiple frequencies, will transform to a sum of delta functions, each representing one of the frequencies. For the square wave function, composed of an infinite summation of frequencies, the transform takes the form $\hat{f}(\xi) = \text{sinc}(x) = \sin(x)/x$, a contiunous sine wave with ever decreasing amplitude. There is such a thing as a discrete Fourier transform (DFT) for signals with discrete samples. The famous Shannon-Nyquist theorem relates continuous and discrete signals, proving that a sample rate of at least twice the highest frequency of the continuous wave is sufficient for an exact reproduction. The fast Fourier transform (FFT) is an important $\mathcal{O}(n\log n)$ time algorithm for evaluating a discrete Fourier transform.
+The initial function $f(x)$ is a function of amplitude over time. The transformed function gives the amplitude for a given frequency. For $f(x) = \sin(x)$, the transform becomes a Dirac delta function, that is, a single point on the real plane, corresponding to the single frequency of the function. A more complex sine wave, comprising multiple frequencies, will transform to a sum of delta functions, each representing a frequency. For the square wave function, composed of an infinite summation of frequencies, the transform takes the form $\hat{f}(\xi) = \text{sinc}(x) = \sin(x)/x$, a contiunous sine wave with ever decreasing amplitude. There is such a thing as a discrete Fourier transform (DFT) for signals with sampled discretely. The famous Shannon-Nyquist theorem relates continuous and discrete signals, proving that a sample rate of at least twice the highest frequency of the continuous wave is sufficient for an exact reproduction. The fast Fourier transform (FFT) is an important $\mathcal{O}(n\log n)$ time algorithm for evaluating a discrete Fourier transform.
 
 \section{The Factorial Function}
 
@@ -1099,7 +1101,7 @@ To show its connection to the factorial function, we integrate by parts,
 &= (n-1)\Gamma(n-1).\notag
 \end{align}
 
-Noting that $\Gamma(1) = 1$, it is clear that $\Gamma(n) = (n - 1)!$ for all positive integers, $n$. However, the gamma function is further defined for all complex numbers, $t$. It is worth nothing that there exists a related function, the pi function, $\Pi(t) = \Gamma(t + 1)$, that does away with the offset term, so as to coincide exactly with the factorial function. Another related function, the beta function, is a composite of the gamma function, where $B(x, y) = \Gamma(x)\Gamma(y)/\Gamma(x+y)$. The gamma function makes many appearances in the domain of statistics, for example in Student's t-distribution. There is also an intimate link to the Normal distribution, which we can show by first observing that the form of the function $\varphi(x) = e^{-x^2}$ is that of the bell curve. Now, the infinite integral\footnote{An integral taken over an infinite integral is known as \emph{improper} and is an abuse of notation to do away with limit notation.} of this function is,
+Noting that $\Gamma(1) = 1$, it is clear that $\Gamma(n) = (n - 1)!$ for all positive integers, $n$. However, the gamma function is further defined for all complex numbers, $t$. It is worth nothing that there exists a related function, the pi function, $\Pi(t) = \Gamma(t + 1)$, that does away with the offset term, so as to coincide exactly with the factorial function. Another related function, the beta function, is a composite of the gamma function, where $B(x, y) = \Gamma(x)\Gamma(y)/\Gamma(x+y)$. The gamma function makes many appearances in the domain of statistics, for example in Student's t-distribution. There is also an intimate link to the Normal distribution, which we can show by first observing that the form of the function $\varphi(x) = e^{-x^2}$ is that of the bell curve. Now, the infinite integral\footnote{An integral taken over an infinite integral is known as \emph{improper} and is an abuse of notation to do away with limits.} of this function is,
 
 $$\int_{-\infty}^{\infty} e^{-t^2} \mathop{dt} = 2\cdot\int_{0}^{\infty} e^{-t^2} \mathop{dt}.$$
 
@@ -1107,19 +1109,19 @@ Defining $t = u^{1/2}$, we have it that $\mathop{dt} = \frac{1}{2}u^{-1/2}\matho
 
 $$\int_{-\infty}^{\infty} e^{-t^2} \mathop{dt} = 2\cdot\frac{1}{2}\cdot\int_{0}^{\infty}u^{1/2 - 1} e^{-u}\mathop{du} = \Gamma(1/2).$$
 
-Given that we know the area under the non-normalised bell curve to be $\sqrt{\pi}$, we may write, $\Gamma(1/2) = \sqrt{\pi}$. Though there exist many such identities for points on the gamma function, to evaluate the gamma function at any positive real point, the Stirling approximation was historically used as a good approximation. Its use has been supplanted in recent decades by the numerical algorithm, the Lanczos approximation. An interesting property of the gamma function is that it is the only function that interpolates the factorial function that is also log-convex. This is according to a result known as the Bohr-Mollerup theorem.
+Given that we know the area under the unnormalised bell curve to be $\sqrt{\pi}$, we may write, $\Gamma(1/2) = \sqrt{\pi}$. Though there exist many such identities for points on the gamma function, to evaluate the gamma function at any positive real point, the Stirling approximation was historically used as a good approximation. Its use has been supplanted in recent decades by the numerical algorithm, the Lanczos approximation. An interesting property of the gamma function is that it is the only function that interpolates the factorial function and is also log-convex. This is according to a result known as the Bohr-Mollerup theorem.
 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.6\textwidth]{Figures/factorial.pdf}
-\caption{Comparison of the discrete factorial points, the gamma function, which interpolates them, and Stirling's approximation.\cite{factorial}}
+\caption{Comparison of the discrete factorial points, the gamma function, which interpolates them, and Stirling's approximation.}
 \label{fig:factorial}
 \end{figure}
 
 \section{Fundamentals of Statistics}
 \subsection{Philosophical Notions of Probability}
 
-Pierre-Simon Laplace (1749-1827) described probability as, `nothing but common sense reduced to calculation.' As it is, there are two competing interpretations of the meaning of probabilities: the \emph{frequentist} interpretation, and the \emph{bayesian} interpretation. In the frequentist interpretation, probabilities represent frequencies or rates. Thus, a probability of $0.5$ that a coin comes up heads\footnote{Although recent research has shown the probability is slightly biased towards the upward-facing side of the coin when flipped, with about a $51\%$ chance of landing on that same side. This is linked somehow to the physics of the problem. See the Diaconis-Holmes-Montgomery coin-tossing theorem.} means that, with sufficient throws, this proportion of heads will prevail. In the bayesian (or epistemological) interpretation, probabilities quantify an uncertainty or `degree of belief' in an outcome, and so is more closely aligned with information theory. In information theory, a fair coin flip (50-50) has maximum entropy, because a uniform distribution maximises uncertainty. Though both views are fully compatible, adopting one or the other changes the emphasis slightly.
+Pierre-Simon Laplace (1749-1827) described probability as, `nothing but common sense reduced to calculation.' As it is, there are two competing interpretations of the meaning of probabilities: the \emph{frequentist} interpretation, and the \emph{Bayesian} interpretation. In the frequentist interpretation, probabilities represent frequencies or rates. Thus, a probability of $0.5$ that a coin comes up heads\footnote{Although recent research has shown the probability is slightly biased towards the upward-facing side of the coin when flipped, with about a $51\%$ chance of landing on that same side. This is linked somehow to the physics of the problem. See the Diaconis-Holmes-Montgomery coin-tossing theorem.} means that, with sufficient throws, this proportion of heads will prevail. In the Bayesian (or epistemological) interpretation, probabilities quantify an \emph{uncertainty} or \emph{degree of belief} in an outcome, and so is more closely aligned with information theory. In information theory, a fair coin flip (50-50) has maximum entropy, because a uniform distribution maximises uncertainty. Though both views are fully compatible, adopting one or the other may change the emphasis.
 
 \subsection{Fundamental Rules}
 
@@ -1131,7 +1133,7 @@ Discrete random variables take values in a finite or countably infinite set (suc
 
 $$\Bigg(\sum_{k = 1}^{K} p(X = k)\Bigg) = 1.$$
 
-Continuous probability distributions express probabilities for random variables taking values in a continuum. For this reason, it no longer makes sense to model probabilities of the form $p(X = k)$. Such an event taken apart has an infinitesimal probability. Rather, we compute the probability of intervals, such as $p(X \leq k)$. The function that gives probabilities is the cumulative density function (cdf),
+Continuous probability distributions express probabilities for random variables taking values in a continuum. For this reason, it no longer makes sense to model probabilities of the form $p(X = k)$. Such an event taken apart has an infinitesimal probability. Rather, we compute the probability of intervals, such as $p(X \leq k)$. The function that assigns probabilities is the cumulative density function (cdf),
 
 $$
 P(X \leq a) = \int_{-\infty}^{a} p(x) \mathop{dx}.
@@ -1149,7 +1151,7 @@ and for this reason, the pdf must be non-negative, and must integrate to $1$.
 
 \subsubsection{Union of Events}
 
-The probability of a union of events $A$ and $B$, that is, the probability that $A$ \emph{or} $B$ occurs is, $$p(A \lor B) = p(A) + p(B) - p(A \land B).$$ When $A$ and $B$ are \emph{mutually exclusive}, the joint probability, $p(A \land B) = 0$. Mutually exclusive events are events that cannot happen simultaneously, such as $A$, the event of rolling a 2 on a die, and $B$, the event of rolling a 3 on a die. An example of events that are \emph{not} mutually exclusive is $A$, the event we draw a king from a deck of cards, and $B$, the event we draw a diamond. The events can happen both separately and together. Measuring the probability of the union of events seems rarely to be of interest, however.
+The probability of a union of events $A$ and $B$, that is, the probability that $A$ \emph{or} $B$ occurs is, $$p(A \lor B) = p(A) + p(B) - p(A \land B).$$ When $A$ and $B$ are \emph{mutually exclusive}, the joint probability, $p(A \land B) = 0$. Mutually exclusive events are events that cannot happen simultaneously, such as $A$, the event of rolling a 2 on a die, and $B$, the event of rolling a 3 on a die. An example of events that are \emph{not} mutually exclusive is $A$, the event we draw a king from a deck of cards, and $B$, the event we draw a diamond. The events can happen either separately or together. Measuring the probability of the union of events seems rarely to be of interest in machine learning, however.
 
 \subsubsection{Inclusion-Exclusion Principle}
 
@@ -1236,7 +1238,7 @@ Quantiles mark milestones in the cumulative distribution, that is, the values fo
 
 \begin{itemize}
 \item median - the value for which there is a 0.5 probability of exceeding and 0.5 probability of falling short, that is, the midpoint of the distribution;
-\item quartile ($Q_1, Q_2, Q_3$) - the values marking 0.25, 0.5, and 0.75, probabilities in the cumulative distribution ($Q_2$ is the median);
+\item quartile ($Q_1, Q_2, Q_3$) - the values marking 0.25, 0.5, and 0.75, probabilities in the cumulative distribution ($Q_2$ is the median). Note that in certain fields that apply statistics, such as finance, a quartile is rather one of the four intervals separated by the quartile points;
 \item percentile - the values marking the $0.01, 0.02, \dots, 0.99$ cumulative probabilities.
 \end{itemize}
 
@@ -1255,14 +1257,14 @@ $$
 \mathbb{E}[(X - c)^N],
 $$
 
-for some constants, $c$ and $N$. When $c = 0$, we have what is called the \emph{raw} moment. Usually $c = \mathbb{E}[X]$, as we are chiefly interested in how $X$ moves about its mean, and these are called \emph{central} moments. Further, standardised moments are normally used in higher orders, presumably to moderate the effect of higher powers.
+for some constants, $c$ and $N$. When $c = 0$, we have what is called the \emph{raw} moment. Usually $c = \mathbb{E}[X]$, as we are chiefly interested in how $X$ moves about its mean, and these are called \emph{central} moments. Further, standardised moments are normally used in higher orders, presumably to moderate the exaggeration of higher powers.
 
 \subsubsection{Expected Value}
 
 The expected value (or mean, or average), denoted $\mu$, of a discrete random variable is the average of the random variable, weighted by its probabilities. It is the first-order ($N=1$) \emph{raw} moment (the central moment is 0 by definition). It is defined as,
 
 $$
-\mathbb{E}[X] \triangleq \sum_{x} p(x) x.\\
+\mathbb{E}[X] \triangleq \sum_{x} p(x)\cdot x.\\
 $$
 
 Similarly, for continuous, $X$,
@@ -1288,7 +1290,7 @@ Another measure of spread is the standard deviation, $\sigma$, defined as the sq
 
 \subsubsection{Skewness}
 
-Skewenss, $\gamma_1$, is the third order \emph{standardised} moment. It is a measure of the skew or \emph{asymmetry} of a distribution, and is simply the third order central moment standardised,
+Skewenss, $\gamma_1$, is the third order \emph{standardised} moment. It is a measure of the skew or \emph{asymmetry} of a distribution, and is simply the standardised third order central moment,
 
 $$
 \gamma_1 = \mathbb{E}\Bigg[\frac{(X - \mathbb{E}[X])^3}{\sigma^3}\Bigg]
@@ -1308,11 +1310,11 @@ Given a set of sample data $x_1, x_2, \dots, x_N$, we can compute estimates of t
 
 $$\bar{x} = \frac{1}{N}\sum_{i=1}^N x_i.$$
 
-At first it may appear that through the $\frac{1}{N}$ term that we are assuming a uniform distribution. This is not the case, however. Wherever non-uniformity exists, the data will `find' the right proportion as a matter of course, by supplying more likely scores in greater number. That is, the higher probabilities will feature more heavily, and receive more weight, effecting higher probabilities. The sample variance is a lot more curious. We might take the sample variance in a similar way to the mean,
+At first it may appear that through the $\frac{1}{N}$ term that we are assuming a uniform distribution. This is not the case, however. Wherever non-uniformity exists, the data will promote the right proportions as a matter of course, by supplying more likely scores in greater number. That is, the higher probabilities will feature more heavily, and receive more weight, effecting higher probabilities. The sample variance is a lot more curious. We might take the sample variance in a similar way to the mean,
 
 $$\sigma_x^2 = \frac{1}{N}\sum_{i=1}^N (x_i - \bar{x})^2$$
 
-This would be, surprisingly, only \emph{almost} correct. This is due to the fact we are using the sample mean only, not the true mean. Given all possible samples, the expectation of the sample variance is,
+This would be, surprisingly, not quite correct. This is due to the fact we are using the sample mean only, not the true mean. Given all possible samples, the expectation of the sample variance is,
 
 \begin{align}
 \mathbb{E}[\sigma_x^2] &= \mathbb{E}\Bigg[\frac{1}{N}\sum_{i=1}^N\Bigg(x_i - \frac{1}{N}\sum_{i=1}^N x_i\Bigg)^2 \Bigg] \notag \\
