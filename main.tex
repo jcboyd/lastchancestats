@@ -1121,7 +1121,7 @@ Given that we know the area under the unnormalised bell curve to be $\sqrt{\pi}$
 \section{Fundamentals of Statistics}
 \subsection{Philosophical Notions of Probability}
 
-Pierre-Simon Laplace (1749-1827) described probability as, `nothing but common sense reduced to calculation.' As it is, there are two competing interpretations of the meaning of probabilities: the \emph{frequentist} interpretation, and the \emph{Bayesian} interpretation. In the frequentist interpretation, probabilities represent frequencies or rates. Thus, a probability of $0.5$ that a coin comes up heads\footnote{Although recent research has shown the probability is slightly biased towards the upward-facing side of the coin when flipped, with about a $51\%$ chance of landing on that same side. This is linked somehow to the physics of the problem. See the Diaconis-Holmes-Montgomery coin-tossing theorem.} means that, with sufficient throws, this proportion of heads will prevail. In the Bayesian (or epistemological) interpretation, probabilities quantify an \emph{uncertainty} or \emph{degree of belief} in an outcome, and so is more closely aligned with information theory. In information theory, a fair coin flip (50-50) has maximum entropy, because a uniform distribution maximises uncertainty. Though both views are fully compatible, adopting one or the other may change the emphasis.
+Pierre-Simon Laplace (1749-1827) described probability as, `nothing but common sense reduced to calculation.'\footnote{That is not to say probability theory is intuitive (it is often not), but rather that probabilities model real world phenomena in an intuitive, simplified way, without addressing the potentially complex physical interactions behind them. A good example is the central limit theorem and the bell curve, which smooths over the uncountable complexities of reality.} As it is, there are two competing interpretations of the meaning of probabilities: the \emph{frequentist} interpretation, and the \emph{Bayesian} interpretation. In the frequentist interpretation, probabilities represent frequencies or rates. Thus, a probability of $0.5$ that a coin comes up heads\footnote{Although recent research has shown the probability is slightly biased towards the upward-facing side of the coin when flipped, with about a $51\%$ chance of landing on that same side. This is linked somehow to the physics of the problem. See the Diaconis-Holmes-Montgomery coin-tossing theorem.} means that, with sufficient throws, this proportion of heads will prevail. In the Bayesian (or epistemological) interpretation, probabilities quantify an \emph{uncertainty} or \emph{degree of belief} in an outcome, and so is more closely aligned with information theory. In information theory, a fair coin flip (50-50) has maximum entropy, because a uniform distribution maximises uncertainty. Though both views are fully compatible, adopting one or the other may change the emphasis.
 
 \subsection{Fundamental Rules}
 
@@ -1340,10 +1340,10 @@ Covariance measures the interaction between random variables, that is, it quanti
 &= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]. \notag
 \end{align}
 
-In the multivariate case, we have the covariance matrix,
+In the multivariate case, we have the covariance matrix as the outer product,
 
 \begin{align}
-\text{Cov}[\mathbf{x}] &\triangleq \mathbb{E}[(\mathbf{x} - \mathbb{E}[\mathbf{x}])^T(\mathbf{x} - \mathbb{E}[\mathbf{x}])] \notag \\
+\text{Cov}[\mathbf{x}] &\triangleq \mathbb{E}[(\mathbf{x} - \mathbb{E}[\mathbf{x}])(\mathbf{x} - \mathbb{E}[\mathbf{x}])^T] \notag \\
 &= \begin{bmatrix}
 \text{Var}[X_1] & \text{Cov}[X_1, X_2] & \dots & \text{Cov}[X_1, X_n] \\
 \text{Cov}[X_2, X_1] & \text{Var}[X_2] & \dots & \text{Cov}[X_2, X_n] \\
@@ -1369,21 +1369,21 @@ $$
 \end{bmatrix}. \notag
 $$
 
-The diagonal elements of this matrix will of course be 1.
+Each of the diagonal elements of the correlation matrix will be equal to 1.
 
 \subsection{Transformation of Random Variables}
 
 For random variable, $X$, define a new random variable, $Y = aX + b$. How have its properties changed? Recall for discrete variables that $\mathbb{E}[f(X)] = \sum_x p(x)f(x)$. Then we have,
 
 \begin{align}
-\mathbb{E}[Y] &= \sum_x p(x)(ax + b) \notag \\
+\mathbb{E}[X] &= \sum_x p(x)(ax + b) \notag \\
 &= a\sum_x p(x)x + b\sum_x 1 = a\mathbb{E}[X] + b. \notag
 \end{align}
 
 The same result is arrived at for continuous random variables. This effect is known as the `linearity of expectation'. Variance behaves a little differently,
 
 \begin{align}
-\text{Var}[Y] &= \mathbb{E}[(Y - \mathbb{E}[Y])^2] \notag \\
+\text{Var}[X] &= \mathbb{E}[(X - \mathbb{E}[X])^2] \notag \\
 &= \mathbb{E}[(aX + b - (a\mathbb{E}[X] + b))^2] \notag \\
 &= \mathbb{E}[a^2(X  - \mathbb{E}[X])^2] \notag \\
 &= a^2\text{Var}[X] \notag
@@ -1399,7 +1399,7 @@ $$p_y(y) = \sum_{x:f(x)=y} p_x(x),$$
 
 that is, by mapping the probabilities of the values of x corresponding to y via the mapping. Things are not so simple for continuous random variables, in which case we must address the cdf. Being a cumulative function, it is monotonic\footnote{A monotonic function holds the property that $f(b) > f(a)$ for any $b > a$.}. If it is monotonic, it is bijective\footnote{If $f$ is bijective, it is a one-to-one mapping.}, and if it is bijective, it is invertible. Therefore, we can write the cumulative distribution,
 
-$$P_y(y) = P(f(X) \leq y) = P(X \leq f^{-1}(y) = P_x(f^{-1}(y))$$
+$$P_y(y) = P(f(X) \leq y) = P(X \leq f^{-1}(y)) = P_x(f^{-1}(y))$$
 
 Now,
 
@@ -1411,7 +1411,7 @@ giving us the \emph{change of variables} formula,
 
 $$p_y(y) = p_x(x)\Big|\frac{dx}{dy}\Big|.$$
 
-An example here would perhaps be useful, so let $X \sim U(-1, 1)$ and $Y = X^2$. Since X is uniformly distributed on an interval of length 2, its pdf, $p_x(x) = 1/2$. Therefore, by the change of variables formula, $p_y(y) = \frac{1}{2} \cdot \frac{1}{2}y^{1/2} = \frac{1}{4}y^{1/2}$.
+An example here would perhaps be useful, so let $X \sim U(-1, 1)$ and $Y = X^2$. Since X is uniformly distributed on an interval of length 2, its pdf, $p_x(x) = 1/2$. Therefore, by the change of variables formula, $p_y(y) = \frac{1}{2} \cdot \frac{1}{2}y^{-1/2} = \frac{1}{4}y^{-1/2}$.
 
 In the multivariate case, we have need of the Jacobian matrix from vector calculus, and the change of variables formula becomes,
 
@@ -1441,7 +1441,7 @@ Monte Carlo statistics are a branch of numerical techniques for providing estima
 \end{figure}
 
 \subsubsection{Buffon's Needles}
-An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line gives us an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, has probability function $p_x = 1/L$, and $\theta$, which varies between $0$, $p_{\theta} = 2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These conditions alone are enough to calculate the probability,
+An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles explicitly. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line gives us an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, has probability function $p_x = 1/L$, and $\theta$, which varies between $0$, $p_{\theta} = 2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These conditions alone are enough to calculate the probability,
 
 $$
 p = \int_{0}^{\pi/2}\int_{0}^{\frac{L}{2}\sin\theta}p_xp_{\theta}\mathop{dx}\mathop{d\theta} = \frac{2}{L\pi}\int_{0}^{\pi/2}\frac{L}{2}\sin\theta\mathop{d\theta} = \frac{1}{\pi}.
@@ -1453,7 +1453,7 @@ Therefore, the proportion of a sample of $n$ scattered needles crossing a line g
 
 \subsection{Uniform Distribution}
 
-A uniform distribution models a coin toss, or a die roll, or any other probability of $K$ events with equal chance, defining an interval, $[a, b]$. The probability mass function for a uniform distribution is,
+A uniform distribution models a coin toss, or a die roll, or any other probability of $K$ events with equal chance, defining an interval, $[a, b]$, on some ordered encoding of the events. The probability mass function for a uniform distribution is,
 
 $$p(k) = \frac{1}{K}.$$
 
@@ -1523,11 +1523,11 @@ where $\text{erf}(x) = \frac{2}{\sqrt{\pi}}\int_{0}^{x}e^{-t^2}\mathop{dt}$ is t
 &= \frac{2}{\sqrt{\pi}}\sum_{k=0}^{\infty} \frac{(-1)^kx^{2k + 1}}{k!(2k + 1)}, \notag
 \end{align}
 
-giving us an infinite series for the error function. Thus, approximations to the Gaussian CDF can be computed by statistical software, and placed in those mysterious statistics tables with which every student of statistics is familiar.
+giving us an infinite series for the error function. Thus, thanks to Taylor series, approximations to the Gaussian CDF can be computed by statistical software, and placed in those mysterious statistics tables with which every student of statistics is familiar.
 
 \subsubsection{Standardisation}
 
-The standard Normal distribution is the Normal distribution with mean $0$ and variance $1$, $\mathcal{N}(0, 1)$. It is possible to \emph{standardise} a random variable, $X \sim \mathcal{N}(\mu, \sigma^2)$, by first subtracting its mean, $\mu$ (which adjusts the mean to 0 without changing the variance), then dividing by its standard deviation, $\sigma$, (which does not change the mean but shrinks the variance from $\sigma^2$ to 1), yielding,
+The standard Normal distribution is a Normal distribution with mean $0$ and variance $1$, $\mathcal{N}(0, 1)$. It is possible to \emph{standardise} a random variable, $X \sim \mathcal{N}(\mu, \sigma^2)$, by first subtracting its mean, $\mu$ (which adjusts the mean to 0 without changing the variance), then dividing by its standard deviation, $\sigma$, (which does not change the mean but shrinks the variance from $\sigma^2$ to 1), yielding,
 
 $$Z = \frac{X - \mu}{\sigma}.$$
 
@@ -1541,7 +1541,7 @@ $$p(y; k) = \frac{1}{2^{\frac{k}{2}}\Gamma\big(\frac{k}{2}\big)}y^{\frac{k}{2} -
 
 where the parameter, $k$, is the number of degrees of freedom (number of variables in the sum), and $\Gamma$ is the gamma function. In the unique case that $k = 2$, the expression simplifies to $p(y; 2) = \frac{1}{2}e^{-y/2}$. We take the time to derive the pdf of the chi-squared distribution, as it involves several of the topics we have covered already.
 
-In the simplest case, $k = 1$, we have $Y = X^2$. Since $X$ is a standardised Gaussian variable, its square makes all previously negative values positive. The shape of the pdf is hence something like a stretched half bell curve. We can derive the pdf of the transformed variable using the change of variables formula. Because of the symmetry of the squared variable, we have, $f_Y(y) = 2f_X(f^{-1}(y))\Big|\Big(\frac{\mathop{dx}}{\mathop{dy}}\Big)\Big|$. Now, $X = \sqrt{Y}$, so $dx/dy = 1/2y^{-1/2} $. Hence,
+In the simplest case, $k = 1$, we have $Y = X^2$. Since $X$ is a standardised Gaussian variable, its square makes all previously negative values positive. The shape of the pdf is therefore something like a stretched half-bell curve. We can derive the pdf of the transformed variable using the change of variables formula. Because of the symmetry of the squared variable, we have, $f_Y(y) = 2f_X(f^{-1}(y))\Big|\Big(\frac{\mathop{dx}}{\mathop{dy}}\Big)\Big|$. Now, $X = \sqrt{Y}$, so $dx/dy = 1/2\cdot y^{-1/2} $. Hence,
 
 $$f(y; 1) = 2\frac{1}{\sqrt{2\pi}}e^{-(\sqrt{y})^2/2}\frac{1}{2}y^{-1/2} = \frac{1}{\sqrt{2}\Gamma(1/2)}e^{-y/2}y^{-1/2},$$
 
@@ -1583,7 +1583,7 @@ We can use our knowledge of statistics to perform tests on sample data. The form
 
 \subsubsection{Z-test}
 
-Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution, by calculating the probability of the sample mean. The calculations are similar to creating a confidence interval, as it involves computing the SE and the Z-score (implying the true mean and standard deviation be known), $Z = (\hat{X} - \mu)/\text{SE}$. The value of $Z$ is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, `can this data reasonably be believed to have been drawn from our distribution?'
+Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution, by calculating the probability of the sample mean. The calculations are similar to creating a confidence interval, as it involves computing the SE and (implying the true mean and standard deviation be known) the Z-score, $Z = (\hat{X} - \mu)/\text{SE}$. The value of $Z$ is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, `can this data reasonably be believed to have been drawn from our distribution?'
 
 \subsubsection{Pearson's Chi-Squared Test}
 
@@ -1599,7 +1599,7 @@ M_X(t) = \mathbb{E}[e^{tX}] &= \mathbb{E}\Bigg[\sum_{k = 0}^{\infty} \frac{(tX)^
 &= \sum_{k = 0}^{\infty} \frac{\mathbb{E}[X^k]t^k}{k!}. \notag
 \end{align}
 
-Such a function is an alternative specification of a distribution to a pdf. By L\'evy's continuity theorem, convergence in MGF implies convergence in distribution, a result that underpins the proof of the central limit theorem. The function is `moment-generating' in that the coefficients of the series expansion are the central moments of the distribution. The MGF of a sum of N i.i.d variables, $T = X_1 + X_2 + \cdots + X_N$ is,
+Such a function is an alternative specification of a distribution to a pdf. By L\'evy's continuity theorem, convergence in MGF implies convergence in distribution, a result that underpins the proof of the central limit theorem. The function is `moment-generating' in that the coefficients of the series expansion are the central moments of the distribution. The MGF of a \emph{sum} of $N$ i.i.d variables, $T = X_1 + X_2 + \cdots + X_N$ is,
 
 \begin{align}
 M_T(t) = \mathbb{E}[e^{tX_1 + tX_2 + \cdots + tX_N}] &= \mathbb{E}[e^{tX_1}]\mathbb{E} [e^{tX_2}] \cdots\mathbb{E}[e^{tX_N}] \notag \\
@@ -1608,7 +1608,7 @@ M_T(t) = \mathbb{E}[e^{tX_1 + tX_2 + \cdots + tX_N}] &= \mathbb{E}[e^{tX_1}]\mat
 
 The MGF of a Gaussian distribution\footnote{Here standardised for simplicity.} is,
 
-$$M_z(t) = \mathbb{E}[e^{tX}] = \int_{-\infty}^{+\infty}e^{zt}\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\mathop{dz}.$$
+$$M_z(t) = \mathbb{E}[e^{tZ}] = \int_{-\infty}^{+\infty}e^{zt}\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\mathop{dz}.$$
 
 If we consider the exponents, we have $e^{zt - z^2/2}$. Completing the square gives $e^{-z^2/2 + zt - t^2/2 + t^2/2} = e^{(z-t)^2/2}\cdot e^{t^2/2}$. Therefore we have,
 
@@ -1617,7 +1617,7 @@ M_z(t) &= e^{t^2/2}\int_{-\infty}^{+\infty}\frac{1}{\sqrt{2\pi}}e^{(z-t)^2/2}\ma
 &= e^{t^2/2} \cdot 1, \notag
 \end{align}
 
-since the integrated expression defines $\mathcal{N}(z | t, 1)$. 
+since the integrated expression defines $\mathcal{N}(z ; t, 1)$. 
 
 \subsection{Proof of the Central Limit Theorem}
 
@@ -1745,7 +1745,7 @@ I(X; Y) &\triangleq \mathcal{D}(p(X, Y) || p(X)p(Y)) = \sum_x \sum_y p(x, y) \lo
 &= \mathcal{H}(X) - \mathcal{H}(X|Y) \notag,
 \end{align}
 
-and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is lifted from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}. For this reason, mutual information can be used as a more sophisticated correlation measure, as it may reveal non-linear dependencies also.
+and so it quantifies how much knowing about one variable tells us about the other (note the formula is symmetric). That is, how much uncertainty is lifted from $X$ by learning about $Y$, and vice versa. In other words, it measures \emph{the extent to which one random variable becomes deterministic once we learn about another}. For this reason, mutual information can be used as a more sophisticated correlation measure, as it may also reveal non-linear dependencies.
 
 \section{Convex Optimisation}
 \subsection{Convexity}
@@ -1765,7 +1765,7 @@ $$
 f((1 - \lambda)x_1 + \lambda x_2) \leq (1 - \lambda) f(x_1) + \lambda f(x_2),
 $$
 
-for all $\lambda \in [0, 1]$. That is, the curve lies below a line drawn $x_1$ and $x_2$. A function with more than one turning point in a domain cannot be convex. Examples of convex functions are $e^x$, $x^2$, etc. \emph{Strict} convexity occurs when there is a strict inequality. \emph{Concavity} is the same property with the inequality reversed. Hence, $f(x)$ convex $\Longleftrightarrow$ $-f(x)$ concave. A linear function is both concave and convex.
+for all $\lambda \in [0, 1]$. That is, the curve lies below a line drawn between $x_1$ and $x_2$. A function with more than one turning point in a domain cannot be convex. Examples of convex functions are $e^x$, $x^2$, etc. \emph{Strict} convexity occurs when there is a strict inequality. \emph{Concavity} is the same property with the inequality reversed. Hence, $f(x)$ convex $\Longleftrightarrow$ $-f(x)$ concave. A linear function is both concave and convex.
 
 \subsubsection{Jensen's Inequality}
 
@@ -1853,7 +1853,7 @@ If we choose $\mathbf{v}$ in the direction of a contour, then by definition $f(\
 \end{array} \notag,
 \end{align}
 
-noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible point (satisfying the constraint), $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}_F\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x})) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x}_F + \delta\mathbf{x}) < f(\mathbf{x}_F)$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve at $0$ on the surface, $h(\mathbf{x})$. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}_F) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}_F)$ for some scalar $\lambda$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
+noting it is always possible to ensure an equality constraint equals 0 by subtracting the right-hand side terms. Given a feasible point (satisfying the constraint), $\mathbf{x}_F$, we can decrease the objective function by taking a step, $\delta\mathbf{x}$, such that the directional derivative, $\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}_F)) > 0$. From (\ref{eq:dirdiv}) we know this implies $f(\mathbf{x}_F + \delta\mathbf{x}) < f(\mathbf{x}_F)$. Now, in order to move to a new feasible point, we must choose $\delta\mathbf{x}$ such that we move along the constraint surface, that is, parallel to the level curve at $0$ on the surface, $h(\mathbf{x})$. We know that a vector running parallel to a level curve will be normal to the gradient. Thus, we need $\delta\mathbf{x}\cdot\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}) = 0$. Combining these ideas, consider where $-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}_F) = \lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}_F)$ for some scalar $\lambda$. Multiplying by $\delta\mathbf{x}$, we get the stopping condition,
 
 $$\delta\mathbf{x}\cdot(-\nabla_{\mathbf{x}}\mathbf{f}(\mathbf{x}^*)) = \delta\mathbf{x}\cdot\lambda\nabla_{\mathbf{x}}\mathbf{h}(\mathbf{x}^*) = 0,$$
 
@@ -1894,7 +1894,7 @@ for $\mu > 0$. The scalar must be positive as it ensures the gradient is facing 
 
 \subsection{The KKT Conditions}
 
-The Karush-Kuhn-Tucker (KKT) conditions are a general set of necessary and sufficient conditions for optimisation problems constrained by multiple equality and inequality constraints. For optimisation problem,
+The Karush-Kuhn-Tucker (KKT) conditions are a general set of necessary and sufficient conditions for non-linear optimisation problems constrained by multiple equality and inequality constraints. For optimisation problem,
 
 \begin{align}
 \begin{array}{rl}
@@ -1926,7 +1926,7 @@ $$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \boldsymbol\mu^T
 
 \subsection{Decision Problems}
 
-Decision problems, as studied in computability and computational complexity theory, are characterised by a question posed on some arbitrary inputs that has a boolean (true-false/yes-no) answer. The question itself is the decision \emph{problem}, which when paired with a parameter set is called a problem \emph{instance}. For example, a decision \emph{problem} might be to determine if some number $x$ is prime or not. A particular problem \emph{instance} might be very trivial, for example, `is the number 2 prime?'. Exact methods of primality testing do exist, however, making primality testing a \emph{decidable} problem, that is, primality is \emph{computable} for any input, though it may take a long time to compute. On the other hand, there are decision problems that are \emph{undecidable}. An example of this is the \emph{halting problem}. It was in demonstrating the undecidability of the halting problem that the great English mathematician, Alan Turing (1912-1954), devised an abstract model of the computer, the Turing machine.
+Decision problems, as studied in computability and computational complexity theory, are characterised by a question posed on some arbitrary inputs that has a boolean (\texttt{TRUE}-\texttt{FALSE}) answer. The question itself is the decision \emph{problem}, which when paired with a parameter set is called a problem \emph{instance}. For example, a decision \emph{problem} might be to determine if some number $x$ is prime or not. A particular problem \emph{instance} might be very trivial, for example, `is the number 2 prime?'. Exact methods of primality testing do exist, however, making primality testing a \emph{decidable} problem, that is, primality is \emph{computable} for any input, though it may take a long time to compute. On the other hand, there are decision problems that are \emph{undecidable}. An example of this is the \emph{halting problem}. It was in demonstrating the undecidability of the halting problem that the great English mathematician, Alan Turing (1912-1954), devised an abstract model of the computer, the Turing machine.
 
 \subsection{The Halting Problem}
 
@@ -1953,11 +1953,11 @@ The halting problem was one of the first problems shown to be undecidable, that 
 \end{algorithmic}
 \end{algorithm}
 
-Turing showed the halting problem to be undecidable with the following proof by contradiction. Suppose there is an algorithm \textsc{Halt} that takes as input some complete description of an algorithm along with some compatible parameters (Algorithm \ref{alg:haltingproblem}) and solves the halting problem, that is, determines in finite time whether this arbitrary algorithm terminates given the set of inputs. Imagine another algorithm \textsc{Halt+} that first runs this \textsc{Halt} algorithm, and if the result is `true' (halts), it loops forever (does not halt), otherwise, if `false' (does not halt), it halts. Finally, consider calling \textsc{Halt+} on itself. Now we see the contradiction--if the \textsc{Halt} subroutine returns `true' for \textsc{Halt+}(\textsc{Halt+}), then \textsc{Halt+}(\textsc{Halt+}) loops forever and does not halt. If \textsc{Halt} returns `false', then \textsc{Halt+}(\textsc{Halt+}) instead terminates. So, \textsc{Halt+} always negates whatever decision \textsc{Halt} makes, making its behaviour undecidable by \textsc{Halt}, and therefore \textsc{Halt} does not solve the halting problem, making the problem undecidable.
+Turing showed the halting problem to be undecidable with the following proof by contradiction. Suppose there is an algorithm \textsc{Halt} that takes as input some complete description of an algorithm along with some compatible parameters (Algorithm \ref{alg:haltingproblem}) and solves the halting problem, that is, determines in finite time whether this arbitrary algorithm terminates given the set of inputs. Imagine another algorithm \textsc{Halt+} that first runs this \textsc{Halt} algorithm, and if the result is \texttt{TRUE} (halts), it loops forever (does not halt), otherwise, if \texttt{FALSE} (does not halt), it halts. Finally, consider calling \textsc{Halt+} on itself. Now we see the contradiction--if the \textsc{Halt} subroutine returns \texttt{TRUE} for \textsc{Halt+}(\textsc{Halt+}), then \textsc{Halt+}(\textsc{Halt+}) loops forever and does not halt. If \textsc{Halt} returns \texttt{FALSE}, then \textsc{Halt+}(\textsc{Halt+}) instead terminates. So, \textsc{Halt+} always negates whatever decision \textsc{Halt} makes, making its behaviour undecidable by \textsc{Halt}, and therefore \textsc{Halt} does not solve the halting problem, making the problem undecidable.
 
 \subsection{Turing Machines}
 
-To complete his proof on the halting problem, Turing required an abstract model of computation on which to base his formal reason. Clearly, it would be infeasible to make assertions about the behaviours of algorithms without a clear definition of what an algorithm actually is. Turing therefore came up with the Turing machine, an abstract computing model generalising the finite state machine (FSM) or automaton\footnote{A finite state machine is an abstract model of computation consisting of a finite number of states, representing actions. Movement between states is dictated by the conjunction of an input value and the identity of the current state. Finite state machines are usually visualised with a diagram.}, sufficiently general to simulate any computer program or algorithm. A Turing machine consists of an infinitely (arbitrarily) long tape divided into cells. A read-write head focuses on one cell at a time, and depending on the cell contents (symbol) and the current internal state of the machine, the machine writes a symbol, moves the tape left or right, and transitions to a new internal state. Formally, the transition function, $\delta$, of a Turing machine can be written,
+To complete his proof on the halting problem, Turing required an abstract model of computation on which to base his formal reasoning. Clearly, it would be infeasible to make assertions about the behaviours of algorithms without a clear definition of what an algorithm actually is. Turing therefore came up with the Turing machine, an abstract computing model generalising the finite state machine (FSM) or automaton\footnote{A finite state machine is an abstract model of computation consisting of a finite number of states, representing actions. Movement between states is dictated by the conjunction of an input value and the identity of the current state. Finite state machines are usually visualised with a diagram.}, sufficiently general to simulate any computer program or algorithm. A Turing machine consists of an infinitely (arbitrarily) long tape divided into cells. A read-write head focuses on one cell at a time, and depending on the cell contents (symbol) and the current internal state of the machine, the machine writes a symbol, moves the tape left or right, and transitions to a new internal state. Formally, the transition function, $\delta$, of a Turing machine can be written,
 
 $$\delta : S \times Q \to S \times \{\text{left}, \text{right}\} \times Q,$$
 
@@ -1965,7 +1965,7 @@ that is, given a current read symbol $\in S$ and internal state $\in Q$, the tra
 
 \subsubsection{Universal Turing Machines}
 
-If we take a Turing machine to be a model of computation for some function, a \emph{universal Turing machine} (UTM) is a Turing machine whose instruction set is configured to be able to run any Turing machine (whose own instruction sets can be encoded as strings in the UTM symbol set) and any arbitrary input. Thus, we would have an interpreter for any Turing machine, and with it a model for a stored-program \emph{computer}, rather than the more abstract model \emph{computation} that Turing machines represent. This model is the original concept behind all computer code (software) as executed on computer hardware. In fact, almost all modern computers can be described as universal Turing machines. A programming language is said to be \emph{Turing complete} if it is capable of simulating any Turing machine, making it a universal Turing machine. All imperative programming languages (\textsc{Python}, C++, \textsc{Java}) have this property--all that is required is the ability to execute instructions conditionally (for example with `if' statement) and to allocate an arbitrary amount of memory. It is strongly argued that the universal Turing machine prefaced John von Neumann's design for the stored-program computer, the von Neumann architecture, the basis of all modern computers.
+If we take a Turing machine to be a model of computation for some function, a \emph{universal Turing machine} (UTM) is a Turing machine whose instruction set is configured to be able to run any Turing machine (whose own instruction sets can be encoded as strings in the UTM symbol set) and any arbitrary input. Thus, we would have an interpreter for any Turing machine, and with it a model for a stored-program \emph{computer}, rather than the more abstract model of \emph{computation} that Turing machines represent. This model is the original concept behind all computer code (software) as executed on computer hardware. In fact, almost all modern computers can be described as universal Turing machines. A programming language is said to be \emph{Turing complete} if it is capable of simulating any Turing machine, making it a universal Turing machine. All imperative programming languages (\textsc{Python}, C++, \textsc{Java}) have this property--all that is required is the ability to execute instructions conditionally (for example with `if' statements) and to allocate an arbitrary amount of memory. It is strongly argued that the universal Turing machine prefaced John von Neumann's design for the stored-program computer, the von Neumann architecture, the basis of all modern computers.
 
 \subsubsection{Non-deterministic Turing Machines}
 
@@ -1989,11 +1989,11 @@ We say that one problem, $A$, may be reduced to another problem, $B$, if an algo
 
 \subsubsection{P class}
 
-The P class is the set of decision problems decidable in polynomial time on a deterministic Turing machine. Polynomial is a desirable, \emph{tractable} complexity that, as a rule, indicates algorithm run time does not increase \emph{too quickly} (think exponentially) with the size of the problem\footnote{A problem's size is usually expressed in the number of variables.}.
+The P class is the set of decision problems decidable in polynomial time on a deterministic Turing machine. Polynomial time is a desirable, \emph{tractable} complexity that, as a rule, indicates algorithm run time does not increase \emph{too quickly} (think exponentially) with the size of the problem\footnote{A problem's size is usually expressed in terms of the number of variables.}.
 
 \subsubsection{NP class}
 
-A common misconception is that NP stands for `non-polynomial' time. Ironically, that would be to beg the question of P versus NP\footnote{It is true that known algorithms for NP problems run in super-polynomial (exponential) time on deterministic Turing machines, but the whole point of P versus NP is that it is not yet known if faster algorithms exist.}. In actual fact, NP stands for \emph{non-deterministic polynomial time}, that is, \emph{NP is the class of algorithms that run in polynomial time on a non-deterministic Turing machine}. However, as noted above, algorithms that run polynomially on an NTM are algorithms whose solution may be verified in polynomial time on a deterministic Turing machine. Hence, the NP class can be alternatively stated as \emph{algorithms that can be verified in polynomial time by a deterministic Turing machine}. Note that all P time algorithms are in the NP class, as whatever can be done polynomially on a deterministic Turing machine can be done polynomially on a NTM, though not necessarily vice versa. This disjunction is the subject of one of the most famous unsolved problems in mathematics. A problem can be shown to be in the NP class if it can be shown that all candidate solutions can be verified in polynomial time.
+A common misconception is that NP stands for `non-polynomial' time. Ironically, that would be to beg the question of P versus NP\footnote{It is true that known algorithms for NP problems run in super-polynomial (exponential) time on deterministic Turing machines, but the whole point of P versus NP is that it is not yet known if faster algorithms exist.}. In actual fact, NP stands for \emph{non-deterministic polynomial time}, that is, \emph{NP is the class of algorithms that run in polynomial time on a non-deterministic Turing machine}. However, as noted above, algorithms that run polynomially on an NTM are algorithms whose solution may be verified in polynomial time on a deterministic Turing machine. Hence, the NP class can be alternatively stated as \emph{algorithms that can be verified in polynomial time by a deterministic Turing machine}. Note that all P time algorithms are in the NP class (whatever can be done polynomially on a deterministic Turing machine can be done polynomially on a NTM) though not necessarily vice versa. This disjunction is the subject of one of the most famous unsolved problems in mathematics. A problem can be shown to be in the NP class if it can be shown that all candidate solutions can be verified in polynomial time.
 
 \subsubsection{NP-hard class}
 
@@ -2001,14 +2001,14 @@ NP-hard (non-deterministic polynomial time \emph{hard}) problems are those probl
 
 \subsubsection{NP-complete class}
 
-The NP-complete class is the intersection of NP and NP-hard, that is, it contains problems that are reducible to all NP problems, and are additionally verifiable in P time. To prove the NP-completeness of a problem, it is necessary to,
+The NP-complete class is the intersection of the NP and NP-hard classes, that is, it contains problems that are reducible to all NP problems, and are additionally verifiable in P time. To prove the NP-completeness of a problem, it is necessary to,
 
 \begin{enumerate}
 \item Show it is in NP, by showing its solutions may be efficiently verified
 \item Show it is NP-hard, by showing it can be efficiently reduced to another known NP-complete problem.
 \end{enumerate}
 
-The first decision problem proved to be NP-complete is the boolean satisfiability problem or SAT (see the Cook-Levin theorem, 1971), which aims to find a combination of values for literals in a boolean expression such that the overall expression evaluates \texttt{TRUE}. The expression is taken to be in conjunctive normal form (a conjunction of disjunctions or an \texttt{AND} of \texttt{OR}s), for example, $$(X_1 \lor X_2 \lor \dots \lor X_N) \land (\neg X_1 \lor \dots) \land \dots$$ There are some special cases of SAT where computation is easy, for example if each variable features in exactly one clause, but in general, no efficient algorithm is known to exist. From a purely intuitive perspective, the task lends itself to an exponential runtime, as there are $2^N$ possible interpretations of an expression with $N$ variables. Until P versus NP is resolved, it is not known whether there is a reliable shortcut. Richard Karp used this result to find and categorise 21 NP-complete problems, beginning with the 3SAT problem, a variant of SAT in which all clauses contain three literals. It is easy to transform a CNF expression to the 3SAT form, with the introduction of dummy variables. The expression loses logical equivalency, but retains equisatisfiability, meaning that solutions in the 3SAT form are necessary and sufficient for solutions in the original form. The length of the expression triples, hence the reduction step is polynomial. Karp's 21 NP-complete problems further include problems from graph theory (such as clique selection) and 0-1 integer programming. Note that if a problem in the NP-hard or NP-complete classes could be shown to have an efficient, polynomial-time solution algorithm, it would imply all problems in NP have efficient solutions.
+The first decision problem proved to be NP-complete is the boolean satisfiability problem or SAT (see the Cook-Levin theorem, 1971), which aims to find a combination of values for literals in a boolean expression such that the overall expression evaluates \texttt{TRUE}. The expression is taken to be in conjunctive normal form (a conjunction of disjunctions or an \texttt{AND} of \texttt{OR}s), for example, $$(X_1 \lor X_2 \lor \dots \lor X_N) \land (\neg X_1 \lor \dots) \land \dots$$ There are some special cases of SAT where computation is easy, for example if each variable features in exactly one clause, but in general, no efficient algorithm is known to exist. From a purely intuitive perspective, the task lends itself to an exponential runtime, as there are $2^N$ possible readings of an expression with $N$ variables. Until P versus NP is resolved, it is not known whether there is a reliable shortcut. Richard Karp used this result to find and categorise 21 NP-complete problems, beginning with the 3SAT problem, a variant of SAT in which all clauses contain three literals. It is easy to transform a CNF expression to the 3SAT form, with the introduction of dummy variables. The expression loses logical equivalency, but retains equisatisfiability, meaning that solutions in the 3SAT form are necessary and sufficient for solutions in the original form. The length of the expression triples, hence the reduction step is polynomial. Karp's 21 NP-complete problems further include problems from graph theory (such as clique selection) and 0-1 integer programming. Note that if a problem in the NP-hard or NP-complete classes could be shown to have an efficient, polynomial-time solution algorithm, it would imply all problems in NP have efficient solutions.
 
 \section{Discrete Optimisation}
 
@@ -2032,11 +2032,11 @@ The assignment problem models the allocation of machines to tasks such that each
 
 \subsubsection{The knapsack problem}
 
-The knapsack problem as an integer programming model for maximising the summed benefit of a range of items, subject to a weight constraint. Each item has an associated value and weight parameter. The decision variables represent the number of each item selected.
+The knapsack problem is an integer programming model for maximising the summed benefit of a range of items, subject to a weight constraint. Each item has an associated value and weight parameter. The decision variables represent the number of each item selected.
 
 \subsubsection{The travelling salesman problem}
 
-The travelling salesman problem (TSP) models a route plan between a set of destinations, each of which must be visited once and only once\footnote{Clearly, visiting any city more than once must be suboptimal anyway, as by simple geometry it cannot be faster to visit one destination via another than to visit that destination directly.}. The destinations may be represented as vertices on a fully connected graph whose arcs provide the costs of moving between each pair. As an integer programming problem, the objective function minimises the total route cost and the boolean decision variables $x_{ij}$ indicate if destination $j$ is visited from destination $i$. There are \emph{sum to one} constraints to ensure each vertex is arrived at and departed from exactly once.
+The travelling salesman problem (TSP) models a route plan between a set of destinations, each of which must be visited once and only once. The destinations may be represented as vertices on a fully connected graph whose arcs provide the costs of moving between each pair. As an integer programming problem, the objective function minimises the total route cost and the boolean decision variables $x_{ij}$ indicate if destination $j$ is visited from destination $i$. There are \emph{sum to one} constraints to ensure each vertex is arrived at and departed from exactly once.
 
 \subsection{Solution Methods}
 
@@ -2044,26 +2044,26 @@ Of the exact solution methods for integer programming problems, the branch and b
 
 \subsubsection{Branch and bound}
 
-The branch and bound method is an exact algorithm, improving upon an exhaustive approach. For example, in an assignment minimisation problem, it is easy to establish a rough lower bound on the optimal solution, simply by ignoring the constraints and taking the minimising value for each variable. Thus, an initial iteration will consider all possible assignments for a first variable, and calculate the (possibly infeasible) lower bound for solutions arising from that. The algorithm continues to consider all possible alternatives for a second variable, and a third, and so on. Once an exact feasible solution is found, it can be used to eliminate all branches with a lower bound exceeding that solution, as even in the best (possibly infeasible) case a solution will be inferior. There are some similarities between branch and bound and the alpha-beta pruning algorithm used in computer chess, and others.
+The branch and bound method is an exact algorithm, improving upon an exhaustive search. For example, in an assignment minimisation problem, it is easy to establish a rough lower bound on the optimal solution, simply by ignoring the constraints and taking the minimising value for each variable. Thus, an initial iteration will consider all possible assignments for a first variable, and calculate the (possibly infeasible) lower bound for solutions arising from that. The algorithm continues to consider all possible alternatives for a second variable, and a third, and so on. Once an exact feasible solution is found, it can be used to eliminate all branches with a lower bound exceeding that solution, as even in the best (possibly infeasible) case a solution will be inferior. There are some similarities between branch and bound and the alpha-beta pruning algorithm used in computer chess, and others.
 
 \subsubsection{Simulated annealing}
 
-Simulated annealing is a popular meta-heuristic algorithm. The aim is to reach a \emph{near-optimal} solution efficiently. Exact solutions may be acquired by chance, though this becomes increasingly unlikely for larger problems. Simulated annealing facilitates both incremental improvement and exploration, according to a schedule of \emph{temperatures} (annealing is a metallurgical term) that decrease linearly to zero round by round. In each round, update steps are taken on the objective function. Improvements are always retained, but updates that reduce the objective function are adopted according to some probability function (such as softmax), for which the probability of accepting inferior updates reduces as the schedule plays out. As a meta-heuristic, it describes an exploration strategy for non-convex objective functions without specifying the update step. It is therefore compatible with many problems.
+Simulated annealing is a popular meta-heuristic algorithm. The aim is to reach a \emph{near-optimal} solution efficiently. Exact solutions may be acquired by chance, though this becomes increasingly unlikely for larger problems. Simulated annealing facilitates both incremental improvement and exploration, according to a schedule of \emph{temperatures} (annealing is a metallurgical term) that decrease linearly to zero round by round. In each round, update steps are taken on the objective function. Improvements are always retained, but updates that reduce the objective function are admitted according to some probability function (such as softmax), for which the probability of accepting inferior updates reduces as the schedule plays out. As a meta-heuristic, it describes an exploration strategy for non-convex objective functions without specifying the update step. It is therefore compatible with many problems.
 
 \subsubsection{Tabu Search}
 
-Tabu (taboo\footnote{From the Tongan word for \emph{prohibited}.}) search is a meta-heuristic algorithm for discrete optimisation problems. From an initial solution, the algorithm considers all possible updates in the solution's neighbourhood. It chooses the best amongst them, even if it is inferior (though it tracks the best overall solution). This update is memorised and from it, a new neighbourhood is generated. Any update that would undo the previous update is regarded as \emph{tabu}, except if it beats the best overall solution. The algorithm proceeds thus, with continued local aspiration until some stopping condition is met. Various stopping conditions are possible, for example if no improvement is made for a streak of iterations.
+Tabu (taboo\footnote{From the Tongan word for \emph{prohibited}.}) search is a meta-heuristic algorithm for discrete optimisation problems. From an initial solution, the algorithm considers all possible updates in the solution's neighbourhood. It chooses the best amongst them, even if it is inferior (though it tracks the best overall solution). This update is memorised and from it, a new neighbourhood is generated. Any update that would undo the previous update is regarded as \emph{tabu}, except if it beats the best overall solution. The algorithm proceeds thus, with continued local aspiration searching, until some stopping condition is met. Various stopping conditions are possible, for example if no improvement is made for a streak of iterations.
 
 \section{Graph Theory}
 Graphs are mathematical objects with many interesting properties, as well as a vast range of applications. A graph, G = (V, E), consists of a set of vertices (or nodes, or points), $V$, and a set of edges (or arcs, or lines), $E$, that connect them. Edges consist of distinct start and end vertices. In general, a graph's properties do not depend on the \emph{placement} of its vertices, nor on the curvature of its edges. As a result, it does not matter how a graph might be drawn. Its \emph{structure} does not vary as long as all edges and vertices are correctly connected. It can be of mathematical interest, however, to compare the ways a graph can be drawn, for example: given a graph, $G$, can it be drawn without intersecting edges?
 
 There are many structural properties of graphs that may be of interest. A graph is \emph{connected} if every node is reachable from every other node via some path of one or more edges. A disconnected graph may have several \emph{islands} of vertices with no edges to bridge them. A graph of $N$ vertices is \emph{complete} when each of its nodes share an edge with every other node, thus amounting to $1 + 2 + 3 + \cdots + N = N(N - 1)/2$ edges\footnote{The same formula used in the legend of the schoolboy Gauss, who summed the arithmetic series $1 + 2 + 3 + \cdots + 100$.}.  The density of a graph reflects the degree to which it is complete. Density is therefore given by the number of edges divided by the above formula (the maximum). A graph is \emph{bipartite} if its vertices are in two disjoint sets, with every node of each set connected to at least one node in the other set, but with no arcs between nodes of the same set. A graph is \emph{complete} bipartite if each node connects to every node in the opposite set. A graph is \emph{planar} if it can be drawn in two dimensions such that its edges intersect only at vertices, that is, no criss-crossing. It may therefore be \emph{embedded} on a two-dimensional plane. Graphs are taxonomised in various other ways according to the number of their vertices and the manner by which they are connected.
 
-The edges of a graph may embed information such as direction and weight. If a graph has directed edges (commonly depicted with an arrowhead), it is known as a \emph{directed} graph or \emph{digraph}, otherwise, undirected. If some arcs are bidirectional, the graph is known as a directed multigraph, and, for example, a weight may be stored in each direction (upstream and downstream). A directed acyclic graph (DAG) is a directed graph with no cycles. For example, a tree is always directed and acyclic. If a graph has edge weights, it is called a \emph{weighted} graph, and may model things such as route distances and network flows for which paths of accumulating length are of interest.
+The edges of a graph may embed information such as direction and weight. If a graph has directed edges (commonly depicted with an arrowhead), it is known as a \emph{directed} graph or \emph{digraph}, otherwise, undirected. If some arcs are bidirectional, the graph is known as a directed multigraph, and, for example, a weight may be stored in each direction (upstream and downstream). A directed acyclic graph (DAG) is a directed graph with no cycles. For example, a tree is always directed and acyclic. If a graph has edge weights, it is called a \emph{weighted} graph, and may model things such as route distances and network flows for which paths of cumulative length are of interest.
 
 \subsection{The Seven Bridges of K\"onigsberg}
 
-A celebrated early result in graph theory is by Euler in 1736, when he solved the \emph{Seven Bridges of K\"onigsberg} problem. He demonstrated no walk could be made over the seven bridges connecting the islands of the town, K\"onigsberg (then Prussia, now Kaliningrad, Russia), such that each bridge was crossed exactly once. Euler reduced the layout of the town from a detailed cartographical map to a graph, with four vertices to represent the four land masses and seven arcs between them for the bridges. He then made the simple observation that apart from the first and last land masses in a tour, each land mass must have an outbound arc for every inbound arc in order to meet the requirement of crossing every bridge exactly once. As every land mass had an odd number of bridges, the problem was logically unsolvable. Of course, Euler could have performed this same reasoning without this novel formalism, but a neat graph depiction brought about some mathematical rigour.
+A celebrated early result in graph theory is by Euler in 1736, when he solved the \emph{Seven Bridges of K\"onigsberg} problem. He demonstrated no walk could be made over the seven bridges connecting the islands of the town, K\"onigsberg (then Prussia, now Kaliningrad, Russia), such that each bridge was crossed exactly once. Euler reduced the layout of the town from a detailed cartographic map to a graph diagram, with four vertices to represent the four land masses and seven arcs between them for the bridges. He then made the simple observation that apart from the first and last land masses in a tour, each land mass must have an outbound arc for every inbound arc in order to meet the requirement of crossing every bridge exactly once. As every land mass had an odd number of bridges, the problem was logically unsolvable. Of course, Euler could have performed this same reasoning without this novel formalism, but a neat graph depiction brought about some mathematical rigour.
 
 \subsection{The Three Cottages Problem}
 
@@ -2071,7 +2071,7 @@ The Three Cottages Problem is an old problem of unknown origin whose solution co
 
 \emph{Suppose we have three cottages in a small village, and three utility stations (for example, water, drainage, and electricity). Is it possible to connect each cottage with each utility with paths that do not cross?}
 
-Thus, the cottages and stations form a complete bipartite graph, with three nodes in each set. In the Kuratowski\footnote{Kazimierz Kuratowski (1896-1980) was a Polish mathematician.} notation, this is $K_{3, 3}$, so the problem is asking whether $K_{3, 3}$ is planar. A relatively simple solution exists. Note first that because the graph is bipartite, any face has at least four edges, as we cannot draw arcs between nodes of the same set. Thus, we may write $E^{*} \geq 4F$, where $F$ is the number of faces and $E^{*}$ is an upper bound on $E$, the number of edges, noting that an edge may be shared between multiple faces. In fact, we may observe also that each edge is in exactly two faces, as it shares a vertex with two other edges. Thus, $E^{*} = 2E$, giving $E \geq F/2$. Now, by the Euler characteristic\footnote{The Euler characteristic states for any convex polyhedron (any shape in any dimensions that is outward-facing like a circle, triangle, cube, sphere, etc.), or planar graph, $V - E + F = 2$, where $V$ is the number of vertices, $E$ is the number of edges, and $F$ is the number of faces. This equation is regularly voted as one of the most beautiful in mathematics, usually right behind Euler's identity.}, $V - E + F = 2$, where finally $V$ is the number of vertices. By substitution, we obtain $E \leq 2V - 4$. Since in our problem $V = 6$ and $E = 9$, we have found a contradiction, hence the problem has no solution. Wagner's theorem is a fundamental result for planar graphs, stating that no planar graph may contain the \emph{utility graph}, $K_{3,3}$, or $K_5$ (the fully-connected graph in fives node) as a minor\footnote{A graph minor is, roughly speaking, a graph formed from a subset of the vertices in a graph. Specifically, a minor can be formed from an initial graph by \emph{deleting} some number of vertices and edges, or \emph{contracting} edges, that is merging two vertices such that the edge between them disappears.}.
+Thus, the cottages and stations form a complete bipartite graph, with three nodes in each set. In the Kuratowski\footnote{Kazimierz Kuratowski (1896-1980) was a Polish mathematician.} notation, this is $K_{3, 3}$, so the problem is asking whether $K_{3, 3}$ is planar. A relatively simple solution exists. Note first that because the graph is bipartite, any face has at least four edges, as we cannot draw arcs between nodes of the same set. Thus, we may write $E^{*} \geq 4F$, where $F$ is the number of faces and $E^{*}$ is an upper bound on $E$, the number of edges, noting that an edge may be shared between multiple faces. In fact, we may observe also that each edge is in exactly two faces, as it shares a vertex with two other edges. Thus, $E^{*} = 2E$, giving $E \geq 2F$. Now, by the Euler characteristic\footnote{The Euler characteristic states for any convex polyhedron (any shape in any dimensions that is outward-facing like a circle, triangle, cube, sphere, etc.), or planar graph, $V - E + F = 2$, where $V$ is the number of vertices, $E$ is the number of edges, and $F$ is the number of faces. This equation is regularly voted as one of the most beautiful in mathematics, usually right behind Euler's identity.}, $V - E + F = 2$, where finally $V$ is the number of vertices. By substitution, we obtain $E \leq 2V - 4$. Since in our problem $V = 6$ and $E = 9$, we have found a contradiction, hence the problem has no solution. Wagner's theorem is a fundamental result for planar graphs, stating that no planar graph may contain the \emph{utility graph}, $K_{3,3}$, or $K_5$ (the fully-connected graph in fives node) as a minor\footnote{A graph minor is, roughly speaking, a graph formed from a subset of the vertices in a graph. Specifically, a minor can be formed from an initial graph by \emph{deleting} some number of vertices and edges, or \emph{contracting} edges, that is merging two vertices such that the edge between them disappears.}.
 
 \subsection{NP-complete Graph Problems}
 
@@ -2105,7 +2105,7 @@ where $c(v)$ denotes a cost function for a vertex $v$ and $x_v$ is set to one if
 
 \subsection{Graph Traversal}
 
-The act of traversing a graph is to visit each of its nodes exactly once, according to some traversal ordering. Two main strategies may be used: depth-first search (DFS) and breadth-first search (BFS). A DFS visits the descendants of a node before visiting its siblings, that is, traversing sub-branch by sub-branch. A BFS visits the siblings of a nodes before visiting its descendants, that is, traversing depth by depth. Pseudo-code for DFS and BFS is given in Algorithms \ref{alg:dfs} and \ref{alg:bfs} respectively. When the graph has a tree structure (only branching, no converging), there is a single path to each node from the root, hence marking nodes as visited is unnecessary. Traversal may, for example, be used to exhaustively locate a particular node in the graph. A BFS has the potential advantage of facilitating a depth cutoff, searching each depth exhaustively and one at a time. However, there is then a space requirement to queue descendants in some internal memory structure, and for a ballooning tree structure such as in a chess \emph{game tree}, storing more than a few levels or \emph{ply} is infeasible.
+The act of traversing a graph is to visit each of its nodes exactly once, according to some ordering. Two main strategies may be used: depth-first search (DFS) and breadth-first search (BFS). A DFS visits the descendants of a node before visiting its siblings, that is, traversing sub-branch by sub-branch. A BFS visits the siblings of a node before visiting its descendants, that is, traversing depth by depth. Pseudo-code for DFS and BFS is given in Algorithms \ref{alg:dfs} and \ref{alg:bfs} respectively. When the graph has a tree structure (only branching, no converging), there is a single path to each node from the root, hence marking nodes as visited is unnecessary. Traversal may, for example, be used to exhaustively locate a particular node in the graph. A BFS has the potential advantage of facilitating a depth cutoff, searching each depth exhaustively and one at a time. However, there is then a space requirement to queue descendants in some internal memory structure, and for a ballooning tree structure such as in a chess \emph{game tree}, storing more than a few levels or \emph{ply} is infeasible.
 
 \begin{algorithm}
 \caption{Pseudocode for a depth-first search (DFS).}\label{alg:dfs}
@@ -2150,38 +2150,57 @@ A common problem to compute over a weighted graph is the shortest path between a
 
 \subsubsection{Dijkstra's Algorithm}
 
-Given a weighted graph, Dijkstra's algorithm, discovered by Dutch computer scientist,  Edsger W. Dijkstra (1930-2002), finds the shortest path from a source node to all other nodes in a graph. In practice, the goal is often to find the shortest path from a source node to a unique sink node, but Dijkstra's algorithm computes shortest paths to all nodes as a matter of course. The algorithm consists of visiting each node in order of closeness (initially the source node has zero distance and all others are infinite). Each neighbour of the current node is then inspected and its shortest distances updated, if it happens that a shorter path can reach it via the current node. After a node has been visited, it is discarded, and the algorithm terminates once all nodes have been visited. Aside from their shortest distance, nodes store the node from which its shortest path derives, such that at the end, the shortest path can be traced back from sink to source. The algorithm runs in $O(N\log N)$ time in the worst case, where $N$ is the number of vertices.
+Given a weighted graph, Dijkstra's algorithm, discovered by Dutch computer scientist,  Edsger W. Dijkstra (1930-2002), finds the shortest path from a source node to all other nodes in a graph. In practice, the goal is to find the shortest path from a source node to a unique sink node, but Dijkstra's algorithm computes shortest paths to all nodes as a matter of course. The algorithm consists of visiting each node in order of closeness (initially the source node has zero distance and all others are infinite). Each neighbour of the current node is then inspected, and its shortest distances updated, if it so happens that a shorter path can reach it via the current node. After a node has been visited, it is discarded, and the algorithm terminates once all nodes have been visited. Aside from a shortest distance, nodes record the node from which its shortest path derives, such that at the end, the shortest path can be traced back from sink to source. The algorithm runs in $O(N\log N)$ time in the worst case, where $N$ is the number of vertices.
 
 \section{Introduction to Machine Learning}
 
-Machine learning makes up the stochastic wing of the artificial intelligence community. It is an amalgamation of techniques from across statistics, probability theory, and numerical optimisation.
+Machine learning makes up the stochastic wing of the artificial intelligence community. It is an amalgamation of techniques from across probability theory, linear algebra, and optimisation theory. Here we specify a glossary of important terms in machine learning.
 
-\subsection{Fundamental Notions of Machine Learning}
+\subsection{Learning}
 
-Here we specify a glossary of important terms in machine learning.
+In machine learning, learning refers to optimising a model to generalise over a data set. A machine learning task will follow one of the following fundamental approaches, which depend on the nature of the data $\mathcal{D}$ to be learned from:
 
-\subsubsection{Learning Approaches}
+\subsubsection{Supervised Learning}
 
-A machine learning task will follow one of the following fundamental approaches, which depend on the nature of the data $\mathcal{D}$ to be learned from:
+in this case, $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each data sample, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real for a regression task, and discrete for classification\footnote{Note the output may further be scalar- or vector-valued, though we will focus on scalar-valued outputs.}. The task of supervised learning is therefore to learn the map that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, which includes many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
 
-\begin{itemize}
-\item supervised learning - in this case, $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each data sample, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real for a regression task, and discrete for classification. The task of supervised learning is therefore to learn the map that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, which includes many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
-\item unsupervised - in this case $\mathcal{D}$ is unlabelled and the learning task is to extract patterns from the data. It is sometimes also known as \emph{knowledge discovery}. For example, we might want to find how to reasonably group the observations in $\mathcal{D}$, a task known as clustering. This is arguably the part of machine learning that is most like human learning in that rules are inferred without external confirmation. Unlike supervised learning, which sports a profusion of techniques, unsupervised learning techniques are less extensive and understood. Unsupervised learning is a sort of holy grail of machine learning.
-\item semi-supervised - in this case, the dataset is a mixture of both labelled and unlabelled data. In many practical problems, labelled data is hard to come by, but unlabelled data might be abundant. Semi-supervised techniques seek to combine the data in a reliable way. This approach to learning has shown surprisingly limited success so far.
-\end{itemize}
+\subsubsection{Unsupervised Learning}
 
-The following schemes refer to how the data is \text{used}, rather than the nature of the data (as above):
+In this case $\mathcal{D} = \{\mathbf{X}\}$ is unlabelled and the learning task is to extract patterns from the data in and of itself. It is sometimes also known as \emph{knowledge discovery}. For example, we might want to find how to reasonably group the observations in $\mathcal{D}$, a task known as clustering. This is arguably the part of machine learning that is most like human learning in that rules are inferred without external confirmation. Unlike supervised learning, which sports a profusion of techniques, unsupervised learning techniques are less extensive and understood. Unsupervised learning is a sort of holy grail of machine learning.
 
-\begin{itemize}
-\item reinforcement learning - in this case, learning incorporates occasional feedback signals in a trial and error framework.
-\item active learning - refers to a scheme whereby training data can be actively selected.
-\item online learning - refers to where models are trained on data samples that arrive one by one rather than all at once, as if streamed.
-\item ensemble learning - ensemble models train multiple `weak' models on subsets of the data, then aggregate their individual predictions. Random forests are an example of this, where many decorrelated decision trees are trained in an effort to reduce variance. Adaboost (adaptive boosting) is a famous boosting  meta-algorithm.
-\end{itemize}
+\subsubsection{Semi-Supervised Learning}
 
-\subsubsection{Training and Prediction}
+In this case, the dataset is a mixture of both labelled and unlabelled data. In many practical problems, labelled data is hard to come by, but unlabelled data might be abundant. Semi-supervised techniques seek to combine the data in a reliable way. This approach to learning has shown surprisingly limited success so far.
 
-\textbf{Feature engineering} is the task of designing features, according to some ontology about the model. This is an opportunity for domain knowledge to be imparted into a model, in the view of making more indicative features. This is an inherently soft science, but constitutes a large part of applied machine learning in practice. \textbf{Feature extraction} is a separate concept, which uses unsupervised learning to derive features for modelling. \textbf{Training} or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is strictly separated from the training process. A part of the training set is extracted as a validation set. These split sizes follow some loose convention, leaving the majority of data for training, for example a $70-20-10$ split. Models are trained on a training set and its predictive performance is assessed on a validation set, providing a benchmark to compare choices of model and model hyperparameters. When data is scarce, we can simulate having a validation set in a procedure called cross validation (CV). \textbf{Cross validation} partitions the training data into $K$ validation \emph{folds}. A model is trained on the first $K - 1$ folds, and validated on the final fold. This process is repeated $K$ times, such that each fold is validated on, giving $K$ samples for estimating error. If the fold size is chosen to be a single sample (that is, $K = N$), we have leave-one-out cross validation (LOOCV). The chosen model will be the one that minimises the average CV error. A model is then trained on all the training data (including validation data), and the resulting model tested on the test data. The predictions made are compared with the true values, giving an estimation of generalisation error that can then be reported. \textbf{Generalisation error} refers to the expected test error averaged over all possible datasets. As such data is in practice unavailable, an estimate can be found using cross validation. As more data is added, the predictive power (generalisation error) of the model improves, as the approximation error (the discrepancy between the estimate and the best estimate given the choice of model) in the model parameters is minimised.
+%\subsection{Learning Schemes}
+%
+%The following schemes refer to how the data is \text{used}, rather than the nature of the data (as above):
+%
+%\subsubsection{Reinforcement learning}
+%In this case, learning incorporates occasional feedback signals in a trial and error framework.
+%
+%\subsubsection{Active learning}
+%Refers to a scheme whereby training data can be actively selected.
+%
+%\subsubsection{Online learning}
+%Refers to where models are trained on data samples that arrive one by one rather than all at once, as if streamed.
+%
+%\subsubsection{Ensemble learning}
+%Ensemble models train multiple `weak' models on subsets of the data, then aggregate their individual predictions. Random forests are an example of this, where many decorrelated decision trees are trained in an effort to reduce variance. Adaboost (adaptive boosting) is a famous boosting  meta-algorithm.
+
+\subsection{Training and Prediction}
+
+Here we define some key concepts surrounding the training and prediction of models.
+
+\subsubsection{Feature Engineering} Feature engineering is the exercise of designing features, according to some ontology about the model. This is an opportunity for domain knowledge to be imparted into a model, with the view of making more indicative features. This is an inherently soft science, but constitutes a large part of applied machine learning in practice. \emph{Feature extraction} is a separate concept, which uses unsupervised learning to derive features for modelling.
+
+\subsubsection{Training} Training or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is strictly separated from the training process. A part of the training set is extracted as a validation set. These split sizes follow some loose convention, leaving the majority of data for training, for example a $50-25-25$ split. Models are trained on a training set and its predictive performance is assessed on a validation set, providing a benchmark to compare choices of model and model hyper-parameters. This is a process known as \emph{model selection}.\cite{htf}
+
+\subsubsection{Cross-Validation}
+When data is scarce, we can simulate having a validation set in a procedure called cross-validation (CV). Cross-validation partitions the training data into $K$ validation \emph{folds}. A model is trained on the first $K - 1$ folds, and validated on the final fold. This process is repeated $K$ times, such that each fold is validated on, giving $K$ samples for estimating error. If the fold size is chosen to be a single sample (that is, $K = N$), we have leave-one-out cross-validation (LOOCV). The chosen model will be the one that minimises the average CV error. A model is then trained on all the training data (including validation data), and the resulting model tested on the test data. The predictions made are compared with the true values, giving an estimation of generalisation error that can then be reported, in a process known as \emph{model assessment}.
+
+\subsubsection{Generalisation Error}
+Generalisation error refers to the expected test error averaged over all possible datasets. As such complete coverage of data is in practice never available, an estimate can be found using cross-validation. As more data is added, the predictive power (generalisation error) of the model improves, as the approximation error (the discrepancy between the estimate and the best estimate given the choice of model) in the model parameters is minimised.
 
 \begin{figure}
 \centering
@@ -2193,15 +2212,28 @@ The following schemes refer to how the data is \text{used}, rather than the natu
 \label{fig:knn}
 \end{figure}
 
-\textbf{Overfitting} is a constant danger when training models. This is the effect of \emph{fitting the noise instead of the signal}. All data contains noise, and when the dataset is sufficiently small and the model sufficiently complex (e.g. a high degree polynomial), the model can fit the training data perfectly, only to be useless on test data. Take for example a k-nearest neighbours classifier (kNN) (Figure \ref{fig:knn}). For small $k$, outliers have unreasonable influence on local test data, creating discontinuous decision boundaries. There are various strategies to attenuate overfitting. The most ideal is to increase the amount of data available for training, but this is rarely an option. A more typical approach is \emph{regularisation}. This usually takes the form of a penalty term, but really corresponds to imposing a prior distribution on the parameter set. A prior distribution assigns low probabilities to large parameter values. Complex models that overfit usually require large parameter values to make a fit, so regularisation curtails this tendency. Another, more drastic approach, is to change the form of the likelihood (cost) function of the model to insulate it from outliers in the data. An example of this is robust regression, where a Laplace likelihood replaces a Gaussian. A variant of overfitting is the zero count (sparse data) problem, where specific data that ought to be modelled has not appeared in the dataset and leads to a zero probability prediction. \emph{Underfitting} occurs when the complexity of the model is insufficient to capture the trends of the data. This can be addressed by modifying the choice of basis function or kernel, otherwise by choosing a different technique.
+\subsubsection{Overfitting} Overfitting is a constant danger when training models. This is the effect of \emph{fitting the noise instead of the signal}. All data contains noise, and when the dataset is sufficiently small and the model sufficiently complex (e.g. a high degree polynomial), the model can fit the training data perfectly, only to be useless on test data. Take for example a k-nearest neighbours (kNN) classifier (Figure \ref{fig:knn}). For small $k$, outliers have unreasonable influence on local test data, creating discontinuous decision boundaries. There are various strategies to attenuate overfitting. The most ideal is to increase the amount of data available for training, but this is rarely an option. A more typical approach is \emph{regularisation}. This usually takes the form of a penalty term, but really corresponds to imposing a prior distribution on the parameter set. A prior distribution assigns low probabilities to large parameter values. Complex models that overfit usually require large parameter values to make a fit, so regularisation curtails this tendency. Another, more drastic approach, is to change the form of the cost function (likelihood) of the model to insulate it from outliers in the data. An example of this is robust regression, where a Laplace likelihood replaces a Gaussian. A variant of overfitting is the zero count (sparse data) problem, where specific data that ought to be modelled has not appeared in the dataset and leads to a zero probability prediction. \emph{Underfitting} occurs when the complexity of the model is insufficient to capture the trends of the data. This can be addressed by modifying the choice of basis function or kernel, otherwise by choosing a different technique.
 
-\subsubsection{Philosophical Ideas}
+\subsubsection{Ground Truth}
+Ground truth is a somewhat nebulous term usually referring to a supervised data set, in particular, that which can be assumed to be correct, and which is to be assimilated by a model. It differs from those patterns that are inferred, for example in an unsupervised setting. The term comes from the field of earth sciences where it refers to data measured directly on the ground, or in the atmosphere, rather than indirect data samples collected from, for example, satellite imagery. The \emph{gold standard} is a related term from statistics that refers to the convention for the best possible statistical test one can perform. What qualifies as the gold standard varies according to the context. In practice, it is shorthand for indicating that a statistical study conforms to the highest possible standard.
 
-\textbf{Ground truth} is a somewhat nebulous term referring variably both to the \emph{correctness} of the data being used (with respect to the real world), and, more intuitively, to the real world data itself. It differs from data that is derived or inferred. The term comes from the field of earth sciences where it refers to the reality of conditions `on the ground' rather than collected data samples. The \textbf{gold standard} is a related term from statistics that refers to the convention for the best possible statistical test one can perform. What qualifies as the gold standard varies according to the context. In practice, it is shorthand for indicating that a statistical study conforms to the highest possible standard. The \textbf{curse of dimensionality} refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axes of highest variance (think \emph{trends}) of the data. Another option is to encourage model sparsity using $l_1$ regularisation. This tends to build models that ignore unimportant features. Dimensionality reduction can also be crudely achieved by removing model features. The \textbf{bias-variance tradeoff} refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters. It may be shown that the MSE between an estimate and the true parameters, averaged over all possible data, depends both on the variance of the parameters around its own mean, and the bias (the gap between this estimate mean and the true parameters\footnote{The flaw here is that we require the structural assumptions of the model to be correct before we can talk about `true' parameters, which is rarely the case. This discrepancy is known as `structural error'. Even if the model structure is correct, there is an inescapable error of noise that all models share called the \emph{noise floor}. The noise floor is the limit of the learning curve (the trend of improvement in generalisation error as data is added) for an unbiased estimate.}. An unbiased estimate is a parameter model (for example MLE) that converges (in probability) to a hypothetical true parameter set as data increases, but it may entail a higher variance, making it more likely to draw a bad estimate some of the time. Hence, if we wish to be more certain about the optimality of our estimate, it may be prudent to allow some bias (for example through regularisation) if it sufficiently reduces the variance. In conclusion, the bias-variance tradeoff illustrates that on average it may benefit to use a ridge regression rather than OLS regression, even though this invokes a small bias.
+\subsubsection{The Curse of Dimensionality}
+The curse of dimensionality refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axes of highest variance (trends) of the data. Another option is to encourage model sparsity using $l_1$ regularisation. This tends to build models that ignore unimportant features. Dimensionality reduction can also be crudely achieved by removing model features.
 
-\subsection{Bayes and the Beta-Binomial Model}
+\subsubsection{Bias-Variance Decomposition}
+The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters. Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for data point $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x)$. Then, the MSE between an estimate and the true parameters, averaged over all possible data,
 
-We begin by examining the primordial Beta-Binomial model--that which was studied by English mathematician, Thomas Bayes (1701-1761), in \emph{An Essay towards solving a Problem in the Doctrine of Chances}\footnote{This early term for probability theory comes from de Moivre's seminal textbook (1718).}. Here we consider the inference of data produced from a sequence of coin tosses, such as, $$0101001010111,$$ where $0$ represents `tails' and 1 `heads'. In fact, it is sufficient to know the number of heads and tails, which we denote $N_1$ and $N_0$ respectively. These are known as `sufficient statistics'. Note that the beta-binomial model is not a classifier, as we are not engaging in \emph{classification}, but rather we are predicting a single next outcome. The starting point is to define the likelihood. The probability distribution for such a random sequence is the discrete binomial distribution. As we are maximising for the rate parameter, we can drop the normalisation constant and we have,
+\begin{align}
+\mathbb{E}[(Y - \hat{f}(x))^2] &= \mathbb{E}[((f(x) + \epsilon - \mathbb{E}[\hat{f}(x)]) + (\mathbb{E}[\hat{f}(x)] - \hat{f}(x)))^2] \notag \\
+&= \sigma^2 + \mathbb{E}[f(x) - \mathbb{E}[\hat{f}(x)]]^2 + \mathbb{E}[(\hat{f}(x) - \mathbb{E}[\hat{f}(x)])^2] \notag \\
+&= \text{noise} + \text{bias}^2 + \text{variance} \notag
+\end{align}
+
+The discrepancy therefore depends both on the variance of the parameters around its own mean, and the bias (the gap between this estimate mean and the true parameters\footnote{The flaw here is that we require the structural assumptions of the model to be correct before we can talk about `true' parameters, which is rarely the case. This discrepancy is known as `structural error'. Even if the model structure is correct, there is an inescapable error of noise that all models share called the \emph{noise floor}. The noise floor is the limit of the learning curve (the trend of improvement in generalisation error as data is added) for an unbiased estimate.}). An unbiased estimate is a parameter model (for example MLE) that converges (in probability) to a hypothetical true parameter set as data increases, but it may entail a higher variance, making it more likely to draw a bad estimate some of the time. Hence, if we wish to be more certain about the optimality of our estimate, it may be prudent to allow some bias (for example through regularisation) if it sufficiently reduces the variance. In conclusion, the bias-variance tradeoff illustrates that on average it may benefit to use a ridge regression rather than OLS regression, even though this invokes a small bias.
+
+\section{Bayes and the Beta-Binomial Model}
+
+We begin by examining the primordial Beta-Binomial model--that which was studied by English mathematician, Thomas Bayes (1701-1761), in \emph{An Essay towards solving a Problem in the Doctrine of Chances}\footnote{This early term for probability theory comes from de Moivre's seminal textbook (1718).}. Here we consider inference over data produced from a sequence of coin tosses, such as, $$0101001010111,$$ where $0$ represents `tails' and 1 `heads'. In fact, it is sufficient to know the number of heads and tails, which we denote $N_1$ and $N_0$ respectively. These are known as `sufficient statistics'. Note that the beta-binomial model is not a classifier, as we are not engaging in \emph{classification}, but rather we are predicting a single next outcome. The starting point is to define the likelihood. The probability distribution for such a random sequence is the discrete binomial distribution. As we are maximising for the rate parameter, we can drop the normalisation constant and we have,
 
 $$p(\mathcal{D}|\theta) = \theta^{N_1}\cdot(1 - \theta)^{N_0}.$$
 
@@ -2229,7 +2261,7 @@ p(\hat{x} = 1|\mathcal{D}) &= \int_0^1 p(x = 1 |\theta)p(\theta|\mathcal{D})\mat
 
 The mean of a beta distribution differs from its mode, as it is asymmetric.
 
-\subsection{Generative Classifiers}
+\section{Generative Classifiers}
 
 Here we describe \emph{generative classifiers}, by illustrating how their components are derived with the naive Bayes classifier (NBC). A classifier is simply a model that predicts the membership of an observation, $x$, in one of a discrete number of classes. Generative classifiers `generate' the posterior distribution through inference, in contrast to \emph{discriminative} classifiers, which model the posterior distribution directly. The parameters of a NBC are found by considering the likelihood for $N$ data training samples, $\mathcal{D}$, of dimension $D$, which may be written,
 
@@ -2255,7 +2287,7 @@ where $N_c$ is the number of observations having class $c$. Now we have an expre
 &\propto p(y = c|\boldsymbol\theta)p(\mathbf{x}|y=c,\boldsymbol\theta), \label{eq:postpred}
 \end{align}
 
-having the same form as (\ref{eq:nbc}). For a test observation, $\hat{\mathbf{x}}$, we can simply cycle through each of the classes, plug the appropriate parameters into (\ref{eq:postpred}), and compute a probability. We can then predict the classification of $\mathbf{x}$ to be the class $c$ having maximum probability. This is called a \textbf{plug-in approximation}, and it is the first of two alternatives for prediction. We will come to the other shortly, however, there are several more things we can do with plug-in approximation. To begin with, we may wish to include \emph{prior} information on the parameters. Thus, we form the prior distribution,
+having the same form as (\ref{eq:nbc}). For a test observation, $\hat{\mathbf{x}}$, we can simply cycle through each of the classes, plug the appropriate parameters into (\ref{eq:postpred}), and compute a probability. We can then predict the classification of $\mathbf{x}$ to be the class $c$ having maximum probability. This is called a \textbf{plug-in approximation}, and it is the first of two alternatives for prediction. We will come to the other shortly, but first there are several more things we can do with plug-in approximation. To begin with, we may wish to include \emph{prior} information on the parameters. Thus, we form the prior distribution,
 
 \begin{align}
 \textbf{prior} = p(\boldsymbol\theta) = p(\boldsymbol\pi)\prod_c\prod_{j=1}^Dp(\theta_{jc}). \notag
@@ -2281,7 +2313,7 @@ p(y = c|\hat{\mathbf{x}}, \mathcal{D}) &= \frac{p(\hat{\mathbf{x}}|y = c, \mathc
 
 where step (\ref{eq:ltp}) comes form the law of total probability and the cancellations in step (\ref{eq:cancel}) occur because the prediction is independent of the data when conditioned on the parameters. Thus we are averaging by the posterior distribution. This may be solved analytically for the choice of distributions we have made. Now, a retrospective connection to plug-in approximation may be seen. Plug-in approximation works on the assumption that the distribution on the parameters, $p(\theta|\mathcal{D}) \to \delta_{\hat{\theta}_{MAP}}(\theta)$ as $|\mathcal{D}| \to \infty$. This follows the intuition that increasing data increases our certainty about the parameters. If we replace the posteriors in the integral with the limit, then by the sifting property of the Dirac delta function, we obtain the class conditional and class prior distributions, conditioned on the MAP estimate--the plug-in approximation. A simple implementation of the naive Bayes classifier is given in \texttt{nbcDemo.m}. 
 
-\subsection{Multivariate Normal Distribution}
+\section{Multivariate Normal Distribution}
 The multivariate Normal (MVN) or multivariate Gaussian distribution is the multidimensional generalisation of the univariate Gaussian distribution. The form of the probability density function for a $D$-dimensional Gaussian is defined to be,
 
 $$\mathcal{N}(\mathbf{x} ; \mu, \Sigma) \triangleq \frac{1}{(2\pi)^{D/2}|\boldsymbol\Sigma|^{1/2}}
@@ -2334,11 +2366,11 @@ $$p(y = c|\mathbf{x}, \theta) = \frac{e^{\beta_c^T\mathbf{x} + \gamma_c}}{\sum_{
 
 where $\eta_c = [\beta_1^T\mathbf{x} + \gamma_1, \beta_2^T\mathbf{x} \gamma_2 , \dots, \beta_C^T\mathbf{x} + \gamma_C]$, and $\mathcal{S}$ is the \emph{softmax} function\footnote{The softmax function is so called because at low `temperatures', that is, if we divide all the exponents by $T$, the probability of the most likely class goes to $1$ as $T \to 0$. This terminology comes from statistical physics--in fact the softmax function has the same form as the Boltzmann distribution (Ludwig Boltzmann (1844-1906) was a German physicist credited with the development of statistical mechanics).} The marginal likelihood is known as the partition function, denoted $Z$ for `Zustandssumme'--the German expression for `sum over states'. This form of LDA is very similar to logistic regression, differing only in the fact that LDA is generative and logistic regression is discriminative. If we normalise a naive Bayes classifier with Gaussian features, it is equivalent to LDA--hence naive Bayes and logistic regression form what is known as a generative-discriminative pair.
 
-\subsection{Linear Regression}
+\section{Linear Regression}
 
 A linear regression is used to make predictions for a continuous variable.
 
-\subsubsection{Constructing a Loss Function}
+\subsection{Constructing a Loss Function}
 The starting point for building a regression model is a dataset, $\mathcal{D}$, where,
 
 $$\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N},$$
@@ -2356,7 +2388,7 @@ $$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2}(\mathbf{y} 
 
 where $\mathcal{L}(\boldsymbol\beta)$ is the `loss' function, expressing a \emph{mean square error} (MSE) for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm to minimise this function. It is also typical to write $\text{MSE} = \text{RSS}/N$, where RSS stands for \emph{residual sum of squares}, the non-weighted sum. Note we could have chosen any sort of loss function, but our reasons for choosing mean square error will be revealed in the following section.
 
-\subsubsection{Method of Least Squares}
+\subsection{Method of Least Squares}
 
 The method of least squares (MLS) is a closed-form solution to a linear regression. As previously stated, it was first published in the same paper by Gauss that also first formalised the Normal distribution. We will discover the link in the following section. We may write the derivative of the loss function,
 
@@ -2372,11 +2404,11 @@ $$\boldsymbol\beta^* = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}.$$
 
 MLS also has a nice geometric interpretation. According to the normal equation, the error, $\mathbf{X}\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $\mathbf{X}^T$. This makes sense, because it means the choice of prediction, $\mathbf{X}\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly `below' it on the hyperplane, $\mathbf{X}^T$. This solution is known as the ordinary least squares (OLS) solution.
 
-\subsubsection{The Gram Matrix}
+\subsection{The Gram Matrix}
 
 For the closed-form method of least squares, we require the \emph{gram} matrix $\mathbf{X}^T\mathbf{X}$ to be invertible. If $\mathbf{X}$ is full rank\footnote{A matrix is full rank if its columns are linearly independent. By the rank-nullity theorem, full rank implies a zero-dimensional null space or kernel.} then $\mathbf{X}\mathbf{a} = \mathbf{0}$ iff $\mathbf{a} = \mathbf{0}$. Therefore, $\mathbf{a}^T\mathbf{X}^T\mathbf{X}\mathbf{a} \geq 0$, implying the gram matrix is positive-definite, and therefore invertible. Note that when $N < D$ and we have a `fat' $\mathbf{X}$, $\mathbf{X}$ is often rank deficient. Even when the gram matrix is invertible, it may still be ill-conditioned. This arises when a high degree of \emph{multilinearity} is present in the data. This refers to high degrees of correlation between features. Ill-conditioning is a concept common in numerical analysis, and in linear algebra it is captured by the \emph{condition number} of a matrix. This provides an upper bound on the relative error between solutions for changes in the data. A high condition number indicates parameters may vary significantly for small changes in the data. This can lead to problems in practice, when floating point arithmetic introduces small inaccuracies. It can be shown that the condition number, $\kappa({\mathbf{A}}) = ||\mathbf{A}||\cdot||\mathbf{A}^{-1}|| = \boldsymbol\sigma_{max}/\boldsymbol\sigma_{min}$, that is, the ratio of the largest and smallest eigenvalues of $\mathbf{A}$. Geometrically, this makes sense. Consider the way a matrix transforms a unit circle of vectors in two dimensions. When one eigenvalue dominates the other, vectors are mostly `stretched' in the direction of the first eigenvector. We would find that a small change in the direction of the second eigenvector corresponds to a much larger change in the direction of the first. `Lifting' the eigenvalues (thereby reducing the condition number) is a convenient outcome of ridge regression. This is easily seen by considering the eigenvalue decomposition of the gram matrix, then $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I} = \mathbf{U}\boldsymbol\Sigma\mathbf{U}^T + \lambda\mathbf{I} = \mathbf{U}(\boldsymbol\Sigma + \lambda\mathbf{I})\mathbf{U}^T$. It can now be seen that a ridge regression improving its condition number through regularisation is the means by which it reduces variance in the bias-variance tradeoff.
 
-\subsubsection{Gradient Descent}
+\subsection{Gradient Descent}
 
 As an alternative to closed-form solutions, there are sure-fire numerical methods. The most fundamental of these is the method of gradient descent. The convenient form of our loss function makes it a differentiable function that is furthermore \emph{convex}. It therefore has a unique global minimum. We can approach this optimal point iteratively from an arbitrary starting point by taking steps in the direction of the gradient (Figure \ref{fig:gradientdescent}). The algorithm is defined as,
 
@@ -2391,13 +2423,13 @@ where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\bet
 \label{fig:gradientdescent}
 \end{figure}
 
-\subsubsection{Model Prediction}
+\subsection{Model Prediction}
 
 Once we have computed our optimal model parameters, $\boldsymbol\beta^*$, we can start making predictions for unseen data, $\hat{\mathbf{x}}$. Our prediction is then,
 
 $$\hat{y} = \hat{\mathbf{x}}^T\boldsymbol\beta^*.$$
 
-\subsubsection{Maximum Likelihood Estimation}
+\subsection{Maximum Likelihood Estimation}
 
 Now we will derive our regression model from a probabilistic angle. Probabilistic constructions are preferred in machine learning because they make the models more comprehensible\footnote{For some techniques, however, such as neural networks, things are not so straightforward.}. We start our derivation with the following assumptions: firstly, that the data points, $(\mathbf{x}_n, y_n)$ are independent and identically distributed (i.i.d); second, that the output variable is modelled by a linear function with Gaussian noise, that is, $\mathbf{y} = X\boldsymbol\beta + \boldsymbol\epsilon$, where $\boldsymbol\epsilon$ is a vector of normally distributed random variables, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$, for which $\sigma^2$ is the variance representing the random noise. We are thereby making an assumption about how the output variable is distributed around our line of best fit, $\mathbf{x}_n^T\boldsymbol\beta$. Now we may write a probability distribution for $y_n$,
 
@@ -2419,7 +2451,7 @@ As we will soon see, maximising this probability is equivalent to minimising the
 
 where $k_1$ and $k_2$ are positive constants, and so they have no bearing on the optimal $\boldsymbol\beta^*$. Thus, we see that maximising our likelihood function is equivalent to minimising our original mean square error loss function. This is equivalently known as the negative log-likelihood (NLL).
 
-\subsubsection{Non-linear Fits}
+\subsection{Non-linear Fits}
 
 If we wish to fit a non-linear function to our data, we can simply transform the data. For example, if we want to fit a quadratic function to our data (Figure \ref{fig:quadraticfit}), we need only square the values in our dataset and introduce it as a new dimension in our data. It is important to note that this is still a linear regression, as we still have a linear combination of parameters, albeit with a non-linear basis function. These more complex models are best created in the framework of a \emph{ridge regression}, where we introduce a penalty term in the loss function.
 
@@ -2430,17 +2462,17 @@ If we wish to fit a non-linear function to our data, we can simply transform the
 \label{fig:quadraticfit}
 \end{figure}
 
-\subsubsection{Bayesian Linear Regression}
+\subsection{Bayesian Linear Regression}
 
 Bayes model averaging may be performed for linear regression to obtain a more robust posterior predictive distribution, just as we saw for generative classifiers. Such a result can for example be analysed for its variance, unlike a mere point estimate such as ML or MAP estimates. The derivation involves multiplying and integrating Gaussians and belongs in a textbook, rather than in Last Chance Stats.
 
-\subsubsection{Robust Linear Regression}
+\subsection{Robust Linear Regression}
 
 One drawback of using a Gaussian likelihood is that it is sensitive to outliers. This makes it likely to overfit in practice. There are several ways of mitigating this effect. The most crude is known as `early stopping', where training is terminated before convergence, and before the model has a chance to overfit. The most ideal option is to train on more data, taking density away from outliers, but data is usually hard to come by. The most common approach is to \emph{regularise} the cost function by introducing a prior distribution on the model parameters. This gives us the posterior distribution, just as it was with the beta-binomial model, and the optimal parameters are the MAP estimate, $\boldsymbol\theta_{MAP} = \argmax_{\boldsymbol\theta} \text{NLL}(\boldsymbol\theta)$, where NLL is the negative log-likelihood. If we choose another Gaussian for the prior, we are using $l_2$ regularisation, and we get what is known as a \emph{ridge regression},
 
 $$\text{NLL} = \frac{1}{2}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) + \frac{\lambda}{2}\boldsymbol\beta^T\boldsymbol\beta = \frac{1}{2}\sum_{n=1}^N(y_n - \boldsymbol\beta^T\mathbf{x}_n)^2 + \frac{\lambda}{2}\sum_{d=1}^D\beta_d^2.$$
 
-Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, and thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a LASSO\footnote{Least absolute shrinkage and selection operator} regression. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for only a small subset of the dimensions. Encouraging sparsity is a form of \emph{feature selection}. This is useful for high-dimensional data with many noisy indicators, otherwise known as the `small $N$, large $D$' problem. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes have greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes--the most common approaches are coordinate descent algorithms\footnote{Coordinate descent algorithms are similar to gradient descent, but where at each step the function is optimised with respect to one variable.} such as the `shooting' algorithm.
+Clearly, this is a linear regression with an extra cost over the parameter values. This is known as a penalty term in the cost function. High parameter values, which correspond to more complex fits (overfitting), are punished with a quadratic cost. The parameter $\lambda$ is a scaling constant which may be optimised through cross-validation. Ridge regression is very popular, and has the added bonus of producing a more numerically stable normal equation, because the regularisation term increases the eigenvalues of the gram matrix, $\mathbf{X^T}\mathbf{X}$, in the normal equations, thereby reducing the ratio between the highest and lowest eigenvalues, and thereby improving its condition number. Another option is a Laplace prior. This is known as $l_1$ regularisation, and when applied to regression is known as a LASSO\footnote{Least absolute shrinkage and selection operator} regression. One of the effects of $l_1$ regularisation is to encourage \emph{sparse} models. Sparsity refers to models whose parameters are non-zero for only a small subset of the dimensions. Encouraging sparsity is a form of \emph{feature selection}. This is useful for high-dimensional data with many noisy indicators, otherwise known as the `small $N$, large $D$' problem. The intuition behind this phenomenon of encouraging sparsity is that the contours of the prior distribution are linear, forming a diamond shape in the parameter space, whose vertices lie along each of the axes. In contrast, the Gaussian $l_2$ prior has ellipsoidal contours. Thus, in $l_1$ regularisation sparse parameters on the axes have greater magnitude than parameters along the edges of the diamond. These sparse parameters with greater magnitude (allowing for better fits) may be chosen at no extra penalty. Unfortunately, the cost function is no longer differentiable everywhere, due to the absolute value function, and our solution algorithm changes--the most common approaches are coordinate descent algorithms\footnote{Coordinate descent algorithms are similar to gradient descent, but where at each step the function is optimised with respect to one variable.} such as the `shooting' algorithm.
 
 A final, more drastic option for robust regression is to modify the form of the likelihood to a distribution with heavier tails, making it more robust to outliers, thereby creating to \emph{robust linear regression}. Typical choices are the Student or Laplace distributions. In the latter case, the function is no longer differentiable, but with a reformulation trick can be made into a linear programming problem. For example, given a Laplace likelihood,
 
@@ -2452,7 +2484,7 @@ $$\text{NLL}(\mathbf{w}) =  \sum_n r_n^+ + r_n^-,$$
 
 where $r_n^+ - r_n^- = y_n- \mathbf{w}^T\mathbf{x}_n$ with the \emph{type} constraint that $r_n^+r_n^- = 0$ (ensuring only one variable is activated at a time), and $r_n^+, r_n^- \geq 0$. The type constraint can be omitted, as at optimality it will be satisfied as a matter of course. Now we have a constrained convex optimisation problem, which can be optimised with any linear solver, for example, the simplex algorithm.
 
-\subsubsection{The Simplex Algorithm}
+\section{The Simplex Algorithm}
 
 The simplex algorithm was designed by American mathematician George Dantzig\footnote{There is famous anecdote from Dantzig's time as a doctoral student at Berkley. Arriving late to class, Dantzig copied down two important unsolved statistics problems the professor had earlier written on the blackboard, taking them to be set for homework. With some effort, he managed to solve both problems, and submitted them to the professor for review. It was not until some weeks later that the professor looked at the solutions, to great excitement. Dantzig then had the rare privilege of submitting his homework as his doctoral thesis.} (1914-2005). It is an optimisation algorithm for linear programming problems, that is, a problem of the form,
 
@@ -2535,11 +2567,11 @@ $$
 
 Now we see the final row contains non-negatives for $x_1$ and $x_2$, therefore no improvement can be made by varying either variable, and hence we have arrived at an optimal solution. Because the state of $R_3$ (the objective function) has been arrived at as a combination of its previous state and the new first constraint, $R_1$, any solution which satisfies the under-determined $R_1$ satisfies its contribution to $R_3$. Hence, we choose the trivial solution, $(x_1, 5, 0, 0, 0)$. This may not always be the only optimal solution (though in our problem it is), but it is indeed optimal. Because of the linearly independent basis vectors, this leaves the trivial solution available in the second constraint, $R_2$, that is, $(0, x_2, 0, 0, 0)$. Combining these yields the optimal solution, $x_1 = 0, x_2 = 5, s_1 = 0, s_2 = 0$, as seen in Figure \ref{fig:simplex}. Thus, in general, our method brings us to a state wherein the optimal solution can be read directly from the final tableau as the basic columns, with other variables equal to 0. As noted, this method verifiably gives us an optimal solution, though others may exist.
 
-\subsection{Logistic Regression}
+\section{Logistic Regression}
 
 Logistic regression is a class of classification models. Learning a logistic regression can be thought of as fitting a multivariate Bernoulli distribution. There is also a strong connection between logistic regression and linear discriminant analysis. In fact, logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions\footnote{This is often hard to do, especially when the input data is vector-valued, and is a limitation on generative models. In contrast, discriminative models allow for arbitrary basis function expansion and feature engineering. On the other hand, generative models are usually easier to fit, more robust to changes in the dataset (discriminative models must be retrained), and better facilitate semi-supervised learning.}. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably presents the student with the quintessential optimisation techniques of machine learning. Linear and logistic regressions are part of a wider family of models called \emph{generalised linear models}. This is a family of models modelling exponential densities over output variables, and where the mean is a linear combination of the parameters, in some cases passed through a non-linear function.
 
-\subsubsection{Binary Logistic Regression}
+\subsection{Binary Logistic Regression}
 
 A binary logistic regression models,
 
@@ -2596,7 +2628,7 @@ $$
 
 where $S = \text{diag}([\sigma(\boldsymbol\beta^T\mathbf{x}_1), \sigma(\boldsymbol\beta^T\mathbf{x}_2), \dots, \sigma(\boldsymbol\beta^T\mathbf{x}_N)])$. The Newton step may be rewritten as a least squares problem. In such a formulation, the optimisation algorithm is known as iterative reweighted least squares (IRLS). Due to the computational complexity of computing the Hessian, quasi-Newton techniques exist that create an approximation iteratively. The most common quasi-Newton method is the BFGS algorithm (Broyden, Fletcher, Goldfarb and Shanno). The $\mathcal{O}(D^2)$ space complexity of the Hessian gives rise to a further approximation in the limited memory or L-BFGS algorithm. This is the usual weapon of choice for modelling high-dimensional data. Just as with linear regression, $l_2$ regularisation may be used. Unlike linear regression, however, the full posterior distribution is not directly computable due to the absence of a conjugate prior. Approximation techniques, such as Markov chain Monte Carlo (MCMC), are therefore used. An object-oriented logistic regression model is solved with both gradient descent and Newton's method in \texttt{logRegDemo.m}.
 
-\subsubsection{Multinomial Logistic Regression}
+\subsection{Multinomial Logistic Regression}
 
 Going beyond binary logistic regression requires some adjustments--the sigma function is replaced by the generalised softmax function,
 
@@ -2640,14 +2672,15 @@ $$\mathbf{H}(\mathbf{W}) =  \begin{bmatrix}
 
 giving a $DC \times DC$ matrix. The model can likewise incorporate a regularisation term. An example of multinomial logistic regression is given in \texttt{logRegDemo.m}.
 
-\subsection{Online Learning and Perceptrons}
-\subsubsection{Online learning}
+\section{Online Learning and Perceptrons}
+
+\subsection{Online learning}
 Online learning is an alternative to the more customary offline learning. In online learning, data is streamed rather than processed in a batch. That is, data samples arrive one at a time, and the parameters are adjusted at each iteration. The loss is compared to the batch performance in a function known as the \emph{regret}. This leads to a technique known as online gradient descent. It is further possible to simulate online learning as an alternative to batch gradient descent in an algorithm known as \emph{stochastic} gradient descent (SGD). Here, the gradient at a point is constructed on some subset of the available data, possibly a single data sample alone, rather than the full dataset. The algorithm cycles through the dataset in these smaller chunks, according to some random permutation. A complete cycle is known as an \emph{epoch}, and multiple epochs may be required before convergence is reached. There are various problems where it may be beneficial to do this, for example when fitting neural networks whose cost function is not convex. In this case, the randomness of stochastic gradient descent can help escape local minima during the descent. Moreover, the algorithm may simply outperform batch gradient descent, as calculating the full gradient is $\mathcal{O}(N^2)$, but only $\mathcal{O}(N)$ when a single sample is used. It is likely a small subset of the data can give a good approximation to the true gradient, in particular when duplication is present in the data. When applied to least squares, the algorithm is known as least mean squares (LMS). A comparison of batch and stochastic gradient descent is given in \texttt{regressionDemo.m}.
 
 \subsubsection{The Perceptron}
 The perceptron is an historically important algorithm. It is one of the earliest machine learning algorithms, invented by American psychologist, Frank Rosenblatt (1928-1971), in 1956. The perceptron learns a binary classifier in an online manner from supervised data, in a process that closely resembles stochastic gradient descent\footnote{The perceptron algorithm replaces the probability, $\mu_i = p(y_i = 1 | \mathbf{x}_i)$, with the prediction, $\hat{y}_i$ (effectively rounding the probability), but is otherwise identical to SGD.}. The algorithm is guaranteed to converge if the data is linearly separable, and there is a nice proof of this. The algorithm is furthermore guaranteed \emph{not} to converge when the data is not linearly separable, and various enhancements exist to mitigate this problem. Notable examples of the perceptron's limitations are in learning logical functions. A perceptron can learn the \texttt{OR}, \texttt{AND}, and \texttt{NAND} functions, but is unable to learn \texttt{XOR}\footnote{Consider the four points arising from \texttt{XOR} in two variables--they are clearly not linearly separable.}. The multi-layer perceptron, also known as an artificial feed-forward neural network, arises from stacking several perceptrons in layers. These neural networks are much more flexible than the basic perceptron. The perceptron is also the origin of logistic regression, and maximum margin methods such as support vector machines (SVM). An example of a perceptron fitting the logical \texttt{NAND} function is given in \texttt{perceptronDemo.m}.
 
-\subsection{Neural Networks}
+\section{Neural Networks}
 
 Several types of neural networks exist\footnote{See for instance auto-encoders, which reconstruct the input from a reduced number of hidden states--a form of unsupervised learning; or convolutional neural networks, a neural network with a sliding window designed for pattern recognition within high resolution images.}, but we will consider the most common--the feed-forward neural network. Neural networks extend the structure of the simple perceptron by stacking a number of perceptrons into $K$ layers, such that the output of each layer propagates into the next. For this reason, a feed-forward neural network is also known as a \emph{multi-layer perceptron}. Each layer, $k$, has a number of `hidden' units, $\mathbf{z}^{(k)}$, and is a linear combination of the last layer of variables, $\mathbf{z}^{(k-1)}$, and a set of weights, $\mathbf{B}^{(k-1)}$, finally passed through a non-linear `activation' function, $h$ (usually a sigmoid or hyperbolic tangent). That is, $\mathbf{z}^{(k+1)} = h(\mathbf{B}^{(k)}\mathbf{z}^{(k)})$ In this way, the states of each of the hidden units are a culmination of the previous layers. Thus, a neural network makes a prediction as,
 
@@ -2665,15 +2698,15 @@ A neural network may be used for both regression and classification, the output 
 \label{fig:universalapproximater}
 \end{figure}
 
-\subsection{Support Vector Machines}
+\section{Support Vector Machines}
 
 Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin classifier in 1963, which later evolved into the kernelised support vector machine (SVM).
 
-\subsubsection{Kernels}
+\subsection{Kernels}
 
 Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. An example of this is tf-idf cosine similarity of a bag of words representation for document classification. Another example are Gaussian kernels, which give a multivariate Gaussian probability for the difference between two observations--the smaller the difference, the greater the probability. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi^T\boldsymbol\Phi$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}, and it is particularly useful, for example, when we may apply a kernel such as the \emph{radial basis function} whose corresponding basis function is infinite-dimensional, without having to compute the infinite-dimensional basis function itself. Models can be `kernelised' according to some reformulation, and replacing linear kernels (dot products) with another kernel function. In the case of kNN, this can be done quite readily. Kernelising ridge regression requires a reformulation trick known as the matrix inversion lemma. Support vector machines are kernelised by reformulating the problem into its dual problem, by application of the minimax theorem. The kernel trick requires a \emph{Mercer} kernel be used, that is, such that the Gram matrix be symmetric positive-definite.
 
-\subsubsection{Kernelised kNN}
+\subsection{Kernelised kNN}
 
 The $k$ nearest neighbours algorithm classifies a data point as the majority vote of the classes of the $k$ closest training data points. By default, the distance metric is Euclidean distance, $||\mathbf{x} - \mathbf{x}'||_2^2 = \mathbf{x}^T\mathbf{x} + \mathbf{x}'^T\mathbf{x}' - 2\mathbf{x}^T\mathbf{x}'$. It is therefore clear we can replace the inner products with any kernel function of our choosing.
 
@@ -2685,7 +2718,7 @@ The $k$ nearest neighbours algorithm classifies a data point as the majority vot
 %
 %where $F^*$ is the convex conjugate of $F$, $\sup$ is the supremum (least upper bound) and $\inf$ is the infimum (greatest lower bound). For certain convex problems, this bound goes to $0$, and the primal and dual solutions correspond. It is often useful to consider the dual to a primal problem. For one thing, it may yield a more efficient (kernelised) representation. Furthermore, however, it may change the nature of the problem to one more easily solvable with numerical techniques, as we will see for support vector machines (SVMs). Note there are various forms of duality, for example Wolfe duality, named after American mathematician Philip Wolfe (1927-), a pioneer in the fields of convex optimisation theory and mathematical programming.
 
-\subsubsection{Matrix Inversion Lemma}
+\subsection{Matrix Inversion Lemma}
 
 We will here derive a result that we will use below, known as the Woodbury matrix identity, or the matrix inversion lemma. Given matrices $\mathbf{X} \in \mathbb{R}^{M\times N}$ and $\mathbf{Y} \in \mathbb{R}^{N\times M}$, consider,
 
@@ -2703,7 +2736,7 @@ Equating (\ref{eq:mli1}) and (\ref{eq:mli2}),
 
 where the final step is achieved by multiplying both sides by $\mathbf{X}$ to the left and right.
 
-\subsubsection{Reformulating Ridge Regression}
+\subsection{Reformulating Ridge Regression}
 
 If we apply the matrix inversion lemma to the optimal parameters of a ridge regression, we obtain,
 
@@ -2711,7 +2744,7 @@ $$\boldsymbol{\beta}^* = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}_D)^{-1}\mat
 
 where $\boldsymbol\alpha = (\mathbf{X}\mathbf{X}^T + \lambda\mathbf{I}_N)^{-1}\mathbf{y}$ is a vector of \emph{dual} variables. This demonstrates that the optimal primal parameters $\boldsymbol\beta^*$ lie in the \emph{row} space of $\mathbf{X}$. By contrast, the output $\mathbf{y} = \mathbf{X}\boldsymbol\beta$ lies in the \emph{column} space of $\mathbf{X}$. There is a useful result called the \emph{representer theorem} which states that the primal and dual solutions are always related in this way for models of like form, that is, models with a loss function and penalty term. This is useful, as it is easier to solve the dual problem for support vector machines.
 
-\subsubsection{Decision Boundaries}
+\subsection{Decision Boundaries}
 
 Consider a simple binary classifier,
 
@@ -2781,7 +2814,7 @@ f(\mathbf{x}) = \text{sgn}\Bigg(\sum_{i=1}^N \alpha_iy_i\kappa(\mathbf{x}_i, \ma
 
 where $\kappa(\cdot, \cdot)$ is a Mercer kernel of our choosing, replacing the linear inner product from before. Apart from the dual form being conveniently kernelised, it affords an insightful alternative interpretation of the model. From (\ref{eq:svmdual}), we can see how an observation, $\mathbf{x}$ is classified according to its similarity with the training vectors. Each training vector, $\mathbf{x}_i$, casts its vote, $y_i$, be it $-1$ or $1$, with the influence regulated by a similarity measure provided by the kernel function, and the weight provided by the dual variable. Only the support vectors have a (non-zero) weighted vote. It is easy to see why this is such a powerful framework--we can choose between many similarity measures (kernels), though the mathematics restricts us to choosing Mercer kernels.
 
-\subsubsection{Sequential Minimal Optimisation}
+\subsection{Sequential Minimal Optimisation}
 
 Our model (\ref{eq:svmdual}) may be solved with any QP solver, which was formerly the standard approach. However, in 1998, American computer scientist, John Platt (1963-), invented sequential minimal optimisation (SMO), an algorithm for analytically optimising the dual variables two at a time. The superiority and simplicity of this algorithm helped bring support vector machines into the forefront of machine learning research. The algorithm works by iteratively optimising pairs of variables that violate the optimality conditions. These are,
 
@@ -2794,7 +2827,7 @@ Our model (\ref{eq:svmdual}) may be solved with any QP solver, which was formerl
 \label{eq:svmkkt}
 \end{equation}
 
- Optimisation is done in pairs in order to maintain the equality constraint of the problem (\ref{eq:dual}). Thus, for pair $\alpha_i$ and $\alpha_j$, we make updates such that $y_i\Delta\alpha_i + y_j\Delta\alpha_j = 0$. Rearranging gives $\Delta\alpha_j = -\Delta\alpha_iy^{(i)}/y^{(j)} = -\Delta\alpha_iy^{(i)}y^{(j)}$, as since $y_i \in \{-1, 1\}$, division is the same as multiplication, and the cost function becomes,
+Optimisation is done in pairs in order to maintain the equality constraint of the problem (\ref{eq:dual}). Thus, for pair $\alpha_i$ and $\alpha_j$, we make updates such that $y_i\Delta\alpha_i + y_j\Delta\alpha_j = 0$. Rearranging gives $\Delta\alpha_j = -\Delta\alpha_iy^{(i)}/y^{(j)} = -\Delta\alpha_iy^{(i)}y^{(j)}$, as since $y_i \in \{-1, 1\}$, division is the same as multiplication, and the cost function becomes,
 
 \begin{align}
 W(\boldsymbol\alpha) &= \sum_{k=1}^N\alpha_k + \Delta\alpha_i -\Delta\alpha_iy_iy_j - \frac{1}{2}\sum_{k=1}^Ny_k\alpha_k(f(\mathbf{x}_k) - b) \notag \\ 
@@ -2811,15 +2844,15 @@ $$y_i = \sum_{k=1}^N \alpha_iy_i\mathbf{x}_k^T\mathbf{x}_i + b + \Delta b + \Del
 
 for $\Delta b^*$. The same is done for $f(\mathbf{x}_j)$, and the expressions are combined according to the convergence conditions (\ref{eq:svmkkt}). Thus, the optimisation steps are done analytically, rather than with linear algebra. The rest of the algorithm is mostly concerned with heuristics for choosing the best $\alpha_i$, $\alpha_j$ pair. An implementation of support vector machines solved with the SMO algorithm is given in \texttt{supportVectorMachine.m}.
 
-\subsubsection{Support Vector Machine Regression}
+\subsection{Support Vector Machine Regression}
 
 The ideas of support vector machines can be extended to regression models as well. This is achieved using a modification of the Huber loss function, creating a constrained quadratic programming (QP) problem. One of the shortcomings of SVMs is the difficulty in extending them to multi-class classification. This stems from the fact that they are not probabilistic models. Schemes exist, however, for example, by training multiple classifiers in a hierarchy.
 
-\subsection{Decision Trees}
+\section{Decision Trees}
 
 Decision trees are distinct from the previously discussed classifiers in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data.
 
-\subsubsection{Learning Decision Trees}
+\subsection{Learning Decision Trees}
 
 Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups iteratively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree.
 
@@ -2836,11 +2869,11 @@ Several impurity measures are possible, but we know from information theory that
 
 $$I_{split}(p) = h_2(p) = -p\log p - (1-p)\log (1-p).$$
 
-\subsubsection{More Advanced Techniques}
+\subsection{More Advanced Techniques}
 
 An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done by aggregating the predictions of individual trees. This is an example of ensemble learning and \emph{bagging} (bootstrap aggregating). The advantage of random forests is that it reduces the variance of the prediction.
 
-\subsection{Dimensionality Reduction and PCA}
+\section{Dimensionality Reduction and PCA}
 
 The curse of dimensionality motivates techniques to transform high-dimensional data, given by an $N \times D$ matrix $\mathbf{X}$, to a lower rank approximation. This can be achieved by choosing lower dimensionality, $M  < D$, and finding $D \times M$ matrix $\mathbf{W}$ and $N \times M$ matrix $\mathbf{Z}$ such that,
 
@@ -2852,7 +2885,7 @@ $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1
 
 where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with a technique known as alternating least squares (ALS). It can be shown that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$ for orthonormal $\mathbf{W}$, then $\mathbf{W}^T\mathbf{X}^T \approx \mathbf{W}^T\mathbf{W}\mathbf{Z}^T \implies \mathbf{X}\mathbf{W}  \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional form. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
 
-\subsubsection{Singular Value Decomposition}
+\subsection{Singular Value Decomposition}
 
 Singular Value Decomposition (SVD) is to rectangular matrices what eigenvalue decomposition is to square matrices. This factorisation of matrix $\mathbf{X}$ can be written,
 
@@ -2864,11 +2897,11 @@ $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf
 
 which is the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. Thus, SVD (which may be done with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. We can choose the dimensionality by taking the $M$ most significant singular values.
 
-\subsection{Unsupervised Machine Learning}
+\section{Unsupervised Machine Learning}
 
 Whereas supervised machine learning can be said to embody learning by example, \emph{unsupervised} machine learning is concerned with finding inherent patterns in a dataset. In this sense, its aim is \emph{description}, rather than prediction. The two most common applications of unsupervised machine learning are feature extraction and \emph{clustering}. Clustering is of particular interest to data mining applications. Clustering is the act of grouping data observations according to some grouping measure. The choice of clustering algorithm is usually problem-specific. Various approaches exist, for example density-based clustering algorithm DBSCAN (density-based spatial clustering with additive noise), or agglomerative clustering \emph{dendrogram} models\footnote{Dendrograms cluster data by pairing closest data samples into groups repeatedly, creating a binary tree hierarchy in a bottom-up approach until all data belongs to a single super group.}. These techniques are popular, but are more heuristic algorithms than machine learning. The techniques we will discuss are more sophisticated and are based on fitting probability densities to data.
 
-\subsubsection{K-means}
+\subsection{K-means}
 
 One of the most popular clustering techniques, K-means, organises data into $K$ clusters. The algorithm begins by initialising $K$ centre points in $D$-dimensional space and alternates between two steps. The first step assigns observations to centres based on a distance measure (usually Euclidean distance). Observations assigned to a common centre can then be said to be in the same cluster. For each cluster, a new centre point is calculated as the average of all observations in the cluster. This is repeated until the centre points converge (which will occur when observations cease to change clusters). Note that $K$ must be pre-selected--the algorithm does not tell us what value of $K$ is most suitable. To formalise beyond this intuitive algorithm, we denote a set of parameters, $r_{nk}$, whose binary value indicates the membership (or not) of observation $x_n$ in cluster $k$. A further set of parameters, $u_k$, denote the centre point of each of the $K$ clusters. Thus, the K-means algorithm can be formulated as the optimisation problem,
 
@@ -2895,15 +2928,11 @@ this is clearly the arithmetic mean of the points in the cluster. With this in m
 
 where $\mathbf{I}$ is the identity matrix. This shows that K-means is fitting $K$ Gaussian densities with unit variance. So, despite the initially simple algorithm, we see the deeper probabilistic meaning behind K-means. Because the clusters are all based on spherical Gaussians of fixed size and shape, the technique can alternatively be viewed as clustering points by nearness in Euclidean space. It is useful, however, to take note of the probabilistic notions, as these are expanded upon in the more powerful Gaussian mixture models.
 
-\subsubsection{Gaussian Mixture Models}
+\subsection{Gaussian Mixture Models}
 
 \begin{figure}
 \centering
 \begin{tabular}{cc}
-%\subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.png}} & 
-%\subfloat[10 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm10.png}}\\
-%\subfloat[20 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm15.png}}&
-%\subfloat[30 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm30.png}} \\
 \subfloat[1 iteration]{\includegraphics[width=0.5\textwidth]{Figures/gmm0.pdf}} & 
 \subfloat[3 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm2.pdf}}\\
 \subfloat[5 iterations]{\includegraphics[width=0.5\textwidth]{Figures/gmm4.pdf}}&
@@ -3012,6 +3041,9 @@ At approximately the same time, the systems lab at the University of California,
 
 \bibitem{gradientdescent}
 ``Gradient descent'' by Gradient\_descent.png: The original uploader was Olegalexandrov at English Wikipediaderivative work: Zerodamage - This file was derived from Gradient descent.png:. Licensed under Public Domain via Commons - \\https://commons.wikimedia.org/wiki/File:Gradient\_descent.svg\#/media/File:Gradient\_descent.svg
+
+\bibitem{htf}
+Friedman, Jerome, Trevor Hastie, and Robert Tibshirani. The elements of statistical learning. Vol. 1. Springer, Berlin: Springer series in statistics, 2001.
 
 \end{thebibliography}
 
