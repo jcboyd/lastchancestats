@@ -2208,7 +2208,7 @@ Generalisation error refers to the expected test error averaged over all possibl
 \subfloat[$k = 1$]{\includegraphics[width=0.5\textwidth]{Figures/knn1.pdf}} & 
 \subfloat[$k = 7$]{\includegraphics[width=0.5\textwidth]{Figures/knn7.pdf}}
 \end{tabular}
-\caption{Visualisation of overfitting with k-nearest neighbours (kNN) (non-parametric model). A data point is classified as the majority class of the $k$ geometrically closest data points. Note the steadier decision boundary formed for $k = 7$. Created with \texttt{knnDemo.m}.}
+\caption{Visualisation of overfitting with k-nearest neighbours (kNN) (non-parametric model). A data point is classified as the majority class of the $k$ geometrically closest data points. Note the steadier decision boundary formed for $k = 7$. This classifier can be very effective, but suffers from the curse of dimensionality. Data normalisation and dimensionality reduction usually help. However, in certain high-dimensional data sets where data is confined to a lower-dimensional manifold, for example in OCR data, kNN can be very effective. Unlike most classifiers, test time is much greater than training time. Approximations using memory tradeoffs mitigate this. Created with \texttt{knnDemo.m}.}
 \label{fig:knn}
 \end{figure}
 
@@ -2221,7 +2221,9 @@ Ground truth is a somewhat nebulous term usually referring to a supervised data 
 The curse of dimensionality refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axes of highest variance (trends) of the data. Another option is to encourage model sparsity using $l_1$ regularisation. This tends to build models that ignore unimportant features. Dimensionality reduction can also be crudely achieved by removing model features.
 
 \subsubsection{Bias-Variance Decomposition}
-The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters. Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for data point $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x)$. Then, the MSE between an estimate and the true parameters, averaged over all possible data,
+The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. This tradeoff is reflected in the \emph{no free lunch theorems}\footnote{No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. It  If the data is uniformly random, there will be no signal to learn.}.
+
+ Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for data point $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x)$. Then, the MSE between an estimate and the true parameters, averaged over all possible data,
 
 \begin{align}
 \mathbb{E}[(Y - \hat{f}(x))^2] &= \mathbb{E}[((f(x) + \epsilon - \mathbb{E}[\hat{f}(x)]) + (\mathbb{E}[\hat{f}(x)] - \hat{f}(x)))^2] \notag \\
