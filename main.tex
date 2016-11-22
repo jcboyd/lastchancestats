@@ -2429,6 +2429,15 @@ where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\bet
 \label{fig:gradientdescent}
 \end{figure}
 
+\subsubsection{Coordinate Descent}
+
+Another plausible optimisation algorithm is coordinate descent, where each descent step optimises with respect to a single variable. For OLS regression we have,
+
+$$
+\frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta_k} = \frac{1}{N}\sum_{n=1}^N x_{ik}(y_i - \mathbf{x}_i^T\boldsymbol\beta)
+\implies \beta_k^* = \frac{\sum_n x_{nk}y_n - \sum_n\sum_{j \neq k}x_{nk} x_{nj}\beta_j}{\sum_n x_{nk}^2}.
+$$
+
 \subsection{Model Prediction}
 
 Once we have computed our optimal model parameters, $\boldsymbol\beta^*$, we can start making predictions for unseen data, $\hat{\mathbf{x}}$. Our prediction is then,
@@ -2640,7 +2649,7 @@ Going beyond binary logistic regression requires some adjustments--the sigma fun
 
 $$p(y_i = c | \mathbf{x}_i, \mathbf{W}) = \frac{\exp(\mathbf{w}_c^T\mathbf{x})}{\sum_{c' = 1}^C \exp(\mathbf{w}_{c'}^T\mathbf{x})},$$
 
-just as with linear discriminant analysis. We now have the generalised multinomial or softmax regression. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes\footnote{This, incidentally leads to an identifiability issue. Identifiability is a property of statistical models whereby a model (the distribution) is defined by a unique parameter set, that is, there is a one-to-one mapping between parameters and models. It is important for precise statistical inference. In this instance the model is clearly not identifiable, as adding any constant vector to each of the parameter vectors gives the same model probabilities. To address this, the parameters are usually offset to eliminate the ambiguity.}. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a `one-of-C encoding' binary vector of length $C$. Thus, the negative log likelihood is,
+just as with linear discriminant analysis\footnote{Clearly, the sigma function is the simplified binary form of the softmax function.}. We now have the generalised multinomial or softmax regression. The parameters now make up a matrix $\mathbf{W}$ whose $C$ columns correspond to each of the $C$ classes\footnote{This, incidentally leads to an identifiability issue. Identifiability is a property of statistical models whereby a model (the distribution) is defined by a unique parameter set, that is, there is a one-to-one mapping between parameters and models. It is important for precise statistical inference. In this instance the model is clearly not identifiable, as adding any constant vector to each of the parameter vectors gives the same model probabilities. To address this, the parameters are usually offset to eliminate the ambiguity.}. Note that the matrix structure is only for notational convenience, the parameters still effectively constitute a vector of unknowns, and the gradient still has a vector structure. The binary encoding on the classes is dropped in favour of a `one-of-C encoding' binary vector of length $C$. Thus, the negative log likelihood is,
 
 $$\text{NLL}(\mathbf{W}) = -\sum_i \bigg[\bigg(\sum_{c = 1}^Cy_{ic}\mathbf{w}_c^T\mathbf{x}_i\bigg) - \log\bigg(\sum_{c'=1}^C\exp(\mathbf{w}_{c'}^T\mathbf{x}_i)\bigg)\bigg].$$
 
@@ -2688,7 +2697,7 @@ The perceptron is an historically important algorithm. It is one of the earliest
 
 \section{Neural Networks}
 
-Many types of neural networks exist\footnote{See for instance auto-encoders, which reconstruct the input from a reduced number of hidden states--a form of unsupervised learning; or convolutional neural networks, a neural network with a sliding window designed for pattern recognition within high resolution images.}, but we will consider the most common--the feed-forward neural network. Neural networks extend the structure of the simple perceptron by stacking a number of perceptrons into $K$ layers, such that the output of each layer propagates into the next. For this reason, a feed-forward neural network is also known as a \emph{multi-layer perceptron}. Each layer, $k$, has a number of `hidden' units, $\mathbf{z}^{(k)}$, and is a linear combination of the last layer of variables, $\mathbf{z}^{(k-1)}$, and a set of weights, $\mathbf{B}^{(k-1)}$, finally passed through a non-linear `activation' function, $h$ (usually a sigmoid or hyperbolic tangent). That is, $\mathbf{z}^{(k+1)} = h(\mathbf{B}^{(k)}\mathbf{z}^{(k)})$ In this way, the states of each of the hidden units are a culmination of the previous layers. Thus, a neural network makes a prediction as,
+Many types of neural networks exist\footnote{See for instance auto-encoders, which reconstruct the input from a reduced number of hidden states--a form of unsupervised learning; or convolutional neural networks, a neural network with a sliding window designed for pattern recognition within high resolution images.}, but we will consider the most common--the feed-forward neural network. Neural networks extend the structure of the simple perceptron by stacking a number of perceptrons into $K$ layers, such that the output of each layer propagates into the next. For this reason, a feed-forward neural network is also known as a \emph{multi-layer perceptron}. Each layer, $k$, has a number of `hidden' units, $\mathbf{z}^{(k)}$, and is a linear combination of the last layer of variables, $\mathbf{z}^{(k-1)}$, and a set of weights, $\mathbf{B}^{(k-1)}$, finally passed through a non-linear `activation' function, $h$\footnote{Classic choices are the sigma function or hyperbolic tangent function, itself a linear transform of the sigma function. The rectified linear unit (ReLU), the $\max$ function, and variations thereof are increasingly popular.}. That is, $\mathbf{z}^{(k+1)} = h(\mathbf{B}^{(k)}\mathbf{z}^{(k)})$ In this way, the states of each of the hidden units are a culmination of the previous layers. Thus, a neural network makes a prediction as,
 
 $$\hat{y} = h(\mathbf{B}^{(K-1)}h(\mathbf{B}^{(K-2)}(\cdots(h(\mathbf{B}^{(1)})\hat{\mathbf{x}})))).$$
 
@@ -2881,7 +2890,7 @@ and such that the \emph{reconstruction error} is minimised. This leads to the ob
 
 $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1}^N||\mathbf{x}_i - \hat{\mathbf{x}}_i||^2,$$
 
-where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with a technique known as alternating least squares (ALS). It can be shown that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$ for orthonormal $\mathbf{W}$, then $\mathbf{W}^T\mathbf{X}^T \approx \mathbf{W}^T\mathbf{W}\mathbf{Z}^T \implies \mathbf{X}\mathbf{W}  \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional form. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
+where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with a technique known as alternating least squares (ALS). It can be shown that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \frac{1}{N}\mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X}^T \approx \mathbf{W}\mathbf{Z}^T,$ for orthonormal $\mathbf{W}$, then $\mathbf{W}^T\mathbf{X}^T \approx \mathbf{W}^T\mathbf{W}\mathbf{Z}^T \implies \mathbf{X}\mathbf{W}  \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional form. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
 
 \subsection{Singular Value Decomposition}
 
@@ -2894,6 +2903,10 @@ where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ i
 $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{V}^T =  \mathbf{V}\mathbf{S}^2\mathbf{V}^T,$$
 
 which is the eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. Thus, SVD (which may be done with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. We can choose the dimensionality by taking the $M$ most significant singular values.
+
+\subsection{Decorrelation}
+
+The data may be deccorelated using the decomposition. Consider mapping $\mathbf{X}$ to $\mathbf{Z} = \mathbf{X}^T\mathbf{U} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U} = \mathbf{V}\mathbf{S}$. The covariance matrix for this is then, $\mathbf{Z}^T\mathbf{Z} = \mathbf{S}\mathbf{V}^T\mathbf{V}\mathbf{S} = \mathbf{S}^2$, that is, a diagonal matrix with no correlations between variables.
 
 \section{Unsupervised Machine Learning}
 
