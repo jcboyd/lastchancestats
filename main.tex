@@ -14,6 +14,7 @@
 \usepackage{bbm}
 \usepackage{cancel}
 \usepackage{mathdots}
+\usepackage{natbib}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 % \setlength\parindent{0pt}
 
@@ -966,7 +967,7 @@ $$\sin (\alpha + \beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta.$$
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/eulersformula.png}
-\caption{$e^{ix}$ traces a unit circle on the complex plane.\cite{eulerformula}}
+\caption{$e^{ix}$ traces a unit circle on the complex plane (\cite{eulerformula}).}
 \label{fig:eulersformula}
 \end{figure}
 
@@ -1170,7 +1171,7 @@ $$p(X_1 \lor \dots \lor X_N) = \sum_{i = 1}^{N}p(X_i) - \sum_{1 \leq i < j \leq 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/inclusionexclusion.png}
-\caption{The inclusion-exclusion principle is best understood with Venn diagrams\cite{inclusionexclusion}.}
+\caption{The inclusion-exclusion principle is best understood with Venn diagrams (\cite{inclusionexclusion}).}
 \label{fig:inclusionexclusion}
 \end{figure}
 
@@ -1621,7 +1622,7 @@ since the integrated expression defines $\mathcal{N}(z ; t, 1)$.
 
 \subsection{Proof of the Central Limit Theorem}
 
-The central limit theorem (CLT) is the crowning jewel of statistics--a profound result, with far-reaching applications. It explains, at least in part, the uncanny ubiquitousness of the bell curve in nature. Its proof is therefore the demonstration of a universal truth. This is where Laplace's statement that `probability is common sense reduced to calculation' resonates most strongly. The theorem states that the sum of $n$ random variables, whatever their individual distributions, converges to a Gaussian distribution as $n \to \infty$. If we then suppose natural phenomena to be aggregations of many random events, the central limit theorem explains how the bell curve appears with such regularity.
+The central limit theorem (CLT) is the crowning jewel of statistics--a profound result, with far-reaching applications. It explains, at least in part, the uncanny ubiquitousness of the bell curve in nature. Its proof is therefore the demonstration of a universal truth. This is where Laplace's statement that `probability is common sense reduced to calculation' resonates most strongly. The theorem states that the sum of $n$ random variables, whatever their individual distributions, converges to a Gaussian distribution as $n \to \infty$. If we then suppose natural phenomena to be aggregations of many random events, the central limit theorem explains how the bell curve appears with such regularity\footnote{A wonderful mechanical demonstration of the central limit theorem is the \emph{Galton board}. These can often be found in science museums.}.
 
 Given $X_1, X_2, ... X_n$ are i.i.d. random variables with mean 0, variance $\sigma^2$, and moment-generating function, $M_x(t)$, denote their standardised sum, $Z = (X_1 + X_2 + \cdots X_n)/\sqrt{n\sigma^2}$. Therefore,
 
@@ -2158,7 +2159,7 @@ Given a weighted graph, Dijkstra's algorithm, discovered by Dutch computer scien
 
 \section{Introduction to Machine Learning}
 
-Machine learning makes up the stochastic wing of the artificial intelligence community. It is an amalgamation of techniques from across probability theory, linear algebra, and optimisation theory. Here we specify a glossary of important terms in machine learning.
+Machine learning seeks to construct algorithms that create mathematical models or \emph{machines}, predictive or descriptive, over a set of data. The field utilises an amalgamation of applied mathematics techniques from probability, linear algebra, and optimisation theory. Here we specify a glossary of important terms in machine learning.
 
 \subsection{Learning}
 
@@ -2166,7 +2167,7 @@ In machine learning, learning refers to optimising a model to generalise over a 
 
 \subsubsection{Supervised Learning}
 
-in this case, $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each data sample, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real for a regression task, and discrete for classification\footnote{Note the output may further be scalar- or vector-valued, though we will focus on scalar-valued outputs.}. The task of supervised learning is therefore to learn the map that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, which includes many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
+in this case, $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each data sample, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real-valued for a regression task, and discrete for classification\footnote{Note the output may further be scalar- or vector-valued, though we will focus on scalar-valued outputs.}. The task of supervised learning is therefore to learn the mapping that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, which includes many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
 
 \subsubsection{Unsupervised Learning}
 
@@ -2175,6 +2176,14 @@ In this case $\mathcal{D} = \{\mathbf{X}\}$ is unlabelled and the learning task 
 \subsubsection{Semi-Supervised Learning}
 
 In this case, the dataset is a mixture of both labelled and unlabelled data. In many practical problems, labelled data is hard to come by, but unlabelled data might be abundant. Semi-supervised techniques seek to combine the data in a reliable way. This approach to learning has shown surprisingly limited success so far.
+
+\subsubsection{Transfer Learning}
+
+Transfer learning (\cite{transfersurvey}) refers to a broad variety of techniques that use the solution of one problem in solving another. Arguably, supervised machine learning is subsumed by the transfer learning framework, but where the source and target domains are the same, and where training is performed as a single step.
+
+\subsubsection{Deep Learning}
+
+Deep learning refers to approaches that aim to model a hierarchy of abstractions in a dataset. One famous example are deep convolutional neural networks form computer vision, which ``stack'' multiple convolutional hidden layers in sequence, each layer modeling finer features of its input images. These models have shown tremendous success in computer vision tasks in recent years, making vast improvements on the earlier state of the art. Another example are deep belief networks, which are restricted Boltzmann machines (RBM)\footnote{RBMs are a generative neural networks factorising over a bipartite graph (hence, \emph{restricited}). Similarly to autoencoders, they can be used in an unsupervised fashion to learn a feature representation in terms of \emph{latent variables}.} stacked one after the other.
 
 %\subsection{Learning Schemes}
 %
@@ -2196,9 +2205,9 @@ In this case, the dataset is a mixture of both labelled and unlabelled data. In 
 
 Here we define some key concepts surrounding the training and prediction of models.
 
-\subsubsection{Feature Engineering} Feature engineering is the exercise of designing features, according to some ontology about the model. This is an opportunity for domain knowledge to be imparted into a model, with the view of making more indicative features. This is an inherently soft science, but constitutes a large part of applied machine learning in practice. \emph{Feature extraction} is a separate concept, which uses unsupervised learning to derive features for modelling.
+\subsubsection{Feature Engineering} Feature engineering is the exercise of designing features, according to some ontology about the model. This is an opportunity for domain knowledge to be imparted into a model, with the view of making more indicative features. This is an inherently soft science, but constitutes a large part of applied machine learning in practice. \emph{Feature extraction} is a separate concept, which, for example, may use unsupervised learning to derive features for modelling.
 
-\subsubsection{Training} Training or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is strictly separated from the training process. A part of the training set is extracted as a validation set. These split sizes follow some loose convention, leaving the majority of data for training, for example a $50-25-25$ split. Models are trained on a training set and its predictive performance is assessed on a validation set, providing a benchmark to compare choices of model and model hyper-parameters. This is a process known as \emph{model selection}.\cite{htf}
+\subsubsection{Training} Training or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is strictly separated from the training process. A part of the training set is extracted as a validation set. These split sizes follow some loose convention, leaving the majority of data for training, for example a $50-25-25$ split. Models are trained on a training set and its predictive performance is assessed on a validation set, providing a benchmark to compare choices of model and model hyper-parameters. This is a process known as \emph{model selection} (\cite{htf}).
 
 \subsubsection{Cross-Validation}
 When data is scarce, we can simulate having a validation set in a procedure called cross-validation (CV). Cross-validation partitions the training data into $K$ validation \emph{folds}. A model is trained on the first $K - 1$ folds, and validated on the final fold. This process is repeated $K$ times, such that each fold is validated on, giving $K$ samples for estimating error. If the fold size is chosen to be a single sample (that is, $K = N$), we have leave-one-out cross-validation (LOOCV). The chosen model will be the one that minimises the average CV error. A model is then trained on all the training data (including validation data), and the resulting model tested on the test data. The predictions made are compared with the true values, giving an estimation of generalisation error that can then be reported, in a process known as \emph{model assessment}.
@@ -2222,10 +2231,11 @@ Generalisation error refers to the expected test error averaged over all possibl
 Ground truth is a somewhat nebulous term usually referring to a supervised data set, in particular, that which can be assumed to be correct, and which is to be assimilated by a model. It differs from those patterns that are inferred, for example in an unsupervised setting. The term comes from the field of earth sciences where it refers to data measured directly on the ground, or in the atmosphere, rather than indirect data samples collected from, for example, satellite imagery. The \emph{gold standard} is a related term from statistics that refers to the convention for the best possible statistical test one can perform. What qualifies as the gold standard varies according to the context. In practice, it is shorthand for indicating that a statistical study conforms to the highest possible standard.
 
 \subsubsection{The Curse of Dimensionality}
-The curse of dimensionality refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axes of highest variance (trends) of the data. Another option is to encourage model sparsity using $l_1$ regularisation. This tends to build models that ignore unimportant features. Dimensionality reduction can also be crudely achieved by removing model features.
+The curse of dimensionality refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axes of highest variance (trends) of the data. Another option is to encourage model sparsity using $l_1$ regularisation. This tends to build models that ignore unimportant features. Various 
+feature selection techniques also exist, where an optimised subset of features is selected according to preprocessing (filtering), cross-validation (wrapping), or as part of the learning algorithm itself (embedding) (\cite{transfersurvey}).
 
 \subsubsection{Bias-Variance Decomposition}
-The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. This tradeoff is reflected in the \emph{no free lunch theorems}\footnote{No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. It  If the data is uniformly random, there will be no signal to learn.}.
+The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters it approximates. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. This tradeoff is reflected in the \emph{no free lunch theorems}\footnote{No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. It  If the data is uniformly random, there will be no signal to learn.}.
 
  Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for data point $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x)$. Then, the MSE between an estimate and the true parameters, averaged over all possible data,
 
@@ -2425,7 +2435,7 @@ where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\bet
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/gradientdescent.png}
-\caption{The method of gradient descent iteratively approaches a global minimum on a convex function.\cite{gradientdescent}}
+\caption{The method of gradient descent iteratively approaches a global minimum on a convex function (\cite{gradientdescent}).}
 \label{fig:gradientdescent}
 \end{figure}
 
@@ -2473,7 +2483,7 @@ If we wish to fit a non-linear function to our data, we can simply transform the
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/quadraticfit.pdf}
-\caption{A non-linear fit may be found by transforming the data.}
+\caption{A non-linear fit may be found by transforming the data with a non-linear basis function.}
 \label{fig:quadraticfit}
 \end{figure}
 
@@ -2713,6 +2723,18 @@ A neural network may be used for both regression and classification, the output 
 \label{fig:universalapproximater}
 \end{figure}
 
+\subsection{Convolutional Neural Networks}
+
+\subsubsection{Images Masks}
+
+In the field of image analysis, the mask (or filter, or kernel) is an important construct. A \emph{convolution} is an operation involving an initial image and the mask. The operation is equivalent to flipping the mask both vertically and horizontally and then visually placing the it over each pixel in turn. The output is the sum over a pixel-wise product of the mask and the sub-image. Masks are usually symmetric, so flipping is unnecessary.
+
+\subsubsection{Convolutional Neural Networks}
+
+Convolutional Neural Networks (CNNs) are the current state-of-the-art in the many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012 (\cite{krizhevsky2012imagenet}).} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering (\cite{sharif2014cnn}).
+
+The cornerstone of the CNN is the \emph{convolutional layer}, a hidden layer where a square grid of weights is convolved with the input, just like an image mask (now, however, the the mask is learned as part of an all-encompassing model). The output of the convolutional layer is akin to a convolved image. Next, the non-linear activation function, ReLu (REctified Linear Unit), is applied to zero-out any negative values. Next there is a \emph{pooling} layer, emulating \emph{downsampling}. Here, each group of (usually) four values (pixels) is replaced by the maximum of the four, leaving a single most intense pixel. This pooling method is known as \emph{max pooling}. This sequence of \texttt{CONV->RELU->POOL} layers may be repeated multiple times to create a deep architecture. Finally, a few fully-connected layers round off the architecture. Though it seems far more sophisticated than a MLP, it can be shown that a CNN can be represented as a classical fully-connected neural network. For example, a convolutional layer can be represented as a sparse fully-connected layer. Various techniques have been developed for training these vast models, for example momentum optimisers, weight initialisation, and \emph{dropout}\footnote{Dropout involves deactivating (setting to $0$) hidden units in fully-connected layers according to a Bernoulli probability. This is repeated for every forward-backward pass of the network, such that every training example is trained on a different sub-graph of the network.} for regularisation.
+
 \section{Support Vector Machines}
 
 Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin classifier in 1963, which later evolved into the kernelised support vector machine (SVM).
@@ -2857,11 +2879,11 @@ The ideas of support vector machines can be extended to regression models as wel
 
 \section{Decision Trees}
 
-Decision trees are distinct from the previously discussed classifiers in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data.
+Decision trees are distinct from the previously discussed classifiers in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data\footnote{Non-parametric methods could be said to ``let the data do the talking''.}.
 
 \subsection{Learning Decision Trees}
 
-Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups iteratively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree.
+Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups recursively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree. Note this is an example of \emph{embedded feature selection} (\cite{featureselectionsurvey}).
 
 The only question then is \emph{how} we should split the data. For example, if we are classifying vehicles, and $y \in \{\text{car}, \text{motorbike}\}$, and our data consists of categories, $\mathbf{x} = [\text{number wheels}, \text{colour}, \text{milage}]$, the number of wheels is likely be a very effective indicator for sorting the cars from the bikes. In fact, it may be decisive, and rarely are indicators so informative in practice. The colour would likely tell us very little, but the milage might tell us something, as longer journeys are usually done by cars, so there may be a weak correlation. We therefore use an impurity measure to quantify the reduction in uncertainty upon making a given split. The best split is the one that minimises the uncertainty,
 
@@ -2878,7 +2900,27 @@ $$I_{split}(p) = h_2(p) = -p\log p - (1-p)\log (1-p).$$
 
 \subsection{More Advanced Techniques}
 
-An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done by aggregating the predictions of individual trees. This is an example of ensemble learning and \emph{bagging} (bootstrap aggregating). The advantage of random forests is that it reduces the variance of the prediction.
+An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done in an \emph{ensemble} by aggregating the predictions of individual trees,
+
+$$z(\mathbf{x}) = \frac{1}{M}\sum_{i=1}^M f_i(\mathbf{x}),$$
+
+where the models $f_i$ are individual decision trees trained on random subsets of the data. In such a scheme they are known as \emph{weak learners}. Now, recall that,
+
+\begin{align}
+\text{Var}[X + Y] &= \mathbb{E}[(X + Y)^2] - \mathbb{E}[X + Y]^2 \notag \\
+&= \mathbb{E}[X^2 + 2XY + Y^2] - \mathbb{E}{X}^2 - 2\mathbb{E}[X]\mathbb{E}[Y] - \mathbb{E}[Y]^2 \notag \\
+&= \text{Var}[X] + \text{Var}[Y] + 2\text{Cov}[X, Y] \notag
+\end{align}
+
+It is easy to then show that,
+
+$$\text{Var}\Big[\sum_i X_i\Big] = \sum_i \text{Var}[X_i] + 2\sum_i\sum_{j \neq i} \text{Cov}(X_i, X_j).$$
+
+Consider then that in our random forest, each learner has a variance of $\sigma^2$ and $\text{Cov}(f_i, f_j) = \rho\epsilon \forall i, j, i \neq j$. Then,
+
+$$\text{Var}\Big[\frac{1}{M}\sum_i f_i\Big] = \frac{\sigma^2}{M} + \rho\frac{M-1}{M}\sigma^2.$$
+
+Thus, the ratio is reduced by, $M/(1 + \rho(M-1))$. We therefore aim to decorrelate the individual trees. This is done in two ways. First, the training set is sampled (with replacement) to create $M$ \emph{bootstrapped} training sets of size $N$. Used in the ensemble, this is known as \emph{bagging} (bootstrapping and aggregating). Secondly, train each learner on a random subset of the available features. The size of the subset is a model hyperparameter.
 
 \section{Dimensionality Reduction and PCA}
 
@@ -3074,20 +3116,11 @@ At approximately the same time, the systems lab at the University of California,
 \item The harmonic series, $h = \sum_{n=1}^{\infty} 1/n$ is (surprisingly) divergent. Clearly, $h = 1 + 1/2 + (1/3 + 1/4) + (1/5 + 1/6 + 1/7 + 1/8) + \cdots > 1 + 1/2 + (1/4 + 1/4) + (1/8 + 1/8 + 1/8 + 1/8) \cdots = 1 + 1/2 + 1/2 + 1/2 + \cdots$, which is clearly divergent.
 \end{itemize}
 
-\begin{thebibliography}{9}
+%\emph{Bibliography} % Change the page header to say "Bibliography"
 
-\bibitem{eulerformula}
-``Euler's formula'' by Originally created by gunther using xfig, recreated in Inkscape by Wereon, italics fixed by lasindi. - Drawn by en User:Gunther, modified by others.. Licensed under CC BY-SA 3.0 via Commons - https://commons.wikimedia.org/wiki/\\File:Euler\%27s\_formula.svg\#/media/File:Euler\%27s\_formula.svg
+\bibliographystyle{unsrtnat} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
 
-\bibitem{inclusionexclusion}
-``Inclusion-exclusion'' Licensed under CC BY-SA 3.0 via Commons - \\https://commons.wikimedia.org/wiki/File:Inclusion-exclusion.svg\#/media/File:Inclusion-exclusion.svg
-
-\bibitem{gradientdescent}
-``Gradient descent'' by Gradient\_descent.png: The original uploader was Olegalexandrov at English Wikipediaderivative work: Zerodamage - This file was derived from Gradient descent.png:. Licensed under Public Domain via Commons - \\https://commons.wikimedia.org/wiki/File:Gradient\_descent.svg\#/media/File:Gradient\_descent.svg
-
-\bibitem{htf}
-Friedman, Jerome, Trevor Hastie, and Robert Tibshirani. The elements of statistical learning. Vol. 1. Springer, Berlin: Springer series in statistics, 2001.
-
-\end{thebibliography}
+\bibliography{Bibliography} % The references (bibliography) information are stored in the file named "Bibliography.bib"
 
 \end{document}
+
