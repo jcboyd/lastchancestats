@@ -363,7 +363,54 @@ and reducing $\mathbf{A}$ to $\mathbf{I}$ transforms $\mathbf{I}$ to $\mathbf{A}
 
 \subsection{Matrix Decompositions}
 
-More efficient algorithms for solving systems of linear equations and inverting matrices come in the form of matrix decompositions. The most widely used, LU decomposition, consists of factorising the matrix into lower and upper triangular matrices. Inverting these triangular matrices may be done very efficiently. QR decomposition is another decomposition where $\mathbf{Q}$ is orthogonal and $\mathbf{R}$ is upper-triangular. In the special case of a Hermitian, positive-definite matrix, we can perform a Cholesky\footnote{Andr\'e-Louis Cholesky was a French mathematician (1875-1918).} decomposition faster than the previous methods. Note that a Hermitian matrix, named after French mathematician, Charles Hermite (1822-1901), is a matrix of complex numbers equal to its transpose in its real parts, and complex conjugate in imaginary parts. Thus, if our domain is the real numbers, a Hermitian matrix is the same as a symmetric matrix. In this case, we can write our matrix as,
+More efficient algorithms for solving systems of linear equations and inverting matrices come in the form of matrix decompositions. The most widely used, LU decomposition, consists of factorising the matrix into lower and upper triangular matrices. Inverting these triangular matrices may be done very efficiently. QR decomposition is another decomposition where $\mathbf{Q}$ is orthogonal and $\mathbf{R}$ is upper-triangular.
+
+\subsubsection{The Gram-Schmidt Process}
+
+Given a basis set of vectors, $V = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$, we can construct an orthonormal basis we the following approach, first defining
+
+$$\text{proj}_{\mathbf{u}}(\mathbf{v}) = \frac{\mathbf{u}\cdot\mathbf{v}}{|\mathbf{u}|}\mathbf{u},$$
+
+that is, the vector of the orthogonal projection of the vector $\mathbf{v}$ onto the line of $\mathbf{u}$ (its length given by the inner product). Then,
+
+\begin{align}
+\begin{array}{lr}
+\mathbf{u}_1 = \mathbf{v}_1 & \mathbf{e}_1 = \frac{\mathbf{u}_1}{|\mathbf{u}_1|} \notag \\
+\mathbf{u}_2 = \mathbf{v}_2 - \text{proj}_{\mathbf{u}_1}(\mathbf{v}_2) & \mathbf{e}_2 = \frac{\mathbf{u}_2}{|\mathbf{u}_2|}  \notag \\
+\mathbf{u}_3 = \mathbf{v}_3 - \text{proj}_{\mathbf{u}_1}(\mathbf{v}_3) - \text{proj}_{\mathbf{u}_2}(\mathbf{v}_3) & \mathbf{e}_3 = \frac{\mathbf{u}_3}{|\mathbf{u}_3|}  \notag \\
+\multicolumn{1}{c}{\vdots} & \multicolumn{1}{c}{\vdots} \notag
+\end{array}
+\end{align}
+
+It can be shown by substitution and mathematical induction that set $E = \{\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_k\}$ is orthonormal. It is easy to see, however, that $\mathbf{u}_1$ and $\mathbf{u}_2$ are orthogonal by definition of the projection. Likewise, $(\mathbf{v}_3 - \text{proj}_{\mathbf{u}_1}(\mathbf{v}_3))$ is orthogonal to $\mathbf{u}_1$, and since $\text{proj}_{\mathbf{u}_2}(\mathbf{v}_3)$ is now also orthogonal to $\mathbf{u}_1$, $\mathbf{u}_3$ is orthogonal to $\mathbf{u}_1$. We can then swap the order to show $\mathbf{u}_3$ is also orthogonal to $\mathbf{u}_2$. With this reasoning, the tedium of substitution may be avoided.
+
+\subsubsection{QR Decomposition}
+
+Given a full-rank matrix, $A = [\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_n]$, we can factorise it by first applying the Gram-Schmidt process on its columns. The columns may then be expressed as linear combinations of the resulting orthonormal basis,
+
+\begin{align}
+\begin{array}{ll}
+\mathbf{a}_1 &= (\mathbf{e}_1 \cdot \mathbf{a}_1) \mathbf{e}_1 \notag \\
+\mathbf{a}_2 &= (\mathbf{e}_1 \cdot \mathbf{a}_2) \mathbf{e}_1 + (\mathbf{e}_2 \cdot \mathbf{a}_2) \mathbf{e}_2 \notag \\
+\mathbf{a}_3 &= (\mathbf{e}_1 \cdot \mathbf{a}_3) \mathbf{e}_1 + (\mathbf{e}_2 \cdot \mathbf{a}_3) \mathbf{e}_2 + (\mathbf{e}_3 \cdot \mathbf{a}_3) \mathbf{e}_3 \notag \\
+\multicolumn{1}{c}{\vdots} & \multicolumn{1}{c}{\vdots} \notag
+\end{array}
+\end{align}
+
+Thus, we may write the factorisation $A = QR$, where $Q = [\mathbf{e}_1, \mathbf{e}_2, \dots \mathbf{e}_k]$ and
+
+$$R = 
+\begin{pmatrix}
+\mathbf{e}_1 \cdot \mathbf{a}_1&\mathbf{e}_1 \cdot \mathbf{a}_2&\mathbf{e}_1 \cdot \mathbf{a}_3&\cdots\\
+0&\mathbf{e}_2 \cdot \mathbf{a}_2&\mathbf{e}_2 \cdot \mathbf{a}_3&\cdots\\
+0&0&\mathbf{e}_3 \cdot \mathbf{a}_3&\cdots\\
+\vdots&\vdots&\vdots&\ddots
+\end{pmatrix}.
+$$
+
+\subsubsection{Cholesky Decomposition}
+
+In the special case of a Hermitian, positive-definite matrix, we can perform a Cholesky\footnote{Andr\'e-Louis Cholesky was a French mathematician (1875-1918).} decomposition faster than the previous methods. Note that a Hermitian matrix, named after French mathematician, Charles Hermite (1822-1901), is a matrix of complex numbers equal to its transpose in its real parts, and complex conjugate in imaginary parts. Thus, if our domain is the real numbers, a Hermitian matrix is the same as a symmetric matrix. In this case, we can write our matrix as,
 
 $$\mathbf{A} = \mathbf{L}\mathbf{L}^T,$$
 
@@ -2740,7 +2787,7 @@ In the field of image analysis, the mask (or filter, or kernel) is an important 
 
 \subsubsection{Convolutional Neural Networks}
 
-Convolutional Neural Networks (CNNs) are the current state-of-the-art in the many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012 (\cite{krizhevsky2012imagenet}).} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering (\cite{sharif2014cnn}).
+Convolutional Neural Networks (CNNs) are the current state-of-the-art in the many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012 (\cite{krizhevsky2012imagenet}).} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering (\cite{sharif2014cnn}). Another possibility is to use the pre-trained weights as an initialisation for training on a new dataset. Both are examples of transfer learning.
 
 The cornerstone of the CNN is the \emph{convolutional layer}, a hidden layer where a square grid of weights is convolved with the input, just like an image mask (now, however, the the mask is learned as part of an all-encompassing model). The output of the convolutional layer is akin to a convolved image. Next, the non-linear activation function, ReLu (REctified Linear Unit), is applied to zero-out any negative values. Next there is a \emph{pooling} layer, emulating \emph{downsampling}. Here, each group of (usually) four values (pixels) is replaced by the maximum of the four, leaving a single most intense pixel. This pooling method is known as \emph{max pooling}. This sequence of \texttt{CONV->RELU->POOL} layers may be repeated multiple times to create a deep architecture. Finally, a few fully-connected layers round off the architecture. Though it seems far more sophisticated than a MLP, it can be shown that a CNN can be represented as a classical fully-connected neural network. For example, a convolutional layer can be represented as a sparse fully-connected layer. Various techniques have been developed for training these vast models, for example momentum optimisers, weight initialisation, and \emph{dropout}\footnote{Dropout involves deactivating (setting to $0$) hidden units in fully-connected layers according to a Bernoulli probability. This is repeated for every forward-backward pass of the network, such that every training example is trained on a different sub-graph of the network.} for regularisation.
 
