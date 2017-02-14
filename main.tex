@@ -408,13 +408,23 @@ $$R =
 \end{pmatrix}.
 $$
 
+Thus, in order to solve $\mathbf{A}\mathbf{x} = \mathbf{b}$ for full rank $\mathbf{A}$, we write $\mathbf{Q}\mathbf{R}\mathbf{x} = \mathbf{b} \implies \mathbf{R}\mathbf{x} = \mathbf{Q}^T\mathbf{b}$ (since orthonormality implies $\mathbf{Q}^T\mathbf{Q} = \mathbf{I}$), which is directly solvable by back-substitution as $\mathbf{R}$ is upper-triangular. This technique can be used to solve the least-squares problem in closed-form, where the Gram matrix is positive semi-definite.
+
 \subsubsection{Cholesky Decomposition}
 
-In the special case of a Hermitian, positive-definite matrix, we can perform a Cholesky\footnote{Andr\'e-Louis Cholesky was a French mathematician (1875-1918).} decomposition faster than the previous methods. Note that a Hermitian matrix, named after French mathematician, Charles Hermite (1822-1901), is a matrix of complex numbers equal to its transpose in its real parts, and complex conjugate in imaginary parts. Thus, if our domain is the real numbers, a Hermitian matrix is the same as a symmetric matrix. In this case, we can write our matrix as,
+In the special case of a Hermitian, positive-definite matrix, we can perform a Cholesky\footnote{Andr\'e-Louis Cholesky was a French mathematician (1875-1918).} decomposition faster than the previous methods. Note that a Hermitian matrix, named after French mathematician, Charles Hermite (1822-1901), is a matrix of complex numbers equal to its transpose in its real parts, and complex conjugate in imaginary parts. If a Hermitian matrix is purely real-valued, it is simply equal to its transpose. If a matrix $\mathbf{A}$ is Hermitian positive-definite, its Cholesky decomposition is,
 
-$$\mathbf{A} = \mathbf{L}\mathbf{L}^T,$$
+$$\mathbf{A} = \mathbf{L}\mathbf{L}^*,$$
 
-where $\mathbf{L}$ is a lower triangular matrix. Solutions can then be derived in the usual way using back-propagation. Symmetric positive-definite matrices arise in machine learning models, thus Cholesky decomposition and the related, iterative \emph{conjugate gradient method} are of interest.
+where $\mathbf{L}$ is a lower triangular matrix and $\mathbf{L}^*$ is its conjugate transpose. Deriving equations for the elements of $\mathbf{L}$ is a simple exercise of multiplying a lower-triangular matrix of unknowns with its transpose, equating it with $\mathbf{A}$ and solving the resulting equations by substitution. Solving a linear system can then be derived in the usual way using back-substitution. Symmetric positive-definite matrices arise in machine learning models, thus Cholesky decomposition and the related, iterative \emph{conjugate gradient method} are of interest.
+
+\subsubsection{The Conjugate Gradient Method}
+
+Two vectors, $\mathbf{p}_i$ and $\mathbf{p}_j$ are said to be conjugate with respect to a matrix $\mathbf{A}$ if $\mathbf{p}_i\mathbf{A}\mathbf{p}_j = 0$. A set of $N$ mutually conjugate vectors forms a basis for $\mathbb{R}^N$. For a given equation, $\mathbf{A}\mathbf{x} = \mathbf{b}$, we can write the solution in terms of the conjugate set,
+
+$$\mathbf{x}^* = \sum_{n=1}^N \alpha_n \mathbf{p}_n,$$
+
+for a set of constants $\alpha_n$. Thus, for a given $\mathbf{p}_k$, $\mathbf{p}_k^T\mathbf{A}\mathbf{x}^* = \sum_{n=1}^N \alpha_n\mathbf{p}_k^T\mathbf{A}\mathbf{p}_n = \mathbf{p}_k^T\alpha_k\mathbf{p}_k$, giving the rule, $\alpha_k = \frac{\mathbf{p}_k^T\mathbf{b}}{\mathbf{p}_k^T\mathbf{p}_k}$. It is possible to construct a conjugate set on the fly, following a pattern similar to that in Gram-Schmidt orthonormalisation, in the framework of an iterative algorithm. For a large system, this can be used to find an approximate solution consisting of only the first few conjugate vectors. In machine learning, this method is potentially an alternative to gradient descent.
 
 \section{Vector Calculus}
 
