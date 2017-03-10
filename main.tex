@@ -353,6 +353,17 @@ $$\mathbf{A}^{-1} = \frac{1}{\text{det}(\mathbf{A})}\mathbf{C}^{T},$$
 
 where $\mathbf{C} \in \mathbb{R}^{N \times N}$ is the \emph{cofactor} matrix of $\mathbf{A}$, whose elements are each of the $N^2$ minors of $\mathbf{A}$, that is, the determinants of each of the $(N - 1) \times (N - 1)$ sub-matrices of $\mathbf{A}$, and with alternating signs. The transpose of the cofactor matrix is denoted the \emph{adjugate} matrix. This form rarely has use outside of theory, as its computation is intractable like the analytic determinant.
 
+\subsection{Positive-definite Matrices}
+
+Singular matrices have many interesting properties. One such property is that for non-singular $\mathbf{A}, \mathbf{A}\mathbf{x} = \mathbf{0} \implies \mathbf{x} = \mathbf{0}$. Otherwise put, the null space of $\mathbf{A}$, $\text{Null}(\mathbf{A})$ is zero-dimensional (and hence, $\mathbf{A}$ has full rank, by the fundamental theorem of linear algebra). Clearly, if there exist two distinct solutions, $\mathbf{x}$ and $\mathbf{y}$ for invertible $\mathbf{A}$, we have it that $\mathbf{A}(\mathbf{x} - \mathbf{y}) = \mathbf{0} \implies \mathbf{A}^{-1}\mathbf{A}(\mathbf{x} - \mathbf{y}) = \mathbf{0} \implies \mathbf{x} = \mathbf{y}$, a contradiction. A matrix $\mathbf{A}$ is positive-definite if $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0, \forall \mathbf{x} \in \mathbb{R}^N$. Note that any eigenvalue $\lambda$ of $\mathbf{A}$ gives,
+
+\begin{align}
+\mathbf{A}\mathbf{x} &= \lambda\mathbf{x} \notag \\
+\implies \mathbf{x}^T\mathbf{A}\mathbf{x} &= \lambda\mathbf{x}^T\mathbf{x} > 0, \notag
+\end{align}
+
+thus implying $\lambda > 0$ for all $\lambda$ eigenvalues of positive-definite $\mathbf{A}$. Now, clearly, for positive-definite $\mathbf{A}$, $\mathbf{A}\mathbf{x} = \mathbf{0} = 0 \cdot \mathbf{x} \implies \mathbf{x} = \mathbf{0}$ since we know the eigenvalues of $\mathbf{A}$ are all positive. $\mathbf{A}$ is therefore non-singular. Positive-definite matrices appear in machine learning, for example the \emph{Gram} matrix, and the \emph{Hessian} matrix used in Newton's method for optimisation.
+
 \subsection{Gaussian Elimination}
 
 Gaussian elimination is an ancient technique for solving systems of linear equations, but has in modern times been erroneously attributed to Gauss, who merely contributed to its notation. The technique consists of performing a series of \emph{elementary row operations} to transform the system into a form where its solution or solutions may be extracted directly. The row operations are: swapping two rows; scaling a row by a constant factor, and; adding one row to another. With a finite sequence of these operations, a system may be reduced to \emph{row echelon form}, where the matrix has an upper-triangular form, allowing solutions to be found by back-substituting each variable. When the system is further reduced to \emph{reduced echelon form}, the technique is known as Gauss-Jordan elimination. It may be seen easily that these row operations correspond with multiplying the matrix by slight modifications of the identity matrix, and that the inverse matrix is just product of these. The technique has a number of useful applications, in particular computing a matrix inverse. This can be found by applying the technique to the system,
@@ -2484,7 +2495,14 @@ and finally, the optimal parameter vector,
 
 $$\boldsymbol\beta^* = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}.$$
 
-MLS also has a nice geometric interpretation. According to the normal equation, the error, $\mathbf{X}\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $\mathbf{X}^T$. This makes sense, because it means the choice of prediction, $\mathbf{X}\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly `below' it on the hyperplane, $\mathbf{X}^T$. This solution is known as the ordinary least squares (OLS) solution.
+MLS also has a nice geometric interpretation. According to the normal equation, the error, $\mathbf{X}\boldsymbol\beta - \mathbf{y}$, is minimised when it is perpendicular to the hyperplane defined by $\mathbf{X}^T$. That is,
+
+\begin{align}
+\mathbf{X}^T\mathbf{e} &= \mathbf{0} \notag \\
+\implies \mathbf{e}^T\mathbf{X}\mathbf{a} &= 0, \forall \mathbf{a}, \notag
+\end{align}
+
+where $\mathbf{e} = \mathbf{X}\boldsymbol\beta - \mathbf{y}$ is the error vector. Thus, the optimal parameters occur when the error is orthogonal to all vectors in the span of $\mathbf{X}$, that is, when it is normal to the plane. This makes intuitive sense, because it means the choice of prediction, $\mathbf{X}\boldsymbol\beta$, that minimises the distance to the true value, $y$, is the one directly `below' it on the hyperplane, $\mathbf{X}^T$. This solution is known as the ordinary least squares (OLS) solution.
 
 \subsection{The Gram Matrix}
 
@@ -2496,7 +2514,7 @@ As an alternative to closed-form solutions, there are always sure-fire numerical
 
 $$\boldsymbol\beta^{k+1} = \boldsymbol\beta^{k} - \alpha \nabla\mathcal{L}(\boldsymbol\beta^k),$$
 
-where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent can be enhanced with a line search to find the optimal step size for each search direction. When used, the algorithm exhibits a zig-zag path to the optimal point, as each step is perpendicular to the last. Gradient descent also has more sophisticated variants such as Newton's method and quasi-Newton methods, whose application may be warranted for larger data sets. One alternative to gradient descent is the conjugate gradient method, an iterative technique related to the direct method of Cholesky decomposition for symmetric positive definite matrices, in which the solution vector is built up iteratively as a linear combination of a set of mutually conjugate vectors. This approach may be advantageous in sparse linear systems.
+where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\beta^k) = \frac{\delta\mathcal{L}(\boldsymbol\beta_k)}{\delta\boldsymbol\beta}$. Gradient descent can be enhanced with a line search to find the optimal step size for each search direction. When used, the algorithm exhibits a zig-zag path to the optimal point, as each step is perpendicular to the last. Gradient descent also has more sophisticated variants such as Newton's method and quasi-Newton methods, whose application may be warranted for larger data sets. One alternative to gradient descent is the conjugate gradient method, an iterative technique related to the direct method of Cholesky decomposition for symmetric positive-definite matrices, in which the solution vector is built up iteratively as a linear combination of a set of mutually conjugate vectors. This approach may be advantageous in sparse linear systems.
 
 \begin{figure}[!ht]
 \centering
