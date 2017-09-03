@@ -378,7 +378,7 @@ More efficient algorithms for solving systems of linear equations and inverting 
 
 \subsubsection{The Gram-Schmidt Process}
 
-Given a basis set of vectors, $V = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$, we can construct an orthonormal basis we the following approach, first defining
+Given a basis set of vectors, $V = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$, we can construct an orthonormal basis with the following approach, first defining
 
 $$\text{proj}_{\mathbf{u}}(\mathbf{v}) = \frac{\mathbf{u}\cdot\mathbf{v}}{|\mathbf{u}|}\mathbf{u},$$
 
@@ -1970,7 +1970,7 @@ Such a constraint may be either \emph{active} or \emph{inactive}. When it is ina
 
 for $\mu > 0$. The scalar must be positive as it ensures the gradient is facing `outwards' of the feasible region, indicating that we are at the extreme point closest to the local optimum. The Karush-Kuhn-Tucker (KKT) conditions capture these two cases in a general set of conditions.
 
-\subsection{The KKT Conditions}
+\subsection{KKT Conditions}
 
 The Karush-Kuhn-Tucker (KKT) conditions are a general set of necessary and sufficient conditions for non-linear optimisation problems constrained by multiple equality and inequality constraints. For optimisation problem,
 
@@ -2312,7 +2312,7 @@ The curse of dimensionality refers to the difficulty of generalising over a smal
 feature selection techniques also exist, where an optimised subset of features is selected according to preprocessing (filtering), cross-validation (wrapping), or as part of the learning algorithm itself (embedding) (\cite{transfersurvey}).
 
 \subsubsection{Bias-Variance Decomposition}
-The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters it approximates. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. This tradeoff is reflected in the \emph{no free lunch theorems}\footnote{No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. It  If the data is uniformly random, there will be no signal to learn.}.
+The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters it approximates. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. Underfitting/bias is observed in training error; overfitting/variance in test error. This tradeoff is reflected in the \emph{no free lunch theorems}\footnote{No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. It  If the data is uniformly random, there will be` no signal to learn.}.
 
  Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for data point $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x)$. Then, the MSE between an estimate and the true parameters, averaged over all possible data,
 
@@ -2701,7 +2701,11 @@ is the sigmoid or logistic function\footnote{This may be substituted by any func
 &= \sum_i \log(1 + \exp(\boldsymbol\beta^T\mathbf{x}_i)) - y_i\boldsymbol\beta^T\mathbf{x}_i.\notag
 \end{align}
 
-Due to the logistic function, it is no longer possible to obtain a least-squares solution. We therefore have recourse to numerical techniques. Because the function is convex, vanilla gradient descent will do the trick. However, more powerful techniques exist. Newton's method is a similar algorithm incorporating second order information into the descent step. It comes from considering the second order Taylor polynomial for the NLL function, around a point $\boldsymbol\beta_k$,
+Due to the logistic function, it is no longer possible to obtain a least-squares solution. We therefore have recourse to numerical techniques.
+
+\subsubsection{Newton's method}
+
+Because the function is convex, vanilla gradient descent will do the trick. However, more powerful techniques exist. Newton's method\footnote{This is a multivariate generalisation of the Newton root-finding method. Here, however, we are finding the ``root'' of the gradient.} is a similar algorithm incorporating second order information into the descent step. It comes from considering the second order Taylor polynomial for the NLL function, around a point $\boldsymbol\beta_k$,
 
 $$NLL(\boldsymbol\beta) \approx NLL(\boldsymbol\beta_k) + g_k^T(\boldsymbol\beta - \boldsymbol\beta_k) + \frac{1}{2}(\boldsymbol\beta - \boldsymbol\beta_k)\mathbf{H}_k(\boldsymbol\beta - \boldsymbol\beta_k).$$
 
@@ -2739,7 +2743,23 @@ $$\mathbf{H} = \begin{bmatrix}
 = \sum_i \sigma_i(1 - \sigma_i)\mathbf{x}_i\mathbf{x}_i^T = \mathbf{X}^T\mathbf{S}\mathbf{X},
 $$
 
-where $S = \text{diag}([\sigma(\boldsymbol\beta^T\mathbf{x}_1), \sigma(\boldsymbol\beta^T\mathbf{x}_2), \dots, \sigma(\boldsymbol\beta^T\mathbf{x}_N)])$. The Newton step may be rewritten as a least squares problem. In such a formulation, the optimisation algorithm is known as iterative reweighted least squares (IRLS). Due to the computational complexity of computing the Hessian, quasi-Newton techniques exist that create an approximation iteratively. The most common quasi-Newton method is the BFGS algorithm (Broyden, Fletcher, Goldfarb and Shanno). The $\mathcal{O}(D^2)$ space complexity of the Hessian gives rise to a further approximation in the limited memory or L-BFGS algorithm. This is the usual weapon of choice for modelling high-dimensional data. Just as with linear regression, $l_2$ regularisation may be used. Unlike linear regression, however, the full posterior distribution is not directly computable due to the absence of a conjugate prior. Approximation techniques, such as Markov chain Monte Carlo (MCMC), are therefore used. An object-oriented logistic regression model is solved with both gradient descent and Newton's method in \texttt{logRegDemo.m}.
+where $S = \text{diag}([\sigma(\boldsymbol\beta^T\mathbf{x}_1), \sigma(\boldsymbol\beta^T\mathbf{x}_2), \dots, \sigma(\boldsymbol\beta^T\mathbf{x}_N)])$. The Newton step may be rewritten as a least squares problem. In such a formulation, the optimisation algorithm is known as iterative reweighted least squares (IRLS).
+
+\subsubsection{BFGS}
+
+Due to the computational complexity of computing the Hessian, quasi-Newton techniques exist that create an approximation iteratively. The most common quasi-Newton method is the BFGS algorithm (Broyden, Fletcher, Goldfarb and Shanno). It is quasi-Newton because it relies on the secant equation\footnote{Similar to the fact that Newton's method is a generalisation of the Newton root-finding method, BFGS is approximates a multivariate generalisation of the secant root-finding method.},
+
+\[
+\mathbf{H_{k+1}}(\mathbf{x_{k+1}} - \mathbf{x_k}) = \mathbf{g}_{k+1} - \mathbf{g}_k,
+\]
+
+which is true in the limit, but only approximately true for a step of $\mathbf{x_{k+1}} - \mathbf{x_k}$. BFGS makes an update to the Hessian at each iteration,
+
+$$H_{k+1} = H_k + \alpha\mathbf{u}\mathbf{u}^T + \beta\mathbf{v}\mathbf{v}^T,$$
+
+equating to two rank-one updates (hence a rank-two update overall). The vectors $\mathbf{u}$ and $\mathbf{v}$ are chosen such that the secant equation is satisfied. This approximation makes the Hessian cheaper to compute and to invert. Particularly when the Hessian is sparse, BFGS can greatly speed up Newton's method.
+
+The $\mathcal{O}(D^2)$ space complexity of the Hessian gives rise to a further approximation in the limited memory or L-BFGS algorithm. This is the usual weapon of choice for modeling high-dimensional data. Just as with linear regression, $l_2$ regularisation may be used. Unlike linear regression, however, the full posterior distribution is not directly computable due to the absence of a conjugate prior. Approximation techniques, such as Markov chain Monte Carlo (MCMC), are therefore used. An object-oriented logistic regression model is solved with both gradient descent and Newton's method in \texttt{logRegDemo.m}.
 
 \subsection{Multinomial Logistic Regression}
 
