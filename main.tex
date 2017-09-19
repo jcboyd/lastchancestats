@@ -2483,7 +2483,7 @@ for all $n = 1, \dots, N$. Each of the $D$ dimensions of $\mathbf{x_n}$ is known
 
 $$\min_{\boldsymbol\beta}\mathcal{L}(\boldsymbol\beta) = \frac{1}{2N}(\mathbf{y} - \mathbf{X}\boldsymbol\beta)^T(\mathbf{y} - \mathbf{X}\boldsymbol\beta) = \frac{1}{2N}\sum_{n=1}^{N}(y_n - \mathbf{x_n}^T\boldsymbol\beta)^2,$$
 
-where $\mathcal{L}(\boldsymbol\beta)$ is the `loss' function, expressing a \emph{mean square error} (MSE) for choosing parameter vector $\boldsymbol\beta$, that is, the average squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm to minimise this function. It is also typical to write $\text{MSE} = \text{RSS}/N$, where RSS stands for \emph{residual sum of squares}, the non-weighted sum. Note we could have chosen any sort of loss function, but our reasons for choosing mean squared error will be revealed in the following section.
+where $\mathcal{L}(\boldsymbol\beta)$ is the `loss' function, expressing a \emph{mean square error} (MSE) for choosing parameter vector $\boldsymbol\beta$, that is, the average\footnote{This is empirical risk minimisation: minimising the expected loss. It is a fundamental principle in statistical learning.} squared distance of the approximation from the true value. Note the similarity to the variance statistic. It is the job of the learning algorithm to minimise this function. It is also typical to write $\text{MSE} = \text{RSS}/N$, where RSS stands for \emph{residual sum of squares}, the non-weighted sum. Note we could have chosen any sort of loss function, but our reasons for choosing mean squared error will be revealed in the following section.
 
 \subsection{Method of Least Squares}
 
@@ -2849,7 +2849,7 @@ Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin
 
 \subsection{Kernels}
 
-Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. An example of this is tf-idf cosine similarity of a bag of words representation for document classification. Another example are Gaussian kernels, which give a multivariate Gaussian probability for the difference between two observations--the smaller the difference, the greater the probability. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi^T\boldsymbol\Phi$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}, and it is particularly useful, for example, when we may apply a kernel such as the \emph{radial basis function} whose corresponding basis function is infinite-dimensional, without having to compute the infinite-dimensional basis function itself. Models can be \emph{kernelised} according to some reformulation, and replacing linear kernels (dot products) with another kernel function. In the case of kNN, this can be done quite readily. Kernelising ridge regression requires a reformulation trick known as the matrix inversion lemma. Support vector machines are kernelised by reformulating the problem into its dual problem, by application of the minimax theorem. The kernel trick requires a \emph{Mercer} kernel be used, that is, such that the Gram matrix be symmetric positive-definite.
+Kernel functions are used to describe a similarity measure between objects. It is often convenient to work with a kernel of the data rather than the data itself. An example of this is tf-idf cosine similarity of a bag of words representation for document classification. Another example are Gaussian kernels, which give a multivariate Gaussian probability for the difference between two observations--the smaller the difference, the greater the probability. In linear models, it is possible to reformulate a model in terms of a kernel matrix $\mathbf{K} = \boldsymbol\Phi\boldsymbol\Phi^T$, where $\boldsymbol\Phi$ is some transformation of data $\mathbf{X}$ using basis function $\phi$. This is known as the \emph{kernel trick}, and it is particularly useful, for example, when we may apply a kernel such as the \emph{radial basis function} whose corresponding basis function is infinite-dimensional, without having to compute the infinite-dimensional basis function itself. Models can be \emph{kernelised} according to some reformulation, and replacing linear kernels (dot products) with another kernel function. In the case of kNN, this can be done quite readily. Kernelising ridge regression requires a reformulation trick known as the matrix inversion lemma. Support vector machines are kernelised by reformulating the problem into its dual problem, by application of the minimax theorem. The kernel trick requires a \emph{Mercer} kernel be used, that is, such that the Gram matrix be symmetric positive-definite.
 
 \subsection{Kernelised kNN}
 
@@ -2923,15 +2923,18 @@ $$
 \end{array}
 $$
 
-%$$
-%\begin{array}{rl}
-%\min_{\boldsymbol\alpha} & \inf_{\boldsymbol\xi, \mathbf{w}, b}\bigg(\frac{1}{2}\mathbf{w}^T\mathbf{w} + C\sum_{i = 1}^{N}\xi_i + \sum_{i=1}^N \alpha_i(1 - \xi_i - y_i(\mathbf{w}^T\mathbf{x}_i + b))\bigg) \\
-%\text{subject to} & \alpha_i \geq 0, \xi_i \geq 0, \forall i
-%\end{array}
-%$$
+where $C$ is a weight for classification error. This problem is often expressed in terms of a hinge loss function, following the notation of other regression models. By the principle of convex duality, we can convert this problem into its dual form where the dual variables $\alpha_i$ are the Lagrange multipliers of the earlier constraints. The dual form is then the maximum of the \emph{infimum}\footnote{The infimum of a set is its greatest lower-bound, the counterpart of the \emph{supremum}, the least upper-bound. Some sets have these bounds without having a defined minimum or maximum. For example, the set $\{x : 0 < x < 1\}$ has no minimum or maximum, but its infimum is 0 and supremum is 1.}  of our current problem.
 
-where $C$ is a weight for classification error. This problem is often expressed in terms of a hinge loss function, following the notation of other regression models. By the principle of convex duality, we can convert this problem into its dual form where the dual variables $\alpha_i$ are the Lagrange multipliers of the earlier constraints. The dual form is then the maximum of the \emph{infimum}\footnote{The infimum of a set is its greatest lower-bound, the counterpart of the \emph{supremum}, the least upper-bound. Some sets have these bounds without having a defined minimum or maximum. For example, the set $\{x : 0 < x < 1\}$ has no minimum or maximum, but its infimum is 0 and supremum is 1.}  of our current problem. We can find the infimum of this expression by taking derivatives of each of the parameters, thus $\frac{\partial f}{\partial \mathbf{w}} = \mathbf{w} - \sum_{i=1}^N \alpha_iy_i\mathbf{x}_i = 0 \implies \mathbf{w}^* = \sum_{i=1}^N \alpha_iy_i\mathbf{x}_i$ at optimality, which may be substituted into the objective function. For the bias term, $\frac{\partial f}{\partial b} = \sum_{i=1}^N \alpha_iy_i = 0$ at optimality. For the slack variables, 
-$\frac{\partial f}{\partial\xi_i} = C - \lambda_i \implies \lambda_i \leq C$ at optimality, where the inequality arises from the positivity constraint on $\xi_i$. Thus, the parameters are eliminated by substitution, and the bias and slack variables correspond with constraints on the dual variables, giving the dual form,
+$$
+\begin{array}{rl}
+\min &  \mathcal{L}({\boldsymbol\xi, \mathbf{w}, b,  \boldsymbol\alpha}) =  \frac{1}{2}\mathbf{w}^T\mathbf{w} + C\sum_{i = 1}^{N}\xi_i - \sum_{i=1}^N \alpha_i(y_i(\mathbf{w}^T\mathbf{x}_i + b) + \xi_i - 1) \\
+\text{subject to} & \xi_i \geq 0, \forall i
+\end{array}
+$$
+
+
+We can find the infimum of this expression by taking derivatives of each of the parameters, thus $\frac{\partial \mathcal{L}}{\partial \mathbf{w}} = \mathbf{w} - \sum_{i=1}^N \alpha_iy_i\mathbf{x}_i = 0 \implies \mathbf{w}^* = \sum_{i=1}^N \alpha_iy_i\mathbf{x}_i$ at optimality, which may be substituted into the objective function. For the bias term, $\frac{\partial \mathcal{L}}{\partial b} = \sum_{i=1}^N \alpha_iy_i = 0$ at optimality. For the slack variables, 
+$\frac{\partial\mathcal{L}}{\partial\xi_i} = C - \alpha_i \leq 0$ (because of the slack constraints) $\implies \alpha_i \leq C$ at optimality. Thus, the parameters are eliminated by substitution, and the bias and slack variables correspond with constraints on the dual variables, giving the dual form,
 
 \begin{equation}
 \begin{array}{rl}
