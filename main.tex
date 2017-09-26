@@ -1655,13 +1655,29 @@ $$\mu = [\bar{X} - 1.96\times\text{SE}, \bar{X} + 1.96\times\text{SE}],$$
 
 which is the general form for a $95\%$ confidence interval. Confidence intervals of arbitrary size can be constructed by looking up the normalised value of the desired probability.
 
+\subsection{Degrees of Freedom}
+
+Degrees of freedom refer to the dimensionality of randomness of a statistic. For $N$ random variables, the degree of freedom is $N$, as this probabilistic vector is random in every dimension. If we were to calculate the sample variance, however, involving the sample mean implies a constraint on the data: given the first $N-1$ observations, we can derive the final one from the value of the mean (known in advance). The variance statistic therefore has $N-1$ degrees of freedom. In a simple (bivariate) linear regression, the normal equations for optimising the bias and gradient weights impose two constraints on the data, thus statistic has $N-2$ degrees of freedom\footnote{In multiple regression with a general $p$ dimensions, each coefficient has $n-p$ degrees of freedom.}
+
 \subsection{Hypothesis Testing}
 
 We can use our knowledge of statistics to perform tests on sample data. The formal framework for this is to propose two hypotheses, one the null (or default) hypothesis, $H_0$, the other the alternative hypothesis, $H_1$. The procedure is to compute a statistic to challenge the statistical implications of the null hypothesis, producing a probability that the sample data is consistent with $H_0$. If the probability is lower than some conventional threshold (usually 0.05 or 0.1), $H_0$ is rejected and $H_1$ accepted, in a sort of probabilistic proof by contradiction. Erroneously rejecting $H_0$ is referred to as a type 1 error (false positive); erroneously accepting $H_0$ is referred to as a type 2 error (false negative).
 
 \subsubsection{Z-test}
 
-Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution, by calculating the probability of the sample mean. The calculations are similar to creating a confidence interval, as it involves computing the SE and (implying the true mean and standard deviation be known) the Z-score, $Z = (\hat{X} - \mu)/\text{SE}$. The value of $Z$ is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, `can this data reasonably be believed to have been drawn from our distribution?'
+Many statistical tests exist, and perhaps the simplest is the $Z$-test, which can be used to decide whether a set of n samples conforms to a given distribution, by calculating the probability of the sample mean. The calculations are similar to creating a confidence interval, as it involves computing the standard error and (implying the true mean and standard deviation be known) the Z-score,
+
+$$Z = \frac{\hat{x} - \mu_0}{\sigma/\sqrt{n}}.$$
+
+The value of $Z$ is looked up in standard normal tables, yielding a probability. The probability (or p-value) is compared with a conventional threshold (typically 0.05 or 0.1) and the null hypothesis accepted or rejected depending on where it falls. We may interpret the Z-score as asking the question, `can this data reasonably be believed to have been drawn from our distribution?'
+
+\subsubsection{Student's t-test}
+
+In the absence of population parameters, we to Student's t-test and answer slightly different questions. In the one sample case, the t-statistic,
+
+$$t = \frac{\hat{x} - \mu_0}{s/\sqrt{n}},$$
+
+(distance in standard error units around a null mean) is normally distributed by virtue of the central limit theorem, even if the population distribution is not. The calculation involves the sample mean implying $N-1$ degrees of freedom.
 
 \subsubsection{Pearson's Chi-Squared Test}
 
