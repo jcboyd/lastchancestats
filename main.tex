@@ -1677,7 +1677,7 @@ In the absence of population parameters, we to Student's t-test and answer sligh
 
 $$t = \frac{\hat{x} - \mu_0}{s/\sqrt{n}},$$
 
-(distance in standard error units around a null mean) is normally distributed by virtue of the central limit theorem, even if the population distribution is not. The calculation involves the sample mean implying $N-1$ degrees of freedom.
+(distance in standard error units around a null mean) is normally distributed by virtue of the central limit theorem, even if the population distribution is not. The calculation involves the sample mean implying $N-1$ degrees of freedom. In a \emph{paired} two-sample case, where data comes in before/after, dependent pairs, the one-sample test is performed on the mean of the difference, $\mu_D = \mu_X - \mu_Y$, with $\mu_0 = 0$ (the null hypothesis postulating no \emph{a posteriori} effect. When the samples are independent (treated/untreated), the formulation changes slightly, and the number of degrees of freedom is doubled (twice the data, twice the constraints). The formulation further changes when the independent sample sizes are uneven.
 
 \subsubsection{Pearson's Chi-Squared Test}
 
