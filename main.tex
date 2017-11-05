@@ -3006,7 +3006,7 @@ The ideas of support vector machines can be extended to regression models as wel
 
 \section{Decision Trees}
 
-Decision trees are distinct from the previously discussed classifiers in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data\footnote{Non-parametric methods could be said to ``let the data do the talking''.}.
+Decision trees (also known as classification and regression trees--CART) are distinct from the previously discussed classifiers in that they are \emph{non-parametric}. This means the model is not simply a mathematical function with a fixed form, and that the size of the model changes depending on the size of the data\footnote{Non-parametric methods could be said to ``let the data do the talking''.}.
 
 \subsection{Learning Decision Trees}
 
@@ -3025,7 +3025,7 @@ Several impurity measures are possible, but we know from information theory that
 
 $$I_{split}(p) = h_2(p) = -p\log p - (1-p)\log (1-p).$$
 
-\subsection{More Advanced Techniques}
+\subsection{Random Forest}
 
 An extension of decision trees is the technique of \emph{random forests}. Random forests construct multiple decision trees from subsets of the training data. Prediction is then done in an \emph{ensemble} by aggregating the predictions of individual trees,
 
@@ -3048,6 +3048,10 @@ Consider then that in our random forest, each learner has a variance of $\sigma^
 $$\text{Var}\Big[\frac{1}{M}\sum_i f_i\Big] = \frac{\sigma^2}{M} + \rho\frac{M-1}{M}\sigma^2.$$
 
 Thus, the ratio is reduced by, $M/(1 + \rho(M-1))$. We therefore aim to decorrelate the individual trees. This is done in two ways. First, the training set is sampled (with replacement) to create $M$ \emph{bootstrapped} training sets of size $N$. Used in the ensemble, this is known as \emph{bagging} (bootstrapping and aggregating). Secondly, train each learner on a random subset of the available features. The size of the subset is a model hyperparameter.
+
+\subsection{Boosting methods}
+
+Random forests are an example of a bagging (bootstrapped aggregation). A related, yet distinct, approach to learning, are boosting methods. These are meta algorithms to create ensembles of weak learners (often decision trees) by adding them incrementally into a strong learner as a weighted sum. For example, Adaboost trains a set of weak learners in an initial step. At each iteration, it selects for inclusion in the ensemble, the weak learner whose own misclassifications are best handled (least misclassified) by the existing ensemble. Its weight in the ensemble is then determined through a simple, analytical optimisation. Adaboost is a special case of the more general gradient boosting. The famous software XGBoost is an implementation of gradient boosting.
 
 \section{Dimensionality Reduction and PCA}
 
