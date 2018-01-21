@@ -2831,11 +2831,31 @@ The perceptron is an historically important algorithm. It is one of the earliest
 
 \section{Neural Networks}
 
-Many types of neural networks exist\footnote{See for instance auto-encoders, which reconstruct the input from a reduced number of hidden states--a form of unsupervised learning; or convolutional neural networks, a neural network with a sliding window designed for pattern recognition within high resolution images.}, but we will consider the most common--the feed-forward neural network. Neural networks extend the structure of the simple perceptron by stacking a number of perceptrons into $K$ layers, such that the output of each layer propagates into the next. For this reason, a feed-forward neural network is also known as a \emph{multi-layer perceptron}. Each layer, $k$, has a number of `hidden' units, $\mathbf{z}^{(k)}$, and is a linear combination of the last layer of variables, $\mathbf{z}^{(k-1)}$, and a set of weights, $\mathbf{B}^{(k-1)}$, finally passed through a non-linear `activation' function, $h$\footnote{Classic choices are the sigma function or hyperbolic tangent function, itself a linear transform of the sigma function. The rectified linear unit (ReLU), the $\max$ function, and variations thereof are increasingly popular.}. That is, $\mathbf{z}^{(k+1)} = h(\mathbf{B}^{(k)}\mathbf{z}^{(k)})$ In this way, the states of each of the hidden units are a culmination of the previous layers. Thus, a neural network makes a prediction as,
+A good starting point for studying the structure of a neural network is to consider a softmax regression model,
 
-$$\hat{y} = h(\mathbf{B}^{(K-1)}h(\mathbf{B}^{(K-2)}(\cdots(h(\mathbf{B}^{(1)})\hat{\mathbf{x}})))).$$
+$$\mathbf{f}(\mathbf{x}) = \text{softmax}(\mathbf{W}\mathbf{x} + \mathbf{b})$$
 
-A neural network may be used for both regression and classification, the output passed through the logistic function in the latter case. Despite the complexity, this model can be trained with standard gradient descent techniques. There are some complications however, as the loss function is not convex. The gradients, $\frac{\partial\mathcal{L}}{\partial\mathbf{B}^{(k)}}$, are obtained by application of the chain rule, in an algorithm called \emph{back propagation}. Feed-forward neural networks, and other variants, have seen a great amount of success, especially with the advent of deep learning in recent years. Neural networks are very powerful non-linear models, which are in fact capable of fitting any smooth function given enough layers, making them \emph{universal approximaters}. A simple example of a neural network fitting an absolute value function is given in Figure \ref{fig:universalapproximater}.
+where $\mathbf{W} \in \mathbb{R}^{K \times D}$ are the weights and $\mathbf{b} \in \mathbb{R}^{K \times 1}$ (sometimes incorporated into into the weights via the bias trick) and $\text{softmax}(x) = \frac{\exp(x)}{\sum_{x'}\exp(x)}$ generalises the sigma logistic function. The softmax gives us a vector of $K$ probabilities $\mathbf{p}_i \in \mathbb{R}^{K \times 1}$ for each input sample $\mathbf{x}_i$. The loss function $L = \frac{1}{N}\sum_{i=1}^N L_i$ where $L_i = D_{KL}(\mathbf{p}_i || p(y_i))$. Given the ground truth $y_i$ puts all probability mass on one value, the divergence term reduces to $L_i = -\log(p_{y_i})$. Now, for a given \emph{score}, $s_k = \mathbf{w}_k^T\mathbf{x} + b_k$, its gradient is given by, $\frac{\partial L_i}{\partial s_k} = -\frac{1}{p_{y_i}}\cdot\frac{\partial p_{y_i}}{\partial s_k}$. For $k = y_{i}$, $$\frac{\partial p_{y_i}}{\partial s_k}
+= \frac{\partial}{\partial s_k}\frac{e^{s_{y_i}}}{\sum_j e^{s_j}}
+= p_{y_i} - p_{y_i}^2 \implies \frac{\partial L_i}{\partial s_k}
+= p_{y_i} - 1$$
+For $k \neq y_{i}$, $$\frac{\partial p_{k}}{\partial s_k}
+= -p_kp_{y_i} \implies \frac{\partial L_i}{\partial s_k} = p_k$$
+Hence, in general, $$\frac{\partial L_i}{\partial s_k}
+= p_k - 1(k = y_i)$$
+
+Now, to construct a true neural network, we introduce an intermediate \emph{hidden} layer separating the input from the output,
+
+\begin{align}
+\mathbf{h}(\mathbf{x}) &= \sigma(\mathbf{W}^{(1)}\mathbf{x}  + \mathbf{b}^{(1)}) & \text{(hidden layer)} \notag \\
+\mathbf{f}(\mathbf{x}) &= \text{softmax}(\mathbf{W}^{(2)}\mathbf{h} + \mathbf{b}^{(2)}) & \text{(output layer)}\notag
+\end{align}
+
+This hidden layer creates an intermediate representation of the input data. The essence of \emph{deep learning} is to model a hierarchy of multiple representations. Neural networks are therefore apt as a deep learning framework as, indeed, we may extend to a multi-layer network simply by stacking a desired layers,
+
+$$\mathbf{f}(\mathbf{x}) = \sigma(\mathbf{W}^{(M)}\sigma(\mathbf{W}^{(M-1)}(\cdots\sigma(\mathbf{W}^{(1)}\mathbf{x} + \mathbf{b}^{(1)})\cdots)  + \mathbf{b}^{(M-1)})  + \mathbf{b}^{(M)})$$
+
+A neural network may be used for classification and regression, the output passed through mean-squared error in the latter case. Despite the complexity, this model can be trained with standard gradient descent techniques. Despite an elongated history, feed-forward neural networks and their variants have seen a resurgence of popularity in recent years, with the advent of deep learning. Neural networks are very powerful non-linear models, which are in fact capable of fitting any smooth function given enough layers, making them \emph{universal approximaters}. A simple example of a neural network fitting an absolute value function is given in Figure \ref{fig:universalapproximater}.
 
 \begin{figure}
 \centering
@@ -2847,17 +2867,131 @@ A neural network may be used for both regression and classification, the output 
 \label{fig:universalapproximater}
 \end{figure}
 
+Note that we endow each hidden layer with its own set of weights. Though a neural network in non-linear and not convex, it remains differentiable and therefore trainable with gradient descent. The procedure for computing the gradients at each iteration of a gradient descent is called backpropagation. Backpropagation is an application of the chain rule to the graph structure of model. The crucial formula for backpropagation, as presented in the 1986 paper of Rumelhart, Hinton, and Williams is,
+
+$$\frac{\partial L}{\partial x_i} = \sum_j \frac{\partial L}{\partial y_i} w_{ij}$$
+
+where the gradient of the score $x_i$ at a given layer is the sum product of the gradients of the activations $y_j$ emanating from it and the weights $w_{ij}$ between them. From a practical standpoint, each layer $l$ over which we perform backpropagation requires three computations:
+
+\begin{enumerate}
+\item $\frac{\partial L}{\partial \mathbf{s}^{(l)}}$, the gradient of the \emph{scores}, $\mathbf{s}^{(l)} = \mathbf{W}^{(l)}\mathbf{x}^{(l)} + \mathbf{b}^{(l)}$.
+\item $\frac{\partial L}{\partial \mathbf{W}^{(l)}}$, the gradient of the weights. All weights are subsequently updated to make the descent step.
+\item $\frac{\partial L}{\partial \mathbf{x}^{(l)}}$, the gradient of the input (previous activation). This is the \emph{error signal} that is passed back to the layer below.
+\end{enumerate}
+
+Let us first consider (1), the gradient of the scores. We previously derived the gradient for the particular case of an output layer. In general, we compute, $\frac{\partial L}{\partial \mathbf{s}^{(l)}} = \frac{\partial L}{\partial \boldsymbol\sigma^{(l)}}\cdot\frac{\partial\boldsymbol\sigma^{(l)}}{\partial\mathbf{s}^{(l)}}$ where $\frac{\partial L}{\partial \boldsymbol\sigma^{(l)}} = \frac{\partial L}{\partial \mathbf{x}^{(l+1)}}$, since the present activation and the following input are one in the same. The activation function $\sigma$, applied element-wise, is classically the sigmoid function or else the hyperbolic tangent function (itself a linear transformation of sigmoid), and nowadays more commonly the rectified linear unit (ReLU) function and its variants. Since we have $\sigma(\mathbf{s}) = [\sigma(s_1), \sigma(s_2), \cdots \sigma(s_k)]^T$, an element-wise transformation, we can calculate the gradient element-wise as,
+
+$$
+\frac{\partial L}{\partial \mathbf{s}^{(l)}} =
+\begin{bmatrix}
+\frac{\partial L}{\partial\sigma_1^{(l)}}\cdot\frac{\partial\sigma_1^{(l)}}{\partial{s}_1^{(l)}} \\ 
+\vdots \\
+\frac{\partial L}{\partial\sigma_k^{(l)}}\cdot\frac{\partial\sigma_k^{(l)}}{\partial{s}_k^{(l)}} \\
+\end{bmatrix},
+$$
+
+where for sigmoid, $\frac{\partial\sigma_i^{(l)}}{\partial{s}_i^{(l)}} = \partial\sigma_i^{(l)}(1 - \sigma_i^{(l)})$, and for ReLU, $\frac{\partial\sigma_i^{(l)}}{\partial{s}_i^{(l)}} = 1_{\{\sigma_i^{(l)} > 0\}}$.
+
+For computation (2), the weights gradient, consider, $\frac{\partial L}{\partial w_{kj}^{(l)}} = \frac{\partial L}{\partial s_j}\cdot\frac{\partial s_j}{\partial w_{kj}^{(l)}} = \frac{\partial L}{\partial s_j}\cdot x_j$. In vector form this gives us, $\frac{\partial L}{\partial \mathbf{s}^{(l)}}\mathbf{x}^T$, that is, the outer product of the score gradient and the input vector. Considering that the loss over a batch is the sum of losses for each sample, we have in general, for batch $\mathbf{X} \in \mathbb{R}^{D \times M}$,
+
+$$\frac{\partial L}{\partial \mathbf{W}^{(l)}} = \frac{\partial L}{\partial \mathbf{s}^{(l)}}\cdot\mathbf{X}^T$$
+
+For the bias terms, consider that with the bias trick, the gradients $\frac{\partial s_j}{\partial b_{k}^{(l)}} = 1, \forall k$. We can therefore simply sum the score gradients over the size $m$ batch, $\sum_m\frac{\partial s_{mj}}{\partial b_{k}^{(l)}}$. 
+
+Finally, for computation (3), simply consider the chain rule, $\frac{\partial L}{\partial\mathbf{x}^{(l)}} = \frac{\partial L}{\partial\mathbf{s}^{(l)}}\cdot\frac{\partial\mathbf{s}^{(l)}}{\partial\mathbf{x}^{(l)}}.$ It is easy to show by forming the Jacobian matrix that $\frac{\partial\mathbf{s}^{(l)}}{\partial\mathbf{x}^{(l)}} = \mathbf{W}^{(l)}$. Hence,
+
+$$\frac{\partial L}{\partial \mathbf{x}^{(l)}} = \frac{\partial L}{\partial \mathbf{s}^{(l)}}\cdot\mathbf{W}^T$$
+
+This final gradient is passed to the previous layer as $\frac{\partial L}{\partial \boldsymbol{\sigma}^{(l-1)}}$ to continue the backpropagation.
+
 \subsection{Convolutional Neural Networks}
 
-\subsubsection{Images Masks}
+In the field of image analysis, the mask (or filter, or kernel) is an important construct. A \emph{convolution} is an operation involving an initial image and the mask. The operation is equivalent to flipping the mask both vertically and horizontally and then visually placing the it over each pixel in turn. The output is the sum over a pixel-wise product of the mask and the sub-image. Masks are usually symmetric, so flipping is unnecessary. Recall from signal processing, the \emph{convolution} between two functions,
 
-In the field of image analysis, the mask (or filter, or kernel) is an important construct. A \emph{convolution} is an operation involving an initial image and the mask. The operation is equivalent to flipping the mask both vertically and horizontally and then visually placing the it over each pixel in turn. The output is the sum over a pixel-wise product of the mask and the sub-image. Masks are usually symmetric, so flipping is unnecessary.
+$$(f * g)(t) \triangleq \int_{-\infty}^{+\infty}f(\tau)g(t-\tau)d\tau$$
 
-\subsubsection{Convolutional Neural Networks}
+In image processing, a convolution between an image $\mathbf{I}$ and \emph{kernel} $\mathbf{K}$ of size $d \times d$ and centered at a given pixel $(x, y)$ is defined as,
 
-Convolutional Neural Networks (CNNs) are the current state-of-the-art in the many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012 (\cite{krizhevsky2012imagenet}).} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering (\cite{sharif2014cnn}). Another possibility is to use the pre-trained weights as an initialisation for training on a new dataset. Both are examples of transfer learning.
+$$(\mathbf{I} * \mathbf{K})(x, y) = \sum_{i = 1}^{d}\sum_{j = 1}^{d} \mathbf{I}(x + i -d/2, y + j - d/2) \times \mathbf{K}(i, j)$$
 
-The cornerstone of the CNN is the \emph{convolutional layer}, a hidden layer where a square grid of weights is convolved with the input, just like an image mask (now, however, the the mask is learned as part of an all-encompassing model). The output of the convolutional layer is akin to a convolved image. Next, the non-linear activation function, ReLu (REctified Linear Unit), is applied to zero-out any negative values. Next there is a \emph{pooling} layer, emulating \emph{downsampling}. Here, each group of (usually) four values (pixels) is replaced by the maximum of the four, leaving a single most intense pixel. This pooling method is known as \emph{max pooling}. This sequence of \texttt{CONV->RELU->POOL} layers may be repeated multiple times to create a deep architecture. Finally, a few fully-connected layers round off the architecture. Though it seems far more sophisticated than a MLP, it can be shown that a CNN can be represented as a classical fully-connected neural network. For example, a convolutional layer can be represented as a sparse fully-connected layer. Various techniques have been developed for training these vast models, for example momentum optimisers, weight initialisation, and \emph{dropout}\footnote{Dropout involves deactivating (setting to $0$) hidden units in fully-connected layers according to a Bernoulli probability. This is repeated for every forward-backward pass of the network, such that every training example is trained on a different sub-graph of the network.} for regularisation.
+Convolutional neural networks are a family of neural network architectures having at least one convolutional layer. \emph{LeNet} is the original CNN network architecture, bearing the name of Yann Lecun, who proposed it in the 90s. Its architecture can be written,
+
+\begin{align}
+\mathbf{H}_1 &= \sigma(\mathbf{X} * \mathbf{K}^{(1)}) & \text{(first convolutional layer)}\notag \\
+\mathbf{P}_1 &= \text{maxpool}(\mathbf{H}_1) & \text{(first pooling layer)}\notag \\
+\mathbf{H}_2 &= \sigma(\mathbf{P}_1 * \mathbf{K}^{(2)}) & \text{(second convolutional layer)} \notag \\
+\mathbf{P}_2 &= \text{maxpool}(\mathbf{H}_2) & \text{(second pooling layer)} \notag \\
+\mathbf{F}_1 &= \sigma(\mathbf{W}^{(1)}\mathbf{P}_2 + \mathbf{b}^{(1)}) & \text{(first fully-connected layer)} \notag \\
+\mathbf{F}_2 &= \sigma(\mathbf{W}^{(2)}\mathbf{F}_1 + \mathbf{b}^{(2)}) & \text{(second fully-connected layer)} \notag \\
+\mathbf{f}(\mathbf{X}) &= \text{softmax}(\mathbf{W}^{(3)}\mathbf{F}_2 + \mathbf{b}^{(3)}) & \text{(output layer)} \notag
+\end{align}
+
+Convolutional Neural Networks (CNNs) are the current state-of-the-art in many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012 (\cite{krizhevsky2012imagenet}).} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of receiving image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering (\cite{sharif2014cnn}). Another possibility is to use the pre-trained weights as an initialisation for training on a new dataset. Both are examples of transfer learning.
+
+The cornerstone of the CNN is the \emph{convolutional layer}, a hidden layer where a square grid of weights is convolved with the input, just like an image mask (now, however, the mask is learned as part of an all-encompassing model). The output of the convolutional layer is akin to a convolved image. Next, the non-linear activation function, ReLu (REctified Linear Unit), is applied to zero-out any negative values. Next there is a \emph{pooling} layer, emulating \emph{downsampling}. Here, each group of (usually) four values (pixels) is replaced by the maximum (sometimes the mean) of the four, leaving a single most intense pixel. This pooling method is known as \emph{max pooling}. This sequence of \texttt{CONV->RELU->POOL} layers may be repeated multiple times to create a deep architecture. Finally, a few fully-connected layers round off the architecture. Though it seems far more sophisticated than a MLP, it can be shown that a CNN can be represented as a classical fully-connected neural network. For example, a convolutional layer can be represented as a sparse fully-connected layer. Various techniques have been developed for training these vast models, for example momentum optimisers, weight initialisation, batch normalisation\footnote{Batch normalisation mitigates \emph{internal covariate shift}, the fluctuations to the internal distributions of activations that make convergence so arduous.}, and \emph{dropout}\footnote{Dropout involves deactivating (setting to $0$) hidden units in fully-connected layers according to a Bernoulli probability. This is repeated for every forward-backward pass of the network, such that every training example is trained on a different sub-graph of the network.} for regularisation.
+
+But how do we compute the gradient for the convolutional kernel? Let us consider the following simple convolution,
+
+$$
+\underbrace{\begin{bmatrix}
+x_{11} & x_{12} & x_{13} \\
+x_{21} & x_{22} & x_{23} \\
+x_{31} & x_{32} & x_{33} \\
+\end{bmatrix}}_{\mathbf{X}} * 
+\underbrace{\begin{bmatrix}
+k_{11} & k_{12} \\
+k_{21} & k_{22} \\
+\end{bmatrix}}_{\mathbf{K}} =
+\underbrace{\begin{bmatrix}
+s_{11} & s_{12} \\
+s_{21} & s_{22} \\
+\end{bmatrix}}_{\mathbf{S}}
+$$
+
+This gives the set of equations,
+
+\begin{align}
+s_{11} &= k_{11}x_{11} + k_{12}x_{12} + k_{21}x_{21} + k_{22}x_{22}\notag \\
+s_{12} &= k_{11}x_{12} + k_{12}x_{13} + k_{21}x_{22} + k_{22}x_{23}\notag \\
+s_{21} &= k_{11}x_{21} + k_{12}x_{22} + k_{21}x_{31} + k_{22}x_{32}\notag \\
+s_{22} &= k_{11}x_{22} + k_{12}x_{23} + k_{21}x_{32} + k_{22}x_{33}\notag
+\end{align}
+
+The partial derivatives of the kernel's elements are therefore,
+
+\begin{align}
+\frac{\partial{L}}{\partial{k_{11}}} &= \frac{\partial{L}}{\partial{s_{11}}}x_{11} + \frac{\partial{L}}{\partial{s_{12}}}x_{12} + \frac{\partial{L}}{\partial{s_{21}}}x_{21} + \frac{\partial{L}}{\partial{s_{22}}}x_{22}\notag \\
+\frac{\partial{L}}{\partial{k_{12}}} &= \frac{\partial{L}}{\partial{s_{11}}}x_{12} + \frac{\partial{L}}{\partial{s_{12}}}x_{13} + \frac{\partial{L}}{\partial{s_{21}}}x_{22} + \frac{\partial{L}}{\partial{s_{22}}}x_{23}\notag \\
+\frac{\partial{L}}{\partial{k_{21}}} &= \frac{\partial{L}}{\partial{s_{11}}}x_{21} + \frac{\partial{L}}{\partial{s_{12}}}x_{22} + \frac{\partial{L}}{\partial{s_{21}}}x_{31} + \frac{\partial{L}}{\partial{s_{22}}}x_{32}\notag \\
+\frac{\partial{L}}{\partial{k_{22}}} &= \frac{\partial{L}}{\partial{s_{11}}}x_{22} + \frac{\partial{L}}{\partial{s_{12}}}x_{23} + \frac{\partial{L}}{\partial{s_{21}}}x_{32} + \frac{\partial{L}}{\partial{s_{22}}}x_{33}\notag
+\end{align}
+
+It is evident that the kernel derivative is simply a convolution between the score ``image'' $\mathbf{S}$ and the input,
+
+$$
+\underbrace{\begin{bmatrix}
+\frac{\partial{L}}{\partial{k_{11}}} & \frac{\partial{L}}{\partial{k_{12}}} \\
+\frac{\partial{L}}{\partial{k_{21}}} & \frac{\partial{L}}{\partial{k_{22}}} \\
+\end{bmatrix}}_{\frac{\partial L}{\partial\mathbf{K}}}
+=
+\underbrace{\begin{bmatrix}
+x_{11} & x_{12} & x_{13} \\
+x_{21} & x_{22} & x_{23} \\
+x_{31} & x_{32} & x_{33} \\
+\end{bmatrix}}_{\mathbf{X}} *
+\underbrace{\begin{bmatrix}
+\frac{\partial{L}}{\partial{s_{11}}} & \frac{\partial{L}}{\partial{s_{12}}} \\
+\frac{\partial{L}}{\partial{s_{21}}} & \frac{\partial{L}}{\partial{s_{22}}} \\
+\end{bmatrix}}_{\frac{\partial L}{\partial\mathbf{Y}}}
+$$
+
+By following a similar procedure for the input gradient, it is easy to see that,
+
+$$\frac{\partial L}{\partial \mathbf{X}^{(l)}} = \frac{\partial L}{\partial \mathbf{S}^{(l)}} * \text{rot180}\big(\mathbf{K}^T\big),$$
+
+that is, the input gradient is (almost shockingly) equal to a convolution between the (zero-padded) scores gradient and a $180^{\circ}$ rotation of the kernel matrix.
+
+Finally, consider the gradient for max pooling. We treat this similar to differentiating the ReLU activation function. If we have, for example, a $2 \times 2$ block of neurons $\boldsymbol\sigma=\{\sigma_1, \sigma_2, \sigma_3, \sigma_4\}$, then for pooling function $p$, we have $\frac{\partial{L}}{\partial{\sigma_i}} = \frac{\partial{L}}{\partial{p(\boldsymbol\sigma)}}\cdot\frac{\partial{p(\boldsymbol\sigma)}}{\partial{\sigma_i}}$, where $\frac{\partial{p(\boldsymbol\sigma)}}{\partial{\sigma_i}} = 1_{\{\sigma_1 = \max(\boldsymbol\sigma)\}}$.
 
 \section{Support Vector Machines}
 
