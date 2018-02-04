@@ -3349,6 +3349,42 @@ Apart from being free to use, the idea of a GNU operating system was to expand \
 
 At approximately the same time, the systems lab at the University of California, Berkeley, were extending their licensed version of Unix, in particular, extending its TCP/IP functionalities. This came to be known as the Berkeley Software Distribution (BSD) of Unix, but it remained subject to AT\&T licensing restrictions. The Unix parts were gradually rewritten, and BSD and its variants (FreeBSD, OpenBSD, and others) came under the BSD license, a highly permissive license, allowing the full reuse of software, even in proprietary products, provided inclusion of the license text. Many of the operating systems of the present day are descended from Unix via the free alternatives of BSD. For example, BSD forms a large part of Apple's OS X operating system. BSD was the subject of a law suit by the Unix proprietors in the early 90s, during a time nicknamed the ``Unix wars'', with BSD ultimately winning the case. Unlike Linux, BSD does not use GNU, it has its own OS software including, for example, the famous vi editor. Linux is more user-friendly, however, with BSD having a command line interface (CLI) orientation. Thus, whereas GNU reverse engineered Unix, BSD evolved from it directly like the ship of Theseus. Both extended it far beyond its initial capabilities. Because of them, we now have whole families of software that are deemed ``Unix-like''.
 
+\section{Image Analysis}
+
+\subsection{Labelling}
+
+In image analysis, labelling refers to the identification (via annotation) of the connection components in an image. If we consider an image, $\mathcal{I}$, we may conceptualise it as a graph, where each pixel is a node, and the connectivity of nodes are given by adjacency, and equal intensity (for grayscale or RGB images--rather than binary images--this could be relaxed to approximate equal intensity). A further directionality condition for connectivity, where arcs run only top-to-bottom and left-to-right would render the graph directed and acyclic, making the eventual depth-first-search easier to formulate (and would place a limit on the recursive depth). A suitable and efficient pseudocode is giving in 
+
+\begin{algorithm}
+\caption{Pseudocode for labelling connected components in an image.}
+\label{alg:labelling}
+\begin{algorithmic}[1]
+
+\State label $\leftarrow 0$
+\State queue $\leftarrow$ sorted(vertices) // sorted top-to-bottom and left-to-right
+
+\Procedure{Propagate}{vertex, label}
+\State vertex.set\_label(label)
+\For {connected\_vertex in vertex.neighbourhood()}
+\If {not queue.contains(connected\_vertex)}
+\State continue
+\Else
+\State propagate(connected\_vertex, label)
+\EndIf
+\EndFor
+\EndProcedure
+
+\While {not queue.empty()}
+\State vertex $\leftarrow$ queue.emit\_next()
+\State propagate(vertex, label)
+
+\State label $\leftarrow$ label $+ 1$
+
+\EndWhile
+
+\end{algorithmic}
+\end{algorithm}
+
 \section{Useless Maths Facts}
 
 \begin{itemize}
