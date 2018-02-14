@@ -2543,6 +2543,64 @@ where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\bet
 \label{fig:gradientdescent}
 \end{figure}
 
+\subsubsection{Proof of Convergence}
+
+Firstly, suppose we have a convex function $f$ whose gradient $f'$ is Lipschitz continuous with constant $M$. As a result, the second derivative is bounded by $M$. Consider the Taylor expansion of $f$ at a point $y$, in one dimension for brevity:
+
+$$f(y) = f(x) + f'(x)(y - x) + R_1(y)$$
+
+where $$
+R_1(y) = \int_{x}^y f''(t)(y - t)dt \leq \int_{x}^y M(y - t)dt = \frac{M}{2}(y - x)^2
+$$
+
+Note that in higher dimensions, $M$ is chosen such that $M\mathbf{I} \succeq \nabla^2f(\mathbf{x})$, that is, $M\mathbf{I} - \nabla^2f(\mathbf{x})$ is negative semi-definite\footnote{The symbol $\succ$ reads ``succeeds'', and refers to order. In linear algebra, $\mathbf{A} > 0$ means that $\mathbf{A}$ is positive-definite}. Thus, in general we have,
+
+$$f(\mathbf{y}) \leq f(\mathbf{x}) + \nabla{f(\mathbf{x})}^T(\mathbf{y} - \mathbf{x}) + \frac{M}{2}||\mathbf{y} - \mathbf{x}||_2^2 \notag$$
+
+Consider a gradient step: $\mathbf{x}^{+} = \mathbf{x} - t\nabla{f(\mathbf{x})}$. By substitution, we have,
+
+\begin{align}
+f(\mathbf{x^{+}}) &\leq f(\mathbf{x}) + f'(\mathbf{x})(\mathbf{x^{+}} - \mathbf{x}) + \frac{M}{2}||\mathbf{x^{+}} - \mathbf{x}||_2^2 \notag \\
+&= f(\mathbf{x}) - t\nabla f(\mathbf{x})^T\nabla f(\mathbf{x}) + \frac{Mt^2}{2}f(\mathbf{x})^T\nabla f(\mathbf{x}) \notag \\
+&= f(\mathbf{x}) - t\cdot\bigg(1 - \frac{Mt}{2}\bigg)\cdot||\nabla f(\mathbf{x})||_2^2 \notag
+\end{align}
+
+Note that if we choose $0 < t \leq 1/L$, we can guarantee convergence since then,
+
+$$f(\mathbf{x^+}) \leq f(\mathbf{x}) - \frac{t}{2}||\nabla f(\mathbf{x})||_2^2$$
+
+Next consider the optimal point $x^*$. Since $f$ is convex, we can establish the relation,
+
+$$f(\mathbf{x}) \leq f(\mathbf{x^*}) + \nabla f(\mathbf{x})^T(\mathbf{x^*} - \mathbf{x})$$
+
+and the objective function decreases after each iteration. Combining these inequalities gives,
+
+$$f(\mathbf{x^+}) \leq f(\mathbf{x^*}) + \nabla f(\mathbf{x})^T(\mathbf{x^*} - \mathbf{x}) - \frac{t}{2}||\nabla f(\mathbf{x})||_2^2$$
+
+Then, we have,
+
+\begin{align}
+f(\mathbf{x^+}) - f(\mathbf{x}^*) &\leq \frac{1}{2t}\big(2t \nabla f(\mathbf{x})^T(\mathbf{x} - \mathbf{x}^*) - t^2||\nabla f(\mathbf{x})||_2^2\big) \notag \\
+&= \frac{1}{2t}\Big(2t\nabla f(\mathbf{x})^T (\mathbf{x} - \mathbf{x}^*) - t^2 ||\nabla f(\mathbf{x})||_2^2 - ||\mathbf{x} - \mathbf{x}^*||_2^2 + ||\mathbf{x} - \mathbf{x}^*||_2^2\Big) \notag \\
+&= \frac{1}{2t}\Big(||\mathbf{x} - \mathbf{x}^*||_2^2 - ||\mathbf{x} - t\nabla f(\mathbf{x})^T - \mathbf{x}^*||_2^2\Big) \notag \\
+&= \frac{1}{2t}\Big(||\mathbf{x} - \mathbf{x}^*||_2^2 - ||\mathbf{x}^+ - \mathbf{x}^*||_2^2\Big) \notag
+\end{align}
+
+Now, summing to iteration $k$ gives us,
+
+\begin{align}
+\sum_{i=1}^k f(\mathbf{x}^{(i)}) - f(\mathbf{x}^*) &\leq \sum_{i=1}^k \frac{1}{2t}\Big(||\mathbf{x}^{(i-1)} - \mathbf{x}^*||_2^2 - ||\mathbf{x}^{(i)} - \mathbf{x}^*||_2^2\Big) \notag \\
+&= \frac{1}{2t}\Big(||\mathbf{x}^{(0)} - \mathbf{x}^*||_2^2 - \cancelto{0}{||\mathbf{x}^{(1)} - \mathbf{x}^*||_2^2 + ||\mathbf{x}^{(1)} - \mathbf{x}^*||_2^2} + \dots\Big)\notag \\
+&= \frac{1}{2t}\Big(||\mathbf{x}^{(0)} - \mathbf{x}^*||_2^2 - ||\mathbf{x}^{(k)} - \mathbf{x}^*||_2^2\Big) \notag \\
+&\leq \frac{1}{2t}||\mathbf{x}^{(0)} - \mathbf{x}^*||_2^2 \notag
+\end{align}
+
+We know from before that $f(x^{(k)}$ is non-increasing. Therefore,
+
+$$f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{*}) \leq \frac{1}{k}\sum_{i=1}^k f(\mathbf{x}^{(i)}) - f(\mathbf{x}^*) \leq \frac{||\mathbf{x}^{(0)} - \mathbf{x}^*||_2^2}{2tk} $$
+
+which concludes the proof. We therefore see there is a convergence rate of $\mathcal{O}(1/k)$.
+
 \subsubsection{Coordinate Descent}
 
 Another plausible optimisation algorithm is coordinate descent, where each descent step optimises with respect to a single variable. For OLS regression we have,
