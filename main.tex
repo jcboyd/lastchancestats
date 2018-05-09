@@ -3267,9 +3267,9 @@ where matrices $\mathbf{U}$ and $\mathbf{V}$ are orthonormal, and $\mathbf{S}$ i
 
 $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{V}^T =  \mathbf{V}\mathbf{S}^2\mathbf{V}^T,$$
 
-which is an eigenvalue decomposition. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. The principal components are therefore the columns of the right singular matrix, $\mathbf{V}$, equivalent to the eigenmatrix of the covariance matrix. Thus, SVD (which may be done with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. In this form, it is clear that a matrix multiplication can be understood in three steps: a rotation $\mathbf{U}$, a scaling $\mathbf{S}$ and a final rotation $\mathbf{V}$. For a cloud of points, $\mathbf{X}$, the principal components give the trend lines in orthogonal directions that maximise the variance. These trends can be thought of as latent variables underlying the observations and this is the essence of information retrieval techniques such as latent semantic indexing (LSI).
+which is an eigenvalue decomposition, indeed the singular value decomposition of the square covariance matrix. Note the singular values are the squares of those of $\mathbf{X}$. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. The principal components are therefore the columns of the right singular matrix, $\mathbf{V}$, equivalent to the eigenmatrix of the covariance matrix. Thus, SVD (which may be performed with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. In this form, it is clear that a matrix multiplication can be understood in three steps: a rotation $\mathbf{U}$, a scaling $\mathbf{S}$ and a final rotation $\mathbf{V}$. For a cloud of points, $\mathbf{X}$, the principal components give the trend lines in orthogonal directions that maximise the variance. These trends can be thought of as latent variables underlying the observations and this is the essence of information retrieval techniques such as latent semantic indexing (LSI).
 
-Without truncation, the data may be decorrelated using the decomposition. Consider mapping $\mathbf{X}$ to $\mathbf{Z} = \mathbf{X}\mathbf{U}$. Then, the covariance matrix of $\mathbf{Z}$ is $\mathbf{Z}^T\mathbf{Z} = \mathbf{U}^T\mathbf{X}^T\mathbf{X}\mathbf{U} = \mathbf{U}^T\mathbf{U}\mathbf{S}\mathbf{U}^T\mathbf{U} = \mathbf{S}$, the penultimate step being a eigendecomposition of the covariance matrix. Thus, the covariance matrix of $\mathbf{Z}$ is diagonal. We can further \emph{whiten} the data by the transformation $\mathbf{Z} = \mathbf{X}\mathbf{U}\mathbf{S}^{-1/2}$. It is easily shown that now $\mathbf{Z}^T\mathbf{Z} = \mathbf{I}$.
+Without truncation, the data may be decorrelated using the decomposition. Consider mapping $\mathbf{X}$ to $\mathbf{Z} = \mathbf{X}\mathbf{U}$. Then, the covariance matrix of $\mathbf{Z}$ is $\mathbf{Z}^T\mathbf{Z} = \mathbf{U}^T\mathbf{X}^T\mathbf{X}\mathbf{U} = \mathbf{U}^T(\mathbf{U}\mathbf{S}\mathbf{V}^T)(\mathbf{V}\mathbf{S}\mathbf{U}^T)\mathbf{U} = \mathbf{S}^2$, the penultimate step being an eigendecomposition of the covariance matrix. Thus, the covariance matrix of $\mathbf{Z}$ is diagonal. We can further \emph{whiten} the data by the transformation $\mathbf{Z} = \mathbf{X}\mathbf{U}\mathbf{S}^{-1}$. It is easily shown that now that the covariance matrix, $\mathbf{Z}^T\mathbf{Z} = \mathbf{I}$.
 
 \section{Unsupervised Machine Learning}
 
@@ -3407,20 +3407,44 @@ Apart from being free to use, the idea of a GNU operating system was to expand \
 
 At approximately the same time, the systems lab at the University of California, Berkeley, were extending their licensed version of Unix, in particular, extending its TCP/IP functionalities. This came to be known as the Berkeley Software Distribution (BSD) of Unix, but it remained subject to AT\&T licensing restrictions. The Unix parts were gradually rewritten, and BSD and its variants (FreeBSD, OpenBSD, and others) came under the BSD license, a highly permissive license, allowing the full reuse of software, even in proprietary products, provided inclusion of the license text. Many of the operating systems of the present day are descended from Unix via the free alternatives of BSD. For example, BSD forms a large part of Apple's OS X operating system. BSD was the subject of a law suit by the Unix proprietors in the early 90s, during a time nicknamed the ``Unix wars'', with BSD ultimately winning the case. Unlike Linux, BSD does not use GNU, it has its own OS software including, for example, the famous vi editor. Linux is more user-friendly, however, with BSD having a command line interface (CLI) orientation. Thus, whereas GNU reverse engineered Unix, BSD evolved from it directly like the ship of Theseus. Both extended it far beyond its initial capabilities. Because of them, we now have whole families of software that are deemed ``Unix-like''.
 
-\section{Image Analysis}
+\section{Image Analysis and Processing}
 
-\subsection{Labelling}
+Image analysis and image processing comprise of an amalgam of techniques for respectively analysing and transforming images. Image analysis calculates image characteristics, while image processing produces a new, modified image. Images are here primarily considered as two-dimensional arrays of pixels, although three-dimensional \emph{voxel} images 
 
-In image analysis, labelling refers to the identification (via annotation) of the connection components in an image. If we consider an image, $\mathcal{I}$, we may conceptualise it as a graph, where each pixel is a node, and the connectivity of nodes are given by adjacency, and equal intensity (for grayscale or RGB images--rather than binary images--this could be relaxed to approximate equal intensity). A further directionality condition for connectivity, where arcs run only top-to-bottom and left-to-right would render the graph directed and acyclic, making the eventual depth-first-search easier to formulate (and would place a limit on the recursive depth). A suitable and efficient pseudocode is giving in 
+\subsection{Connectivity}
+
+In any region-growing algorithm on an image, one must first define the connectivity of pixels. That is, for each given pixel, to define its spatial neighbourhood. For a \emph{four-connected} pixel at coordinate $(x, y)$, its neighbourhood is defined as the four adjacent pixels with which it shares an edge. This is also known as the \emph{Von Neumann neighbourhood}. In \emph{eight-connectivity}, the neighbourhood of a pixel are all those pixels with which it shares a corner.
+
+In either of these two schemes, a logical contradiction arises. Consider two image regions, sharing a single corner. In four-connectivity, the regions are not connected, yet neither is the background between them--a contradiction. In eight-connectivity, the regions are connected, yet the background also--a contradiction. This prompts the use of \emph{six-connectivity}. In six-connectivity, pixels are conceptualised as being hexagonal, and alternating rows of pixels are virtually shifted by a half-pixel to give each (non-border) pixel six neighbours, with which it shares a single unique edge. This overcomes the paradoxes of four- and eight-connectivity, albeit with a computational burden of maintaining a virtual hexagonal grid.
+
+\subsection{Image Scaling}
+
+Image scaling or resampling is a form of image processing referring to the resizing of an image to a smaller or larger size. One begins with the two-dimensional grid of points constituting the original image. A new grid (with fewer or more points depending on the scale factor) is overlaid onto the original coordinate system. Each unknown point is approximated by some combination of the unit grid of four original image points around it. Note that there will be some unit grids containing no unknown points, or some with many, depending on the scale factor.
+
+\subsubsection{2D Nearest Neighbour Interpolation}
+
+In a 2D nearest neighbour scheme, the intensity of the unknown point is assigned simply as the intensity of the closet point in the surrounding unit grid. This is one of the cheapest, yet imprecise approaches, typically yielding pixelated results.
+
+\subsubsection{Bilinear Interpolation}
+
+In bilinear interpolation, a point $(x, y)$ within the unit grid, $\{(x_1, y_1), (x_2, y_1), (x_1, y_2), (x_1, y_2)\}$ is interpolated as the linear interpolation in the $y$ direction of the points, $(x, y_1)$ and $(x, y_2)$, obtained by linear interpolation of $(x_1, y_1), (x_2, y_1)$ and $(x_1, y_2), (x_1, y_2)$ respectively. This is equivalent to solving $f(x, y) = a_0 + a_1x + a_2y + a_3xy$ for the four unknowns $a_i$ (fully-determined).
+
+\subsubsection{Bicubic Interpolation}
+
+Bicubic interpolation is similar to bilinear interpolation, but where we solve for the sixteen unknowns of $\sum_{i=0}^3\sum_{j=0}^3a_{ij}x^iy^j$. Because we still only have the four points of the surrounding unit grid. However, we suppose have access to the $x$ and $y$ first derivatives at each point, and the $xy$ second derivative at point. This gives us 16 equations, hence we are able to solve for all unknowns. Bicubic interpolation tends to give superior results, as it embodies prior knowledge of the typical smoothness of the gradients of an image. This performance does come at a higher computational cost, however.
+
+\subsection{Image Compression}
+
+\subsection{Labeling}
+
+In image analysis, labelling refers to the identification (via annotation) of the connected components in an image. If we conceptualise a binary image $\mathcal{I}$ as a graph where each pixel is a node and the connectivity of nodes are given by both adjacency and equal intensity (for grayscale or RGB images this could be relaxed to approximate equal intensity). A rough pseudocode is given in Algorithm \ref{alg:labelling}.
 
 \begin{algorithm}
 \caption{Pseudocode for labelling connected components in an image.}
 \label{alg:labelling}
 \begin{algorithmic}[1]
-
 \State label $\leftarrow 0$
 \State queue $\leftarrow$ sorted(vertices) // sorted top-to-bottom and left-to-right
-
 \Procedure{Propagate}{vertex, label}
 \State vertex.set\_label(label)
 \For {connected\_vertex in vertex.neighbourhood()}
@@ -3431,17 +3455,241 @@ In image analysis, labelling refers to the identification (via annotation) of th
 \EndIf
 \EndFor
 \EndProcedure
-
 \While {not queue.empty()}
-\State vertex $\leftarrow$ queue.emit\_next()
+\State vertex $\leftarrow$ queue.pop()
 \State propagate(vertex, label)
-
 \State label $\leftarrow$ label $+ 1$
-
 \EndWhile
-
 \end{algorithmic}
 \end{algorithm}
+
+\subsection{Thresholding}
+
+Thresholding can be considered to be a simple form of segmentation. Typically, thresholding results in a binary image (demarcating foreground and background), though several thresholds may be set for an $n$-ary segmentation.
+
+\subsubsection{Otsu Thresholding}
+
+Otsu thresholding is an image analysis technique that optimises the placement of a threshold $k$ in a histogram. Noting that the technique was motivated for image segmentation, it is general-purpose, non-parametric approach to thresholding (a form of one-dimensional clustering), it may be used for any univariate feature readout. This \emph{discriminant} idea is to maximise the ratio $\lambda = \sigma^2_B / \sigma^2_W$ of the \emph{intra}-class variance\footnote{Intra-class variance is the weighted sum of the respective variances of classes invoked by a choice of $k$}, $\sigma^2_W$ and the \emph{inter}-class variance\footnote{Inter-class variance is merely the average squared distance of the class means from the global mean}, $\sigma^2_B$, creating a threshold that maximises similarity within the respective clusters, while maximising the distance between them. The problem is simplified, however, by noting the relation $\sigma^2_B + \sigma^2_W = \sigma^2_T$, where $\sigma^2_T$ is the (fixed) global variance. It can then be shown that maximising $\lambda$ is the same as maximising $\eta = \sigma^2_B / \sigma^2_T$, as they are a function of one another (the problem has only one degree of freedom, not two). Since $\sigma^2_T$ is a constant we can optimise the threshold merely by maximising $\sigma^2_B$. So, the algorithm proceeds by varying $k$ and calculating the inter-class variance each time, retaining the largest.
+
+\subsection{Linear Filters}
+
+In image processing, A convolution kernel is a (typically) small matrix\footnote{It is, however, possible to define non-square convolutional kernels, including single column or row, one-dimensional kernels.} $\mathbf{K}$ that is convolved with an image $\mathbf{I}$. A convolution in two dimensions is defined as,
+
+$$(\mathbf{I} * \mathbf{K})(x, y) = \sum_{i = 1}^{d}\sum_{j = 1}^{d} \mathbf{I}(x + i -d/2, y + j - d/2) \times \mathbf{K}(i, j)$$
+
+\subsubsection{Edge detection}
+
+Edge detection is based on measuring the gradient at all points in the image. Gradients tend to be high when passing from one intensity region to another. To calculate the gradients, we use some variant of finite differences. Such a kernel could be,
+
+$$
+\mathbf{K}_{\text{edge}} =
+\begin{bmatrix}
+0 & 1 & 0 \\
+1 & -4 & 1 \\
+0 & 1 & 0 \\
+\end{bmatrix}
+= \begin{bmatrix}
+0 & 1 & 0 \\
+0 & -2 & 0 \\
+0 & 1 & 0 \\
+\end{bmatrix} + \begin{bmatrix}
+0 & 0 & 0 \\
+1 & -2 & 1 \\
+0 & 0 & 0 \\
+\end{bmatrix},
+$$
+
+that is, the sum of the second order central difference operators. Note the linearity property of convolutions. As an aside, the \emph{Canny edge detector}, named for Australian computer scientist John F. Canny (1958-), is a \emph{pipeline} incorporating various filters.
+
+\subsubsection{Sharpening}
+
+To sharpen an image, we can subtract its edges, darkening the contours. This can be achieved by combining an identity kernel and an edge detection kernel,
+
+$$
+\mathbf{K}_{\text{sharpen}} =
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix} - \begin{bmatrix}
+0 & 1 & 0 \\
+1 & -4 & 1 \\
+0 & 1 & 0 \\
+\end{bmatrix} =
+\begin{bmatrix}
+0 & -1 & 0 \\
+-1 & 5 & -1 \\
+0 & -1 & 0 \\
+\end{bmatrix}.
+$$
+
+\subsubsection{Blurring}
+
+Blurring is a way of removing detail, which can be thought of as a form of image regularisation. A popular choice is the \emph{Gaussian blur}, whose kernel weights follow a Gaussian distribution, circular in two dimensions. A common kernel size is $5 \times 5$ with,
+
+$$
+\mathbf{K}_{\text{blur}} = \frac{1}{256}
+\begin{bmatrix}
+1 & 4 & 6 & 4 & 1 \\
+4 & 16 & 24 & 16 & 4 \\
+6 & 24 & 36 & 24 & 6 \\
+4 & 16 & 24 & 16 & 4 \\
+1 & 4 & 6 & 4 & 1 \\
+\end{bmatrix}
+$$
+
+\subsubsection{Sobel filter}
+
+
+\subsection{Non-linear Filters}
+
+Non-linear filters are any filter not producing a linear combination of its receptive field. They tend to be designed for noise removal. The three examined here are examples of \emph{rank} filters, where the received intensities are sorted and a particular intensity is chosen.
+
+\subsubsection{Median filtering}
+
+Median filtering is a simple, robust technique for removing noise from a signal. Each pixel of an image is replaced with the median of the surrounding area. The median (rather than the mean, which can be ), is robust to isolated, high intensity noisy pixels. As outliers in most pixel neighbourhood, they will usually be replaced and will usually not interfere with the replacement of non-noise. Depending on the image and the amount of noise, there is a tradeoff to be had--moderated by the chosen size of the neighbourhood--between removal of noise and loss of detail.
+
+\subsubsection{Minimum and Maximum filtering}
+
+Minimum and maximum filtering work in a similar way to median filtering and are the basis of image dilation and erosion respectively.
+
+\subsection{Mathematical Morphology}
+
+Mathematical theory is a theory for image processing inspired by geosciences, in which an image is conceptualised a three-dimensional terrain. It formalises image manipulation operations in terms of set operations. The primitive operations of dilation and erosion, and their composites, opening and closing, involve an image $A$, defined as a set for binary images and a function for grayscale images, on a space $E$, and a \emph{structuring element} $B$, likewise defined, used to carry out the operation.
+
+\subsubsection{Dilations}
+
+A dilation is roughly an enlargement of an image, similar to a minimum filter. In the binary setting, a dilation produces a new image,
+
+$$A \oplus B = \bigcup_{b \in B} A_b$$
+
+where $A_b$ is the image $A$ displaced by the value $b$. One can therefore think of $B$ as a set of \emph{displacements}. The new image therefore consists of all points in the displacement range of $B$ from some point in $A$.
+
+On a greyscale image, $A$ and $B$ become functions, corresponding to different intensity values over a set of points. Note that now $A$ and $B$ are defined on the whole domain $E$, though they may be non-zero for only a part of it. In this case, a dilation is defined as,
+
+$$(A \oplus B)(x) = \sup_{y \in E}[A(y) - B(x - y)]$$
+
+That is, the dilated image at a point $x$ is the largest value arising from the difference in $A$ and $B$ over all displacements of $B$ (defined on the whole plane $E$). It is typical, however, to use a ``flat'' $B$ that is $0$ in a subset of $E$ and $-\infty$ everywhere else. Thus defined, $B$ becomes a set of displacements again, and the greyscale dilation is very similar to the binary version.
+
+\subsubsection{Erosions}
+
+An erosion is the dual operator of dilation, corresponding to a shrinking of an image, and similar to a maximum filter. In the binary setting we have,
+
+$$A \ominus B = \bigcap_{b \in B} A_{-b}$$
+
+that is, the eroded image consists of all pixels in $A$ that remain in $A$ under all (negative) displacements of $B$. Equivalently, it is the set of all pixels in $A$ that intersect with $B$ for all all possible displacements of $B$. The greyscale variant is defined as,
+
+$$(A \ominus B)(x) = \inf_{y \in B}[A(x + y) - B(y)]$$
+
+\subsubsection{Openings}
+
+An opening is an important operation combining the two above primitives. It consists of an erosion followed by a dilation,
+
+$$A \circ B = (A \ominus B) \oplus B$$
+
+Openings are used for noise removal, as small elements are eliminated by the initial erosion, and everything else is approximately restored by the final dilation.
+
+\subsubsection{Closings}
+
+A closing consists of a dilation followed by an erosion,
+
+$$A \bullet B = (A \oplus B) \ominus B$$
+
+and serves to eliminate holes in surfaces.
+
+\subsubsection{Gradient}
+
+The morphological version of a gradient image can be calculated as the difference between a dilation and an erosion,
+
+$$g(A) = (A \oplus B) - (A \ominus B)$$
+
+\subsubsection{Reconstruction}
+
+A morphological reconstruction is a more sophisticated operation involving both the original image, and its binary mask.
+
+\subsubsection{Top Hat}
+\subsubsection{Diameter Openings}
+
+\emph{diameter openings}, based on a flooding technique,
+
+        \begin{align}
+[\gamma^{\circ}_{\lambda}(f)] (x)
+=& \sup \{ s \leq f(x) \mid \alpha ( C_x [ X_s^+(f) ] ) \geq \lambda \} \notag \\
+=& \bigcup \{ \gamma_B(f) \mid \alpha(B) \geq \lambda \} \notag
+\end{align}
+
+where $X_s^+(f)$ is the set of all pixels with $f(x)\geq s$, $C_x[A]$ is the connected component of set $A$ containing point $x$ and $\alpha(C_x)$ its maximal extension.
+
+Simply put, this is a \emph{prominence-finding} algorithm, which simulates a flooding on the (inverted) image and terminates when the \emph{maximal extension} (the longest axis of a possibly non-convex shape) has a length of at least $\lambda$. Diagrammatically, this is easy to see as isolating the regions that rise sharply (instead of gradually) to a significant intensity, that is, within a small area (diameter). There are two parameters to diameter openings: $\lambda$, the diameter; and $t$ (not formalised), the threshold. In an unnecessary flourish, we represent this technique in two alternative formalisms:
+
+\begin{enumerate}
+\item The revolting, practical way: as the supremum (union in the image algebraic lattice) of the intensities $f(x)$ on pixels $x$ greater than or equal to $s$ (is this part superfluous?) where the connected component $C_x$ on pixels having intensities greater than or equal to $s$, $X_s^+(f)$, to which $x$ belongs has a maximal extension of at least $\lambda$
+\item The elegant, impractical way: as the union of all closures (erosion followed by dilation) of the image intensities $f$, where the structuring element of the closure is at least $\lambda$. Recall a closure eliminates small elements first with an erosion and restores surviving elements with a dilation. The ``union of all'' implies that the lower intensities (which must have a wider diameter than the higher intensities they \emph{subsume}\footnote{Remember, images $f(x)$ are surjective. That is, each $x$ maps to a single intensity. This means that the image ``terrain'' may only go up or down (or lie flat); it cannot loop back on itself, a characteristic that would render morphological analysis impossible.}) are preserved also (by some larger structuring element). What are lost in this operation are the pointy parts (which are then recovered by subtraction).
+\end{enumerate}
+
+In either case (they are equivalent), we then ``build'' a difference to the original image.
+
+\subsubsection{Granulometries}
+
+Another approach based on \emph{granulometries} is,
+
+\begin{equation}
+\sum_{x \in S_k} \gamma_{B_i}f(x) - \gamma_{B_{i+1}}f(x) \notag
+\end{equation}
+where the structuring elements $B_i$ fulfill the condition $B_{i} \subset B_{i+1}$ and $S_k$ is the k-th cell.
+
+This algorithm is again based on openings (erosion $\to$ dilation), with this time a \emph{series} of successively \emph{larger} structuring elements, $B_i$. That is, $B_{i+1}$ contains $B_i$. The difference of each consecutive pair is summed over the whole cell ($x \in S_k$). A larger difference therefore indicates a sharp rise from one level to another. Intuitively, this is again capturing the prominence of the region. It is not well formulated in the paper, but the indices $i$ in $B_i$ imply that we create granulometries at multiple levels (no free lunch--we must try them all).
+
+\subsection{Segmentation}
+
+Segmentation consists of partitioning an image into homogeneous regions. It is a difficult problem and the scope varies from low-level pixel grouping \emph{superpixels} to high-level semantic segmentation (segmentation of meaningful objects), the latter task best accomplished by deep neural networks.
+
+\subsubsection{The Watershed Algorithm}
+
+The Watershed algorithm is a popular segmentation algorithm from the morphology  that simulates a ``flooding'' or ``immersion'' on the image topology. The flooding begins from each of a set of user-defined \emph{markers}, defining respective \emph{catchment zones}, and terminates when each catchment zone overflows into an adjacent one. The overflow boundary between catchment zones defines a \emph{watershed line}. The weakness of the algorithm arises from the arbitrary placement of markers, which may arise in under- or over-segmentation, and must is user-defined and application-specific. In many application, substantial pre-processing is done on an image to transform it into an amenable form for the algorithm. The watershed algorithm is usually implemented with hierarchical queues. 
+
+\subsubsection{Superpixels}
+
+Superpixels result in an intermediate, low-level segmentation, where pixels are grouped into homogeneous sets, crucially respecting object contours within an image. Superpixels are intended for use in various computer vision tasks, including as the basis of a higher-level segmentation of an image and feature extraction for classification.
+
+The authors show that their Simple Linear Iterative Clustering (SLIC) algorithm achieves efficient state-of-the-art results. The technique works by performing k-Means on the 5-tuple of position $(x, y)$ and \emph{CIELAB} colour\footnote{CIELAB by the International Commission on Illumination encode lightness, $L$, (from black to white), relative green-magenta intensity, denoted by $A$, and relative yellow-blue intensity, denoted by $B$}, but instead of over the entire image, over a spatial grid only. Note that since the colour and space coordinates are of different scales, some simple regularisation is introduced to ensure the clustering. There is a simple preprocessing step of repositioning cluster seeds initialised on image contours, and a final post-processing step reassigning any disjoint cluster components. The simplicity of SLIC seems to reinforce the intuition that forming super-pixels is a relatively simple problem.
+
+\subsection{Feature Extraction}
+
+Features are vectorised quantities extracted from images. They  so that imagine
+
+\subsubsection{Local binary patterns}
+
+Local binary patterns (LBP) characterise image texture by quantifying uniformity. An LBP algorithm divides an image up into square cells. For each pixel within a cell, the pixel is compared with pixels in its neighbourhood. Where the pixel's intensity is greater than its neighbour's, a $1$ is recorded, otherwise a $0$. This produces a binary string, which is an 8-bit integer under 8-connectivity. The histogram of all binary strings in the cell are the LBP features. LBP features from other cells are concatenated to produce a large feature vector.
+
+\subsubsection{Histogram of Gradients}
+
+This is a very famous paper for histogram of oriented gradient (HOG) image features conceived for the problem of person detection. The writing is highly technical and the authors elect to engage in jargon rather than illustrating their technique pictorially. This makes it hard going for the uninitiated, however the technique seems to be the following: the direction of the gradient at each pixel is computed (i.e. the angle of the sum of central difference gradients computed in the $x$- and $y$-directions). The directions are summarised as orientation histograms over square groups of pixels called cells, producing a local representation as a vector of proportions (they choose 9 per cell). The cell values are normalised over a wider multi-cellular area called a block. They use this representation to train a linear SVM (or kernelised at the expense of higher runtime). The SVM is deployed on test images as a sliding-window classifier. The outputs of the detector are run through a conventional algorithm, ``non-maximum suppression''. The pipeline is so successful on the MIT benchmark dataset that they construct their own, more challenging, INRIA person detection dataset.
+
+\subsubsection{Haralick Features}
+
+Haralick features derive from the co-occurrence matrix of an image. The co-occurrence matrix is a matrix whose elements count the number of times pairs of pixel intensities occur in the image at a given offset. The elements are thus indexed by the pixel values themselves, and hence the co-occurrence matrix is square with dimension the dynamic range of the image. Haralick features somehow derive from this and are used to measure texture.
+
+\subsubsection{Zernicke Features}
+
+Zernike features are features based on the Zernicke polynomials that describe shape.
+
+\subsubsection{Wavelet}
+
+\subsubsection{Statistical Features}
+
+Moments etc.
+
+\subsection{Transformations}
+
+\subsubsection{Hough Transform}
+
+The Hough transform was originally designed to find straight lines in an image. Starting with some gradient-based rule, candidate edge points are detected by searching the image pixel-by-pixel. Straight lines are drawn at various angles from each given candidate. Each resulting line can be expressed as an angle and perpendicular distance from the origin, $(\rho, \theta)$. From this, each candidate can be represented as a curve in $\rho$-$\theta$ space, the Hough transform space. Repeating for all candidates results in a collection of curves. The intersection of two curves corresponds with the alignment of two points in a straight line. Multiple intersections correspond with multiple aligned points. To find the most heavily weighted intersections, we can simply add a weight to each point in the curve of each candidate, and sum the curves. The peaks in the resulting Hough space image correspond with groups of aligned points, and these peaks can easily be identified through a global threshold.
+
+
+Since the original formulation, the Hough transform has been extended to find points aligned in arbitrary shapes, in particular circles and ellipses.
+
+\subsubsection{SIFT}
 
 \section{Useless Maths Facts}
 
