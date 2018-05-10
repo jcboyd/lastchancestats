@@ -2988,6 +2988,8 @@ Convolutional Neural Networks (CNNs) are the current state-of-the-art in many co
 
 The cornerstone of the CNN is the \emph{convolutional layer}, a hidden layer where a square grid of weights is convolved with the input, just like an image mask (now, however, the mask is learned as part of an all-encompassing model). The output of the convolutional layer is akin to a convolved image. Next, the non-linear activation function, ReLu (REctified Linear Unit), is applied to zero-out any negative values. Next there is a \emph{pooling} layer, emulating \emph{downsampling}. Here, each group of (usually) four values (pixels) is replaced by the maximum (sometimes the mean) of the four, leaving a single most intense pixel. This pooling method is known as \emph{max pooling}. This sequence of \texttt{CONV->RELU->POOL} layers may be repeated multiple times to create a deep architecture. Finally, a few fully-connected layers round off the architecture. Though it seems far more sophisticated than a MLP, it can be shown that a CNN can be represented as a classical fully-connected neural network. For example, a convolutional layer can be represented as a sparse fully-connected layer. Various techniques have been developed for training these vast models, for example momentum optimisers, weight initialisation, batch normalisation\footnote{Batch normalisation mitigates \emph{internal covariate shift}, the fluctuations to the internal distributions of activations that make convergence so arduous.}, and \emph{dropout}\footnote{Dropout involves deactivating (setting to $0$) hidden units in fully-connected layers according to a Bernoulli probability. This is repeated for every forward-backward pass of the network, such that every training example is trained on a different sub-graph of the network.} for regularisation.
 
+\subsubsection{Backprop through Convolutional Layers}
+
 But how do we compute the gradient for the convolutional kernel? Let us consider the following simple convolution,
 
 $$
@@ -3045,11 +3047,97 @@ $$
 
 By following a similar procedure for the input gradient, it is easy to see that,
 
-$$\frac{\partial L}{\partial \mathbf{X}^{(l)}} = \frac{\partial L}{\partial \mathbf{S}^{(l)}} * \text{rot180}\big(\mathbf{K}^T\big),$$
+$$\frac{\partial L}{\partial \mathbf{X}^{(l)}} = \frac{\partial L}{\partial \mathbf{S}^{(l)}} * \text{rot180}\big(\mathbf{K}\big),$$
 
-that is, the input gradient is (almost shockingly) equal to a convolution between the (zero-padded) scores gradient and a $180^{\circ}$ rotation of the kernel matrix.
+that is, the input gradient is (almost shockingly) equal to a convolution between the (zero-padded) scores gradient and a $180^{\circ}$ rotation of the kernel matrix. To elucidate this somewhat, consider again that the convolution operation may be represented as a matrix operation, by stacking a flattened kernel at offsets and flattening the input image to a vector. Thus, our kernel matrix becomes,
+
+$$
+\underbrace{\begin{bmatrix}
+k_{11} & k_{12} & 0 & k_{21} & k_{22} & 0 & 0 & 0 & 0 \\
+0 & k_{11} & k_{12} & 0 & k_{21} & k_{22} & 0 & 0 & 0 \\
+0 & 0 & 0 & k_{11} & k_{12} & 0 & k_{21} & k_{22} & 0 \\
+0 & 0 & 0 & 0 & k_{11} & k_{12} & 0 & k_{21} & k_{22} \\
+\end{bmatrix}}_{\mathbf{K}}
+\underbrace{\begin{bmatrix}
+x_{11} \\
+x_{12} \\
+x_{13} \\
+x_{21} \\
+x_{22} \\
+x_{23} \\
+x_{31} \\
+x_{32} \\
+x_{33} \\
+\end{bmatrix}}_{\mathbf{X}} =
+\underbrace{\begin{bmatrix}
+s_{11} \\
+s_{12} \\
+s_{21} \\
+s_{22} \\
+\end{bmatrix}}_{\mathbf{S}}
+$$
+
+Now, in the feed-forward setting, the gradient of the input is computed as the matrix product of the gradient of the loss, and the transpose of the weight matrix. It can be seen easily that a transposition of this sparse kernel matrix amounts to the half rotation of the kernel in a convolution operation.
+
+\subsubsection{Backprop through max pooling layers}
 
 Finally, consider the gradient for max pooling. We treat this similar to differentiating the ReLU activation function. If we have, for example, a $2 \times 2$ block of neurons $\boldsymbol\sigma=\{\sigma_1, \sigma_2, \sigma_3, \sigma_4\}$, then for pooling function $p$, we have $\frac{\partial{L}}{\partial{\sigma_i}} = \frac{\partial{L}}{\partial{p(\boldsymbol\sigma)}}\cdot\frac{\partial{p(\boldsymbol\sigma)}}{\partial{\sigma_i}}$, where $\frac{\partial{p(\boldsymbol\sigma)}}{\partial{\sigma_i}} = 1_{\{\sigma_1 = \max(\boldsymbol\sigma)\}}$.
+
+\subsubsection{Deconvolutional layers}
+
+Deconvolutional layers play an essential role in networks where the compressed hidden layers are eventually \emph{decompressed}, usually to the original input sizes. Examples of such networks are convolutional autoencoders, fully-convolutional networks for segmentation, and the generator part of GANs. A deconvolution computation is similar to that of the convolutional gradient--they are implemented as a ``convolutional transpose''--specifically, a convolution between the layer input and the rotation of the kernel. The gradient of a deconvolutional layer is therefore a normal convolution between the gradient of the scores and the kernel.
+
+Recall that convolutional layers may be used for downsampling (rather than a pooling layer) when the stride $s > 1$. Likewise, the convolutional transpose will \emph{upsample} its inputs, back towards the original input size. In this case we have what is called \emph{fractional stride} $1/s$. To see this, take the convolution of stride 2,
+
+$$
+\underbrace{\begin{bmatrix}
+x_{11} & x_{12} & x_{13} & x_{14} \\
+x_{21} & x_{22} & x_{23} & x_{24} \\
+x_{31} & x_{32} & x_{33} & x_{34} \\
+x_{41} & x_{42} & x_{43} & x_{44} \\
+\end{bmatrix}}_{\mathbf{X}} * 
+\underbrace{\begin{bmatrix}
+k_{11} & k_{12} \\
+k_{21} & k_{22} \\
+\end{bmatrix}}_{\mathbf{K}} =
+\underbrace{\begin{bmatrix}
+s_{11} & s_{12} \\
+s_{21} & s_{22} \\
+\end{bmatrix}}_{\mathbf{S}}
+$$
+
+The corresponding sparse kernel matrix is,
+
+\setcounter{MaxMatrixCols}{20}
+
+$$
+\begin{bmatrix}
+k_{11} & k_{12} & 0 & 0 & k_{21} & k_{22} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & k_{11} & k_{12} & 0 & 0 & k_{21} & k_{22} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & k_{11} & k_{12} & 0 & 0 & k_{21} & k_{22} & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & k_{11} & k_{12} & 0 & 0 & k_{21} & k_{22} \\
+\end{bmatrix}
+$$
+
+It can be seen that the transpose of this matrix, multiplied by the flattened scores gradient, $\frac{\partial L}{\partial \mathbf{s}^{(l)}}$, is equivalent to the convolution,
+
+$$\frac{\partial L}{\partial \mathbf{X}}=
+\underbrace{\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 \\
+0 & s_{11}' & 0 & s_{12}' & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & s_{21}' & 0 & s_{22}' & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}}_{\frac{\partial L}{\partial \mathbf{S}}} * 
+\underbrace{\begin{bmatrix}
+k_{22} & k_{21} \\
+k_{12} & k_{11} \\
+\end{bmatrix}}_{\text{rot180}(\mathbf{K})}
+$$
+
+which we can refer to as having $s = 1/2$.
+
+Note that max pooling has an approximate inverse in upsampling layers, where a map is interpolated onto a larger grid, or otherwise spaced on a grid of zeros.
 
 \section{Support Vector Machines}
 
@@ -3539,6 +3627,8 @@ $$
 $$
 
 \subsubsection{Sobel filter}
+
+\subsubsection{Gabor filter}
 
 
 \subsection{Non-linear Filters}
