@@ -3144,14 +3144,14 @@ Note that max pooling has an approximate inverse in upsampling layers, where a m
 
 \subsection{Recurrent Neural Networks}
 
-Recurrent neural networks model sequential data. Just as CNNs share weights across space, RNNs share weights across time, thus  embodying an \emph{inductive bias} or \emph{structural prior}, the key to the success of deep learning models. The basic design is a set of input nodes, representing a sequence of vectors. These are combined linearly with a (shared) set of weights.  For all but the first node in the sequence, these are added to a similarly linearly transformed previous hidden state, also with a shared set of weights. These are then activated with a non-linear activation function. From these, outputs are generated as a softmax of a further dense layer. This is expressed in the following relations,
+Recurrent neural networks model sequential data. Just as CNNs share weights across space, RNNs share weights across time, thus also embodying an \emph{inductive bias} or \emph{structural prior}, the key to the success of deep learning models. The basic design is a set of input nodes, representing a sequence of vectors. These are combined linearly with a (shared) set of weights.  For all but the first node in the sequence, these are added to a similarly linearly transformed previous hidden state, also with a shared set of weights. These are then fed through a non-linear activation function. From these, outputs are generated as a softmax of a further dense layer. This is expressed by the relations,
 
 \begin{align}
 \mathbf{h}^{(t)} &= \tanh\big(\mathbf{W}\mathbf{x}^{(t)} + \mathbf{U}\mathbf{h}^{(t-1)} + \mathbf{b}\big)\notag \\
 \mathbf{y}^{(t)} &= \text{softmax}\big(\mathbf{V}\mathbf{h}^{(t-1)} + \mathbf{c}\big) \notag
 \end{align}
 
-The circuit diagram of a basic RNN is given in Figure \ref{fig:rnn_circuit}. From this perspective, the recurrence of the network is represented as an arrow reflexively pointing back into the state node. This reflects the sharing of weights, and the dependency of states over time--the actual computational graph remains directed and acyclic. Note that this generalises other architectural designs: though an RNN may map a sequence to another sequence, we can account for losses only for the last (or last $k$) output in the sequence, turning the RNN into a categorical classifier. Also, the spatial depth may be increased simply by adding extra hidden layers, without changing the basic principles.
+The circuit diagram of a basic RNN is given in Figure \ref{fig:rnn_circuit}. From this perspective, the recurrence of the network is represented as an arrow reflexively pointing back an internal state node. This reflects the sharing of weights, and the dependency of states over time--the actual computational graph remains directed and acyclic. Note that this generalises other architectural designs: though an RNN may map a sequence to another sequence, we can account for losses only for the last (or last $k$) output in the sequence, turning the RNN into a categorical classifier. Also, the spatial depth may be increased simply by adding extra hidden layers, without changing the basic principles.
 
 \begin{figure}
 \centering
@@ -3167,11 +3167,11 @@ The circuit diagram of a basic RNN is given in Figure \ref{fig:rnn_circuit}. Fro
 \draw[-Latex] (h) to (y);
 
 \end{tikzpicture}
-\caption{Circuit diagram depicting the basic RNN state machine.}
+\caption{Circuit diagram of the basic RNN state machine.}
 \label{fig:rnn_circuit}
 \end{figure}
 
-Although some ambiguous diagrams in the literature may suggest otherwise, an RNN accommodates the varying lengths of input sequences in a batch, hence the ``unfolded'' computational graph (Figure \ref{fig:rnn_comp}) is implicitly extended to the required length. This capacity is provided by the shared weights. The circuit is a dynamical system, as well as a universal Turing machine approximator.
+An RNN accommodates the varying lengths of input sequences in a batch, with the ``unfolded'' computational graph (Figure \ref{fig:rnn_comp}) implicitly extended to the required length. This is facilitated by the set of shared weights. The circuit is a dynamical system, as well as a universal Turing machine approximator.
 
 \begin{figure}[h!]
 \centering
@@ -3210,15 +3210,15 @@ Although some ambiguous diagrams in the literature may suggest otherwise, an RNN
 \label{fig:rnn_comp}
 \end{figure}
 
-RNNs are trained using \emph{backpropagation through time} (BPTT), which simply consists of applying backpropagation on the unfolded computational graph. This is then no different to backpropagation on feed-forward networks, with the gradients computed from the gradients of descendant nodes. However, the unfolded network requires storage of states over the whole sequence, incurring a greater demand of memory. If we replace hidden-to-hidden connections with output-to-hidden connections, the computation is much simplified, and the network is trained instead with a parallelisable backprop called \emph{teacher forcing}. Such a network is, however, no longer a universal approximator.
+RNNs are trained using \emph{backpropagation through time} (BPTT), which simply consists of applying backpropagation on the unfolded computational graph. This is then no different to backpropagation on feed-forward networks, with the gradients computed from the gradients of descendant nodes. However, the unfolded network requires storage of states over the whole sequence, incurring a greater demand on memory. If we replace \emph{hidden-to-hidden} connections with \emph{output-to-hidden} connections, the computation is much simplified, and the network is trained instead with a parallelisable backprop called \emph{teacher forcing}. Such a network is, however, no longer a universal approximator.
 
 \subsubsection{Specialised architecures}
 
-RNNs have many application-specific architectures, where the computational graph is altered to serve the problem. An example is that of speech synthesis, where \emph{bidirectional RNNs} are use to model paths running forwards and backwards along the input, to inform each hidden unit about the past and the future (note this is done without violating the acyclic graph property). Another example is \emph{encoder-decoder RNNs}, which have seen great success in machine translation. These model an input network producing a compressed \emph{context}\footnote{What Geoffrey Hinton has described as a ``thought''.} sequence. This is then fed into a decoder network that produces an output sequence. The result is a network capable of decoding to a different length than the input, an essential capacity for translating phrases between languages. In \emph{automatic captioning}, a CNN is trained to classify images. The penultimate layer, a \emph{CNN code}, is fed into an RNN to automatically caption the image, one of the more uncanny applications of deep learning. Another variant, \emph{Recursive neural networks} are a less common variant that organise the input into a tree hierarchy.
+RNNs have many application-specific architectures, where the computational graph is configured to serve a problem. An example is that of speech synthesis, where \emph{bidirectional RNNs} are use to model paths running forwards and backwards along the input, to inform each hidden unit about past and future states (note this is done without violating the acyclic graph property). Another example is that of \emph{encoder-decoder RNNs}, which have seen great success in machine translation. These model an input network producing a compressed \emph{context} sequence\footnote{What Geoffrey Hinton has described as a ``thought''.}. This is then fed into a decoder network that produces an output sequence. The result is a network capable of decoding to a different length than the input, an essential capacity for translating phrases between languages. In \emph{automatic captioning}, a CNN is first trained to classify images. The penultimate layer, a \emph{CNN code}, is fed into an RNN as an initial state to generate a sentence describing the image, one of the more uncanny applications of deep learning. Another variant, \emph{Recursive neural networks} are a less common variant that organise the input into a tree hierarchy.
 
 \subsubsection{Training RNNs}
 
-As in other forms of deep learning, the basic RNN architectures are decades old and mainstream research is devoted to the betterment of model training. Vanilla RNNs have historically been especially difficult to train, as the repeated application of the weights, both in the forward and backward directions, tends to lead to \emph{exploding} or \emph{vanishing} gradients, when the Jacobian's spectral radius is greater or less than $1$ respectively; this despite the non-linearities separating each additional multiplication. This makes it particularly hard to model long-term dependencies in RNNs, an essential capacity for state-of-the-art sequence modeling.
+As in other forms of deep learning, the basic RNN architectures are decades old and mainstream research is devoted to the betterment of model training. Vanilla RNNs have historically been especially difficult to train, as the repeated application of the weights, both in the forward and backward directions, tends to lead to \emph{vanishing} or \emph{exploding gradients}, when the Jacobian's spectral radius is less than or greater than $1$ respectively (this despite the interspersed non-linearities). This makes it particularly hard to model long-term dependencies in RNNs, an essential capacity for state-of-the-art sequence modeling.
 
 An early attempt to enforce stability in RNNs were \emph{leaky units} (Figure \ref{fig:rnn_leaky}), which augmented the classical architecture with a recurrent self-connection to the hidden unit. The recurrence relation thus becomes,
 
@@ -3249,21 +3249,21 @@ $$\mathbf{h}'^{(t)} = (1 - \alpha)\mathbf{h}^{(t - 1)} + \alpha\mathbf{h}^{(t)}$
 \draw[-Latex] (ht) to (t+1);
 
 \end{tikzpicture}
-\caption{Leaky units are hidden units having an additional linear recurrent self-connection. These allow the RNN to accumulate memory over time/ When the value of $\alpha$ is close to $1$, the gradient is stable. The scalar $\alpha$ may be manually fixed or otherwise a learned parameter.}
+\caption{Leaky units are hidden units having an additional linear recurrent self-connection. These allow the RNN to accumulate memory over time. When the value of $\alpha$ is close to $1$, the gradient is stable. The scalar $\alpha$ may be manually fixed or otherwise a learned parameter.}
 \label{fig:rnn_leaky}
 \end{figure}
 
-This allows the network to accumulate knowledge over time in a stable way. Building upon the novel of leaky units, \emph{long short-term memory} (LSTM) constructs a \emph{gated circuit}. This (remarkably) endows the RNN not only with the capacity to accumulate memory or knowledge, but to \emph{choose to forget} (wipe its memory) over the course of a sequence. The advantage of such a capacity is that it allows the RNN to accumulate memory across \emph{sub-sequences} within the greater sequence, as well as long-term dependencies. The LSTM circuit involves a set of gating mechanisms that take the input and feed it through a sigmoid ($0$-$1$) non-linearity, allowing the network to turn on or off the flow of information through a hidden recurrent state whenever required. The LSTM equations extend the classical RNN with,
+This allows the network to accumulate knowledge over time in a stable way. Building upon the novelty of leaky units, \emph{long short-term memory} (LSTM) constructs a \emph{gated circuit}. This (remarkably) endows the RNN not only with the capacity to accumulate memory or knowledge, but to \emph{choose to forget} (wipe its memory) over the course of a sequence. The advantage of such a capacity is that it allows the RNN to accumulate memory across \emph{sub-sequences} within the greater sequence, as well as long-term dependencies. The LSTM circuit involves a set of gating mechanisms that take the input and feed it through a sigmoid ($0$-$1$) non-linearity, allowing the network to turn on or off the flow of information through a hidden recurrent state whenever required. The LSTM equations extend the classical RNN with,
 
 \begin{align}
 \mathbf{f}^{(t)} &= \sigma\big(\mathbf{W}^f\mathbf{x}^{(t)} + \mathbf{U}^f\mathbf{h}^{(t-1)} + \mathbf{b}^f\big) \notag \\
-\mathbf{g}^{(t)} &= \sigma\big(\mathbf{W}^g * \mathbf{x}^{(t)} + \mathbf{U}^g\mathbf{h}^{(t-1)} + \mathbf{b}^g\big) \notag \\
+\mathbf{g}^{(t)} &= \sigma\big(\mathbf{W}^g\mathbf{x}^{(t)} + \mathbf{U}^g\mathbf{h}^{(t-1)} + \mathbf{b}^g\big) \notag \\
 \mathbf{s}^{(t)} &= \mathbf{f}^{(t)} * \mathbf{s}^{(t)} + \mathbf{g}^{(t)} * \sigma\big(\mathbf{W}\mathbf{x}^{(t)} + \mathbf{U}\mathbf{h}^{(t-1)} + \mathbf{b}\big) \notag \\
 \mathbf{q}^{(t)} &= \sigma\big(\mathbf{W}^o\mathbf{x}^{(t)} + \mathbf{U}^o\mathbf{h}^{(t-1)} + \mathbf{b}^o\big) \notag \\
 \mathbf{h}^{(t)} &= \mathbf{q}^{(t)} * \tanh\big(\mathbf{s}^{(t)}\big) \notag
 \end{align}
 
-where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. The relation between the LSTM components is shown in Figure \ref{fig:rnn_lstm}. LSTM remain a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}.
+where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. The relation between the LSTM components is shown in Figure \ref{fig:rnn_lstm}. LSTM remains a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has also been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}.
 
 \begin{figure}
 \centering
