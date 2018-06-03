@@ -3,6 +3,9 @@
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 %\geometry{landscape}                % Activate for for rotated page geometry
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{tikz}
+\usetikzlibrary{arrows, arrows.meta, shapes.geometric, chains, patterns, shadows, fit, backgrounds}
+
 \usepackage{subfig}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -3139,6 +3142,166 @@ which we can refer to as having $s = 1/2$.
 
 Note that max pooling has an approximate inverse in upsampling layers, where a map is interpolated onto a larger grid, or otherwise spaced on a grid of zeros.
 
+\subsection{Recurrent Neural Networks}
+
+Recurrent neural networks model sequential data. Just as CNNs share weights across space, RNNs share weights across time, thus  embodying an \emph{inductive bias} or \emph{structural prior}, the key to the success of deep learning models. The basic design is a set of input nodes, representing a sequence of vectors. These are combined linearly with a (shared) set of weights.  For all but the first node in the sequence, these are added to a similarly linearly transformed previous hidden state, also with a shared set of weights. These are then activated with a non-linear activation function. From these, outputs are generated as a softmax of a further dense layer. This is expressed in the following relations,
+
+\begin{align}
+\mathbf{h}^{(t)} &= \tanh\big(\mathbf{W}\mathbf{x}^{(t)} + \mathbf{U}\mathbf{h}^{(t-1)} + \mathbf{b}\big)\notag \\
+\mathbf{y}^{(t)} &= \text{softmax}\big(\mathbf{V}\mathbf{h}^{(t-1)} + \mathbf{c}\big) \notag
+\end{align}
+
+The circuit diagram of a basic RNN is given in Figure \ref{fig:rnn_circuit}. From this perspective, the recurrence of the network is represented as an arrow reflexively pointing back into the state node. This reflects the sharing of weights, and the dependency of states over time--the actual computational graph remains directed and acyclic. Note that this generalises other architectural designs: though an RNN may map a sequence to another sequence, we can account for losses only for the last (or last $k$) output in the sequence, turning the RNN into a categorical classifier. Also, the spatial depth may be increased simply by adding extra hidden layers, without changing the basic principles.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+\node (x) at (2, 0) {$\mathbf{x}$};
+
+\node (h) at (2, 2) [square,draw] {$\mathbf{h}$};
+
+\node (y) at (2, 4) {$\mathbf{y}$};
+
+\draw[-Latex] (x) to (h);
+\draw[-Latex] (h.90) arc (0:264:4mm);
+\draw[-Latex] (h) to (y);
+
+\end{tikzpicture}
+\caption{Circuit diagram depicting the basic RNN state machine.}
+\label{fig:rnn_circuit}
+\end{figure}
+
+Although some ambiguous diagrams in the literature may suggest otherwise, an RNN accommodates the varying lengths of input sequences in a batch, hence the ``unfolded'' computational graph (Figure \ref{fig:rnn_comp}) is implicitly extended to the required length. This capacity is provided by the shared weights. The circuit is a dynamical system, as well as a universal Turing machine approximator.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+\node (t-1) at (-2, 2) {$\dots$};
+\node (xt-1) at (0, 0) {$\mathbf{x}^{(t-1)}$};
+\node (xt) at (2, 0) {$\mathbf{x}^{(t)}$};
+\node (xt+1) at (4, 0) {$\mathbf{x}^{(t+1)}$};
+
+\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
+\node (ht) at (2, 2) {$\mathbf{h}^{(t)}$};
+\node (ht+1) at (4, 2) {$\mathbf{h}^{(t+1)}$};
+
+\node (yt-1) at (0, 4) {$\mathbf{y}^{(t-1)}$};
+\node (yt) at (2, 4) {$\mathbf{y}^{(t)}$};
+\node (yt+1) at (4, 4) {$\mathbf{y}^{(t+1)}$};
+
+\node (t+1) at (6, 2) {$\dots$};
+
+\draw[-Latex] (t-1) to (ht-1);
+
+\draw[-Latex] (xt-1) to (ht-1);
+\draw[-Latex] (ht-1) to (yt-1);
+\draw[-Latex] (ht-1) to (ht);
+
+\draw[-Latex] (xt) to (ht);
+\draw[-Latex] (ht) to (yt);
+\draw[-Latex] (ht) to (ht+1);
+
+\draw[-Latex] (xt+1) to (ht+1);
+\draw[-Latex] (ht+1) to (yt+1);
+\draw[-Latex] (ht+1) to (t+1);
+
+\end{tikzpicture}
+\caption{Computational graph resulting from ``unfolding'' an RNN's recurrent relation in time. Note the graph is directed and acyclic and trainable with backpropagation through time (BPTT).}
+\label{fig:rnn_comp}
+\end{figure}
+
+RNNs are trained using \emph{backpropagation through time} (BPTT), which simply consists of applying backpropagation on the unfolded computational graph. This is then no different to backpropagation on feed-forward networks, with the gradients computed from the gradients of descendant nodes. However, the unfolded network requires storage of states over the whole sequence, incurring a greater demand of memory. If we replace hidden-to-hidden connections with output-to-hidden connections, the computation is much simplified, and the network is trained instead with a parallelisable backprop called \emph{teacher forcing}. Such a network is, however, no longer a universal approximator.
+
+\subsubsection{Specialised architecures}
+
+RNNs have many application-specific architectures, where the computational graph is altered to serve the problem. An example is that of speech synthesis, where \emph{bidirectional RNNs} are use to model paths running forwards and backwards along the input, to inform each hidden unit about the past and the future (note this is done without violating the acyclic graph property). Another example is \emph{encoder-decoder RNNs}, which have seen great success in machine translation. These model an input network producing a compressed \emph{context}\footnote{What Geoffrey Hinton has described as a ``thought''.} sequence. This is then fed into a decoder network that produces an output sequence. The result is a network capable of decoding to a different length than the input, an essential capacity for translating phrases between languages. In \emph{automatic captioning}, a CNN is trained to classify images. The penultimate layer, a \emph{CNN code}, is fed into an RNN to automatically caption the image, one of the more uncanny applications of deep learning. Another variant, \emph{Recursive neural networks} are a less common variant that organise the input into a tree hierarchy.
+
+\subsubsection{Training RNNs}
+
+As in other forms of deep learning, the basic RNN architectures are decades old and mainstream research is devoted to the betterment of model training. Vanilla RNNs have historically been especially difficult to train, as the repeated application of the weights, both in the forward and backward directions, tends to lead to \emph{exploding} or \emph{vanishing} gradients, when the Jacobian's spectral radius is greater or less than $1$ respectively; this despite the non-linearities separating each additional multiplication. This makes it particularly hard to model long-term dependencies in RNNs, an essential capacity for state-of-the-art sequence modeling.
+
+An early attempt to enforce stability in RNNs were \emph{leaky units} (Figure \ref{fig:rnn_leaky}), which augmented the classical architecture with a recurrent self-connection to the hidden unit. The recurrence relation thus becomes,
+
+$$\mathbf{h}'^{(t)} = (1 - \alpha)\mathbf{h}^{(t - 1)} + \alpha\mathbf{h}^{(t)}$$
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+
+\node (t-1) at (-2, 2) {$\dots$};
+
+\node (xt-1) at (0, 0) {$\mathbf{x}^{(t-1)}$};
+\node (xt) at (2, 0) {$\mathbf{x}^{(t)}$};
+
+\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
+\node (ht) at (2, 2) {$\mathbf{h}^{(t)}$};
+
+\node (t+1) at (4, 2) {$\dots$};
+
+\draw[-Latex] (t-1) to (ht-1);
+
+\draw[-Latex] (xt-1) to (ht-1);
+
+\draw[-Latex] (ht-1) to [out=45, in=135] node[above]{$\alpha$} (ht);
+\draw[-Latex] (ht-1) to node[below]{$1 - \alpha$} (ht);
+
+\draw[-Latex] (xt) to node[right]{$1 - \alpha$} (ht);
+\draw[-Latex] (ht) to (t+1);
+
+\end{tikzpicture}
+\caption{Leaky units are hidden units having an additional linear recurrent self-connection. These allow the RNN to accumulate memory over time/ When the value of $\alpha$ is close to $1$, the gradient is stable. The scalar $\alpha$ may be manually fixed or otherwise a learned parameter.}
+\label{fig:rnn_leaky}
+\end{figure}
+
+This allows the network to accumulate knowledge over time in a stable way. Building upon the novel of leaky units, \emph{long short-term memory} (LSTM) constructs a \emph{gated circuit}. This (remarkably) endows the RNN not only with the capacity to accumulate memory or knowledge, but to \emph{choose to forget} (wipe its memory) over the course of a sequence. The advantage of such a capacity is that it allows the RNN to accumulate memory across \emph{sub-sequences} within the greater sequence, as well as long-term dependencies. The LSTM circuit involves a set of gating mechanisms that take the input and feed it through a sigmoid ($0$-$1$) non-linearity, allowing the network to turn on or off the flow of information through a hidden recurrent state whenever required. The LSTM equations extend the classical RNN with,
+
+\begin{align}
+\mathbf{f}^{(t)} &= \sigma\big(\mathbf{W}^f\mathbf{x}^{(t)} + \mathbf{U}^f\mathbf{h}^{(t-1)} + \mathbf{b}^f\big) \notag \\
+\mathbf{g}^{(t)} &= \sigma\big(\mathbf{W}^g * \mathbf{x}^{(t)} + \mathbf{U}^g\mathbf{h}^{(t-1)} + \mathbf{b}^g\big) \notag \\
+\mathbf{s}^{(t)} &= \mathbf{f}^{(t)} * \mathbf{s}^{(t)} + \mathbf{g}^{(t)} * \sigma\big(\mathbf{W}\mathbf{x}^{(t)} + \mathbf{U}\mathbf{h}^{(t-1)} + \mathbf{b}\big) \notag \\
+\mathbf{q}^{(t)} &= \sigma\big(\mathbf{W}^o\mathbf{x}^{(t)} + \mathbf{U}^o\mathbf{h}^{(t-1)} + \mathbf{b}^o\big) \notag \\
+\mathbf{h}^{(t)} &= \mathbf{q}^{(t)} * \tanh\big(\mathbf{s}^{(t)}\big) \notag
+\end{align}
+
+where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. The relation between the LSTM components is shown in Figure \ref{fig:rnn_lstm}. LSTM remain a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+
+\node (st-1) at (-2, 0) {$\mathbf{s}^{(t-1)}$};
+\node (st) at (2, 0) {$\mathbf{s}^{(t)}$};
+
+\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
+\node (ht) at (4, 2) {$\mathbf{h}^{(t)}$};
+
+\node (fgt) at (2, 4) {$\mathbf{f}^{(t)}, \mathbf{g}^{(t)}$};
+\node (xt) at (2, 6) {$\mathbf{x}^{(t)}$};
+\node (qt) at (4, 4) {$\mathbf{q}^{(t)}$};
+
+\draw[-Latex] (st-1) to (ht-1);
+\draw[-Latex] (st-1) to (st);
+
+\draw[-Latex] (ht-1) to (fgt);
+\draw[-Latex] (ht-1) to (st);
+\draw[-Latex] (ht-1) to [out=90, in=100] (qt);
+
+\draw[-Latex] (st) to [out=0, in=270] (ht);
+\draw[-Latex] (qt) to (ht);
+
+\draw[-Latex] (fgt) to (st);
+
+\draw[-Latex] (xt) to (fgt);
+\draw[-Latex] (xt) to [out=315, in=45] (st);
+\draw[-Latex] (xt) to [out=0, in=90] (qt);
+
+\end{tikzpicture}
+\caption{The computational graph of an LSTM unit.}
+\label{fig:rnn_lstm}
+\end{figure}
+
+Despite the stabilising effects of gated units, exploding gradients may still arise and cause catastrophic damage to the training process. To avoid this, the relatively ad-hoc technique of \emph{clipping gradients} was developed to rescale gradients whose norm exceed some nominal value.
+
 \section{Support Vector Machines}
 
 Russian computer scientist, Vladimir Vapnik (1936-), invented the maximum-margin classifier in 1963, which later evolved into the kernelised support vector machine (SVM).
@@ -3358,6 +3521,14 @@ $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf
 which is an eigenvalue decomposition, indeed the singular value decomposition of the square covariance matrix. Note the singular values are the squares of those of $\mathbf{X}$. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. The principal components are therefore the columns of the right singular matrix, $\mathbf{V}$, equivalent to the eigenmatrix of the covariance matrix. Thus, SVD (which may be performed with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. In this form, it is clear that a matrix multiplication can be understood in three steps: a rotation $\mathbf{U}$, a scaling $\mathbf{S}$ and a final rotation $\mathbf{V}$. For a cloud of points, $\mathbf{X}$, the principal components give the trend lines in orthogonal directions that maximise the variance. These trends can be thought of as latent variables underlying the observations and this is the essence of information retrieval techniques such as latent semantic indexing (LSI).
 
 Without truncation, the data may be decorrelated using the decomposition. Consider mapping $\mathbf{X}$ to $\mathbf{Z} = \mathbf{X}\mathbf{U}$. Then, the covariance matrix of $\mathbf{Z}$ is $\mathbf{Z}^T\mathbf{Z} = \mathbf{U}^T\mathbf{X}^T\mathbf{X}\mathbf{U} = \mathbf{U}^T(\mathbf{U}\mathbf{S}\mathbf{V}^T)(\mathbf{V}\mathbf{S}\mathbf{U}^T)\mathbf{U} = \mathbf{S}^2$, the penultimate step being an eigendecomposition of the covariance matrix. Thus, the covariance matrix of $\mathbf{Z}$ is diagonal. We can further \emph{whiten} the data by the transformation $\mathbf{Z} = \mathbf{X}\mathbf{U}\mathbf{S}^{-1}$. It is easily shown that now that the covariance matrix, $\mathbf{Z}^T\mathbf{Z} = \mathbf{I}$.
+
+\subsection{Multi-dimensional Scaling}
+
+Multi-dimensional scaling is a simple means of dimensionality reduction, usually used to visualise high-dimensional data in two or three dimensions. Starting with a distance matrix $\mathbf{D} \in \mathbb{R}^{N\times N}$ between $N$ points in $D$ dimensions, one can obtain a $d$-dimensional representation by invoking $\mathbf{x}_i \in R^{d}$ and minimising the convex function, 
+
+$$\sum_{i, j} (|\mathbf{x}_i - \mathbf{x}_j|_2^2 - D_{ij})^2$$
+
+\subsection{t-distributed Stochastic Neighbour Embedding}
 
 \section{Unsupervised Machine Learning}
 
