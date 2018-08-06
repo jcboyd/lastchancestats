@@ -3086,9 +3086,9 @@ Now, in the feed-forward setting, the gradient of the input is computed as the m
 
 Finally, consider the gradient for max pooling. We treat this similar to differentiating the ReLU activation function. If we have, for example, a $2 \times 2$ block of neurons $\boldsymbol\sigma=\{\sigma_1, \sigma_2, \sigma_3, \sigma_4\}$, then for pooling function $p$, we have $\frac{\partial{L}}{\partial{\sigma_i}} = \frac{\partial{L}}{\partial{p(\boldsymbol\sigma)}}\cdot\frac{\partial{p(\boldsymbol\sigma)}}{\partial{\sigma_i}}$, where $\frac{\partial{p(\boldsymbol\sigma)}}{\partial{\sigma_i}} = 1_{\{\sigma_1 = \max(\boldsymbol\sigma)\}}$.
 
-\subsubsection{Deconvolutional layers}
+\subsubsection{Transposed convolutional layers}
 
-Deconvolutional layers play an essential role in networks where the compressed hidden layers are eventually \emph{decompressed}, usually to the original input sizes. Examples of such networks are convolutional autoencoders, fully-convolutional networks for segmentation, and the generator part of GANs. A deconvolution computation is similar to that of the convolutional gradient--they are implemented as a ``convolutional transpose''--specifically, a convolution between the layer input and the rotation of the kernel. The gradient of a deconvolutional layer is therefore a normal convolution between the gradient of the scores and the kernel.
+Transposed convolutional layers (sometimes incorrectly called \emph{deconvolutional layers}\footnote{Formally speaking, a deconvolution inverts a convolution. Transposed convolutional layers cannot be said to do this.}) play an essential role in networks where the compressed hidden layers are eventually \emph{decompressed}, usually to the original input sizes. Examples of such networks are convolutional autoencoders, fully-convolutional networks for segmentation, and the generator networks of GANs. A deconvolution computation is similar to that of the convolutional gradient--they are implemented as a ``convolutional transpose''--specifically, a convolution between the layer input and the rotation of the kernel. The gradient of a transposed convolutional layer is therefore a normal convolution between the gradient of the scores and the kernel.
 
 Recall that convolutional layers may be used for downsampling (rather than a pooling layer) when the stride $s > 1$. Likewise, the convolutional transpose will \emph{upsample} its inputs, back towards the original input size. In this case we have what is called \emph{fractional stride} $1/s$. To see this, take the convolution of stride 2,
 
@@ -3140,7 +3140,19 @@ $$
 
 which we can refer to as having $s = 1/2$.
 
-Note that max pooling has an approximate inverse in upsampling layers, where a map is interpolated onto a larger grid, or otherwise spaced on a grid of zeros.
+\subsubsection{Upsampling layers}
+
+While transposed convolutional layers have weights making them \emph{learnable} upsampling layers, static forms of upsampling are used in convolutional networks too. One example is \emph{bilinear interpolation}. It can easily be seen on paper that, for a fixed, integral-sized interpolation, this is equivalent to a fixed convolution applied with fractional stride. For example, a bilinear upsampling by a factor of $2$ is equivalent to convolving the input with the kernel,
+
+$$
+\begin{bmatrix}
+1/4 & 1/2 & 1/4 \\
+1/2 & 1 & 1/2 \\
+1/4 & 1/2 & 1/4 \\
+\end{bmatrix}
+$$
+
+with a stride of $1/2$. Likewise, a nearest neighbour upsampling can be achieved by running a $2 \times 2$ convolution with $1/2$ stride.
 
 \subsection{Recurrent Neural Networks}
 
@@ -3530,6 +3542,16 @@ $$\sum_{i, j} (|\mathbf{x}_i - \mathbf{x}_j|_2^2 - D_{ij})^2$$
 
 \subsection{t-distributed Stochastic Neighbour Embedding}
 
+\section{Structured Sequence Learning}
+
+\subsection{Hidden Markov Models}
+
+\subsection{Conditional Random Fields}
+
+\subsection{Kalman Filters}
+
+Kalman Filters, named after Hungarian mathematician Rudolf Emil K\`alm\`an (1930-2016), is a method for improving estimates from sensor inputs in a time series. The Kalman filter predicts a true state as a compromise between a noisy observation and a prediction given the previous state, based by some physical rules. Suppose we had a GPS readout of a moving vehicle, and information about its direction and velocity. The GPS signal alone would be erratic compared to the reality of the vehicle's movement. We could therefore regularise it by factoring in expectations about the vehicle's position based on simple relations about displacement, velocity, and acceleration from physics. The corrected prediction might be a product of two Gaussians, one for the state prediction and one for the measurement, yielding a third Gaussian of lower variance. A real-time system can then be imagined where each state is fed back into itself.
+
 \section{Unsupervised Machine Learning}
 
 Whereas supervised machine learning can be said to embody learning by example, \emph{unsupervised} machine learning is concerned with finding inherent patterns in a dataset. In this sense, its aim is \emph{description}, rather than prediction. The two most common applications of unsupervised machine learning are feature extraction and \emph{clustering}. Clustering is of particular interest to data mining applications. Clustering is the act of grouping data observations according to some grouping measure. The choice of clustering algorithm is usually problem-specific. Various approaches exist, for example density-based clustering algorithm DBSCAN (density-based spatial clustering with additive noise), or hierarchical clustering models\footnote{Hierarchical models cluster data by pairing closest data samples into groups repeatedly, creating a binary tree hierarchy in a bottom-up approach until all data belongs to a single super group. Such a clustering is usually visualised with a tree-like dendrogram.}. These techniques are popular, but are more heuristic algorithms than machine learning. The techniques we will discuss are more sophisticated and are based on fitting probability densities to data.
@@ -3729,6 +3751,10 @@ Thresholding can be considered to be a simple form of segmentation. Typically, t
 \subsubsection{Otsu Thresholding}
 
 Otsu thresholding is an image analysis technique that optimises the placement of a threshold $k$ in a histogram. Noting that the technique was motivated for image segmentation, it is general-purpose, non-parametric approach to thresholding (a form of one-dimensional clustering), it may be used for any univariate feature readout. This \emph{discriminant} idea is to maximise the ratio $\lambda = \sigma^2_B / \sigma^2_W$ of the \emph{intra}-class variance\footnote{Intra-class variance is the weighted sum of the respective variances of classes invoked by a choice of $k$}, $\sigma^2_W$ and the \emph{inter}-class variance\footnote{Inter-class variance is merely the average squared distance of the class means from the global mean}, $\sigma^2_B$, creating a threshold that maximises similarity within the respective clusters, while maximising the distance between them. The problem is simplified, however, by noting the relation $\sigma^2_B + \sigma^2_W = \sigma^2_T$, where $\sigma^2_T$ is the (fixed) global variance. It can then be shown that maximising $\lambda$ is the same as maximising $\eta = \sigma^2_B / \sigma^2_T$, as they are a function of one another (the problem has only one degree of freedom, not two). Since $\sigma^2_T$ is a constant we can optimise the threshold merely by maximising $\sigma^2_B$. So, the algorithm proceeds by varying $k$ and calculating the inter-class variance each time, retaining the largest.
+
+\subsubsection{Adaptive Thresholding}
+
+If there is a steady gradient (for example, a shadow) in the image, a single global threshold will often be ineffective. Whereas in the Otsu framework a single scalar threshold is computed, adaptive thresholding algorithms compute a \emph{threshold image}, to which the original image is compared element-wise to determine the binary mask output. This threshold image consists of local thresholds calculated in a fixed neighbourhood around each pixel, for example, the weighted average or Otsu threshold calculated inside a structuring element. The superior segmentation result will come at the cost of a (much) greater runtime.
 
 \subsection{Linear Filters}
 
