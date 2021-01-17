@@ -3520,6 +3520,52 @@ $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1
 
 where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with an algorithm known as alternating least squares (ALS). It can be shown analytically that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \frac{1}{N}\mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X} \approx \mathbf{Z}\mathbf{W}^T$ for lower-dimensional, orthonormal $\mathbf{W}$, then $\mathbf{X}\mathbf{W} \approx \mathbf{Z}\mathbf{W}^T\mathbf{W} \implies \mathbf{X}\mathbf{W} \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional approximation. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
 
+\subsection{Derivation of PCA}
+
+Given a set of data $\mathbf{A}\in \mathbb{R}^{N\times D}$, compute the unit vector $\mathbf{x}^* \in \mathbb{R}^{D\times 1}$ that passes through the middle of the data manifold, that is, which minimises the residuals,
+
+\begin{equation}
+\mathbf{x}^* = \min_{\mathbf{x}}\sum_{i=1}^N ||\mathbf{r}_i||_2^2
+\label{eq:residuals}
+\end{equation}
+
+where the residual $\mathbf{r}_i = \mathbf{a}_i - proj_\mathbf{x}(\mathbf{a}_i)\mathbf{x}$, and such that,
+
+\begin{equation}
+\mathbf{x}^T\mathbf{x} = 1.
+\label{eq:constraint}
+\end{equation}
+
+Note that for unit $\mathbf{x}$, $proj_\mathbf{x}(\mathbf{a}_i) = \mathbf{a}_i^T\mathbf{x}$. By the method of Lagrange multipliers, the constraint Equation \ref{eq:constraint} may be substituted into Equation \ref{eq:residuals}, yielding,
+
+\begin{equation}
+\mathbf{x}^*, \lambda^* = \min_{\mathbf{x}, \lambda}\sum_{i=1}^N ||\mathbf{r}_i||_2^2 \lambda\cdot(\mathbf{x}^T\mathbf{x} - 1)
+\label{eq:constrained}
+\end{equation}
+
+Note that,
+
+\begin{align}
+\sum_{i=1}^N ||\mathbf{r}_i||_2^2 &= \sum_{i=1}^N\sum_{j=1}^D (a_{ij} - \mathbf{a}_i^T\mathbf{x}\cdot x_j)^2 \\ \notag
+&= tr((\mathbf{A} - \mathbf{A}\mathbf{x}\mathbf{x}^T)^T(\mathbf{A} - \mathbf{A}\mathbf{x}\mathbf{x}^T)) \\ \notag
+&= tr(\mathbf{A}^T\mathbf{A} - \mathbf{x}\mathbf{x}^T\mathbf{A}^T\mathbf{A} - \mathbf{A}^T\mathbf{A}\mathbf{x}\mathbf{x}^T + \mathbf{x}\mathbf{x}^T\mathbf{A}^T\mathbf{A}\mathbf{x}\mathbf{x}^T) \\ \notag
+&= tr(\mathbf{A}^T\mathbf{A}) - \mathbf{x}^T\mathbf{A}^T\mathbf{A}\mathbf{x}
+\end{align}
+
+where the second step is simply the squared Frobenius norm, and the final step leverages Equation \ref{eq:constraint}. Substituting into Equation \ref{eq:constrained} and differentiating,
+
+\begin{equation}
+\frac{\partial}{\partial\mathbf{x}}    \Big(tr(\mathbf{A}^T\mathbf{A}) - \mathbf{x}^T\mathbf{A}^T\mathbf{A}\mathbf{x} - \lambda\cdot(\mathbf{x}^T\mathbf{x} - 1)\Big) = 2\mathbf{A}^T\mathbf{A}\mathbf{x} - \lambda\mathbf{x}
+\end{equation}
+
+Setting the derivative to zero and rearranging, one obtains,
+
+\begin{equation}
+\frac{1}{N - 1}\mathbf{A}^T\mathbf{A}\mathbf{x}^* = \frac{\lambda}{2N - 2}\mathbf{x}^*,
+\end{equation}
+
+namely, $\mathbf{x}^*$ is an eigenvector of the sample covariance matrix $\frac{1}{N - 1}\mathbf{A}^T\mathbf{A}$.
+
 \subsection{Singular Value Decomposition}
 
 Singular Value Decomposition (SVD) is a factorisation that exists for all matrices $\mathbf{X}$ written,
@@ -4015,4 +4061,3 @@ Since the original formulation, the Hough transform has been extended to find po
 \bibliography{Bibliography} % The references (bibliography) information are stored in the file named "Bibliography.bib"
 
 \end{document}
-
