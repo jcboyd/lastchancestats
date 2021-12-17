@@ -1102,25 +1102,64 @@ hence $$y = \mathcal{L}^{-1}\bigg\{\frac{4}{s - 2}\bigg\} - \mathcal{L}^{1}\bigg
 
 A Fourier series, $g(t)$, is a way of representing any periodic function, $f(t)$, as the sum of a (possibly infinite) set of sines and cosines,
 
-$$g(t) = \sum_{n=0}^{\infty}a_n\cos\bigg(\frac{2\pi nt}{T}\bigg) + \sum_{m=1}^{\infty}b_m\sin\bigg(\frac{2\pi mt}{T}\bigg),$$
+$$g(t) = \sum_{n=0}^{N}a_n\cos\bigg(\frac{2\pi nt}{T}\bigg) + \sum_{m=1}^{M}b_m\sin\bigg(\frac{2\pi mt}{T}\bigg),$$
 
 where $a_0$ is an offset term, and $T$ is the fundamental frequency, that is, the lowest value for which the function is periodic, that is, the lowest value for which $f(t + T) = f(t)$ for all $t$. Deriving a Fourier series representation involves solving for the $a_n$ and $a_m$ parameters. It is possible to isolate each parameter by multiplying by the corresponding wave and integrating over the fundamental frequency. This eliminates all other terms in the series leaving,
 
 $$a_n = \frac{2}{T}\int_0^Tg(t)\cos\bigg(\frac{2\pi nt}{T}\bigg)\mathop{dt}.$$
 
-A Fourier series can also be thought of as a technique for decomposing the harmonics of a wave. For example, a square wave function can be represented as an infinite sum of cosines, each higher frequency part converging asymptotically to the square wave form. A Fourier series is often written in terms of complex exponential function, as this is more elegant and often makes integration less cumbersome.
+A Fourier series can also be thought of as a technique for decomposing the harmonics of a wave. For example, a square wave function can be represented as an infinite sum of cosines, each higher frequency part converging asymptotically to the square wave form. A Fourier series is often written more succinctly in terms of complex exponential functions,
 
-\subsection{The Fourier Transform}
+$$
+g(t) = \sum_{n=-N}^Nc_n e^{i\frac{2\pi}{T}nx}
+$$
 
-Fourier transforms are widely used in statistics, engineering, and physics. The Fourier transform maps a function in the time domain to a function in the frequency domain. The Fourier transform is defined as,
+\subsection{Fourier Transform}
 
-$$\hat{f}(\xi) = \int_{-\infty}^{\infty}f(x)e^{-2\pi ix\xi}\mathop{dx},$$
+Fourier transforms are widely used in statistics, engineering, and physics. The Fourier transform maps a function in a time domain to a function in a frequency domain. The Fourier transform of a function $f(t)$ is defined as,
 
-and the inverse Fourier transform is defined as,
+$$\hat{f}(s) = \int_{-\infty}^{\infty}f(t)e^{-2\pi its}\mathop{dt},$$
 
-$$f(x) = \int_{-\infty}^{\infty}\hat{f}(x)e^{2\pi i\xi x}\mathop{d\xi}.$$
+The transformed function $\hat{f}(s)$ gives the amplitude for any given frequency, and can be interpreted as the level of agreement between a wave of that frequency and the target signal. Intuitively, what cross-correlation is to phase, the Fourier transform is to frequency. For example, for $f(x) = \sin(x)$, the transform becomes a Dirac delta function, that is, a single point on the real plane, corresponding to the single frequency of the function. A more complex sine wave, comprising multiple frequencies, will transform to a sum of delta functions, each representing a frequency. For the square wave function, composed of an infinite summation of frequencies, the transform takes the form $\hat{f}(\xi) = \text{sinc}(x) = \sin(x)/x$, a contiunous sine wave with ever decreasing amplitude.
 
-The initial function $f(x)$ is a function of amplitude over time. The transformed function gives the amplitude for a given frequency. For $f(x) = \sin(x)$, the transform becomes a Dirac delta function, that is, a single point on the real plane, corresponding to the single frequency of the function. A more complex sine wave, comprising multiple frequencies, will transform to a sum of delta functions, each representing a frequency. For the square wave function, composed of an infinite summation of frequencies, the transform takes the form $\hat{f}(\xi) = \text{sinc}(x) = \sin(x)/x$, a contiunous sine wave with ever decreasing amplitude. There is such a thing as a discrete Fourier transform (DFT) for signals with sampled discretely. The famous Shannon-Nyquist theorem relates continuous and discrete signals, proving that a sample rate of at least twice the highest frequency of the continuous wave is sufficient for an exact reproduction. The fast Fourier transform (FFT) is an important $\mathcal{O}(n\log n)$ time algorithm for evaluating a discrete Fourier transform.
+The Fourier inversion theorem defines an inverse Fourier transform that recovers the original function,
+
+$$f(t) = \int_{-\infty}^{\infty}\hat{f}(s)e^{2\pi is t}\mathop{ds}.$$
+
+Note the resemblance to the exponential form of the Fourier series--it is its real-valued, infinite integral counterpart.
+
+\subsection{Discrete-time Fourier Transform}
+
+The discrete-time Fourier transform (DTFT) transforms an infinite series of samples into a continuous freuquency function,
+
+$$X(s) = \sum_{n=-\infty}^{\infty} x_ne^{-sn}.$$
+
+Its inverse is a Fourier series, where the coefficients are simply the frequency amplitudes. The Shannon-Nyquist theorem relates continuous and discrete signals, proving that a sample rate of at least twice the highest frequency (the bandwidth) of the continuous wave is sufficient for an exact reproduction of the continuous signal (intuitively, no sinusoid of frequency below this will be able to interpolate the sample points).
+
+\subsection{Discrete Fourier Transform}
+
+The discrete Fourier transform (DFT, distinct from the DTFT) converts a finite sequence of $N$ samples into a corresponding series of samples in the frequency or DTFT domain,
+
+$$
+X_k = \sum_{n=0}^{N-1} x_ne^{-\frac{i2\pi}{N}kn}.
+$$
+
+Note that a multi-dimensional DFT analogue exists. For images, this is two-dimensional. The convolution theorem says that the convolution of two functions is the point-wise product of their Fourier transforms. This holds for the DFT case, as well as the multi-dimensional DFT. An image convolution can therefore be performed as a pixel-wise product in the Fourier representations of the images (which should then be mapped back to pixel space). Other interesting operations are possible. For example, removing frequency information of a desired range involves simply masking regions of the frequency image (just as it would be with a 1D signal).
+
+\subsection{Fast Fourier Transform}
+
+One of the most important algorithms of the 20th century is the fast fourier transform (FFT) for computing the DFT. It is an efficient algorithm $\mathcal{O}(\log N)$ for the $N$ samples, that improves upon the naive $\mathcal{O}(N^2)$ approach. There are many variants, and, like backpropagation, was discovered earlier, but was rediscovered and popularised by others.
+
+$$X_k = \sum_{n=0}^{N/2-1}x_{2n}e^{-\frac{2\pi i}{N/2}mk} + e^{-\frac{2\pi i}{N}k}\sum_{n=0}^{N/2-1}x_{2n+1}e^{-\frac{2\pi i}{N/2}mk}$$
+
+The Cooley-Tukey version exploits a number of symmetries in the DFT by separating even and odd power terms into two DFTs of equal length (N/2), which are solved for each sample. It may be shown that,
+
+\begin{align}
+X_k &= E_k + e^{-2\pi i/Nk}O_k \\ \notag
+X_{k + N/2} &= E_k - e^{-2\pi i/Nk}O_k \notag
+\end{align}
+
+where $E_k$ and $O_k$ are the even and odd DFTs. This can be used to establish a recurrence relation, wherein DFTs of progressively halving length are computed. The FFT efficiency gain arises from the sharing of computation in the above equations. First note that progressive halving induces a computational tree structure of depth $\log(N)$. However, each node (representing a partial-length DFT) feeds two nodes above it. Hence, rather than a naive binary tree, the branching factor of the is $1$, implying $\mathcal{O}(N)$ operations only at each level.
 
 \section{The Factorial Function}
 
@@ -3808,9 +3847,24 @@ In image processing, A convolution kernel is a (typically) small matrix\footnote
 
 $$(\mathbf{I} * \mathbf{K})(x, y) = \sum_{i = 1}^{d}\sum_{j = 1}^{d} \mathbf{I}(x + i -d/2, y + j - d/2) \times \mathbf{K}(i, j)$$
 
-\subsubsection{Edge detection}
+\subsubsection{Low-pass filters}
 
-Edge detection is based on measuring the gradient at all points in the image. Gradients tend to be high when passing from one intensity region to another. To calculate the gradients, we use some variant of finite differences. Such a kernel could be,
+Low-pass filters are a means for removing noise, or smoothing, which can be thought of as a form of image regularisation. A popular choice is the \emph{Gaussian filter}, whose kernel weights follow a Gaussian distribution, circular in two dimensions. A common kernel size is $5 \times 5$ with,
+
+$$
+\mathbf{K}_{\text{blur}} = \frac{1}{256}
+\begin{bmatrix}
+1 & 4 & 6 & 4 & 1 \\
+4 & 16 & 24 & 16 & 4 \\
+6 & 24 & 36 & 24 & 6 \\
+4 & 16 & 24 & 16 & 4 \\
+1 & 4 & 6 & 4 & 1 \\
+\end{bmatrix}
+$$
+
+\subsubsection{High-pass filters}
+
+High-pass filters can be used for edge detection. This is usually based on measuring the gradient at all points in the image. Gradients tend to be high when passing from one intensity region to another. To calculate the gradients, we use some variant of finite differences. Such a kernel could be,
 
 $$
 \mathbf{K}_{\text{edge}} =
@@ -3830,11 +3884,7 @@ $$
 \end{bmatrix},
 $$
 
-that is, the sum of the second order central difference operators. Note the linearity property of convolutions. As an aside, the \emph{Canny edge detector}, named for Australian computer scientist John F. Canny (1958-), is a \emph{pipeline} incorporating various filters.
-
-\subsubsection{Sharpening}
-
-To sharpen an image, we can subtract its edges, darkening the contours. This can be achieved by combining an identity kernel and an edge detection kernel,
+that is, the sum of the second order central difference operators. This is known as the Laplacian filter. Note the linearity property of convolutions. As an aside, the \emph{Canny edge detector}, named for Australian computer scientist John F. Canny (1958-), is a \emph{pipeline} incorporating various filters. To sharpen an image, we can subtract its edges, darkening the contours. This can be achieved by combining an identity kernel and an edge detection kernel,
 
 $$
 \mathbf{K}_{\text{sharpen}} =
@@ -3854,25 +3904,21 @@ $$
 \end{bmatrix}.
 $$
 
-\subsubsection{Blurring}
+Sobel filters are another edge detection approach,
 
-Blurring is a way of removing detail, which can be thought of as a form of image regularisation. A popular choice is the \emph{Gaussian blur}, whose kernel weights follow a Gaussian distribution, circular in two dimensions. A common kernel size is $5 \times 5$ with,
+$$G_x = I * \begin{bmatrix}
+1 & 0 & -1 \\
+2 & 0 & -2 \\
+1 & 0 & -1
+\end{bmatrix}, G_y = I * \begin{bmatrix}
+1 & 2 & 1 \\
+0 & 0 & 0 \\
+-1 & -2 & -1
+\end{bmatrix}.$$
 
-$$
-\mathbf{K}_{\text{blur}} = \frac{1}{256}
-\begin{bmatrix}
-1 & 4 & 6 & 4 & 1 \\
-4 & 16 & 24 & 16 & 4 \\
-6 & 24 & 36 & 24 & 6 \\
-4 & 16 & 24 & 16 & 4 \\
-1 & 4 & 6 & 4 & 1 \\
-\end{bmatrix}
-$$
+These are combined to obtain the gradient magnitude image,
 
-\subsubsection{Sobel filter}
-
-\subsubsection{Gabor filter}
-
+$$G = \sqrt{G_x^2 + G_y^2}.$$
 
 \subsection{Non-linear Filters}
 
@@ -3995,34 +4041,117 @@ Features are vectorised quantities extracted from images. They  so that imagine
 
 Local binary patterns (LBP) characterise image texture by quantifying uniformity. An LBP algorithm divides an image up into square cells. For each pixel within a cell, the pixel is compared with pixels in its neighbourhood. Where the pixel's intensity is greater than its neighbour's, a $1$ is recorded, otherwise a $0$. This produces a binary string, which is an 8-bit integer under 8-connectivity. The histogram of all binary strings in the cell are the LBP features. LBP features from other cells are concatenated to produce a large feature vector.
 
-\subsubsection{Histogram of Gradients}
+\subsubsection{Histogram of Oriented Gradients}
 
-This is a very famous paper for histogram of oriented gradient (HOG) image features conceived for the problem of person detection. The writing is highly technical and the authors elect to engage in jargon rather than illustrating their technique pictorially. This makes it hard going for the uninitiated, however the technique seems to be the following: the direction of the gradient at each pixel is computed (i.e. the angle of the sum of central difference gradients computed in the $x$- and $y$-directions). The directions are summarised as orientation histograms over square groups of pixels called cells, producing a local representation as a vector of proportions (they choose 9 per cell). The cell values are normalised over a wider multi-cellular area called a block. They use this representation to train a linear SVM (or kernelised at the expense of higher runtime). The SVM is deployed on test images as a sliding-window classifier. The outputs of the detector are run through a conventional algorithm, ``non-maximum suppression''. The pipeline is so successful on the MIT benchmark dataset that they construct their own, more challenging, INRIA person detection dataset.
+In histogram of oriented gradient (HOG) features, the direction of the gradient at each pixel is computed (i.e. the angle of the sum of central difference gradients computed in the $x$- and $y$-directions). The directions are summarised as orientation histograms over square groups of pixels called cells, producing a local representation as a vector of proportions (they choose 9 per cell). The ``vote'' of each pixel gradient in the histogram is weighted by its magnitude. To account for local variation in illumination, the cell values are normalised over a wider multi-cellular area called a block. They use this representation to train a linear SVM (or kernelised at the expense of higher runtime). The SVM is deployed on test images as a sliding-window classifier, at multiple scales. The outputs of the detector are run through a conventional algorithm, ``non-maximum suppression''. The pipeline is so successful on the MIT benchmark dataset that they construct their own, more challenging, INRIA person detection dataset.
 
 \subsubsection{Haralick Features}
 
 Haralick features derive from the co-occurrence matrix of an image. The co-occurrence matrix is a matrix whose elements count the number of times pairs of pixel intensities occur in the image at a given offset. The elements are thus indexed by the pixel values themselves, and hence the co-occurrence matrix is square with dimension the dynamic range of the image. Haralick features somehow derive from this and are used to measure texture.
 
-\subsubsection{Zernicke Features}
+\subsection{Feature Detection}
 
-Zernike features are features based on the Zernicke polynomials that describe shape.
+\subsubsection{Laplacian of Gaussian}
 
-\subsubsection{Wavelet}
+The Laplacian of Gaussian (LoG) is a linear filter that can be used for blob detection. From the multivariate Gaussian PDF,
 
-\subsubsection{Statistical Features}
+\begin{align}
+G(x, y;\boldsymbol\Sigma,\boldsymbol\mu) &= \frac{1}{\sqrt{(2\pi)^k|\boldsymbol\Sigma|}}\exp\bigg\{-\frac{1}{2}(\mathbf{x} - \boldsymbol\mu)^T\boldsymbol\Sigma^{-1}(\mathbf{x} - \boldsymbol\mu)\bigg\} \notag \\
+&= \frac{1}{2\pi\sigma^2}\exp\bigg\{-\frac{x^2 + y^2}{2\sigma^2}\bigg\} \notag
+\end{align}
 
-Moments etc.
+where $k=2$, $\boldsymbol\mu = \mathbf{0}$, and $\Sigma = \sigma^2\mathbf{I}$. Differentiating,
 
-\subsection{Transformations}
+$$
+\frac{\partial G}{\partial x} = -\frac{x}{2\pi\sigma^4}\exp\bigg\{-\frac{x^2 + y^2}{2\sigma^2}\bigg\}
+$$
+
+and differentiating,
+
+$$
+\frac{\partial^2 G}{\partial x^2} = -\exp\bigg\{-\frac{x^2 + y^2}{2\sigma^2}\bigg\}\bigg(\frac{1}{2\pi\sigma^4} - \frac{x^2}{2\pi\sigma^6}\bigg).
+$$
+
+Now, the Laplacian of Gaussian,
+
+$$\Delta G = \frac{\partial^2 G}{\partial x^2} + \frac{\partial^2 G}{\partial y^2} = - \frac{1}{\pi\sigma^4}\bigg(1 - \frac{x^2 + y^2}{2\pi\sigma^6}\bigg)\exp\bigg\{-\frac{x^2 + y^2}{2\sigma^2}\bigg\}$$
+
+Recall that $\frac{\partial}{\partial x}\{f(x)\} * g(x) = \frac{\partial}{\partial x}\{f(x) * g(x)\}$, that is, the convolution of a derivative is the derivative of a convolution. Hence, the LoG computes a second derivate of a Gaussian-smoothed image. Blobs are topologically similar to a bell curve, so their second derivative is a sharp peak in the center, and easily thresholded after convolution with LoG.
+
+The difference of Gaussians (DoG) is a linear blob detection filter consisting of the difference of two Gaussian filters, which may be shown to closely approximate LoG while being faster to compute.
+
+\subsubsection{Harris Detector}
+
+The Harris detector is a corner detection algorithm. The idea is to construct a small window $W$ around a given pixel, and consider the difference in the window when one moves to a new pixel at an offset $(\delta x, \delta y)$,
+
+$$E(\delta x, \delta y) = \sum_{(x, y) \in W} (I(x + \delta x, y + \delta y) - I(x, y))^2,$$
+
+that is, the sum square error between the window pixels, and their counterparts in the offset window. For a small offset, the first term can be approximated by the first-order Taylor polynomial,
+
+\begin{align}
+E(\delta x, \delta y) &\approx \sum_{(x, y) \in W} (I(x, y) + \delta x \cdot I_x, \delta y \cdot I_y - I(x, y))^2 \\ \notag
+&= \begin{bmatrix}
+\delta x & \delta y
+\end{bmatrix} \Bigg(\sum_{(x, y) \in W} \begin{bmatrix}
+I_x^2 & I_xI_y \\
+I_yI_x & I_y^2 \\
+\end{bmatrix} \Bigg) \begin{bmatrix}
+\delta x \\ \delta y
+\end{bmatrix} \\ \notag
+&= \boldsymbol\delta^T \mathbf{H} \boldsymbol\delta \notag
+\end{align}
+
+The Harris detector considers that windows around edges will see large $E$ for many choices of $\boldsymbol\delta$, however not all\footnote{Suppose the window moves perpendicular to the curve, the window contents could remain highly similar}. A corner, however will see changes in all directions. A way of detecting this, therefore, is by identifying pixels for which $E$ is always large, that is, the $\boldsymbol\delta$ minimising $E$ for a given $W$ is still large. Such pixels are likely to be corners, and can be identified with eigen-analysis of the matrix $\mathbf{H}$.
+
+Consider a unit length $\boldsymbol\delta$ step from the target pixel. The extrema over choices of step minimise/maximise $E$. Thus, we have,
+
+\begin{align}
+\begin{array}{rl}
+\displaystyle \min_{\boldsymbol\delta} & \boldsymbol\delta^T \mathbf{H} \boldsymbol\delta\\
+\text{subject to} & \boldsymbol\delta^T\boldsymbol\delta = 1
+\end{array} \notag
+\end{align}
+
+By the method of Lagrange multipliers, we can replace the above with the unconstrained problem,
+
+\begin{align}
+\begin{array}{rl}
+\displaystyle \min_{\boldsymbol\delta} & \boldsymbol\delta^T \mathbf{H} \boldsymbol\delta - \lambda(\boldsymbol\delta^T\boldsymbol\delta - 1)
+\end{array} \notag.
+\end{align}
+
+Differentiating the objective function gives the normal equation,
+
+$$(\mathbf{H} + \mathbf{H}^T)\boldsymbol\delta - \lambda\boldsymbol\delta = \mathbf{0}.$$
+
+Noting that due to symmetry $\mathbf{H} = \mathbf{H}^T$ it is clear $\boldsymbol\delta$ is an eigenvector of $\mathbf{H}$ and $\lambda$ is its eigenvalue. Further note that because $\mathbf{H} \in \mathbb{R}^{2\times2}$ its other eigenvector will maximise $E$. Whereas an edge point will have a large eigenvalue $\lambda_+$, it will also usually have a small eigenvalue $\lambda_-$. Thus, a strategy for discerning corners from edges and other points is to compute the ratio $\lambda_- / \lambda_+$, which wll be high for corners. The Harris detector exploits the fact that the harmonic mean of two values of different magnitudes is close to the smaller value,
+
+\begin{align}
+\lambda_{-} &\approx \frac{\lambda_-\cdot\lambda_+}{\lambda_- + \lambda_+} \\ \notag
+&= \frac{det(\mathbf{H})}{tr(\mathbf{H})},
+\end{align}
+
+which can be computed quickly. Further note that in practice, the sum of derivates over $W$ for each image pixel is implemented as a Gaussian filter (that is, a weighted sum product)\footnote{https://github.com/cournape/scikits-image/blob/master/skimage/feature/harris.py\#L40-L49}.
 
 \subsubsection{Hough Transform}
 
 The Hough transform was originally designed to find straight lines in an image. Starting with some gradient-based rule, candidate edge points are detected by searching the image pixel-by-pixel. Straight lines are drawn at various angles from each given candidate. Each resulting line can be expressed as an angle and perpendicular distance from the origin, $(\rho, \theta)$. From this, each candidate can be represented as a curve in $\rho$-$\theta$ space, the Hough transform space. Repeating for all candidates results in a collection of curves. The intersection of two curves corresponds with the alignment of two points in a straight line. Multiple intersections correspond with multiple aligned points. To find the most heavily weighted intersections, we can simply add a weight to each point in the curve of each candidate, and sum the curves. The peaks in the resulting Hough space image correspond with groups of aligned points, and these peaks can easily be identified through a global threshold.
 
-
 Since the original formulation, the Hough transform has been extended to find points aligned in arbitrary shapes, in particular circles and ellipses.
 
 \subsubsection{SIFT}
+
+Scale-invariant feature transform (SIFT) is motivated by image matching, that is, finding corresponding sets of keypoints (homographies) of image contents. SIFT both identifies these keypoints, and computes features around them, yielding a scale- and rotation-invariant image representation. Keypoint detection occurs in two phases: an inital blog detection phase; and a refinement phase.
+
+Blob detection is based on the difference of Gaussian (DoG), a fast approximation to Laplacian of Gaussian (LoG), in which two Gaussian blurs with different variances are calculated and subtracted. To account for scale, this blob detection is performed across a set of geometrically scaled (1.5x bilinear interpolation according to the paper), which further incorporate Gaussian noise. Local minima/maxima are detected by comparing with all adjacent pixels, first in space, then in scale.
+
+Keypoint refinement involves a number of steps to eliminate weak keypoints, but one is essentially Harris detection: remove curve keypoints in favour of corners.
+
+At this point, we return to the original image, now with keypoints that have stable location l and scale s properties. The next criterion is orientation o. A histogram of gradients is computed, and the peak is chosen as the dominant orientation of the keypoint (l, s, o). Any competing peak within a certain margin is taken to create a duplicate keypoint (l, s, o').
+
+Now, essentially magnitude-weighted gradients are computed in a grid of cells in a window (reflecting the originating scale) around the keypoint, and normalised ("sorted", although the paper does not use this term) with respect to the dominant orientation from the previous step. Each histogram is normalised to a unit vector to control for variance in illumination (the magnitudes used for weighting would all by larger if illumination is locally high).
+
+Note that varying numbers of keypoints are detected for each image. The image matching appllication is based on nearest neighbour matching between sets of keypoints. RANSAC is a fully-fleshed algorithm for this. The homography can be computed as a least squares of the coordinates to solve for the homography matrix (affine transformation). A nice application is image stitching for panoramas: first compute SIFT, then match keypoints, then compute homography and warp to a reference image.
 
 \section{Useless Maths Facts}
 
