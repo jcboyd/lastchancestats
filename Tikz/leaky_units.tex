@@ -1,0 +1,23 @@
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+
+\node (t-1) at (-2, 2) {$\dots$};
+
+\node (xt-1) at (0, 0) {$\mathbf{x}^{(t-1)}$};
+\node (xt) at (2, 0) {$\mathbf{x}^{(t)}$};
+
+\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
+\node (ht) at (2, 2) {$\mathbf{h}^{(t)}$};
+
+\node (t+1) at (4, 2) {$\dots$};
+
+\draw[-Latex] (t-1) to (ht-1);
+
+\draw[-Latex] (xt-1) to (ht-1);
+
+\draw[-Latex] (ht-1) to [out=45, in=135] node[above]{$\alpha$} (ht);
+\draw[-Latex] (ht-1) to node[below]{$1 - \alpha$} (ht);
+
+\draw[-Latex] (xt) to node[right]{$1 - \alpha$} (ht);
+\draw[-Latex] (ht) to (t+1);
+
+\end{tikzpicture}

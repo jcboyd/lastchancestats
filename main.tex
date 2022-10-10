@@ -18,6 +18,7 @@
 \usepackage{cancel}
 \usepackage{mathdots}
 \usepackage{natbib}
+\usepackage{standalone}
 
 \usepackage{color}   %May be necessary if you want to color links
 \usepackage{hyperref}
@@ -281,15 +282,15 @@ First, define $g(x) = f(x) - rx$. This must be differentiable on $[a, b]$ since 
 
 \section{Linear Algebra}
 
-A set of $M$ equations in $N$ variables can be referred to as a \emph{system of linear equations}. Each variable may feature in one or more of the $M$ equations. We are typically interested in finding a \emph{simultaneous solution}, that is, values for each of the variables satisfying all the equations at the same time. If $M < N$ (more variables than equations), the system is \emph{underdetermined}. In this case, there will not be enough information to identify a unique solution, and the solution will be expressed in terms of at least one of the variables, giving an infinite family of solutions. If any equations are mutually contradictory\footnote{For example, the equations $x + y + z = 1$ and $x + y + z = 2$ have no simultaneous solution.}, however, the system will have no solution. If $M > N$, the system is \emph{overdetermined}. Unless the excess equations are in fact linear combinations of others, the solution will necessarily have mutually contradictory equations\footnote{If the left-hand sides of some group of $N$ of the $M$ equations are linearly independent, they form a basis in $\mathbb{R}^N$. Therefore, the left-hand side of any excess equation is some linear combination of this group of $N$. The right-hand side of the excess equation must be equal to the corresponding linear combination of the $N$ right-hand sides, or else it is in contradiction, and the overall system has no solution.}. A system of linear equations may alternatively be written as a matrix equation,
+A set of $M$ equations in $N$ variables can be referred to as a \emph{system of linear equations}. Each variable may feature in one or more of the $M$ equations. One is typically interested in finding a \emph{simultaneous solution}, that is, values for each of the variables satisfying all the equations at the same time. If $M < N$ (more variables than equations), the system is \emph{underdetermined}. In this case, there will not be enough information to identify a unique solution, and the solution will be expressed in terms of at least one of the variables, giving an infinite family of solutions. If any equations are mutually contradictory\footnote{For example, the equations $x + y + z = 1$ and $x + y + z = 2$ have no simultaneous solution.}, however, the system will have no solution. If $M > N$, the system is \emph{overdetermined}. Unless the excess equations are in fact linear combinations of others, the solution will necessarily have mutually contradictory equations\footnote{If the left-hand sides of some group of $N$ of the $M$ equations are linearly independent, they form a basis in $\mathbb{R}^N$. Therefore, the left-hand side of any excess equation is some linear combination of this group of $N$. The right-hand side of the excess equation must be equal to the corresponding linear combination of the $N$ right-hand sides, or else it is in contradiction, and the overall system has no solution.}. A system of linear equations may alternatively be written as a matrix equation,
 
 $$\mathbf{A}\mathbf{x} = \mathbf{b},$$
 
-where $\mathbf{A}$ is the matrix of coefficients, $\mathbf{x}$ is vector form of the simultaneous solution, and $\mathbf{b}$ is the vector of constants. The solution, $\mathbf{x}$, may therefore be found by inverting $\mathbf{A}$. A square matrix $\mathbf{A} \in \mathbb{R}^{N\times N}$ is invertible or non-singular if there is a matrix $\mathbf{A}^{-1} \in \mathbb{R}^{N\times N}$ such that $\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}$. Non-square matrices can have at most distinct left or right inverses. There are many matrix properties necessary and sufficient for invertibility. In particular, the rows and columns of $\mathbf{A}$ are linearly independent and span\footnote{The span of a set of vectors is intuitively its expressiveness as a basis. $N$ linearly independent vectors form a basis for the vector space $\mathbb{R}^{N}$. On the other hand, if there are linear dependencies in the system, the span will be of lower dimension.} the vector space $\mathbb{R}^{N}$. This is equivalent to having full rank, which is in turn equivalent to having zero nullity\footnote{The rank of a matrix, $\mathbf{A}$ is the dimensionality of the vector space spanned with its columns as a basis. This is always equivalent to the span of its rows (row rank of $\mathbf{A}$). The nullity of a matrix is the dimensionality of its null space, that is, the set of all vectors solving $\mathbf{A}\mathbf{x} = \mathbf{0}$.}. These properties are connected in the rank-nullity theorem\footnote{The rank-nullity theorem states that for $N \times N$ matrix, $\mathbf{A}$, its rank and nullity sum to its number of columns, formally, $\text{rank}(\mathbf{A}) + \text{null}(\mathbf{A}) = N$}, and further in the fundamental theorem of linear algebra. If the values of a matrix are randomly sampled from a uniform distribution, the matrix has an infinitesimal chance of having linearly dependent columns, and hence of being singular. For this reason, singular matrices are less a practical concern in least squares regression than is \emph{multi-collinearity}, that is, highly correlated columns that cause ill-conditioning, risking numerical errors.
+where $\mathbf{A}$ is the matrix of coefficients, $\mathbf{x}$ is the vector form of the simultaneous solution, and $\mathbf{b}$ is the vector of constants. The solution, $\mathbf{x}$, may therefore be found by inverting $\mathbf{A}$. A square matrix $\mathbf{A} \in \mathbb{R}^{N\times N}$ is invertible or non-singular if there is a matrix $\mathbf{A}^{-1} \in \mathbb{R}^{N\times N}$ such that $\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}$. Non-square matrices can have at most distinct left or right inverses. There are many matrix properties necessary and sufficient for invertibility. In particular, the rows and columns of $\mathbf{A}$ are linearly independent and span\footnote{The span of a set of vectors is intuitively its expressiveness as a basis. $N$ linearly independent vectors form a basis for the vector space $\mathbb{R}^{N}$. On the other hand, if there are linear dependencies in the system, the span will be of lower dimension.} the vector space $\mathbb{R}^{N}$. This is equivalent to having full rank, which is in turn equivalent to having zero nullity\footnote{The rank of a matrix, $\mathbf{A}$ is the dimensionality of the vector space spanned with its columns as a basis. This is always equivalent to the span of its rows (row rank of $\mathbf{A}$). The nullity of a matrix is the dimensionality of its null space, that is, the set of all vectors solving $\mathbf{A}\mathbf{x} = \mathbf{0}$.}. These properties are connected in the rank-nullity theorem\footnote{The rank-nullity theorem states that for $N \times N$ matrix, $\mathbf{A}$, its rank and nullity sum to its number of columns, formally, $\text{rank}(\mathbf{A}) + \text{null}(\mathbf{A}) = N$}, and further in the fundamental theorem of linear algebra. If the values of a matrix are randomly sampled from a uniform distribution, the matrix has an infinitesimal chance of having linearly dependent columns, and hence of being singular. For this reason, singular matrices are less a practical concern in least squares regression than is \emph{multi-collinearity}, that is, highly correlated columns that cause ill-conditioning, risking numerical errors.
 
 \subsection{Analytic Form of Inverse}
 
-Another necessary and sufficient property of a non-singular matrix is a non-zero determinant. The determinant has an analytic form recursive in the \emph{minors} of the matrix, that is, each of the $N$ sub-matrices formed by removing a given row and each of the $N$ columns in turn. Thus, for $\mathbf{A} \in \mathbb{R}^{2 \times 2} \text{det}(\mathbf{A}) =
+Another necessary and sufficient property of a non-singular matrix is a non-zero determinant. The determinant has an analytic form recursive in the \emph{minors} of the matrix, that is, each of the $N$ sub-matrices formed by removing a fixed row and each of the $N$ columns in turn. Thus, for $\mathbf{A} \in \mathbb{R}^{2 \times 2}, \text{det}(\mathbf{A}) =
 \begin{vmatrix}
 a&b\\
 c&d
@@ -350,7 +351,7 @@ m&o&p
 \end{vmatrix}.
 $$
 
-A naive approach to computing a determinant would involve $\mathcal{O}(N!)$ operations. However, efficient algorithms exist, and if required, a determinant is computed as a byproduct of inversion. The determinant is not usually needed in practice, however. The analytic form of the inverse of matrix $\mathbf{A} \in \mathbb{R}^{N \times N}$ is,
+A naive approach to computing a determinant would involve $\mathcal{O}(N!)$ operations. If required, a determinant can be computed as a byproduct of matrix inversion. The determinant is not usually needed in practice, however. The analytic form of the inverse of matrix $\mathbf{A} \in \mathbb{R}^{N \times N}$ is,
 
 $$\mathbf{A}^{-1} = \frac{1}{\text{det}(\mathbf{A})}\mathbf{C}^{T},$$
 
@@ -358,7 +359,7 @@ where $\mathbf{C} \in \mathbb{R}^{N \times N}$ is the \emph{cofactor} matrix of 
 
 \subsection{Positive-definite Matrices}
 
-Singular matrices have many interesting properties. One such property is that for non-singular $\mathbf{A}, \mathbf{A}\mathbf{x} = \mathbf{0} \implies \mathbf{x} = \mathbf{0}$. Otherwise put, the null space of $\mathbf{A}$, $\text{Null}(\mathbf{A})$ is zero-dimensional (and hence, $\mathbf{A}$ has full rank, by the fundamental theorem of linear algebra). Clearly, if there exist two distinct solutions, $\mathbf{x}$ and $\mathbf{y}$ for invertible $\mathbf{A}$, we have it that $\mathbf{A}(\mathbf{x} - \mathbf{y}) = \mathbf{0} \implies \mathbf{A}^{-1}\mathbf{A}(\mathbf{x} - \mathbf{y}) = \mathbf{0} \implies \mathbf{x} = \mathbf{y}$, a contradiction. A matrix $\mathbf{A}$ is positive-definite if $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0, \forall \mathbf{x} \in \mathbb{R}^N$. Note that any eigenvalue $\lambda$ of $\mathbf{A}$ gives,
+Non-singular matrices have many interesting properties. One such property is that for non-singular $\mathbf{A}, \mathbf{A}\mathbf{x} = \mathbf{0} \implies \mathbf{x} = \mathbf{0}$. Otherwise put, the null space of $\mathbf{A}$, $\text{Null}(\mathbf{A})$ is zero-dimensional (and hence, $\mathbf{A}$ has full rank, by the fundamental theorem of linear algebra). Clearly, if there exist two distinct solutions, $\mathbf{x}$ and $\mathbf{y}$ for invertible $\mathbf{A}$, we have it that $\mathbf{A}(\mathbf{x} - \mathbf{y}) = \mathbf{0} \implies \mathbf{A}^{-1}\mathbf{A}(\mathbf{x} - \mathbf{y}) = \mathbf{0} \implies \mathbf{x} = \mathbf{y}$, a contradiction. A matrix $\mathbf{A}$ is positive-definite if $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0, \forall \mathbf{x} \in \mathbb{R}^N \textbackslash \{0\}$. Note that any eigenvalue $\lambda$ of $\mathbf{A}$ gives,
 
 \begin{align}
 \mathbf{A}\mathbf{x} &= \lambda\mathbf{x} \notag \\
@@ -369,11 +370,11 @@ thus implying $\lambda > 0$ for all $\lambda$ eigenvalues of positive-definite $
 
 \subsection{Gaussian Elimination}
 
-Gaussian elimination is an ancient technique for solving systems of linear equations, but has in modern times been erroneously attributed to Gauss, who merely contributed to its notation. The technique consists of performing a series of \emph{elementary row operations} to transform the system into a form where its solution or solutions may be extracted directly. The row operations are: swapping two rows; scaling a row by a constant factor, and; adding one row to another. With a finite sequence of these operations, a system may be reduced to \emph{row echelon form}, where the matrix has an upper-triangular form, allowing solutions to be found by back-substituting each variable. When the system is further reduced to \emph{reduced echelon form}, the technique is known as Gauss-Jordan elimination. It may be seen easily that these row operations correspond with multiplying the matrix by slight modifications of the identity matrix, and that the inverse matrix is just product of these. The technique has a number of useful applications, in particular computing a matrix inverse. This can be found by applying the technique to the system,
+Gaussian elimination is an ancient technique for solving systems of linear equations, but has in modern times been erroneously attributed to Gauss, who merely contributed to its notation. The technique consists of performing a series of \emph{elementary row operations} to transform the system into a form where its solution or solutions may be extracted directly. The row operations are: swapping two rows; scaling a row by a constant factor, and; adding one row to another. With a finite sequence of these operations, a system may be reduced to \emph{row echelon form}, where the matrix has an upper-triangular form, allowing solutions to be found by back-substituting each variable. When the system is further reduced to \emph{reduced echelon form}, the technique is known as Gauss-Jordan elimination. It may be seen easily that these row operations correspond with multiplying the matrix by slight modifications of the identity matrix, and that the inverse matrix is just the product of these. The technique has a number of useful applications, in particular computing a matrix inverse. This can be found by applying the technique to the system,
 
 $$\mathbf{A}\mathbf{X} = \mathbf{I},$$
 
-and reducing $\mathbf{A}$ to $\mathbf{I}$ transforms $\mathbf{I}$ to $\mathbf{A}$ in a product of elementary row operations matrices. Gaussian elimination can also be used to determine the rank of a matrix, as well as to efficiently compute a matrix determinant.
+and reducing $\mathbf{A}$ to $\mathbf{I}$ transforms $\mathbf{I}$ to $\mathbf{A}$ in a product of elementary row operation matrices. Gaussian elimination can also be used to determine the rank of a matrix, as well as to efficiently compute a matrix determinant.
 
 \subsection{Matrix Decompositions}
 
@@ -452,7 +453,7 @@ It is useful to note how certain matrix expressions may be written as sums. Ther
 
 $$\mathbf{a}\cdot\mathbf{b} = \mathbf{a}^T\mathbf{b} = a_1b_1 + a_2b_2 + \cdots + a_nb_n = \sum_i a_ib_i.$$
 
-Geometrically, a dot product relates to how one vector projects onto another. From the cosine formula, $(\mathbf{a}\cdot\mathbf{b})/|\mathbf{b}| = |\mathbf{a}|\cdot\cos\theta$, and $|\mathbf{a}|\cdot\cos\theta$ is the length along the vector $\mathbf{b}$ at which point the perpendicular projection of $\mathbf{a}$ intersects. In machine learning, linear classifiers are log-linear with respect to their parameters, using a dot product to represent log-likelihood. Therefore, a model prediction amounts to projecting a data point onto a line (or hyperplane) defined by the parameters. This line runs perpendicular to a decision boundary, which determines the classification of the point. Now consider a matrix-vector multiplication,
+Geometrically, a dot product relates to how one vector projects onto another. From the cosine formula, $(\mathbf{a}\cdot\mathbf{b})/|\mathbf{b}| = |\mathbf{a}|\cdot\cos\theta$, and $|\mathbf{a}|\cdot\cos\theta$ is the length along the vector $\mathbf{b}$ at which point the perpendicular projection of $\mathbf{a}$ intersects. Now consider a matrix-vector multiplication,
 
 $$\mathbf{A}\mathbf{b} = \big[A_{:, 1}, A_{:, 2}, \dots, A_{:, N}\big]
 \begin{bmatrix}
@@ -485,7 +486,7 @@ $$\sum_{i} \mathbf{a}_i\mathbf{b}_i^T = \mathbf{A}^T\mathbf{B}.$$
 
 \subsubsection{Transposition Chain Rule}
 
-For matrices \textbf{A} and \textbf{B}, the elements of their product, \textbf{AB}, are formed by multiplying each row of \textbf{A} with each column of \textbf{B}. Thus, $(\textbf{AB})_{ij} = A(i, :) \cdot B(:, j)$, that is, the dot product of row $i$ of matrix \textbf{A} with column $j$ of matrix \textbf{B}. Clearly, $A^T(i, :) \cdot B(:, j)= B^T(j, :) \cdot A(:,i)$, from which the rule,
+For matrices \textbf{A} and \textbf{B}, the elements of their product, \textbf{AB}, are formed by multiplying each row of \textbf{A} with each column of \textbf{B}. Thus, $(\textbf{AB})_{ij} = A(i, :) \cdot B(:, j)$, that is, the dot product of row $i$ of matrix \textbf{A} with column $j$ of matrix \textbf{B}. Clearly, $C^T(i, j) = C(j, i) = A(j, :) \cdot B(:, i) = B^T(i, :) \cdot A^T(:, j) = (B^TA^T)(i, j)$, from which the rule,
 
 $$(\mathbf{AB})^T = \mathbf{B}^T\mathbf{A}^T.$$
 
@@ -891,7 +892,7 @@ Subtracting (\ref{eq:halfzeta}) from (\ref{eq:zeta}) removes all multiples of 2 
 
 Multiplying (\ref{eq:thirdzeta}) by $1/3^s$ and subtracting it from itself gives,
 
-$$\Big(1 - \frac{1}{3^s}\Big)\Big(1 - \frac{1}{2^s}\Big)\zeta(s) = 1 + \frac{1}{5^s} + \frac{1}{7^s} + \frac{1}{9^s} + \frac{1}{11^s} + \cdots$$
+$$\Big(1 - \frac{1}{3^s}\Big)\Big(1 - \frac{1}{2^s}\Big)\zeta(s) = 1 + \frac{1}{5^s} + \frac{1}{7^s} + \frac{1}{11^s} + \frac{1}{13^s} + \cdots$$
 
 If we continue in this fashion, eliminating the primes and all their remaining multiples, we are following the method of Eratosthenes, leaving,
 
@@ -1437,10 +1438,10 @@ $$\sigma_x^2 = \frac{1}{N}\sum_{i=1}^N (x_i - \bar{x})^2$$
 This would be, surprisingly, not quite correct. This is due to the fact we are using the sample mean only, not the true mean. Given all possible samples, the expectation of the sample variance is,
 
 \begin{align}
-\mathbb{E}[\sigma_x^2] &= \mathbb{E}\Bigg[\frac{1}{N}\sum_{i=1}^N\Bigg(x_i - \frac{1}{N}\sum_{i=1}^N x_i\Bigg)^2 \Bigg] \notag \\
+\mathbb{E}[\sigma_x^2] &= \mathbb{E}\Bigg[\frac{1}{N}\sum_{i=1}^N\Bigg(x_i - \frac{1}{N}\sum_{j=1}^N x_j\Bigg)^2 \Bigg] \notag \\
 &=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[x_i^2 - \frac{2}{N}x_i\sum_{j=1}^N x_j + \frac{1}{N^2}\sum_{j=1}^N x_j \sum_{k=1}^N x_k\Bigg] \notag \\
-&=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[\frac{N-2}{N}\mathbb{E}[x_i^2] - \frac{2}{N}\sum_{j\neq i}^N \mathbb{E}[x_ix_j] + \frac{1}{N^2}\sum_{j=1}^N \sum_{k\neq j}^N \mathbb{E}[x_jx_k] + \frac{1}{N^2}\sum_{j=1}^N \mathbb{E}[x_j^2]\Bigg] \notag \\
-&=\frac{1}{N}\sum_{i=1}^N\mathbb{E}\Bigg[\frac{N-2}{N}(\sigma^2 + \mu^2) - \frac{2(N - 1)}{N} \mu^2 + \frac{N(N-1)}{N^2} \mu^2 + \frac{1}{N} (\sigma^2 + \mu^2)\Bigg] \notag \\
+&=\frac{1}{N}\sum_{i=1}^N\frac{N-2}{N}\mathbb{E}[x_i^2] - \frac{2}{N}\sum_{j\neq i}^N \mathbb{E}[x_ix_j] + \frac{1}{N^2}\sum_{j=1}^N \sum_{k\neq j}^N \mathbb{E}[x_jx_k] + \frac{1}{N^2}\sum_{j=1}^N \mathbb{E}[x_j^2] \notag \\
+&=\frac{1}{N}\sum_{i=1}^N\frac{N-2}{N}(\sigma^2 + \mu^2) - \frac{2(N - 1)}{N} \mu^2 + \frac{N(N-1)}{N^2} \mu^2 + \frac{1}{N} (\sigma^2 + \mu^2) \notag \\
 &= \frac{N-1}{N}\sigma^2, \notag
 \end{align}
 
@@ -1456,7 +1457,7 @@ Covariance measures the interaction between random variables, that is, it quanti
 
 \begin{align}
 \text{Cov}[X, Y] &= \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] \notag \\
-&= \mathbb{E}[X^2 - \mathbb{E}[Y]X - \mathbb{E}[X]Y + \mathbb{E}[X]\mathbb{E}[Y]] \notag \\
+&= \mathbb{E}[XY - \mathbb{E}[Y]X - \mathbb{E}[X]Y + \mathbb{E}[X]\mathbb{E}[Y]] \notag \\
 &= \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]. \notag
 \end{align}
 
@@ -1561,7 +1562,7 @@ Monte Carlo statistics are a branch of numerical techniques for providing estima
 \end{figure}
 
 \subsubsection{Buffon's Needles}
-An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles explicitly. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line gives us an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, has probability function $p_x = 1/L$, and $\theta$, which varies between $0$, $p_{\theta} = 2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These conditions alone are enough to calculate the probability,
+An extremely nice and demonstrative Monte Carlo problem is know as the Buffon's needle problem. It also derives a technique for numerically computing the digits of $\pi$ using probabilities, but without invoking any circles explicitly. The problem consists of a set of parallel lines, separated by a distance of $2L$, where L is the length of each of the needles. The needles are then scattered randomly between the parallel lines. The proportion of needles intersecting a line gives us an approximation of $\pi$! There are two random variables at play here: the distance, $x$, of a needle from the nearest line; and the orientation, $\theta$, of the needle with respect to the lines. The assumption we make is that these are uniformly randomly distributed, hence $x$, which varies between 0 and $L$, has probability function $p_x = 1/L$, and $\theta$, which varies between $0$, and $2/\pi$. To determine the probability of a needle crossing a line, we note that it is sufficient that $x < \frac{L}{2}\sin\theta$. This is most easily seen with a diagram. These conditions alone are enough to calculate the probability,
 
 $$
 p = \int_{0}^{\pi/2}\int_{0}^{\frac{L}{2}\sin\theta}p_xp_{\theta}\mathop{dx}\mathop{d\theta} = \frac{2}{L\pi}\int_{0}^{\pi/2}\frac{L}{2}\sin\theta\mathop{d\theta} = \frac{1}{\pi}.
@@ -1581,7 +1582,7 @@ The mean of this distribution is, $\mu = \frac{a + b}{2}$. Note there is also a 
 
 \subsection{Bernoulli Distribution}
 
-A Bernoulli distribution models an event with two alternative outcomes. It may therefore model a coin toss, but is parameterised with probability $\theta$ of outcome 1, and $1 - \theta$ of outcome 2. Thus, any binary event may be modelled. We write $X \sim \text{Ber}(\theta)$. Thus,
+A Bernoulli distribution models an event with two alternative outcomes. It may therefore model a coin toss, but is parameterised with probability $\theta$ of outcome 1, and $1 - \theta$ of outcome 2, so any binary event may be modelled. We write $X \sim \text{Ber}(\theta)$. Thus,
 
 $$\text{Ber}(x|\theta) = \theta^{1_{x=1}}(1 - \theta)^{1_{x=0}}.$$
 
@@ -1601,7 +1602,7 @@ Note the resemblance in form to the Bernoulli distribution. The multinomial dist
 
 \subsection{Laplace Distribution}
 
-The Laplace pdf resembles two opposing exponential functions that meet in the middle, and is written,
+The Laplace pdf resembles two opposing exponential functions that meet at the origin, and is written,
 
 $$f(x ; \mu, b) = \frac{1}{2b}\exp\Bigg\{-\frac{|x - \mu|}{b}\Bigg\},$$
 
@@ -1627,7 +1628,7 @@ Its shape is the well-known bell curve, the distribution so often seen in real-w
 
 $$\Phi({z;\mu,\sigma^2}) = \int_{-\infty}^{x}\mathcal{N}(z | \mu, \sigma^2)\mathop{dz}. \notag$$
 
-Defining $u = \frac{z - u}{\sqrt{2}\sigma}$, and so $du = dz/\sqrt{2}\sigma$, we can integrate by substitution,
+Defining $u = \frac{z - \mu}{\sqrt{2}\sigma}$, and so $du = dz/\sqrt{2}\sigma$, we can integrate by substitution,
 
 \begin{align}
 \Phi({z;\mu,\sigma^2}) &= \frac{1}{\sigma\sqrt{2\pi}}\int_{-\infty}^{\frac{z - \mu}{\sqrt{2}\sigma}} e^{-u^2} \sqrt{2}\sigma\mathop{du} \notag \\
@@ -1683,11 +1684,11 @@ where $\Gamma(v)$ is the gamma function, and $\nu$, the Greek letter \emph{nu}, 
 
 \subsection{Standard Error}
 
-Standard error is the standard deviation of the sample mean, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots X_n)$ from $n$ independent samples, $X_1, X_2, \dots, X_n$, where the true standard deviation $\sigma$ is known. The total, $$T = X_1 + X_2 + \dots + X_n,$$ has variance, $\sigma_T^2 = n\sigma^2$. Then, the variance of $\bar{X} = T/n$ is therefore, $$\sigma_{\bar{X}}^2 = \frac{1}{n^2}n\sigma^2 = \sigma^2/n.$$ We write finally the standard error as, $$\text{SE}_{\bar{X}} = \sigma/\sqrt{n}.$$ Clearly as $n \to \infty$, the standard error goes to $0$, reflecting that the sample mean converges to the true mean. Note that in practice $\sigma$ must be approximated by the sample variance.
+Standard error is the standard deviation of the sample mean, $\bar{X} = \frac{1}{n}(X_1 + X_2 + \cdots X_n)$ from $n$ independent samples, $X_1, X_2, \dots, X_n$. The total, $$T = X_1 + X_2 + \dots + X_n,$$ has variance, $\sigma_T^2 = n\sigma^2$ for true standard deviation $\sigma$. The variance of $\bar{X} = T/n$ is therefore, $$\sigma_{\bar{X}}^2 = \frac{1}{n^2}n\sigma^2 = \sigma^2/n.$$ We write finally the standard error as, $$\text{SE}_{\bar{X}} = \sigma/\sqrt{n}.$$ Clearly as $n \to \infty$, the standard error goes to $0$, reflecting that the sample mean converges to the true mean. Note that in practice $\sigma$ is unknown and must be approximated by the sample variance.
 
 \subsection{Confidence Intervals}
 
-A confidence interval is the interval, expressed in standard deviations, around a sample mean, $\bar{X}$, known to contain the true mean, $\mu$, to a desired degree of certainty. Because of the central limit theorem, we know the sum of n random variables is normally distributed, hence the sample mean also. The standard error statistic tells us the standard deviation of this distribution. Because the Normal cdf has no closed form, it must be computed numerically. In practice, it is necessary to have a lookup table of precomputed probabilities from a standard normal distribution. The value of our variable can then be normalised and the corresponding probability retrieved. In a standard Normal distribution, $Pr(Z \leq 1.96) = 0.9775$ (approximately), and due to symmetry, $Pr(Z \geq - 1.96) = 0.9775$. That is, $95\%$ of the distribution sits in the interval $[-1.96, 1.96]$. In other words, $Z$ has a 95\% chance of being within 1.96 standard deviations ($\sigma = 1$ when standardised) of the mean. Thus, we may solve for our own $95\%$ confidence interval by writing,
+A confidence interval is the interval, expressed in standard deviations, around a sample mean, $\bar{X}$, known to contain the true mean, $\mu$, to a desired degree of certainty. Because of the central limit theorem, we know the sum of $N$ random variables is normally distributed, hence the sample mean also. The standard error statistic tells us the standard deviation of this distribution. Because the Normal cdf has no closed form, it must be computed numerically. In practice, it is necessary to have a lookup table of precomputed probabilities from a standard normal distribution. The value of our variable can then be normalised and the corresponding probability retrieved. In a standard Normal distribution, $Pr(Z \leq 1.96) = 0.9775$ (approximately), and due to symmetry, $Pr(Z \geq - 1.96) = 0.9775$. That is, $95\%$ of the distribution sits in the interval $[-1.96, 1.96]$. In other words, $Z$ has a 95\% chance of being within 1.96 standard deviations ($\sigma = 1$ when standardised) of the mean. Thus, we may solve for our own $95\%$ confidence interval by writing,
 
 $$1.96 = \frac{\bar{X} - \mu}{\sigma}.$$
 
@@ -1699,7 +1700,7 @@ which is the general form for a $95\%$ confidence interval. Confidence intervals
 
 \subsection{Degrees of Freedom}
 
-Degrees of freedom refer to the dimensionality of randomness of a statistic. For $N$ random variables, the degree of freedom is $N$, as this probabilistic vector is random in every dimension. If we were to calculate the sample variance, however, involving the sample mean implies a constraint on the data: given the first $N-1$ observations, we can derive the final one from the value of the mean (known in advance). The variance statistic therefore has $N-1$ degrees of freedom. In a simple (bivariate) linear regression, the normal equations for optimising the bias and gradient weights impose two constraints on the data, thus statistic has $N-2$ degrees of freedom\footnote{In multiple regression with a general $p$ dimensions, each coefficient has $n-p$ degrees of freedom.}
+Degrees of freedom refer to the dimensionality of randomness of a statistic. For $N$ random variables, the degree of freedom is $N$, as this probabilistic vector is random in every dimension. If we were to calculate the sample variance, however, involving the sample mean implies a constraint on the data: given the first $N-1$ observations, we can derive the final one from the value of the mean (known in advance). The variance statistic therefore has $N-1$ degrees of freedom. In a simple (bivariate) linear regression, the normal equations for optimising the bias and gradient weights impose two constraints on the data, thus these statistics have $N-2$ degrees of freedom\footnote{In multiple regression with a general $p$ dimensions, each coefficient has $n-p$ degrees of freedom.}
 
 \subsection{Hypothesis Testing}
 
@@ -1715,11 +1716,11 @@ The value of $Z$ is looked up in standard normal tables, yielding a probability.
 
 \subsubsection{Student's t-test}
 
-In the absence of population parameters, we to Student's t-test and answer slightly different questions. In the one sample case, the t-statistic,
+In the absence of population parameters, one may perform Student's t-test and answer slightly different questions. In the one sample case, the t-statistic,
 
 $$t = \frac{\hat{x} - \mu_0}{s/\sqrt{n}},$$
 
-(distance in standard error units around a null mean) is normally distributed by virtue of the central limit theorem, even if the population distribution is not. The calculation involves the sample mean implying $N-1$ degrees of freedom. In a \emph{paired} two-sample case, where data comes in before/after, dependent pairs, the one-sample test is performed on the mean of the difference, $\mu_D = \mu_X - \mu_Y$, with $\mu_0 = 0$ (the null hypothesis postulating no \emph{a posteriori} effect. When the samples are independent (treated/untreated), the formulation changes slightly, and the number of degrees of freedom is doubled (twice the data, twice the constraints). The formulation further changes when the independent sample sizes are uneven.
+(distance in standard error units around a null mean) is normally distributed by virtue of the central limit theorem, even if the population distribution is not. The calculation involves the sample mean, implying $N-1$ degrees of freedom. In a \emph{paired} two-sample case, where data comes in before/after, dependent pairs, the one-sample test is performed on the mean of the difference, $\mu_D = \mu_X - \mu_Y$, with $\mu_0 = 0$ (the null hypothesis postulating no \emph{a posteriori} effect. When the samples are independent (treated/untreated), the formulation changes slightly, and the number of degrees of freedom is doubled (twice the data, twice the constraints). The formulation further changes when the independent sample sizes are uneven.
 
 \subsubsection{Pearson's Chi-Squared Test}
 
@@ -2294,7 +2295,7 @@ Given a weighted graph, Dijkstra's algorithm, discovered by Dutch computer scien
 
 \section{Introduction to Machine Learning}
 
-Machine learning seeks to construct algorithms that create mathematical models or \emph{machines}, predictive or descriptive, over a set of data. The field utilises an amalgamation of applied mathematics techniques from probability, linear algebra, and optimisation theory. Here we specify a glossary of important terms in machine learning.
+Machine learning seeks to construct algorithms that create mathematical models or \emph{machines}, predictive or descriptive, over a set of data. The field utilises an amalgamation of applied mathematics techniques from probability theory, linear algebra, and optimisation theory. Here we specify a glossary of important terms in machine learning.
 
 \subsection{Learning}
 
@@ -2302,7 +2303,7 @@ In machine learning, learning refers to optimising a model to generalise over a 
 
 \subsubsection{Supervised Learning}
 
-in this case, $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each data sample, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real-valued for a regression task, and discrete for classification\footnote{Note the output may further be scalar- or vector-valued, though we will focus on scalar-valued outputs.}. The task of supervised learning is therefore to learn the mapping that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, which includes many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
+In this case, the dataset $\mathcal{D} = \{\mathbf{X}, \mathbf{y}\}$ is \emph{labelled}, that is, each data sample, $\mathbf{x}_i$, has a corresponding output, $y_i$, which is real-valued for a regression task, and discrete for classification\footnote{Note the output may further be scalar- or vector-valued, though we will focus on scalar-valued outputs.}. The task of supervised learning is therefore to learn the mapping that best approximates $\mathbf{y}$ from $\mathbf{X}$. This is by far the most common form of machine learning, which includes many well known techniques, such as regressions, decision trees, support vector machines, and neural networks.
 
 \subsubsection{Unsupervised Learning}
 
@@ -2312,13 +2313,30 @@ In this case $\mathcal{D} = \{\mathbf{X}\}$ is unlabelled and the learning task 
 
 In this case, the dataset is a mixture of both labelled and unlabelled data. In many practical problems, labelled data is hard to come by, but unlabelled data might be abundant. Semi-supervised techniques seek to combine the data in a reliable way. This approach to learning has shown surprisingly limited success so far.
 
+\subsubsection{Self-Supervised Learning}
+
+Self-supervised learning is a branch of unsupervised learning whereby some predictive task is nonetheless constructed, usually for the purposes of \emph{representation learning}. After good representations have been learned, an auxiliary model can be trained on a smaller dataset using the self-supervised representations. Examples of self-supervised tasks are:
+
+\begin{itemize}
+    \item imputation-based: mask some data (e.g. next word in a sentence) and task the model with predicting it.
+    \item contrastive-based: apply class-invariant transformations (e.g. image augmentation) and deploy a loss function maximising representation similarity between original and augmented data.
+\end{itemize}
+
 \subsubsection{Transfer Learning}
 
-Transfer learning (\cite{transfersurvey}) refers to a broad variety of techniques that use the solution of one problem in solving another. Arguably, supervised machine learning is subsumed by the transfer learning framework, but where the source and target domains are the same, and where training is performed as a single step.
+Transfer learning (\cite{transfersurvey}) refers to a broad set of techniques that use the solution of one problem in solving another. Arguably, supervised machine learning is subsumed by the transfer learning framework, but where the source and target domains are the same, and where training is performed as a single step.
+
+\subsubsection{Reinforcement Learning}
+
+Reinforcement learning involves maximising reward in a sequence of actions in a game-like environment.
 
 \subsubsection{Deep Learning}
 
-Deep learning refers to approaches that aim to model a hierarchy of abstractions in a dataset. One famous example are deep convolutional neural networks form computer vision, which ``stack'' multiple convolutional hidden layers in sequence, each layer modeling finer features of its input images. These models have shown tremendous success in computer vision tasks in recent years, making vast improvements on the earlier state of the art. Another example are deep belief networks, which are restricted Boltzmann machines (RBM)\footnote{RBMs are a generative neural networks factorising over a bipartite graph (hence, \emph{restricited}). Similarly to autoencoders, they can be used in an unsupervised fashion to learn a feature representation in terms of \emph{latent variables}.} stacked one after the other.
+Deep learning refers to approaches that aim to model a hierarchy of representations in a dataset. One important example are deep convolutional neural networks from computer vision, which ``stack'' multiple convolutional hidden layers in sequence, each layer modeling finer features of its input images. These models have shown tremendous success in computer vision tasks in recent years, making vast improvements on the earlier state of the art. Another example are deep belief networks, which are restricted Boltzmann machines (RBM)\footnote{RBMs are a generative neural networks factorising over a bipartite graph (hence, \emph{restricted}). Similarly to autoencoders, they can be used in an unsupervised fashion to learn a feature representation in terms of \emph{latent variables}.} stacked one after the other.
+
+\subsubsection{Discriminative and Generative Learning}
+
+Discriminative models fit a posterior predictive distribution directly. In other words, they learn to directly discriminate between (i.e. classify) data. Generative models rather derive a posterior distribution over data by modeling likelihood and prior and combining them using Bayes' rule. This is often hard to do, especially when the input data is vector-valued, and is a limitation on generative models. In contrast, discriminative models allow for arbitrary basis function expansion and feature engineering. On the other hand, generative models are usually easier to fit, more robust to changes in the dataset (discriminative models must be retrained), and better facilitate semi-supervised learning. Another advantage of generative models is we have or can derive a model for $p(X)$. This means data synthesis is on the table. What are commonly referred to as generative models nowadays are concerned with directly or indirectly modeling the marginal distribution on $X$.
 
 %\subsection{Learning Schemes}
 %
@@ -2370,21 +2388,25 @@ The curse of dimensionality refers to the difficulty of generalising over a smal
 feature selection techniques also exist, where an optimised subset of features is selected according to preprocessing (filtering), cross-validation (wrapping), or as part of the learning algorithm itself (embedding) (\cite{transfersurvey}).
 
 \subsubsection{Bias-Variance Decomposition}
-The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters it approximates. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. Underfitting/bias is observed in training error; overfitting/variance in test error. This tradeoff is reflected in the \emph{no free lunch theorems}\footnote{No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. It  If the data is uniformly random, there will be` no signal to learn.}.
+The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters it approximates. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. Underfitting/bias is observed in training error; overfitting/variance in test error.
 
- Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for data point $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x)$. Then, the MSE between an estimate and the true parameters, averaged over all possible data,
+Let $Y = f(x) + \epsilon$ be the ground truth value with $f(x)$ the true signal for a single test sample $x$, and noise, $\epsilon = \mathcal{N}(0, \sigma^2)$. Let our model estimate be denoted by $\hat{f}(x;\mathcal{D})$ for sample training data $\mathcal{D} = \{(x_1, y_2), \dots (x_n, y_n)\}$. Then, the test error under a MSE for all possible training samples (entailing all possible trained models for the class $\hat{f}$), measured over all possible test samples is,
 
 \begin{align}
-\mathbb{E}[(Y - \hat{f}(x))^2] &= \mathbb{E}[((f(x) + \epsilon - \mathbb{E}[\hat{f}(x)]) + (\mathbb{E}[\hat{f}(x)] - \hat{f}(x)))^2] \notag \\
-&= \sigma^2 + \mathbb{E}[f(x) - \mathbb{E}[\hat{f}(x)]]^2 + \mathbb{E}[(\hat{f}(x) - \mathbb{E}[\hat{f}(x)])^2] \notag \\
-&= \text{noise} + \text{bias}^2 + \text{variance} \notag
+\mathbb{E}_x\bigg[\mathbb{E}_{\mathcal{D}, \epsilon}\Big[\big(Y - \hat{f}(x)\big)^2\Big]\bigg] &= \mathbb{E}_x\bigg[\mathbb{E}_{\mathcal{D}, \epsilon}\bigg[\Big(f(x) + \epsilon - \mathbb{E}\big[\hat{f}(x)\big] + \mathbb{E}\big[\hat{f}(x)\big] - \hat{f}(x)\Big)^2\bigg]\bigg] \notag \\
+&= \mathbb{E}_x\bigg[\sigma^2 + \Big(f(x) - \mathbb{E}_{\mathcal{D}, \epsilon}\big[\hat{f}(x)\big]\Big)^2 + \mathbb{E}_{\mathcal{D}, \epsilon}\Big[\Big(\hat{f}(x) - \mathbb{E}_{\mathcal{D}, \epsilon}\big[\hat{f}(x)\big]\Big)^2\Big]\bigg] \notag \\
+&= \mathbb{E}_x[\text{noise} + \text{bias}^2 + \text{variance}], \notag
 \end{align}
 
-The discrepancy therefore depends both on the variance of the parameters around its own mean, and the bias (the gap between this estimate mean and the true parameters\footnote{The flaw here is that we require the structural assumptions of the model to be correct before we can talk about `true' parameters, which is rarely the case. This discrepancy is known as `structural error'. Even if the model structure is correct, there is an inescapable error of noise that all models share called the \emph{noise floor}. The noise floor is the limit of the learning curve (the trend of improvement in generalisation error as data is added) for an unbiased estimate.}). An unbiased estimate is a parameter model (for example MLE) that converges (in probability) to a hypothetical true parameter set as data increases, but it may entail a higher variance, making it more likely to draw a bad estimate some of the time. Hence, if we wish to be more certain about the optimality of our estimate, it may be prudent to allow some bias (for example through regularisation) if it sufficiently reduces the variance. In conclusion, the bias-variance tradeoff illustrates that on average it may benefit to use a ridge regression rather than OLS regression, even though this invokes a small bias.
+where the first step introduces the terms $\pm\mathbb{E}\big[\hat{f}(x)\big]$ so as to complete the decomposition, and the second step relies on some tedious algebra. The decomposition shows therefore that generalisation error depends both on the variance of the trained model around its own mean (which increases with model complexity i.e. overfitting), and the bias, the gap between the mean of the estimator and the ground truth (which increases with model parsimony i.e. underfitting). Should the model class be incorrectly chosen, the resulting bias is known as `structural error'. Even if the model class is correct, there is an inescapable error of noise that all models share called the \emph{noise floor}, which, given all terms are positive, the represents an irreducible lower bound on generalisation error. The noise floor is the limit of the learning curve (the trend of improvement in generalisation error as data is added) for an unbiased estimate. An unbiased estimate is a model that converges (in probability) to a hypothetical true parameter set as data increases. A classic case of bias-variance tradeoff is seen between ridge regression and ordinary least squares.
 
 \subsubsection{Gauss-Markov Theorem}
 
 Orthogonal to the bias-variance tradeoff is the Gauss-Markov theorem. This shows that among unbiased linear models, the one with lowest variance is ordinary least squares. This is thus a statement on the choice of loss function, in contrast to bias-variance, which is a statement about regularisation. In effect, it is a fundamental result, though somewhat tautological: ``the best way to minimise variance is to infer parameters that minimise mean square error, that is, variance''.
+
+\subsubsection{No free-lunch theorems}
+
+No free lunch in machine learning refers to the fact that, averaged over all possible ground truths, no model is better than random guessing. This illustrates the power of the implicit assumptions we make when modelling data, for example, that the ground truth function is smooth with Gaussian noise. If the data is uniformly random, there will be no signal to learn.
 
 \section{Bayes and the Beta-Binomial Model}
 
@@ -2637,7 +2659,7 @@ Now, summing to iteration $k$ gives us,
 &\leq \frac{1}{2t}||\mathbf{x}^{(0)} - \mathbf{x}^*||_2^2 \notag
 \end{align}
 
-We know from before that $f(x^{(k)}$ is non-increasing. Therefore,
+We know from before that $f(x^{(k)})$ is non-increasing. Therefore,
 
 $$f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{*}) \leq \frac{1}{k}\sum_{i=1}^k f(\mathbf{x}^{(i)}) - f(\mathbf{x}^*) \leq \frac{||\mathbf{x}^{(0)} - \mathbf{x}^*||_2^2}{2tk} $$
 
@@ -2798,7 +2820,7 @@ Now we see the final row contains non-negatives for $x_1$ and $x_2$, therefore n
 
 \section{Logistic Regression}
 
-Logistic regression is a class of classification models. Learning a logistic regression can be thought of as fitting a multivariate Bernoulli distribution. There is also a strong connection between logistic regression and linear discriminant analysis. In fact, logistic regression models are the \emph{discriminative} form of the same model. Discriminative models fit a posterior predictive distribution directly, unlike generative models, which derive the posterior by combining likelihood and prior distributions\footnote{This is often hard to do, especially when the input data is vector-valued, and is a limitation on generative models. In contrast, discriminative models allow for arbitrary basis function expansion and feature engineering. On the other hand, generative models are usually easier to fit, more robust to changes in the dataset (discriminative models must be retrained), and better facilitate semi-supervised learning.}. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably presents the student with the quintessential optimisation techniques of machine learning. Linear and logistic regressions are part of a wider family of models called \emph{generalised linear models} (GLM). This is a family of models modeling exponential densities over output variables, and where the mean is a linear combination of the parameters, in some cases passed through a non-linear function. A GLM can be characterised by a choice of probability distribution and a choice of \emph{link function}. In OLS regression, this link function is the identity; in logistic regression it is the logistic function. In a \emph{poisson regression}, the poisson distribution is used with a $\log$ link function. In this case, applying maximum likelihood gives a convex differentiable function and the regression may be performed with gradient descent. Recall a poisson distribution models the number of occurrences of an event with a given occurrence rate over a given time period. In the same way a logistic regression is more suitable for classification than OLS, a poisson regression is more suitable for modeling \emph{rates}.
+Logistic regression is a class of classification models. Learning a logistic regression can be thought of as fitting a multivariate Bernoulli distribution. There is also a strong connection between logistic regression and linear discriminant analysis. In fact, logistic regression models are the \emph{discriminative} form of the same model. Logistic regressions are a core part of machine learning with ties to more sophisticated techniques such as neural networks. Studying logistic regressions notably presents the student with the quintessential optimisation techniques of machine learning. Linear and logistic regressions are part of a wider family of models called \emph{generalised linear models} (GLM). This is a family of models modeling exponential densities over output variables, and where the mean is a linear combination of the parameters, in some cases passed through a non-linear function. A GLM can be characterised by a choice of probability distribution and a choice of \emph{link function}. In OLS regression, this link function is the identity; in logistic regression it is the logistic function. In a \emph{poisson regression}, the poisson distribution is used with a $\log$ link function. In this case, applying maximum likelihood gives a convex differentiable function and the regression may be performed with gradient descent. Recall a poisson distribution models the number of occurrences of an event with a given occurrence rate over a given time period. In the same way a logistic regression is more suitable for classification than OLS, a poisson regression is more suitable for modeling \emph{rates}.
 
 \subsection{Binary Logistic Regression}
 
@@ -2955,7 +2977,7 @@ This hidden layer creates an intermediate representation of the input data. The 
 
 $$\mathbf{f}(\mathbf{x}) = \sigma(\mathbf{W}^{(M)}\sigma(\mathbf{W}^{(M-1)}(\cdots\sigma(\mathbf{W}^{(1)}\mathbf{x} + \mathbf{b}^{(1)})\cdots)  + \mathbf{b}^{(M-1)})  + \mathbf{b}^{(M)})$$
 
-A neural network may be used for classification and regression, the output passed through mean-squared error in the latter case. Despite the complexity, this model can be trained with standard gradient descent techniques. Despite an elongated history, feed-forward neural networks and their variants have seen a resurgence of popularity in recent years, with the advent of deep learning. Neural networks are very powerful non-linear models, which are in fact capable of fitting any smooth function given enough layers, making them \emph{universal approximaters}. A simple example of a neural network fitting an absolute value function is given in Figure \ref{fig:universalapproximater}.
+A neural network may be used for classification and regression, the output passed through mean-squared error in the latter case. Despite the complexity, this model can be trained with standard gradient descent techniques. Despite an elongated history, feed-forward neural networks and their variants have seen a resurgence of popularity in recent years, with the advent of deep learning. Neural networks are very powerful non-linear models, which are in fact capable of fitting any smooth function given enough layers, making them \emph{universal approximators}. A simple example of a neural network fitting an absolute value function is given in Figure \ref{fig:universalapproximater}.
 
 \begin{figure}
 \centering
@@ -2967,42 +2989,113 @@ A neural network may be used for classification and regression, the output passe
 \label{fig:universalapproximater}
 \end{figure}
 
-Note that we endow each hidden layer with its own set of weights. Though a neural network in non-linear and not convex, it remains differentiable and therefore trainable with gradient descent. The gradient of a model weight tells us locally how the loss function will increase for a unit increase to the weight. We therefore take a small (safe) step in the opposite direction, that is, we reduce the weight by a proportional amount. The procedure for computing the gradients at each iteration of a gradient descent is called backpropagation. Backpropagation is an application of the chain rule to the graph structure of model. The crucial formula for backpropagation, as presented in the 1986 paper of Rumelhart, Hinton, and Williams is,
+Note that we endow each hidden layer with its own set of weights. Though a neural network in non-linear and not convex, it remains differentiable and therefore trainable with gradient descent. The gradient of a model weight tells us locally how the loss function will increase for a unit increase to the weight. We therefore take a small (safe) step in the opposite direction, that is, we reduce the weight by a proportional amount. The procedure for computing the gradients at each iteration of a gradient descent is called backpropagation. Backpropagation is an application of the chain rule to the graph structure of a neural network. 
 
-$$\frac{\partial L}{\partial x_i} = \sum_j \frac{\partial L}{\partial y_i} w_{ij}$$
+% The crucial formula for backpropagation, as presented in the 1986 paper of Rumelhart, Hinton, and Williams is,
 
-where the gradient of the score $x_i$ at a given layer is the sum product of the gradients of the activations $y_j$ emanating from it and the weights $w_{ij}$ between them. From a practical standpoint, each layer $l$ over which we perform backpropagation requires three computations:
+% $$\frac{\partial L}{\partial x_i} = \sum_j \frac{\partial L}{\partial y_i} w_{ij}$$
 
-\begin{enumerate}
-\item $\frac{\partial L}{\partial \mathbf{s}^{(l)}}$, the gradient of the \emph{scores}, $\mathbf{s}^{(l)} = \mathbf{W}^{(l)}\mathbf{x}^{(l)} + \mathbf{b}^{(l)}$.
-\item $\frac{\partial L}{\partial \mathbf{W}^{(l)}}$, the gradient of the weights. All weights are subsequently updated to make the descent step.
-\item $\frac{\partial L}{\partial \mathbf{x}^{(l)}}$, the gradient of the input (previous activation). This is the \emph{error signal} that is passed back to the layer below.
-\end{enumerate}
+% where the gradient of the score $x_i$ at a given layer is the sum product of the gradients of the activations $y_j$ emanating from it and the weights $w_{ij}$ between them. From a practical standpoint, each layer $l$ over which we perform backpropagation requires three computations:
 
-Let us first consider (1), the gradient of the scores. We previously derived the gradient for the particular case of an output layer. In general, we compute, $\frac{\partial L}{\partial \mathbf{s}^{(l)}} = \frac{\partial L}{\partial \boldsymbol\sigma^{(l)}}\cdot\frac{\partial\boldsymbol\sigma^{(l)}}{\partial\mathbf{s}^{(l)}}$ where $\frac{\partial L}{\partial \boldsymbol\sigma^{(l)}} = \frac{\partial L}{\partial \mathbf{x}^{(l+1)}}$, since the present activation and the following input are one in the same. The activation function $\sigma$, applied element-wise, is classically the sigmoid function or else the hyperbolic tangent function (itself a linear transformation of sigmoid), and nowadays more commonly the rectified linear unit (ReLU) function and its variants\footnote{The sigmoid and hyperbolic tangent functions suffer from small gradients for most of their inputs. This becomes the vanishing gradient problem in deep networks, where small gradients are compounded through backpropagation, with earlier layers updating very slowly. As a result, the latter are rarely used in training CNNs. The cheap to compute ReLU always has a gradient of $0$ or $1$ and is ubiquitous in CNNs (though not in RNNs where exploding gradients are a concern). However ReLU often suffers from neuron death. This can occur if, for example, a neuron has learned a large negative bias. In this case, any input will likely be negative after the linear transformation, hence the activation will be zero, and so will the gradient. As a result, the neuron will never change. LeakyReLU introduces a gentle slope for negative inputs in an attempt to ameliorate the dying neuron problem. Parameterised ReLU (PReLU) makes this slope learnable. Maxout activations/networks further generalise ReLU, taking the maximum over $k$ piecewise linear transformations. However, the number of learnable weights grows $k$ times.}. Since we have $\sigma(\mathbf{s}) = [\sigma(s_1), \sigma(s_2), \cdots \sigma(s_k)]^T$, an element-wise transformation, we can calculate the gradient element-wise as,
+% \begin{enumerate}
+% \item $\frac{\partial L}{\partial \mathbf{s}^{(l)}}$, the gradient of the \emph{scores}, $\mathbf{s}^{(l)} = \mathbf{W}^{(l)}\mathbf{x}^{(l)} + \mathbf{b}^{(l)}$.
+% \item $\frac{\partial L}{\partial \mathbf{W}^{(l)}}$, the gradient of the weights. All weights are subsequently updated to make the descent step.
+% \item $\frac{\partial L}{\partial \mathbf{x}^{(l)}}$, the gradient of the input (previous activation). This is the \emph{error signal} that is passed back to the layer below.
+% \end{enumerate}
+
+% Let us first consider (1), the gradient of the scores. We previously derived the gradient for the particular case of an output layer. In general, we compute, $\frac{\partial L}{\partial \mathbf{s}^{(l)}} = \frac{\partial L}{\partial \boldsymbol\sigma^{(l)}}\cdot\frac{\partial\boldsymbol\sigma^{(l)}}{\partial\mathbf{s}^{(l)}}$ where $\frac{\partial L}{\partial \boldsymbol\sigma^{(l)}} = \frac{\partial L}{\partial \mathbf{x}^{(l+1)}}$, since the present activation and the following input are one in the same. The activation function $\sigma$, applied element-wise, is classically the sigmoid function or else the hyperbolic tangent function (itself a linear transformation of sigmoid), and nowadays more commonly the rectified linear unit (ReLU) function and its variants\footnote{The sigmoid and hyperbolic tangent functions suffer from small gradients for most of their inputs. This becomes the vanishing gradient problem in deep networks, where small gradients are compounded through backpropagation, with earlier layers updating very slowly. As a result, the latter are rarely used in training CNNs. The cheap to compute ReLU always has a gradient of $0$ or $1$ and is ubiquitous in CNNs (though not in RNNs where exploding gradients are a concern). However ReLU often suffers from neuron death. This can occur if, for example, a neuron has learned a large negative bias. In this case, any input will likely be negative after the linear transformation, hence the activation will be zero, and so will the gradient. As a result, the neuron will never change. LeakyReLU introduces a gentle slope for negative inputs in an attempt to ameliorate the dying neuron problem. Parameterised ReLU (PReLU) makes this slope learnable. Maxout activations/networks further generalise ReLU, taking the maximum over $k$ piecewise linear transformations. However, the number of learnable weights grows $k$ times.}. Since we have $\sigma(\mathbf{s}) = [\sigma(s_1), \sigma(s_2), \cdots \sigma(s_k)]^T$, an element-wise transformation, we can calculate the gradient element-wise as,
+
+% $$
+% \frac{\partial L}{\partial \mathbf{s}^{(l)}} =
+% \begin{bmatrix}
+% \frac{\partial L}{\partial\sigma_1^{(l)}}\cdot\frac{\partial\sigma_1^{(l)}}{\partial{s}_1^{(l)}} \\ 
+% \vdots \\
+% \frac{\partial L}{\partial\sigma_k^{(l)}}\cdot\frac{\partial\sigma_k^{(l)}}{\partial{s}_k^{(l)}} \\
+% \end{bmatrix},
+% $$
+
+% where for sigmoid, $\frac{\partial\sigma_i^{(l)}}{\partial{s}_i^{(l)}} = \partial\sigma_i^{(l)}(1 - \sigma_i^{(l)})$, and for ReLU, $\frac{\partial\sigma_i^{(l)}}{\partial{s}_i^{(l)}} = 1_{\{\sigma_i^{(l)} > 0\}}$.
+
+% For computation (2), the weights gradient, consider, $\frac{\partial L}{\partial w_{kj}^{(l)}} = \frac{\partial L}{\partial s_j}\cdot\frac{\partial s_j}{\partial w_{kj}^{(l)}} = \frac{\partial L}{\partial s_j}\cdot x_j$. In vector form this gives us, $\frac{\partial L}{\partial \mathbf{s}^{(l)}}\mathbf{x}^T$, that is, the outer product of the score gradient and the input vector. Considering that the loss over a batch is the sum of losses for each sample, we have in general, for batch $\mathbf{X} \in \mathbb{R}^{D \times M}$,
+
+% $$\frac{\partial L}{\partial \mathbf{W}^{(l)}} = \frac{\partial L}{\partial \mathbf{s}^{(l)}}\cdot\mathbf{X}^T$$
+
+% For the bias terms, consider that with the bias trick, the gradients $\frac{\partial s_j}{\partial b_{k}^{(l)}} = 1, \forall k$. We can therefore simply sum the score gradients over the size $m$ batch, $\sum_m\frac{\partial s_{mj}}{\partial b_{k}^{(l)}}$. 
+
+% Finally, for computation (3), simply consider the chain rule, $\frac{\partial L}{\partial\mathbf{x}^{(l)}} = \frac{\partial L}{\partial\mathbf{s}^{(l)}}\cdot\frac{\partial\mathbf{s}^{(l)}}{\partial\mathbf{x}^{(l)}}.$ It is easy to show by forming the Jacobian matrix that $\frac{\partial\mathbf{s}^{(l)}}{\partial\mathbf{x}^{(l)}} = \mathbf{W}^{(l)}$. Hence,
+
+% $$\frac{\partial L}{\partial \mathbf{x}^{(l)}} = \frac{\partial L}{\partial \mathbf{s}^{(l)}}\cdot\mathbf{W}^T$$
+
+% This final gradient is passed to the previous layer as $\frac{\partial L}{\partial \boldsymbol{\sigma}^{(l-1)}}$ to continue the backpropagation.
+
+\begin{figure}
+\centering
+\begin{tabular}{cc}
+\subfloat[Network]{\includestandalone[width=0.5\textwidth]{Tikz/backprop1}} & 
+\subfloat[Output layer $L$]{\includestandalone[width=0.5\textwidth]{Tikz/backprop2}} \\
+\subfloat[Activations layer $L-1$]{\includestandalone[width=0.5\textwidth]{Tikz/backprop3}} & 
+\subfloat[Layer $L-1$]{\includestandalone[width=0.5\textwidth]{Tikz/backprop4}}
+\end{tabular}
+\caption{Backpropagation step by step.}
+\label{fig:backprop}
+\end{figure}
+
+Consider a network with $L$ layers and $n[l]$ nodes in layer $l$ as in Figure \ref{fig:backprop}. The forward computation at layer $l$ is,
+
+\begin{align}
+\mathbf{s}^{(l)} &= W^{(l)}\mathbf{x}^{(l-1)} \\ \notag
+\mathbf{x}^{(l)} &= \sigma(\mathbf{s}^{(l)}) \\ \notag
+\end{align}
+
+Backpropagation computes the gradients $\frac{\partial E}{\partial w_{ij}^{(l)}}$ for all weights indexed $i,j$, for all layers $l$.
+
+To illustrate the backpropagation algorithm, first consider the network's output layer $L$, with a mean squared error loss, for a single data sample,
+
+\begin{align}
+E &= (\hat{y} - y)^2 \\ \notag
+&= \bigg(\big(\sum_{i=1}^{n[L]}w_i^{(L)}x_i^{(L)}\big) - y\bigg)^2 \\ \notag
+\end{align}
+
+By the chain rule we have,
+
+$$\frac{\partial E}{\partial w_{i}^{(L)}} = 2x_i^{(L)}(\hat{y} - y)$$
+
+Now, what about the general case? To derive a rule, we consider the multivariable chain rule. This states that, given a function of functions, $E(x) = f(g_1(x), \dots, g_m(x))$ for differentiable functions $f$ and $g_j$ then,
+
+$$\frac{\partial E}{\partial x} = \sum_{j=1}^m \frac{\partial E}{\partial g_j}\cdot\frac{\partial g_j}{\partial x}$$
+
+To show this, one first forms the first-order Taylor polynomial,
+
+$$f(g_1(x), \dots, g_m(x)) = f(g_1(x_0), \dots, g_m(x_0)) + \sum_{j=1}^m \frac{\partial f}{\partial g_j}(z_j(x) - z_j(x_0)) + O(\boldsymbol\delta\mathbf{x}^2)$$
+
+Subtracting $f(x_0)$ and divide through by $x - x_0$ then take the limit as $(x - x_0) \to 0$ to obtain the derivatives. It remains to show that the error goes to zero in the limit.
+
+This result suggests that if we take the $g_j$ to be the subnetwork from layer $l-1$ to layer $l$, and $f$ to be the final $L-l$ layers of the network and apply the multivariable chain rule to obtain the gradients. If we compute the gradients in reverse order of layer, we can efficiently compute all network gradients, propagating gradients backwards to each layer in turn. Returning to our network, we can apply the multivariable chain rule. Let us assume the non-linearity is the logistic function such that $\sigma(x) = \frac{1}{1 + e^{-x}}$ then,
+
+\begin{align}
+\frac{\partial E}{\partial s_i^{(l)}} &= \sum_{j=1}^m \frac{\partial E}{\partial x_j^{(l)}} \cdot \frac{\partial x_j^{(l)}}{\partial s_i^{(l)}} \\ \notag
+&= \frac{\partial E}{\partial x_i^{(l)}} \cdot \sigma(s_i^{(l)})(1 - \sigma(s_i^{(l)})
+\end{align}
+
+The core formula of backpropagation is then,
 
 $$
-\frac{\partial L}{\partial \mathbf{s}^{(l)}} =
-\begin{bmatrix}
-\frac{\partial L}{\partial\sigma_1^{(l)}}\cdot\frac{\partial\sigma_1^{(l)}}{\partial{s}_1^{(l)}} \\ 
-\vdots \\
-\frac{\partial L}{\partial\sigma_k^{(l)}}\cdot\frac{\partial\sigma_k^{(l)}}{\partial{s}_k^{(l)}} \\
-\end{bmatrix},
+\frac{\partial E}{\partial x_i^{(l-1)}} = \sum_{j=1}^m \frac{\partial E}{\partial s_j^{(l)}} \cdot w_{ji}^{(l-1)},
 $$
 
-where for sigmoid, $\frac{\partial\sigma_i^{(l)}}{\partial{s}_i^{(l)}} = \partial\sigma_i^{(l)}(1 - \sigma_i^{(l)})$, and for ReLU, $\frac{\partial\sigma_i^{(l)}}{\partial{s}_i^{(l)}} = 1_{\{\sigma_i^{(l)} > 0\}}$.
+that is, the gradient of a neuron is the sum of the gradients of all neurons emanating from that neuron, weighted by the weights of their connections. It is these error gradients that are backpropagated to layer $l-2$. Finally, the weight gradients can be computed, before sending them to a gradient descent algorithm,
 
-For computation (2), the weights gradient, consider, $\frac{\partial L}{\partial w_{kj}^{(l)}} = \frac{\partial L}{\partial s_j}\cdot\frac{\partial s_j}{\partial w_{kj}^{(l)}} = \frac{\partial L}{\partial s_j}\cdot x_j$. In vector form this gives us, $\frac{\partial L}{\partial \mathbf{s}^{(l)}}\mathbf{x}^T$, that is, the outer product of the score gradient and the input vector. Considering that the loss over a batch is the sum of losses for each sample, we have in general, for batch $\mathbf{X} \in \mathbb{R}^{D \times M}$,
+$$
+\frac{\partial E}{\partial w_{ij}^{l-1}} = \frac{\partial E}{\partial s_i^{(l)}} \cdot x_{j}^{(l-1)}
+$$
 
-$$\frac{\partial L}{\partial \mathbf{W}^{(l)}} = \frac{\partial L}{\partial \mathbf{s}^{(l)}}\cdot\mathbf{X}^T$$
+These three formulas can be vectorised as,
 
-For the bias terms, consider that with the bias trick, the gradients $\frac{\partial s_j}{\partial b_{k}^{(l)}} = 1, \forall k$. We can therefore simply sum the score gradients over the size $m$ batch, $\sum_m\frac{\partial s_{mj}}{\partial b_{k}^{(l)}}$. 
+$$\frac{\partial E}{\partial \mathbf{s}^{(l)}} = \frac{\partial E}{\partial \mathbf{x}^{(l)}} \cdot \sigma(\mathbf{s}^{(l)}) \cdot (1 - \sigma(\mathbf{s}^{(l)}))$$
 
-Finally, for computation (3), simply consider the chain rule, $\frac{\partial L}{\partial\mathbf{x}^{(l)}} = \frac{\partial L}{\partial\mathbf{s}^{(l)}}\cdot\frac{\partial\mathbf{s}^{(l)}}{\partial\mathbf{x}^{(l)}}.$ It is easy to show by forming the Jacobian matrix that $\frac{\partial\mathbf{s}^{(l)}}{\partial\mathbf{x}^{(l)}} = \mathbf{W}^{(l)}$. Hence,
+$$\frac{\partial E}{\partial \mathbf{x}^{(l-1)}} = (W^{(l)})^T\frac{\partial E}{\partial \mathbf{s}^{(l)}}$$
 
-$$\frac{\partial L}{\partial \mathbf{x}^{(l)}} = \frac{\partial L}{\partial \mathbf{s}^{(l)}}\cdot\mathbf{W}^T$$
-
-This final gradient is passed to the previous layer as $\frac{\partial L}{\partial \boldsymbol{\sigma}^{(l-1)}}$ to continue the backpropagation.
+$$\frac{\partial E}{\partial W^{(l-1)}} = \frac{\partial E}{\partial \mathbf{s}^{(l)}}(\mathbf{x}^{(l-1)})^T$$
 
 \subsection{Convolutional Neural Networks}
 
@@ -3202,61 +3295,39 @@ Recurrent neural networks model sequential data. Just as CNNs share weights acro
 \mathbf{y}^{(t)} &= \text{softmax}\big(\mathbf{V}\mathbf{h}^{(t-1)} + \mathbf{c}\big) \notag
 \end{align}
 
-The circuit diagram of a basic RNN is given in Figure \ref{fig:rnn_circuit}. From this perspective, the recurrence of the network is represented as an arrow reflexively pointing back an internal state node. This reflects the sharing of weights, and the dependency of states over time--the actual computational graph remains directed and acyclic. Note that this generalises other architectural designs: though an RNN may map a sequence to another sequence, we can account for losses only for the last (or last $k$) output in the sequence, turning the RNN into a categorical classifier. Also, the spatial depth may be increased simply by adding extra hidden layers, without changing the basic principles.
+The transition diagram of a basic RNN is given in Figure \ref{fig:rnn}. From this perspective, the recurrence of the network is represented as an arrow reflexively pointing back an internal state node. This reflects the sharing of weights, and the dependency of states over time--the actual computational graph remains directed and acyclic. Note that this generalises other architectural designs: though an RNN may map a sequence to another sequence, we can account for losses only for the last (or last $k$) output in the sequence, turning the RNN into a categorical classifier. Also, the spatial depth may be increased simply by adding extra hidden layers, without changing the basic principles.
 
 \begin{figure}
 \centering
-\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
-\node (x) at (2, 0) {$\mathbf{x}$};
-
-\node (h) at (2, 2) [square,draw] {$\mathbf{h}$};
-
-\node (y) at (2, 4) {$\mathbf{y}$};
-
-\draw[-Latex] (x) to (h);
-\draw[-Latex] (h.90) arc (0:264:4mm);
-\draw[-Latex] (h) to (y);
-
-\end{tikzpicture}
-\caption{Circuit diagram of the basic RNN state machine.}
-\label{fig:rnn_circuit}
+  \includestandalone[width=0.25\textwidth]{Tikz/rnn}%     without .tex extension
+  % or use \input{mytikz}
+  \caption{Transition diagram of an Elman network.}
+  \label{fig:rnn}
 \end{figure}
 
-An RNN accommodates the varying lengths of input sequences in a batch, with the ``unfolded'' computational graph (Figure \ref{fig:rnn_comp}) implicitly extended to the required length. This is facilitated by the set of shared weights. The circuit is a dynamical system, as well as a universal Turing machine approximator.
+% \begin{figure}
+% \centering
+% \begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+% \node (x) at (2, 0) {$\mathbf{x}$};
+
+% \node (h) at (2, 2) [square,draw] {$\mathbf{h}$};
+
+% \node (y) at (2, 4) {$\mathbf{y}$};
+
+% \draw[-Latex] (x) to (h);
+% \draw[-Latex] (h.90) arc (0:264:4mm);
+% \draw[-Latex] (h) to (y);
+
+% \end{tikzpicture}
+% \caption{Transition diagram of the basic RNN state machine.}
+% \label{fig:rnn_circuit}
+% \end{figure}
+
+An RNN accommodates the varying lengths of input sequences in a batch, with the ``unfolded'' computational graph (Figure \ref{fig:rnn}) implicitly extended to the required length. This is facilitated by the set of shared weights. The circuit is a dynamical system, as well as a universal Turing machine approximator.
 
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
-\node (t-1) at (-2, 2) {$\dots$};
-\node (xt-1) at (0, 0) {$\mathbf{x}^{(t-1)}$};
-\node (xt) at (2, 0) {$\mathbf{x}^{(t)}$};
-\node (xt+1) at (4, 0) {$\mathbf{x}^{(t+1)}$};
-
-\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
-\node (ht) at (2, 2) {$\mathbf{h}^{(t)}$};
-\node (ht+1) at (4, 2) {$\mathbf{h}^{(t+1)}$};
-
-\node (yt-1) at (0, 4) {$\mathbf{y}^{(t-1)}$};
-\node (yt) at (2, 4) {$\mathbf{y}^{(t)}$};
-\node (yt+1) at (4, 4) {$\mathbf{y}^{(t+1)}$};
-
-\node (t+1) at (6, 2) {$\dots$};
-
-\draw[-Latex] (t-1) to (ht-1);
-
-\draw[-Latex] (xt-1) to (ht-1);
-\draw[-Latex] (ht-1) to (yt-1);
-\draw[-Latex] (ht-1) to (ht);
-
-\draw[-Latex] (xt) to (ht);
-\draw[-Latex] (ht) to (yt);
-\draw[-Latex] (ht) to (ht+1);
-
-\draw[-Latex] (xt+1) to (ht+1);
-\draw[-Latex] (ht+1) to (yt+1);
-\draw[-Latex] (ht+1) to (t+1);
-
-\end{tikzpicture}
+\includestandalone[width=0.8\textwidth]{Tikz/unfolded_rnn}
 \caption{Computational graph resulting from ``unfolding'' an RNN's recurrent relation in time. Note the graph is directed and acyclic and trainable with backpropagation through time (BPTT).}
 \label{fig:rnn_comp}
 \end{figure}
@@ -3277,29 +3348,7 @@ $$\mathbf{h}'^{(t)} = (1 - \alpha)\mathbf{h}^{(t - 1)} + \alpha\mathbf{h}^{(t)}$
 
 \begin{figure}
 \centering
-\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
-
-\node (t-1) at (-2, 2) {$\dots$};
-
-\node (xt-1) at (0, 0) {$\mathbf{x}^{(t-1)}$};
-\node (xt) at (2, 0) {$\mathbf{x}^{(t)}$};
-
-\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
-\node (ht) at (2, 2) {$\mathbf{h}^{(t)}$};
-
-\node (t+1) at (4, 2) {$\dots$};
-
-\draw[-Latex] (t-1) to (ht-1);
-
-\draw[-Latex] (xt-1) to (ht-1);
-
-\draw[-Latex] (ht-1) to [out=45, in=135] node[above]{$\alpha$} (ht);
-\draw[-Latex] (ht-1) to node[below]{$1 - \alpha$} (ht);
-
-\draw[-Latex] (xt) to node[right]{$1 - \alpha$} (ht);
-\draw[-Latex] (ht) to (t+1);
-
-\end{tikzpicture}
+\includestandalone[width=0.8\textwidth]{Tikz/leaky_units}
 \caption{Leaky units are hidden units having an additional linear recurrent self-connection. These allow the RNN to accumulate memory over time. When the value of $\alpha$ is close to $1$, the gradient is stable. The scalar $\alpha$ may be manually fixed or otherwise a learned parameter.}
 \label{fig:rnn_leaky}
 \end{figure}
@@ -3314,42 +3363,14 @@ This allows the network to accumulate knowledge over time in a stable way. Build
 \mathbf{h}^{(t)} &= \mathbf{q}^{(t)} * \tanh\big(\mathbf{s}^{(t)}\big) \notag
 \end{align}
 
-where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. The relation between the LSTM components is shown in Figure \ref{fig:rnn_lstm}. LSTM remains a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has also been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}.
+where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. LSTM remains a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has also been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}.
 
-\begin{figure}
-\centering
-\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
-
-\node (st-1) at (-2, 0) {$\mathbf{s}^{(t-1)}$};
-\node (st) at (2, 0) {$\mathbf{s}^{(t)}$};
-
-\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
-\node (ht) at (4, 2) {$\mathbf{h}^{(t)}$};
-
-\node (fgt) at (2, 4) {$\mathbf{f}^{(t)}, \mathbf{g}^{(t)}$};
-\node (xt) at (2, 6) {$\mathbf{x}^{(t)}$};
-\node (qt) at (4, 4) {$\mathbf{q}^{(t)}$};
-
-\draw[-Latex] (st-1) to (ht-1);
-\draw[-Latex] (st-1) to (st);
-
-\draw[-Latex] (ht-1) to (fgt);
-\draw[-Latex] (ht-1) to (st);
-\draw[-Latex] (ht-1) to [out=90, in=100] (qt);
-
-\draw[-Latex] (st) to [out=0, in=270] (ht);
-\draw[-Latex] (qt) to (ht);
-
-\draw[-Latex] (fgt) to (st);
-
-\draw[-Latex] (xt) to (fgt);
-\draw[-Latex] (xt) to [out=315, in=45] (st);
-\draw[-Latex] (xt) to [out=0, in=90] (qt);
-
-\end{tikzpicture}
-\caption{The computational graph of an LSTM unit.}
-\label{fig:rnn_lstm}
-\end{figure}
+% \begin{figure}
+% \centering
+% \includestandalone[width=0.8\textwidth]{Tikz/lstm}
+% \caption{The computational graph of an LSTM unit.}
+% \label{fig:rnn_lstm}
+% \end{figure}
 
 Despite the stabilising effects of gated units, exploding gradients may still arise and cause catastrophic damage to the training process. To avoid this, the relatively ad-hoc technique of \emph{clipping gradients} was developed to rescale gradients whose norm exceed some nominal value.
 
@@ -3717,61 +3738,6 @@ that is, the harmonic mean of precision and recall (the ``1'' in $F_1$ indicates
 \subsection{ROC Curves}
 
 Receiver Operator Characteristic (ROC) curves are a way of assessing the performance of a binary classifier, usually visualised graphically. A ROC curve compares the true positive and false positive rates of a binary classifier over a range of thresholding choices. In practice, a classifier's predictions are output as a set of real probabilities (taking care not to round early). Points on the ROC curve are generated by calculating the resultant TP and FP rates\footnote{Note that some authors prefer to refer to the true positive rate as \emph{sensitivity} and the false positive rate as the complement of \emph{specificity}. Specificity is in fact equivalent to the \emph{true negative} rate, and is therefore complement to the false positive rate. For this reason, when these alternative terms are used, the specificity axis runs backwards on the ROC graph.} as the classification threshold is varied from 0 to 1. To illustrate, consider a low threshold: a good classifier will tend be more sure about its negatives, avoiding false negatives, even at lower thresholds. This will place the curve high on the top left corner of the graph. Over the spectrum of thresholds, a good classifier will maintain the ROC curve high above the FP-axis. The area under the ROC curve (AUROC) $\in [0, 1]$ is therefore a good indicator of the strength of a binary classifier. Further note that because \emph{rates} are used rather than absolute positives and negatives, ROC curves address the same shortcoming the accuracy measure has for unbalanced data sets.
-
-\section{Computer Architecture}
-
-The von Neumann architecture, named after Hungarian polymath John von Neumann (1903-1957), is the basic template for assembling a computer. It centres around a central processing unit (CPU) and primary memory source. Input and output devices may be connected to this processing core. In a modern personal computer, the components are organised across a printed circuit board (PCB)\footnote{A printed circuit board (PCB) is a plate of layered material. The top layer is made of a conductive copper and sits atop a non-conductive fibreglass layer. The circuit pattern is created by pressing a mask of the printed design to the copper plate and soaking it in an acid solution to remove the surrounding copper. Finally, a solder mask in the familiar blue or green material is placed on top of the copper traces to protect them from dust and debris, while leaving holes at the connection points. Components may then be connected to the copper circuit using melted solder (a lead-tin alloy) to fuse components to the exposed connection points. Thus, the PCB replaces traditional wiring with the copper traces, functioning as the circuitry as well as a base to which integrated circuits and other components are attached.}, known as a \emph{motherboard}. A chip is a standalone circuit with a specific function, such as memory or processing. These components are soldered onto the motherboard to connect them to the rest of the computer hardware. The wiring groups between components are known as \emph{buses}, and are used to transfer information throughout the system. However fine the motherboard circuitry is, the internal circuitry of an integrated circuit is far finer, having of the order of billions of transistors per square centimetre. When a processor is contained in a single integrated circuit, it is referred to as a \emph{microprocessor}. This is the defining characteristic of a microcomputer or personal computer (PC). Personal computers have long supplanted the large, mainframe computers of earlier decades.
-
-The distinction between hardware and software is at times not well defined. Thus, it is difficult to talk about one without the other. Ultimately, everything exists in the physical layer, software just being structured (low entropy) configurations of electrical signals buried in the hardware. Software has varying levels of abstraction, right up to the user-friendly graphical interfaces, but at least in some sense, this is all just an illusion created by organising lower-level parts.
-
-\subsection{Hardware}
-
-As it is in the von Neumann architecture, the centrepiece of computer activity is the interaction between the central processing unit (CPU) and the (primary) memory--all other components are arguably peripheral to this. When a computer is turned on, a component within the CPU begins to oscillate. This is like the heartbeat of the computer, and provides a periodic \emph{clock} bit to each computation. In a Turing machine, the clock would be the invisible force driving the transitions along the tape. With some additional circuitry, the clock signal is accelerated to a \emph{clock rate} of the order of billions of hertz (Hz). This largely determines the speed of the computer, though the practical rate of computation, or floating point operations per second (FLOPS), will depend on other things, such as the efficiency of the circuitry.
-
-The CPU first runs a primitive piece of firmware that solves the bootstrap problem\footnote{The bootstrap is conceptually the necessary prime mover for all further software on the system.}. On a PC, this is called the BIOS (Basic Input Output Software), and UEFI (Unified Extensible Firmware Interface) on a Mac. The BIOS performs checks to ensure all the hardware is functional. It also provides a user interface for making low-level changes to the system\footnote{For example, a CPU can be \emph{overclocked} to increase performance. This can be controlled from the BIOS. As a general rule, the more active the CPU is, the more voltage in its circuits per unit time. More voltage creates more heat, and thermal sensors in the motherboard cause the fans to work harder to cool the chip. Overclocking can have detrimental effects if the circuitry gets too hot.}. The BIOS is usually located on a special chip of read-only memory (ROM), installed by the manufacturer. The BIOS finds the boot loader stored in secondary memory--typically a hard disk drive (HDD) or solid-state drive (SSD), but other secondary memory such as a USB drive, CD-ROM, or the former floppy disk, are sometimes used\footnote{A user can usually interrupt the BIOS and choose where to boot from.}. The boot loader is then loaded into memory. Its task is to load the operating system (OS) into memory in turn. Again, the user may interrupt this procedure in order to choose between operating systems installed on the drive. Once the operating system is in memory it has control of the system, giving the user the ability to control the computer and load and execute other software.
-
-\subsection{Software}
-
-Software exists in memory as a sequence of precompiled instructions, usually loaded from secondary memory. The control unit (CU) within the CPU is hardwired to take each instruction in turn and run it through the arithmetic/logic unit (ALU) circuitry. \emph{Registers} are small, localised pieces of memory for storing inputs for CPU operations. At this level, the code is not interpreted, but rather hardwired. Each instruction has an operator code which channels execution to the appropriate circuit. The form of the instructions are defined in an assembly language, which reflects the hardwired functions provided by the processor. An example of this is the x86 and x64 Intel resp. 32-bit and 64-bit instruction sets. Assembly code is usually automatically generated from high-level language code by a compiler. The assembly code is then transformed into a binary encoding called machine code. There is more or less a one-to-one mapping between assembly and machine code. In this way, machine code is more of an encoding than a language. As an example, take the simple high-level operation \texttt{a + b}, as it would be in \texttt{C}, or another programming language. When translated to assembly code, this will look something like Algorithm \ref{alg:assembly}.
-
-\begin{algorithm}
-\caption{Assembly pseudocode for a \texttt{a + b} operation.}\label{alg:assembly}
-\begin{algorithmic}[1]
-\State LDR R1 a // load of 1 with variable a
-\State LDR R2 b // load register 2 with variable b
-\State ADD R1, R2, R3 // add register 1 and 2 and put the answer in register 3
-\end{algorithmic}
-\end{algorithm}
-
-This follows what is called \emph{reverse Polish notation} (RPN), a convenient way to encode such instructions. This might then be translated to machine code as \texttt{01001100 00000010 00000011 00000100}, that is, perform operation 76 (addition) on registers 1 and 2 and put answer in register 3. Binary code is directly translatable to a system of high and low voltages. Thus, the program can exist in secondary storage as a series of electrical signals, ready to be loaded into memory by the operating system instructions for processing. To better understand how this processing works, it is necessary to descend to the electronics level.
-
-\subsection{Digital Circuitry}
-
-The fundamental component of electrical computers is the transistor. Conceptualised in 1926 by Hungarian physicist, Julius Edgar Lilienfeld (1882-1963), it was first implemented by a trio of Bell labs researchers in 1947, work for which they received the Nobel prize in Physics in 1956. A transistor is made of semiconductor material such as silicon (Si). It functions as a bridge between a source and sink wire, providing a third, base wire that controls the conductivity of the silicon material. If current is passed through the base wire, the bridge is opened and current flows from source to sink. In this way, the current on the main wire can be switched on or off very quickly and with no moving parts. The size of a computer overall therefore depends crucially on how small we can make transistors. Moore's law\footnote{Named after Gordon Moore (1929-), one of the founders of Intel Corporation.} predicts that the number of transistors per integrated circuit doubles every two years. This allows for building computers that are twice as powerful while retaining the same approximate size, cost, and power consumption. However, we are rapidly approaching the physical limit on transistor size. At $1.4 \times 10^{-10}\text{m}$, quantum effects are starting to interfere with accuracy.
-
-\subsubsection{Logic Gates}
-
-Using combinations of transistors, we can create logic gates. As it is in boolean normal forms, the only gates we need are conjunction (\texttt{AND}), disjunction (\texttt{OR}), and negation (\texttt{NOT}), and we can wire any logical circuit. An \texttt{AND} gate can be created by placing two transistors in sequence. If both transistors are activated, current will flow overall. If either or both transistors are not activated, current will not flow. Thus, it may be seen that submitting some combination of on/off (\texttt{TRUE}/\texttt{FALSE}) currents to the transistors will result in an overall on/off current through the wire, in accordance with the truth table of a logical \texttt{AND} operator. Thus, we have a circuit capable of computing a logical \texttt{AND}. An \texttt{OR} gate may be created by placing two transistors in \emph{parallel}, and a \texttt{NOT} gate or \emph{inverter} by combining positive and negative transistors.
-
-\subsubsection{Adders}
-
-From logic gates we can construct adders. The exclusive-or (\texttt{XOR}) operation handles the first part of binary addition: $0 \oplus 0 = 1 \oplus 1 = 0$ and $1 \oplus 0 = 0 \oplus 1 = 1$. The only thing that is not accounted for is the \emph{carry bit}. For this reason, \texttt{XOR} is called a \emph{half-adder}. It can be created in a number of ways, for example, as \texttt{OR AND NOT AND}. To create a \emph{full-adder}, it is combined with an \texttt{AND} gate to represent the carry bit. To add an 8-bit number, eight full-adders can be arranged in sequence, with each carry bit feeding into the next. More complex operations such as multiplication can be created by combining multiple full-adders. Examples of other CPU operations are the \texttt{COMPARE} and \texttt{JUMPIF} instructions. These are used in sequence to dynamically move among instructions in memory based on some logical test. This is what enables loops and if statements to occur.
-
-\subsubsection{Memory}
-
-The type of memory usually used as primary memory is \emph{random access memory} (RAM). Random access refers to the fact that any memory address can be accessed equally quickly. This is in contrast to a hard disk drive used for \emph{secondary} memory, where a latency of a few milliseconds is incurred to move the requested memory sector under the drive's read-write head. Increased affordability has brought about the advent of the much faster \emph{solid state}\footnote{That is, no moving parts.} (SSD) secondary memory. Note that SSD memory is still orders of magnitude slower than RAM. Despite being fast, RAM is \emph{volatile}. Volatility is a property referring to the loss of memory when the power is switched off. This contrasts with the \emph{persistent} memory provided by secondary memory sources. There are two main types of RAM: static RAM (SRAM) and dynamic RAM (DRAM). Usually SRAM is used in a CPU cache. A cache is used to store recently used data in fast memory near to the CPU. This is an heuristic strategy that helps to minimise the delay incurred on frequently used data by the much slower main memory access, the CPU being far faster. Typically, only a small cache is sufficient to speed up processing dramatically. Like logic gates, a unit of static RAM is constructed by wiring transistors in a special way. We start by wiring two \texttt{NOR} gates together such that one of the inputs of each is the output of the other. The remaining input wires are denoted the \emph{set} and \emph{reset} wires. With this configuration, it is possible to send current through the set and reset wires to switch the signals between the \texttt{NOR} gates, and such that this signal persists when the current stops. This mechanism is called a RS latch, and provides a way to store a binary signal. When combined with a wire for write data, and the CPU clock bit, we can create what is called a \emph{flip-flop}. Each flip-flop is used to store a single bit of information, and these are arranged into an array that can be addressed by row and column number. In contrast, DRAM is cheaper and more suited to primary memory storage. This consists of an array of capacitors to store bits. The capacitors only hold the bit signal for a small amount of time (milliseconds), so a mechanism is used to quickly read and rewrite memory periodically (every 100 nanoseconds or so). This is why DRAM is known as \emph{dynamic}, though it might better be referred to as \emph{extra-volatile} memory.
-
-\subsection{Operating Systems}
-
-An operating system (OS) is the primary software running on a computer. As well as generally providing the user with a means of manipulating the computer, it facilitates the running of other programs on the hardware. A program is loaded into memory as a \emph{process}, with its own \emph{heap} of memory. A heap is a contiguous block of main memory. When memory is allocated dynamically in a language like \texttt{C} it takes it from the process heap. Segmentation faults occur when memory on the heap is abused. A process consists of one or more \emph{threads}, which represent streams of execution. Each thread has a \emph{stack}, which is a FIFO queue for instructions and data. The stack is pushed and popped in accordance with the requirements of the program. The stack grows with the initialisation of local variables, but also with each new call to a nested function. Therefore, a maximum recursion depth is imposed by many languages to prevent the stack memory allowance being exceeded, an event known as a \emph{stack overflow}. A process scheduler in the operating system controls the access to hardware resources for each process. This is essential to a multiprogramming operating system. Input and output devices are connected to the bus with addresses. IN/OUT instructions can send or retrieve data from these devices via a data bus. The operating system provides \emph{driver} software for interfacing with hardware components. The heart of an operating system is the kernel. This provides various services for memory allocation of processes, organisation of the OS file system, handling interrupts from peripheral devices, and so on.
-
-\subsubsection{The Unix Story}
-
-Unix is an important operating system that was developed at Bell Labs by American computer scientists Ken Thompson (1943-) and Dennis Ritchie (1941-2011). It is the ancestor of many of the most widely used operating systems used today. At the time, Unix was favoured due to its speed, stability, modularity, and security. Unix was the first operating system written in a high-level language (\texttt{C}, itself created by the same people), and was thus portable to any hardware with a \texttt{C} compiler. It also had just the right set of innovations to make it the ideal operating system, for example \emph{piping}, used to chain software together via their outputs. However, Unix was proprietary software owned by AT\&T\footnote{Bell Labs, NJ, was owned by AT\&T for most of the 20th century. It is credited with inventing radio astronomy, the transistor, information theory, \texttt{C}, \texttt{C++}, Unix, and the one time pad (Vernam cipher). It is now owned by Nokia.}, and interest developed to create free equivalents. In particular, MIT AI lab programmer Richard Matthew Stallman (1953-), started the Free Software Foundation (FSF) and the GNU (GNU's Not Unix!) project to create a free operating system. This was a pioneering initiative in the history of open-source software.
-
-Apart from being free to use, the idea of a GNU operating system was to expand \emph{user land}, that is, the part of the OS flexible to a user's preferences, having only a ``micro-kernel'' and a set of replaceable daemons\footnote{In Unix, daemons are named with a trailing `d'. This is why the Apache HTTP Server, \texttt{httpd}, (the most commonly used web server) is so named.}. The sense of \emph{free} software is really to do with free control over the software--gratuity is only one part of that. The GNU micro-kernel is in contrast to a complete, \emph{monolithic} kernel such as the Linux kernel. The micro-kernel was to be known as Hurd (a gnu is a type of antelope). Due to some technical difficulties, progress stalled and the project was supplanted by the Linux project, developed by Finnish programmer, Linus Torvalds (1969-), taking with it much of the support and enthusiasm for GNU. Later, divisions arose in the GNU community due to the divisive political vision of GNU. The GNU project did, however, create a large amount of very important software, for example the GNU compiler collection (GCC), the GNU Core Utilities (reimplementations of \texttt{cat}, \texttt{ls}, \texttt{rm}, etc.) the BASH shell\footnote{The Bourne Again Shell was an open-source replacement for the Unix Bourne Shell, an improvement to the Thompson Shell (no scripting).}, \texttt{glibc} (GNU's implementation of the C standard library), the GNOME desktop environment (which runs on the X Windows system for bitmap displays), and Emacs. These tools are used on many other operating systems, including Windows, OS X, and Linux. It is for this reason that Richard Stallman refers to Linux as a \emph{GNU} operating system with Linux kernel. It is unclear whether the pure GNU operating system will ever be finished, but its legacy endures. Another notable output of the movement was the GNU Public License (GPL), a software license supporting \emph{copyleft} practices, that is, free reuse of intellectual property, provided the same copyleft open-source license is retained, and therefore the ability to reuse that software too. Such an arrangement can be described as \emph{share-alike}, and is adopted by other open source licenses\footnote{There are more permissive licenses such as Berkeley Software Distribution (BSD) and the MIT license, arguably even more permissive than BSD. This comes only with the disclaimer that the author shall not be responsible for adverse effects caused by the free use of their software. The GNU Lesser General Public License (LGPL) was created as a compromise between MIT/BSD and GNU GPL. Note also that these licenses are free to use, the copyright is applied without the need to register the software. The license text is usually put in a project file marked \texttt{LICENSE}. In short, GPL is a copyleft license, BSD is an acknowledgement, and MIT is a disclaimer.}.
-
-At approximately the same time, the systems lab at the University of California, Berkeley, were extending their licensed version of Unix, in particular, extending its TCP/IP functionalities. This came to be known as the Berkeley Software Distribution (BSD) of Unix, but it remained subject to AT\&T licensing restrictions. The Unix parts were gradually rewritten, and BSD and its variants (FreeBSD, OpenBSD, and others) came under the BSD license, a highly permissive license, allowing the full reuse of software, even in proprietary products, provided inclusion of the license text. Many of the operating systems of the present day are descended from Unix via the free alternatives of BSD. For example, BSD forms a large part of Apple's OS X operating system. BSD was the subject of a law suit by the Unix proprietors in the early 90s, during a time nicknamed the ``Unix wars'', with BSD ultimately winning the case. Unlike Linux, BSD does not use GNU, it has its own OS software including, for example, the famous vi editor. Linux is more user-friendly, however, with BSD having a command line interface (CLI) orientation. Thus, whereas GNU reverse engineered Unix, BSD evolved from it directly like the ship of Theseus. Both extended it far beyond its initial capabilities. Because of them, we now have whole families of software that are deemed ``Unix-like''.
 
 \section{Image Analysis and Processing}
 
@@ -4152,6 +4118,61 @@ At this point, we return to the original image, now with keypoints that have sta
 Now, essentially magnitude-weighted gradients are computed in a grid of cells in a window (reflecting the originating scale) around the keypoint, and normalised ("sorted", although the paper does not use this term) with respect to the dominant orientation from the previous step. Each histogram is normalised to a unit vector to control for variance in illumination (the magnitudes used for weighting would all by larger if illumination is locally high).
 
 Note that varying numbers of keypoints are detected for each image. The image matching appllication is based on nearest neighbour matching between sets of keypoints. RANSAC is a fully-fleshed algorithm for this. The homography can be computed as a least squares of the coordinates to solve for the homography matrix (affine transformation). A nice application is image stitching for panoramas: first compute SIFT, then match keypoints, then compute homography and warp to a reference image.
+
+\section{Computer Architecture}
+
+The von Neumann architecture, named after Hungarian polymath John von Neumann (1903-1957), is the basic template for assembling a computer. It centres around a central processing unit (CPU) and primary memory source. Input and output devices may be connected to this processing core. In a modern personal computer, the components are organised across a printed circuit board (PCB)\footnote{A printed circuit board (PCB) is a plate of layered material. The top layer is made of a conductive copper and sits atop a non-conductive fibreglass layer. The circuit pattern is created by pressing a mask of the printed design to the copper plate and soaking it in an acid solution to remove the surrounding copper. Finally, a solder mask in the familiar blue or green material is placed on top of the copper traces to protect them from dust and debris, while leaving holes at the connection points. Components may then be connected to the copper circuit using melted solder (a lead-tin alloy) to fuse components to the exposed connection points. Thus, the PCB replaces traditional wiring with the copper traces, functioning as the circuitry as well as a base to which integrated circuits and other components are attached.}, known as a \emph{motherboard}. A chip is a standalone circuit with a specific function, such as memory or processing. These components are soldered onto the motherboard to connect them to the rest of the computer hardware. The wiring groups between components are known as \emph{buses}, and are used to transfer information throughout the system. However fine the motherboard circuitry is, the internal circuitry of an integrated circuit is far finer, having of the order of billions of transistors per square centimetre. When a processor is contained in a single integrated circuit, it is referred to as a \emph{microprocessor}. This is the defining characteristic of a microcomputer or personal computer (PC). Personal computers have long supplanted the large, mainframe computers of earlier decades.
+
+The distinction between hardware and software is at times not well defined. Thus, it is difficult to talk about one without the other. Ultimately, everything exists in the physical layer, software just being structured (low entropy) configurations of electrical signals buried in the hardware. Software has varying levels of abstraction, right up to the user-friendly graphical interfaces, but at least in some sense, this is all just an illusion created by organising lower-level parts.
+
+\subsection{Hardware}
+
+As it is in the von Neumann architecture, the centrepiece of computer activity is the interaction between the central processing unit (CPU) and the (primary) memory--all other components are arguably peripheral to this. When a computer is turned on, a component within the CPU begins to oscillate. This is like the heartbeat of the computer, and provides a periodic \emph{clock} bit to each computation. In a Turing machine, the clock would be the invisible force driving the transitions along the tape. With some additional circuitry, the clock signal is accelerated to a \emph{clock rate} of the order of billions of hertz (Hz). This largely determines the speed of the computer, though the practical rate of computation, or floating point operations per second (FLOPS), will depend on other things, such as the efficiency of the circuitry.
+
+The CPU first runs a primitive piece of firmware that solves the bootstrap problem\footnote{The bootstrap is conceptually the necessary prime mover for all further software on the system.}. On a PC, this is called the BIOS (Basic Input Output Software), and UEFI (Unified Extensible Firmware Interface) on a Mac. The BIOS performs checks to ensure all the hardware is functional. It also provides a user interface for making low-level changes to the system\footnote{For example, a CPU can be \emph{overclocked} to increase performance. This can be controlled from the BIOS. As a general rule, the more active the CPU is, the more voltage in its circuits per unit time. More voltage creates more heat, and thermal sensors in the motherboard cause the fans to work harder to cool the chip. Overclocking can have detrimental effects if the circuitry gets too hot.}. The BIOS is usually located on a special chip of read-only memory (ROM), installed by the manufacturer. The BIOS finds the boot loader stored in secondary memory--typically a hard disk drive (HDD) or solid-state drive (SSD), but other secondary memory such as a USB drive, CD-ROM, or the former floppy disk, are sometimes used\footnote{A user can usually interrupt the BIOS and choose where to boot from.}. The boot loader is then loaded into memory. Its task is to load the operating system (OS) into memory in turn. Again, the user may interrupt this procedure in order to choose between operating systems installed on the drive. Once the operating system is in memory it has control of the system, giving the user the ability to control the computer and load and execute other software.
+
+\subsection{Software}
+
+Software exists in memory as a sequence of precompiled instructions, usually loaded from secondary memory. The control unit (CU) within the CPU is hardwired to take each instruction in turn and run it through the arithmetic/logic unit (ALU) circuitry. \emph{Registers} are small, localised pieces of memory for storing inputs for CPU operations. At this level, the code is not interpreted, but rather hardwired. Each instruction has an operator code which channels execution to the appropriate circuit. The form of the instructions are defined in an assembly language, which reflects the hardwired functions provided by the processor. An example of this is the x86 and x64 Intel resp. 32-bit and 64-bit instruction sets. Assembly code is usually automatically generated from high-level language code by a compiler. The assembly code is then transformed into a binary encoding called machine code. There is more or less a one-to-one mapping between assembly and machine code. In this way, machine code is more of an encoding than a language. As an example, take the simple high-level operation \texttt{a + b}, as it would be in \texttt{C}, or another programming language. When translated to assembly code, this will look something like Algorithm \ref{alg:assembly}.
+
+\begin{algorithm}
+\caption{Assembly pseudocode for a \texttt{a + b} operation.}\label{alg:assembly}
+\begin{algorithmic}[1]
+\State LDR R1 a // load of 1 with variable a
+\State LDR R2 b // load register 2 with variable b
+\State ADD R1, R2, R3 // add register 1 and 2 and put the answer in register 3
+\end{algorithmic}
+\end{algorithm}
+
+This follows what is called \emph{reverse Polish notation} (RPN), a convenient way to encode such instructions. This might then be translated to machine code as \texttt{01001100 00000010 00000011 00000100}, that is, perform operation 76 (addition) on registers 1 and 2 and put answer in register 3. Binary code is directly translatable to a system of high and low voltages. Thus, the program can exist in secondary storage as a series of electrical signals, ready to be loaded into memory by the operating system instructions for processing. To better understand how this processing works, it is necessary to descend to the electronics level.
+
+\subsection{Digital Circuitry}
+
+The fundamental component of electrical computers is the transistor. Conceptualised in 1926 by Hungarian physicist, Julius Edgar Lilienfeld (1882-1963), it was first implemented by a trio of Bell labs researchers in 1947, work for which they received the Nobel prize in Physics in 1956. A transistor is made of semiconductor material such as silicon (Si). It functions as a bridge between a source and sink wire, providing a third, base wire that controls the conductivity of the silicon material. If current is passed through the base wire, the bridge is opened and current flows from source to sink. In this way, the current on the main wire can be switched on or off very quickly and with no moving parts. The size of a computer overall therefore depends crucially on how small we can make transistors. Moore's law\footnote{Named after Gordon Moore (1929-), one of the founders of Intel Corporation.} predicts that the number of transistors per integrated circuit doubles every two years. This allows for building computers that are twice as powerful while retaining the same approximate size, cost, and power consumption. However, we are rapidly approaching the physical limit on transistor size. At $1.4 \times 10^{-10}\text{m}$, quantum effects are starting to interfere with accuracy.
+
+\subsubsection{Logic Gates}
+
+Using combinations of transistors, we can create logic gates. As it is in boolean normal forms, the only gates we need are conjunction (\texttt{AND}), disjunction (\texttt{OR}), and negation (\texttt{NOT}), and we can wire any logical circuit. An \texttt{AND} gate can be created by placing two transistors in sequence. If both transistors are activated, current will flow overall. If either or both transistors are not activated, current will not flow. Thus, it may be seen that submitting some combination of on/off (\texttt{TRUE}/\texttt{FALSE}) currents to the transistors will result in an overall on/off current through the wire, in accordance with the truth table of a logical \texttt{AND} operator. Thus, we have a circuit capable of computing a logical \texttt{AND}. An \texttt{OR} gate may be created by placing two transistors in \emph{parallel}, and a \texttt{NOT} gate or \emph{inverter} by combining positive and negative transistors.
+
+\subsubsection{Adders}
+
+From logic gates we can construct adders. The exclusive-or (\texttt{XOR}) operation handles the first part of binary addition: $0 \oplus 0 = 1 \oplus 1 = 0$ and $1 \oplus 0 = 0 \oplus 1 = 1$. The only thing that is not accounted for is the \emph{carry bit}. For this reason, \texttt{XOR} is called a \emph{half-adder}. It can be created in a number of ways, for example, as \texttt{OR AND NOT AND}. To create a \emph{full-adder}, it is combined with an \texttt{AND} gate to represent the carry bit. To add an 8-bit number, eight full-adders can be arranged in sequence, with each carry bit feeding into the next. More complex operations such as multiplication can be created by combining multiple full-adders. Examples of other CPU operations are the \texttt{COMPARE} and \texttt{JUMPIF} instructions. These are used in sequence to dynamically move among instructions in memory based on some logical test. This is what enables loops and if statements to occur.
+
+\subsubsection{Memory}
+
+The type of memory usually used as primary memory is \emph{random access memory} (RAM). Random access refers to the fact that any memory address can be accessed equally quickly. This is in contrast to a hard disk drive used for \emph{secondary} memory, where a latency of a few milliseconds is incurred to move the requested memory sector under the drive's read-write head. Increased affordability has brought about the advent of the much faster \emph{solid state}\footnote{That is, no moving parts.} (SSD) secondary memory. Note that SSD memory is still orders of magnitude slower than RAM. Despite being fast, RAM is \emph{volatile}. Volatility is a property referring to the loss of memory when the power is switched off. This contrasts with the \emph{persistent} memory provided by secondary memory sources. There are two main types of RAM: static RAM (SRAM) and dynamic RAM (DRAM). Usually SRAM is used in a CPU cache. A cache is used to store recently used data in fast memory near to the CPU. This is an heuristic strategy that helps to minimise the delay incurred on frequently used data by the much slower main memory access, the CPU being far faster. Typically, only a small cache is sufficient to speed up processing dramatically. Like logic gates, a unit of static RAM is constructed by wiring transistors in a special way. We start by wiring two \texttt{NOR} gates together such that one of the inputs of each is the output of the other. The remaining input wires are denoted the \emph{set} and \emph{reset} wires. With this configuration, it is possible to send current through the set and reset wires to switch the signals between the \texttt{NOR} gates, and such that this signal persists when the current stops. This mechanism is called a RS latch, and provides a way to store a binary signal. When combined with a wire for write data, and the CPU clock bit, we can create what is called a \emph{flip-flop}. Each flip-flop is used to store a single bit of information, and these are arranged into an array that can be addressed by row and column number. In contrast, DRAM is cheaper and more suited to primary memory storage. This consists of an array of capacitors to store bits. The capacitors only hold the bit signal for a small amount of time (milliseconds), so a mechanism is used to quickly read and rewrite memory periodically (every 100 nanoseconds or so). This is why DRAM is known as \emph{dynamic}, though it might better be referred to as \emph{extra-volatile} memory.
+
+\subsection{Operating Systems}
+
+An operating system (OS) is the primary software running on a computer. As well as generally providing the user with a means of manipulating the computer, it facilitates the running of other programs on the hardware. A program is loaded into memory as a \emph{process}, with its own \emph{heap} of memory. A heap is a contiguous block of main memory. When memory is allocated dynamically in a language like \texttt{C} it takes it from the process heap. Segmentation faults occur when memory on the heap is abused. A process consists of one or more \emph{threads}, which represent streams of execution. Each thread has a \emph{stack}, which is a FIFO queue for instructions and data. The stack is pushed and popped in accordance with the requirements of the program. The stack grows with the initialisation of local variables, but also with each new call to a nested function. Therefore, a maximum recursion depth is imposed by many languages to prevent the stack memory allowance being exceeded, an event known as a \emph{stack overflow}. A process scheduler in the operating system controls the access to hardware resources for each process. This is essential to a multiprogramming operating system. Input and output devices are connected to the bus with addresses. IN/OUT instructions can send or retrieve data from these devices via a data bus. The operating system provides \emph{driver} software for interfacing with hardware components. The heart of an operating system is the kernel. This provides various services for memory allocation of processes, organisation of the OS file system, handling interrupts from peripheral devices, and so on.
+
+\subsubsection{The Unix Story}
+
+Unix is an important operating system that was developed at Bell Labs by American computer scientists Ken Thompson (1943-) and Dennis Ritchie (1941-2011). It is the ancestor of many of the most widely used operating systems used today. At the time, Unix was favoured due to its speed, stability, modularity, and security. Unix was the first operating system written in a high-level language (\texttt{C}, itself created by the same people), and was thus portable to any hardware with a \texttt{C} compiler. It also had just the right set of innovations to make it the ideal operating system, for example \emph{piping}, used to chain software together via their outputs. However, Unix was proprietary software owned by AT\&T\footnote{Bell Labs, NJ, was owned by AT\&T for most of the 20th century. It is credited with inventing radio astronomy, the transistor, information theory, \texttt{C}, \texttt{C++}, Unix, and the one time pad (Vernam cipher). It is now owned by Nokia.}, and interest developed to create free equivalents. In particular, MIT AI lab programmer Richard Matthew Stallman (1953-), started the Free Software Foundation (FSF) and the GNU (GNU's Not Unix!) project to create a free operating system. This was a pioneering initiative in the history of open-source software.
+
+Apart from being free to use, the idea of a GNU operating system was to expand \emph{user land}, that is, the part of the OS flexible to a user's preferences, having only a ``micro-kernel'' and a set of replaceable daemons\footnote{In Unix, daemons are named with a trailing `d'. This is why the Apache HTTP Server, \texttt{httpd}, (the most commonly used web server) is so named.}. The sense of \emph{free} software is really to do with free control over the software--gratuity is only one part of that. The GNU micro-kernel is in contrast to a complete, \emph{monolithic} kernel such as the Linux kernel. The micro-kernel was to be known as Hurd (a gnu is a type of antelope). Due to some technical difficulties, progress stalled and the project was supplanted by the Linux project, developed by Finnish programmer, Linus Torvalds (1969-), taking with it much of the support and enthusiasm for GNU. Later, divisions arose in the GNU community due to the divisive political vision of GNU. The GNU project did, however, create a large amount of very important software, for example the GNU compiler collection (GCC), the GNU Core Utilities (reimplementations of \texttt{cat}, \texttt{ls}, \texttt{rm}, etc.) the BASH shell\footnote{The Bourne Again Shell was an open-source replacement for the Unix Bourne Shell, an improvement to the Thompson Shell (no scripting).}, \texttt{glibc} (GNU's implementation of the C standard library), the GNOME desktop environment (which runs on the X Windows system for bitmap displays), and Emacs. These tools are used on many other operating systems, including Windows, OS X, and Linux. It is for this reason that Richard Stallman refers to Linux as a \emph{GNU} operating system with Linux kernel. It is unclear whether the pure GNU operating system will ever be finished, but its legacy endures. Another notable output of the movement was the GNU Public License (GPL), a software license supporting \emph{copyleft} practices, that is, free reuse of intellectual property, provided the same copyleft open-source license is retained, and therefore the ability to reuse that software too. Such an arrangement can be described as \emph{share-alike}, and is adopted by other open source licenses\footnote{There are more permissive licenses such as Berkeley Software Distribution (BSD) and the MIT license, arguably even more permissive than BSD. This comes only with the disclaimer that the author shall not be responsible for adverse effects caused by the free use of their software. The GNU Lesser General Public License (LGPL) was created as a compromise between MIT/BSD and GNU GPL. Note also that these licenses are free to use, the copyright is applied without the need to register the software. The license text is usually put in a project file marked \texttt{LICENSE}. In short, GPL is a copyleft license, BSD is an acknowledgement, and MIT is a disclaimer.}.
+
+At approximately the same time, the systems lab at the University of California, Berkeley, were extending their licensed version of Unix, in particular, extending its TCP/IP functionalities. This came to be known as the Berkeley Software Distribution (BSD) of Unix, but it remained subject to AT\&T licensing restrictions. The Unix parts were gradually rewritten, and BSD and its variants (FreeBSD, OpenBSD, and others) came under the BSD license, a highly permissive license, allowing the full reuse of software, even in proprietary products, provided inclusion of the license text. Many of the operating systems of the present day are descended from Unix via the free alternatives of BSD. For example, BSD forms a large part of Apple's OS X operating system. BSD was the subject of a law suit by the Unix proprietors in the early 90s, during a time nicknamed the ``Unix wars'', with BSD ultimately winning the case. Unlike Linux, BSD does not use GNU, it has its own OS software including, for example, the famous vi editor. Linux is more user-friendly, however, with BSD having a command line interface (CLI) orientation. Thus, whereas GNU reverse engineered Unix, BSD evolved from it directly like the ship of Theseus. Both extended it far beyond its initial capabilities. Because of them, we now have whole families of software that are deemed ``Unix-like''.
 
 \section{Useless Maths Facts}
 

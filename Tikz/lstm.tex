@@ -1,0 +1,29 @@
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+
+\node (st-1) at (-2, 0) {$\mathbf{s}^{(t-1)}$};
+\node (st) at (2, 0) {$\mathbf{s}^{(t)}$};
+
+\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
+\node (ht) at (4, 2) {$\mathbf{h}^{(t)}$};
+
+\node (fgt) at (2, 4) {$\mathbf{f}^{(t)}, \mathbf{g}^{(t)}$};
+\node (xt) at (2, 6) {$\mathbf{x}^{(t)}$};
+\node (qt) at (4, 4) {$\mathbf{q}^{(t)}$};
+
+\draw[-Latex] (st-1) to (ht-1);
+\draw[-Latex] (st-1) to (st);
+
+\draw[-Latex] (ht-1) to (fgt);
+\draw[-Latex] (ht-1) to (st);
+\draw[-Latex] (ht-1) to [out=90, in=100] (qt);
+
+\draw[-Latex] (st) to [out=0, in=270] (ht);
+\draw[-Latex] (qt) to (ht);
+
+\draw[-Latex] (fgt) to (st);
+
+\draw[-Latex] (xt) to (fgt);
+\draw[-Latex] (xt) to [out=315, in=45] (st);
+\draw[-Latex] (xt) to [out=0, in=90] (qt);
+
+\end{tikzpicture}

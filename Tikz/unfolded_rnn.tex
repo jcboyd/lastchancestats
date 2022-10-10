@@ -1,0 +1,31 @@
+\begin{tikzpicture}[font=\sffamily, square/.style={regular polygon,regular polygon sides=4}]
+\node (t-1) at (-2, 2) {$\dots$};
+\node (xt-1) at (0, 0) {$\mathbf{x}^{(t-1)}$};
+\node (xt) at (2, 0) {$\mathbf{x}^{(t)}$};
+\node (xt+1) at (4, 0) {$\mathbf{x}^{(t+1)}$};
+
+\node (ht-1) at (0, 2) {$\mathbf{h}^{(t-1)}$};
+\node (ht) at (2, 2) {$\mathbf{h}^{(t)}$};
+\node (ht+1) at (4, 2) {$\mathbf{h}^{(t+1)}$};
+
+\node (yt-1) at (0, 4) {$\mathbf{y}^{(t-1)}$};
+\node (yt) at (2, 4) {$\mathbf{y}^{(t)}$};
+\node (yt+1) at (4, 4) {$\mathbf{y}^{(t+1)}$};
+
+\node (t+1) at (6, 2) {$\dots$};
+
+\draw[-Latex] (t-1) to (ht-1);
+
+\draw[-Latex] (xt-1) to (ht-1);
+\draw[-Latex] (ht-1) to (yt-1);
+\draw[-Latex] (ht-1) to (ht);
+
+\draw[-Latex] (xt) to (ht);
+\draw[-Latex] (ht) to (yt);
+\draw[-Latex] (ht) to (ht+1);
+
+\draw[-Latex] (xt+1) to (ht+1);
+\draw[-Latex] (ht+1) to (yt+1);
+\draw[-Latex] (ht+1) to (t+1);
+
+\end{tikzpicture}
