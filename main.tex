@@ -186,7 +186,7 @@ which corresponds to $x^3 + x^2y + 2x^2y + 2xy^2 + xy^2 + y^3$, and clearly each
 In general, this relation is reflected in Pascal's rule,
 
 $${{n}\choose{k}} = {{n-1}\choose{k-1}} + {{n-1}\choose{k}},$$
-		
+        
 for $1 \leq k \leq n$. Isaac Newton (1642-1727) extended the notion of binomial expansion to real powers in 1665. This was an important stepping-stone towards the definition of a derivative, as we will see.
 
 \subsection{($\epsilon$-$\delta$) Definition of a Limit}
@@ -1048,7 +1048,7 @@ $$\sin (\alpha + \beta) = \sin\alpha\cos\beta + \cos\alpha\sin\beta.$$
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/eulersformula.png}
-\caption{$e^{ix}$ traces a unit circle on the complex plane (\cite{eulerformula}).}
+\caption{$e^{ix}$ traces a unit circle on the complex plane (\url{https://commons.wikimedia.org/wiki/File:Euler's\_formula.svg}).}
 \label{fig:eulersformula}
 \end{figure}
 
@@ -1291,7 +1291,7 @@ $$p(X_1 \lor \dots \lor X_N) = \sum_{i = 1}^{N}p(X_i) - \sum_{1 \leq i < j \leq 
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/inclusionexclusion.png}
-\caption{The inclusion-exclusion principle is best understood with Venn diagrams (\cite{inclusionexclusion}).}
+\caption{The inclusion-exclusion principle is best understood with Venn diagrams (\url{https://commons.wikimedia.org/wiki/File:Inclusion-exclusion.svg}).}
 \label{fig:inclusionexclusion}
 \end{figure}
 
@@ -2063,7 +2063,7 @@ $$\mathcal{L}(\mathbf{x}, \boldsymbol\lambda) = f(\mathbf{x}) + \boldsymbol\mu^T
 
 \subsection{Decision Problems}
 
-Decision problems, as studied in computability and computational complexity theory, are characterised by a question posed on some arbitrary inputs that has a boolean (\texttt{TRUE}-\texttt{FALSE}) answer. The question itself is the decision \emph{problem}, which when paired with a parameter set is called a problem \emph{instance}. For example, a decision \emph{problem} might be to determine if some number $x$ is prime or not. A particular problem \emph{instance} might be very trivial, for example, `is the number 2 prime?'. Exact methods of primality testing do exist, however, making primality testing a \emph{decidable} problem, that is, primality is \emph{computable} for any input, though it may take a long time to compute. On the other hand, there are decision problems that are \emph{undecidable}. An example of this is the \emph{halting problem}. It was in demonstrating the undecidability of the halting problem that the great English mathematician, Alan Turing (1912-1954), devised an abstract model of the computer, the Turing machine.
+Decision problems, as studied in computability and computational complexity theory, are characterised by a question posed on some arbitrary inputs that has a boolean (\texttt{TRUE}-\texttt{FALSE}) answer. The question itself is the decision \emph{problem}, which when paired with a parameter set is called a problem \emph{instance}. For example, a decision \emph{problem} might be to determine if some number $x$ is prime or not. A particular problem \emph{instance} might be very trivial, for example, `is the number 2 prime?'. Exact methods of primality testing do exist, however, making primality testing a \emph{decidable} problem. In other words, primality is \emph{computable} for any input, even if in practice it may take a long time to compute. On the other hand, there exist decision problems that are \emph{undecidable}. An example of this is the \emph{halting problem}. It was in demonstrating the undecidability of the halting problem that the great English mathematician, Alan Turing (1912-1954), devised an abstract model of the computer, the Turing machine.
 
 \subsection{The Halting Problem}
 
@@ -2134,7 +2134,7 @@ A common misconception is that NP stands for `non-polynomial' time. Ironically, 
 
 \subsubsection{NP-hard class}
 
-NP-hard (non-deterministic polynomial time \emph{hard}) problems are those problems that can are \emph{at least as hard as the hardest problems in NP}. In formal terms, this means an NP-hard problem can be reduced to any problem in NP in polynomial time. Note that a problem may be purely NP-hard (not in NP), whereas problems in the intersection between NP and NP-hard are known as NP-complete.
+NP-hard (non-deterministic polynomial time \emph{hard}) problems are those problems that are \emph{at least as hard as the hardest problems in NP}. In formal terms, this means an NP-hard problem can be reduced to any problem in NP in polynomial time. Note that a problem may be purely NP-hard (not in NP), whereas problems in the intersection between NP and NP-hard are known as NP-complete.
 
 \subsubsection{NP-complete class}
 
@@ -2145,7 +2145,7 @@ The NP-complete class is the intersection of the NP and NP-hard classes, that is
 \item Show it is NP-hard, by showing it can be efficiently reduced to another known NP-complete problem.
 \end{enumerate}
 
-The first decision problem proved to be NP-complete is the boolean satisfiability problem or SAT (see the Cook-Levin theorem, 1971), which aims to find a combination of values for literals in a boolean expression such that the overall expression evaluates \texttt{TRUE}. The expression is taken to be in conjunctive normal form (a conjunction of disjunctions or an \texttt{AND} of \texttt{OR}s), for example, $$(X_1 \lor X_2 \lor \dots \lor X_N) \land (\neg X_1 \lor \dots) \land \dots$$ There are some special cases of SAT where computation is easy, for example if each variable features in exactly one clause, but in general, no efficient algorithm is known to exist. From a purely intuitive perspective, the task lends itself to an exponential runtime, as there are $2^N$ possible readings of an expression with $N$ variables. Until P versus NP is resolved, it is not known whether there is a reliable shortcut. Richard Karp used this result to find and categorise 21 NP-complete problems, beginning with the 3SAT problem, a variant of SAT in which all clauses contain three literals. It is easy to transform a CNF expression to the 3SAT form, with the introduction of dummy variables. The expression loses logical equivalency, but retains equisatisfiability, meaning that solutions in the 3SAT form are necessary and sufficient for solutions in the original form. The length of the expression triples, hence the reduction step is polynomial. Karp's 21 NP-complete problems further include problems from graph theory (such as clique selection) and 0-1 integer programming. Note that if a problem in the NP-hard or NP-complete classes could be shown to have an efficient, polynomial-time solution algorithm, it would imply all problems in NP have efficient solutions.
+The first decision problem proved to be NP-complete is the boolean satisfiability problem or SAT (see the Cook-Levin theorem, 1971), which aims to find a combination of values for literals in a boolean expression such that the overall expression evaluates \texttt{TRUE}. The expression is taken to be in conjunctive normal form (CNF)\footnote{A conjunction of disjunctions or an \texttt{AND} of \texttt{OR}s), for example, $(X_1 \lor X_2 \lor \dots \lor X_N) \land (\neg X_1 \lor \dots) \land \dots$}. There are some special cases of SAT where computation is easy, for example if each variable features in exactly one clause, but in general, no efficient algorithm is known to exist. From a purely intuitive perspective, the task lends itself to an exponential runtime, as there are $2^N$ possible readings of an expression with $N$ variables. Until P versus NP is resolved, it is not known whether there is a reliable shortcut. Richard Karp used this result to find and categorise 21 NP-complete problems, beginning with the 3SAT problem, a variant of SAT in which all clauses contain three literals. It is easy to transform a CNF expression to the 3SAT form, with the introduction of dummy variables. The expression loses logical equivalency, but retains equisatisfiability, meaning that solutions in the 3SAT form are necessary and sufficient for solutions in the original form. The length of the expression triples, hence the reduction step is polynomial. Karp's 21 NP-complete problems further include problems from graph theory (such as clique selection) and 0-1 integer programming. Note that if a problem in the NP-hard or NP-complete classes could be shown to have an efficient, polynomial-time solution algorithm, it would imply all problems in NP have efficient solutions.
 
 \section{Discrete Optimisation}
 
@@ -2324,7 +2324,7 @@ Self-supervised learning is a branch of unsupervised learning whereby some predi
 
 \subsubsection{Transfer Learning}
 
-Transfer learning (\cite{transfersurvey}) refers to a broad set of techniques that use the solution of one problem in solving another. Arguably, supervised machine learning is subsumed by the transfer learning framework, but where the source and target domains are the same, and where training is performed as a single step.
+Transfer learning refers to a broad set of techniques that use the solution of one problem in solving another. Arguably, supervised machine learning is subsumed by the transfer learning framework, but where the source and target domains are the same, and where training is performed as a single step.
 
 \subsubsection{Reinforcement Learning}
 
@@ -2360,7 +2360,7 @@ Here we define some key concepts surrounding the training and prediction of mode
 
 \subsubsection{Feature Engineering} Feature engineering is the exercise of designing features, according to some ontology about the model. This is an opportunity for domain knowledge to be imparted into a model, with the view of making more indicative features. This is an inherently soft science, but constitutes a large part of applied machine learning in practice. \emph{Feature extraction} is a separate concept, which, for example, may use unsupervised learning to derive features for modelling.
 
-\subsubsection{Training} Training or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is strictly separated from the training process. A part of the training set is extracted as a validation set. These split sizes follow some loose convention, leaving the majority of data for training, for example a $50-25-25$ split. Models are trained on a training set and its predictive performance is assessed on a validation set, providing a benchmark to compare choices of model and model hyper-parameters. This is a process known as \emph{model selection} (\cite{htf}).
+\subsubsection{Training} Training or learning is the act of inferring model parameters from a dataset through some sort of optimisation algorithm. It is vitally important to (randomly) set aside some data from the start, because there must be some independent data available to validate the trained model. If we use all data on training, it is impossible to know how it will perform on unseen data. The usual scheme is to first split the data into training and test datasets. The test data is strictly separated from the training process. A part of the training set is extracted as a validation set. These split sizes follow some loose convention, leaving the majority of data for training, for example a $50-25-25$ split. Models are trained on a training set and its predictive performance is assessed on a validation set, providing a benchmark to compare choices of model and model hyper-parameters. This is a process known as \emph{model selection}.
 
 \subsubsection{Cross-Validation}
 When data is scarce, we can simulate having a validation set in a procedure called cross-validation (CV). Cross-validation partitions the training data into $K$ validation \emph{folds}. A model is trained on the first $K - 1$ folds, and validated on the final fold. This process is repeated $K$ times, such that each fold is validated on, giving $K$ samples for estimating error. If the fold size is chosen to be a single sample (that is, $K = N$), we have leave-one-out cross-validation (LOOCV). The chosen model will be the one that minimises the average CV error. A model is then trained on all the training data (including validation data), and the resulting model tested on the test data. The predictions made are compared with the true values, giving an estimation of generalisation error that can then be reported, in a process known as \emph{model assessment}.
@@ -2385,7 +2385,7 @@ Ground truth is a somewhat nebulous term usually referring to a supervised data 
 
 \subsubsection{The Curse of Dimensionality}
 The curse of dimensionality refers to the difficulty of generalising over a small amount of high-dimensional data. This is because the observation state space grows exponentially as features are added. We therefore need to increase our data exponentially to maintain good coverage. Automatic techniques such as principal components analysis (PCA) exist for \emph{dimensionality reduction} of data, in which the data is mapped to a lower-dimensional space representing the axes of highest variance (trends) of the data. Another option is to encourage model sparsity using $l_1$ regularisation. This tends to build models that ignore unimportant features. Various 
-feature selection techniques also exist, where an optimised subset of features is selected according to preprocessing (filtering), cross-validation (wrapping), or as part of the learning algorithm itself (embedding) (\cite{transfersurvey}).
+feature selection techniques also exist, where an optimised subset of features is selected according to preprocessing (filtering), cross-validation (wrapping), or as part of the learning algorithm itself (embedding).
 
 \subsubsection{Bias-Variance Decomposition}
 The bias-variance tradeoff refers to a result illustrating the expected behaviour of a parameter estimate, with respect to the `true' parameters it approximates. Bias represents \emph{underfitting}, and variance represents \emph{overfitting}. Underfitting/bias is observed in training error; overfitting/variance in test error.
@@ -2603,7 +2603,7 @@ where $\alpha$ is the step size parameter and $\nabla\mathcal{L}(\boldsymbol\bet
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Figures/gradientdescent.png}
-\caption{The method of gradient descent iteratively approaches a global minimum on a convex function (\cite{gradientdescent}).}
+\caption{The method of gradient descent iteratively approaches a global minimum on a convex function (\url{https://commons.wikimedia.org/wiki/File:Gradient\_descent.svg}).}
 \label{fig:gradientdescent}
 \end{figure}
 
@@ -3119,7 +3119,7 @@ Convolutional neural networks are a family of neural network architectures havin
 \mathbf{f}(\mathbf{X}) &= \text{softmax}(\mathbf{W}^{(3)}\mathbf{F}_2 + \mathbf{b}^{(3)}) & \text{(output layer)} \notag
 \end{align}
 
-Convolutional Neural Networks (CNNs) are the current state-of-the-art in many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012 (\cite{krizhevsky2012imagenet}).} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of receiving image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering (\cite{sharif2014cnn}). Another possibility is to use the pre-trained weights as an initialisation for training on a new dataset. Both are examples of transfer learning.
+Convolutional Neural Networks (CNNs) are the current state-of-the-art in many computer vision tasks. Their great success in image classification\footnote{See ImageNet Large Scale Visual Recognition Competition (LSVRC), 2012.} heralded a resurgence of interest in neural networks and deep learning. CNNs make the specific assumption of receiving image inputs and emulate the process of feature extraction using image masks. It has been found that using a pre-trained CNN as a general-purpose feature extractor for a simple linear model can yield significant improvements over even the most meticulously hand-crafted feature engineering). Another possibility is to use the pre-trained weights as an initialisation for training on a new dataset. Both are examples of transfer learning.
 
 The cornerstone of the CNN is the \emph{convolutional layer}, a hidden layer where a square grid of weights is convolved with the input, just like an image mask (now, however, the mask is learned as part of an all-encompassing model). The output of the convolutional layer is akin to a convolved image. Next, the non-linear activation function, ReLu (REctified Linear Unit), is applied to zero-out any negative values. Next there is a \emph{pooling} layer, emulating \emph{downsampling}. Here, each group of (usually) four values (pixels) is replaced by the maximum (sometimes the mean) of the four, leaving a single most intense pixel. This pooling method is known as \emph{max pooling}. This sequence of \texttt{CONV->RELU->POOL} layers may be repeated multiple times to create a deep architecture. Finally, a few fully-connected layers round off the architecture. Though it seems far more sophisticated than a MLP, it can be shown that a CNN can be represented as a classical fully-connected neural network. For example, a convolutional layer can be represented as a sparse fully-connected layer. Various techniques have been developed for training these vast models, for example momentum optimisers, weight initialisation, batch normalisation\footnote{Batch normalisation mitigates \emph{internal covariate shift}, the fluctuations to the internal distributions of activations that make convergence so arduous.}, and \emph{dropout}\footnote{Dropout involves deactivating (setting to $0$) hidden units in fully-connected layers according to a Bernoulli probability. This is repeated for every forward-backward pass of the network, such that every training example is trained on a different sub-graph of the network.} for regularisation.
 
@@ -3525,7 +3525,7 @@ Decision trees (also known as classification and regression trees--CART) are dis
 
 \subsection{Learning Decision Trees}
 
-Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups recursively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree. Note this is an example of \emph{embedded feature selection} (\cite{featureselectionsurvey}).
+Just as with regression, we begin with a dataset, $\mathcal{D} = \{(\mathbf{x}_n, y_n)\}_{n=1}^{N}$. Now, however, the output variable, $y \in \{0, 1, \dots, K-1\}$, is a discrete variable taking a value in one of $K$ categories. For simplicity, we will consider the case that $K = 2$, that is, binary classification. We therefore search for a way of splitting the data into two groups. We repeat this procedure for each of the subgroups recursively, until we satisfy some stopping condition. In so doing, we create a binary tree. Prediction can therefore be done by tracing a data point through the splitting conditions of the tree. Note this is an example of \emph{embedded feature selection}.
 
 The only question then is \emph{how} we should split the data. For example, if we are classifying vehicles, and $y \in \{\text{car}, \text{motorbike}\}$, and our data consists of categories, $\mathbf{x} = [\text{number wheels}, \text{colour}, \text{milage}]$, the number of wheels is likely be a very effective indicator for sorting the cars from the bikes. In fact, it may be decisive, and rarely are indicators so informative in practice. The colour would likely tell us very little, but the milage might tell us something, as longer journeys are usually done by cars, so there may be a weak correlation. We therefore use an impurity measure to quantify the reduction in uncertainty upon making a given split. The best split is the one that minimises the uncertainty,
 
@@ -3578,53 +3578,63 @@ and such that the \emph{reconstruction error} is minimised. This leads to the ob
 
 $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1}^N||\mathbf{x}_i - \hat{\mathbf{x}}_i||^2,$$
 
-where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with an algorithm known as alternating least squares (ALS). It can be shown analytically that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \frac{1}{N}\mathbf{X}^T\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X} \approx \mathbf{Z}\mathbf{W}^T$ for lower-dimensional, orthonormal $\mathbf{W}$, then $\mathbf{X}\mathbf{W} \approx \mathbf{Z}\mathbf{W}^T\mathbf{W} \implies \mathbf{X}\mathbf{W} \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional approximation. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
+where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with an algorithm known as alternating least squares (ALS). It can be shown analytically that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N-1}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \frac{1}{N-1}\mathbf{X}^T\mathbf{X} \in \mathbb{R}^D$ for the $D$ features of $\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X} \approx \mathbf{Z}\mathbf{W}^T$ for lower-dimensional, orthonormal $\mathbf{W}$, then $\mathbf{X}\mathbf{W} \approx \mathbf{Z}\mathbf{W}^T\mathbf{W} \implies \mathbf{X}\mathbf{W} \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional approximation. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
+
+\begin{figure}
+\centering
+\begin{tabular}{cc}
+\subfloat[Principal components]{\includegraphics[width=0.5\textwidth]{Figures/pca1.pdf}} & 
+\subfloat[Other]{\includegraphics[width=0.5\textwidth]{Figures/pca2.pdf}}
+\end{tabular}
+\caption{Principal components analysis identifies the optimal line of projection (left, red line) versus any alternative (right, red line). The choice is optimal as it minimises the residuals (black dashed lines), or, equivalently, maximises the variance of the project data (spread of purple point along red lines).}
+\label{fig:decisionboundary}
+\end{figure}
 
 \subsection{Derivation of PCA}
 
-Given a set of data $\mathbf{A}\in \mathbb{R}^{N\times D}$, compute the unit vector $\mathbf{x}^* \in \mathbb{R}^{D\times 1}$ that passes through the middle of the data manifold, that is, which minimises the residuals,
+Given a set of data $\mathbf{X}\in \mathbb{R}^{N\times D}$, compute the unit vector $\mathbf{w}^* \in \mathbb{R}^{D\times 1}$ that passes through the middle of the data manifold, that is, which minimises the residuals,
 
 \begin{equation}
-\mathbf{x}^* = \min_{\mathbf{x}}\sum_{i=1}^N ||\mathbf{r}_i||_2^2
+\mathbf{w}^* = \min_{\mathbf{w}}\sum_{i=1}^N ||\mathbf{r}_i||_2^2
 \label{eq:residuals}
 \end{equation}
 
-where the residual $\mathbf{r}_i = \mathbf{a}_i - proj_\mathbf{x}(\mathbf{a}_i)\mathbf{x}$, and such that,
+where the residual $\mathbf{r}_i = \mathbf{x}_i - proj_\mathbf{w}(\mathbf{x}_i)\mathbf{w}$, and such that,
 
 \begin{equation}
-\mathbf{x}^T\mathbf{x} = 1.
+\mathbf{w}^T\mathbf{w} = 1.
 \label{eq:constraint}
 \end{equation}
 
-Note that for unit $\mathbf{x}$, $proj_\mathbf{x}(\mathbf{a}_i) = \mathbf{a}_i^T\mathbf{x}$. By the method of Lagrange multipliers, the constraint Equation \ref{eq:constraint} may be substituted into Equation \ref{eq:residuals}, yielding,
+Note that for unit $\mathbf{w}$, $proj_\mathbf{w}(\mathbf{x}_i) = \mathbf{x}_i^T\mathbf{w}$. By the method of Lagrange multipliers, the constraint Equation \ref{eq:constraint} may be substituted into Equation \ref{eq:residuals}, yielding,
 
 \begin{equation}
-\mathbf{x}^*, \lambda^* = \min_{\mathbf{x}, \lambda}\sum_{i=1}^N ||\mathbf{r}_i||_2^2 \lambda\cdot(\mathbf{x}^T\mathbf{x} - 1)
+\mathbf{w}^*, \lambda^* = \min_{\mathbf{w}, \lambda}\sum_{i=1}^N ||\mathbf{r}_i||_2^2 - \lambda\cdot(\mathbf{w}^T\mathbf{w} - 1)
 \label{eq:constrained}
 \end{equation}
 
 Note that,
 
 \begin{align}
-\sum_{i=1}^N ||\mathbf{r}_i||_2^2 &= \sum_{i=1}^N\sum_{j=1}^D (a_{ij} - \mathbf{a}_i^T\mathbf{x}\cdot x_j)^2 \\ \notag
-&= tr((\mathbf{A} - \mathbf{A}\mathbf{x}\mathbf{x}^T)^T(\mathbf{A} - \mathbf{A}\mathbf{x}\mathbf{x}^T)) \\ \notag
-&= tr(\mathbf{A}^T\mathbf{A} - \mathbf{x}\mathbf{x}^T\mathbf{A}^T\mathbf{A} - \mathbf{A}^T\mathbf{A}\mathbf{x}\mathbf{x}^T + \mathbf{x}\mathbf{x}^T\mathbf{A}^T\mathbf{A}\mathbf{x}\mathbf{x}^T) \\ \notag
-&= tr(\mathbf{A}^T\mathbf{A}) - \mathbf{x}^T\mathbf{A}^T\mathbf{A}\mathbf{x}
+\sum_{i=1}^N ||\mathbf{r}_i||_2^2 &= \sum_{i=1}^N\sum_{j=1}^D (x_{ij} - \mathbf{x}_i^T\mathbf{w}\cdot w_j)^2 \\ \notag
+&= tr((\mathbf{X} - \mathbf{X}\mathbf{w}\mathbf{w}^T)^T(\mathbf{X} - \mathbf{X}\mathbf{w}\mathbf{w}^T)) \\ \notag
+&= tr(\mathbf{X}^T\mathbf{X} - \mathbf{w}\mathbf{w}^T\mathbf{X}^T\mathbf{X} - \mathbf{X}^T\mathbf{X}\mathbf{w}\mathbf{w}^T + \mathbf{w}\mathbf{w}^T\mathbf{X}^T\mathbf{X}\mathbf{w}\mathbf{w}^T) \\ \notag
+&= tr(\mathbf{X}^T\mathbf{X}) - \mathbf{w}^T\mathbf{X}^T\mathbf{X}\mathbf{w} \notag
 \end{align}
 
 where the second step is simply the squared Frobenius norm, and the final step leverages Equation \ref{eq:constraint}. Substituting into Equation \ref{eq:constrained} and differentiating,
 
 \begin{equation}
-\frac{\partial}{\partial\mathbf{x}}    \Big(tr(\mathbf{A}^T\mathbf{A}) - \mathbf{x}^T\mathbf{A}^T\mathbf{A}\mathbf{x} - \lambda\cdot(\mathbf{x}^T\mathbf{x} - 1)\Big) = 2\mathbf{A}^T\mathbf{A}\mathbf{x} - \lambda\mathbf{x}
+\frac{\partial}{\partial\mathbf{w}}\Big(tr(\mathbf{X}^T\mathbf{X}) - \mathbf{w}^T\mathbf{X}^T\mathbf{X}\mathbf{w} - \lambda\cdot(\mathbf{w}^T\mathbf{w} - 1)\Big) = 2\mathbf{X}^T\mathbf{X}\mathbf{w} - \lambda\mathbf{w}
 \end{equation}
 
 Setting the derivative to zero and rearranging, one obtains,
 
 \begin{equation}
-\frac{1}{N - 1}\mathbf{A}^T\mathbf{A}\mathbf{x}^* = \frac{\lambda}{2N - 2}\mathbf{x}^*,
+\frac{1}{N - 1}\mathbf{X}^T\mathbf{X}\mathbf{w}^* = \frac{\lambda}{2N - 2}\mathbf{w}^*,
 \end{equation}
 
-namely, $\mathbf{x}^*$ is an eigenvector of the sample covariance matrix $\frac{1}{N - 1}\mathbf{A}^T\mathbf{A}$.
+namely, $\mathbf{w}^*$ is an eigenvector of the sample covariance matrix $\frac{1}{N - 1}\mathbf{X}^T\mathbf{X}$.
 
 \subsection{Singular Value Decomposition}
 
@@ -3638,7 +3648,7 @@ $$\hat{\boldsymbol\Sigma} = \mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{S}\mathbf
 
 which is an eigenvalue decomposition, indeed the singular value decomposition of the square covariance matrix. Note the singular values are the squares of those of $\mathbf{X}$. This implies that $\mathbf{W} = \mathbf{V}$ and $\mathbf{Z} = \mathbf{X}\mathbf{W} = \mathbf{U}\mathbf{S}\mathbf{V}^T\mathbf{V} = \mathbf{U}\mathbf{S}$. The principal components are therefore the columns of the right singular matrix, $\mathbf{V}$, equivalent to the eigenmatrix of the covariance matrix. Thus, SVD (which may be performed with various techniques) is an alternative to ALS for acquiring the reconstruction matrices for PCA. In this form, it is clear that a matrix multiplication can be understood in three steps: a rotation $\mathbf{U}$, a scaling $\mathbf{S}$ and a final rotation $\mathbf{V}$. For a cloud of points, $\mathbf{X}$, the principal components give the trend lines in orthogonal directions that maximise the variance. These trends can be thought of as latent variables underlying the observations and this is the essence of information retrieval techniques such as latent semantic indexing (LSI).
 
-Without truncation, the data may be decorrelated using the decomposition. Consider mapping $\mathbf{X}$ to $\mathbf{Z} = \mathbf{X}\mathbf{U}$. Then, the covariance matrix of $\mathbf{Z}$ is $\mathbf{Z}^T\mathbf{Z} = \mathbf{U}^T\mathbf{X}^T\mathbf{X}\mathbf{U} = \mathbf{U}^T(\mathbf{U}\mathbf{S}\mathbf{V}^T)(\mathbf{V}\mathbf{S}\mathbf{U}^T)\mathbf{U} = \mathbf{S}^2$, the penultimate step being an eigendecomposition of the covariance matrix. Thus, the covariance matrix of $\mathbf{Z}$ is diagonal. We can further \emph{whiten} the data by the transformation $\mathbf{Z} = \mathbf{X}\mathbf{U}\mathbf{S}^{-1}$. It is easily shown that now that the covariance matrix, $\mathbf{Z}^T\mathbf{Z} = \mathbf{I}$.
+Without truncation, the data may be decorrelated using the decomposition. Consider mapping $\mathbf{X}$ to $\mathbf{Z} = \mathbf{X}\mathbf{V}$. Then, the covariance matrix of $\mathbf{Z}$ is $\mathbf{Z}^T\mathbf{Z} = \mathbf{V}^T\mathbf{X}^T\mathbf{X}\mathbf{V} = \mathbf{V}^T(\mathbf{V}\mathbf{S}\mathbf{U}^T)(\mathbf{U}\mathbf{S}\mathbf{V}^T)\mathbf{V} = \mathbf{S}^2$. Thus, the covariance matrix of $\mathbf{Z}$ is diagonal. We can further \emph{whiten} the data by the transformation $\mathbf{Z}_{\text{white}} = \mathbf{X}\mathbf{V}\mathbf{S}^{-1}$. It is easily shown that now that the covariance matrix, $\mathbf{Z}_{\text{white}}^T\mathbf{Z}_{\text{white}} = \mathbf{S}^{-1}\mathbf{V}^T(\mathbf{V}\mathbf{S}^2\mathbf{V}^T)\mathbf{V}\mathbf{S}^{-1} =  \mathbf{I}$.
 
 \subsection{Multi-dimensional Scaling}
 
@@ -4204,10 +4214,10 @@ At approximately the same time, the systems lab at the University of California,
 \item The harmonic series, $h = \sum_{n=1}^{\infty} 1/n$ is (surprisingly) divergent. Clearly, $h = 1 + 1/2 + (1/3 + 1/4) + (1/5 + 1/6 + 1/7 + 1/8) + \cdots > 1 + 1/2 + (1/4 + 1/4) + (1/8 + 1/8 + 1/8 + 1/8) \cdots = 1 + 1/2 + 1/2 + 1/2 + \cdots$, which is clearly divergent.
 \end{itemize}
 
-%\emph{Bibliography} % Change the page header to say "Bibliography"
+% %\emph{Bibliography} % Change the page header to say "Bibliography"
 
-\bibliographystyle{unsrtnat} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
+% \bibliographystyle{unsrtnat} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
 
-\bibliography{Bibliography} % The references (bibliography) information are stored in the file named "Bibliography.bib"
+% \bibliography{Bibliography} % The references (bibliography) information are stored in the file named "Bibliography.bib"
 
 \end{document}
