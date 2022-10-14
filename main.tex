@@ -2681,7 +2681,7 @@ Once we have computed our optimal model parameters, $\boldsymbol\beta^*$, we can
 $$\hat{y} = \hat{\mathbf{x}}^T\boldsymbol\beta^*.$$
 
 \subsection{Maximum Likelihood Estimation}
-
+\label{subsec:mle}
 Now we will derive our regression model from a probabilistic angle. Probabilistic constructions are preferred in machine learning because they make the models more comprehensible\footnote{For some techniques, however, such as neural networks, things are not so straightforward.}. We start our derivation with the following assumptions: firstly, that the data points, $(\mathbf{x}_n, y_n)$ are independent and identically distributed (i.i.d); second, that the output variable is modelled by a linear function with Gaussian noise, that is, $\mathbf{y} = X\boldsymbol\beta + \boldsymbol\epsilon$, where $\boldsymbol\epsilon$ is a vector of normally distributed random variables, $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$, for which $\sigma^2$ is the variance representing the random noise. We are thereby making an assumption about how the output variable is distributed around our line of best fit, $\mathbf{x}_n^T\boldsymbol\beta$. Now we may write a probability distribution for $y_n$,
 
 $$p(y_n|\mathbf{x}_n, \boldsymbol\beta) = \mathcal{N}(\mathbf{x}_n^T\boldsymbol\beta, \sigma^2),$$
@@ -3716,6 +3716,63 @@ where $\mathbf{I}$ is the identity matrix. This shows that K-means fits $K$ Gaus
 A more powerful clustering technique, Gaussian mixture models (GMM) improve on two major shortcomings of K-means. Firstly, GMMs fit elliptical Gaussian densities, optimising over the choice of $\boldsymbol\Sigma$, the covariance matrix. Secondly, the parameters, $r_{nk}$, are replaced by random variables, $r_n$, of a special kind called \emph{latent} random variables. These act as a bridge between each observation $\mathbf{x}_n$ (also a random variable), and its class, $k$. Thus, rather than hard binary values, the values $r_{nk} = p(r_n = k)$ indicate the probabilities of $\mathbf{x_n}$ belonging to cluster $k$. This is useful both for the fact that the parameters no longer grow with the size of the data, and also to quantify an uncertainty about $\mathbf{x}_n$, which can be used for analysis of outliers, and for example the selection of $K$. However, the complexity of the algorithm is far greater than K-means. Again, problem-specific considerations must be made when choosing the most suitable algorithm. Note that unlike spatial clustering algorithm DBSCAN, GMMs are capable of clustering densities that overlap, but are less useful when the data is not linearly separable. Thus, GMMs are good at clustering populations that are likely to be normally distributed in their features, but not, for example, geospatial data that exhibit irregular shapes. The likelihood function for GMMs is maximised using an iterative algorithm called expectation maximisation (EM) (Figure \ref{fig:gmm}), which, similar to K-means, consists of two alternating steps, the $E$ and $M$ steps. In general this is,
 
 $$\arg \max_\theta \mathbb{E}_{p(z_n)}[\log p(x_n, r_n | \theta)].$$
+
+\subsection{Variational Autoencoders}
+
+Autoencoding variational Bayes is about performing maximum likelihood estimation on the marginal probability distribution $p_\theta(\mathbf{x})$ for data sample $\mathbf{x}$, where it is supposed that latent variables $\mathbf{z}$ generate $\mathbf{x}$. The posterior distribution is defined as $q_\phi(\mathbf{z}|\mathbf{x})$. Applying Bayes theorem,
+
+\begin{align}
+\log p_\theta(\mathbf{x}^{(i)}) &= \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\big[\log p_\theta(\mathbf{x}^{(i)})\big] \notag \\
+&= \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\bigg[\log \frac{p_\theta(\mathbf{x}^{(i)}|\mathbf{z})p_\theta(\mathbf{z})}{p_\theta(\mathbf{z}|\mathbf{x}^{(i)})}\bigg] \notag \\
+&= \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\bigg[\log \frac{p_\theta(\mathbf{x}^{(i)}|\mathbf{z})p_\theta(\mathbf{z})}{p_\theta(\mathbf{z}|\mathbf{x}^{(i)})} \cdot
+\frac{q_\phi(\mathbf{z}|\mathbf{x}^{(i)})}{q_\phi(\mathbf{z}|\mathbf{x}^{(i)})} \bigg] \notag \\
+&= \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}
+\bigg[\log \frac{q_\phi(\mathbf{z}|\mathbf{x}^{(i)})}{p_\theta(\mathbf{z}|\mathbf{x}^{(i)})}\bigg] + \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}
+\bigg[\log \frac{p_\theta(\mathbf{x}^{(i)}, \mathbf{z})}{q_\phi(\mathbf{z}|\mathbf{x}^{(i)})}\bigg] \notag \\
+&= \underbrace{D_{KL}\big(q_\phi(\mathbf{z}|\mathbf{x}^{(i)}) || p_\theta(\mathbf{z}|\mathbf{x}^{(i)}) \big)}_{\geq 0} + \mathcal{L}(\theta, \phi ; \mathbf{x}^{(i)}), \notag
+\end{align}
+
+and the divergence term may be eliminated, giving us what is known as a \emph{variational} lower bound on the likelihood, and which can nevertheless be maximised. This expression can then be rearranged as,
+
+$$\mathcal{L}(\theta, \phi ; \mathbf{x}^{(i)}) = -D_{KL}\big(q_\phi(\mathbf{z}|\mathbf{x}^{(i)}) || p_\theta(\mathbf{z}) \big) + \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})} \big[\log p_\theta(\mathbf{x}^{(i)}| \mathbf{z})\big],$$
+
+that is, yet another KL divergence term (that can in many cases by addressed analytically), and an expectation. It is well worth pointing out here that when this formulation is instantiated as a vartiational autoencoder, the distribution $q_\phi(\mathbf{z}|\mathbf{x})$ is the encoder model, and $p_\theta(\mathbf{x}^{(i)}| \mathbf{z})$ is the decoder model. Because it is the distribution over which the expectation is defined, $q_\phi$ will be sampled according to a Monte Carlo strategy, which is why one samples the encoder model via the reparameterisation trick. Both models produce the parameters (mean and variance) for their respective distributions. There is nothing unusual about this. The Bayesian view on linear regression sees a linear model producing the expectation of a Normal distribution around the target variable (see Section \ref{subsec:mle}).
+
+Now, we would like to continue with MLE by computing gradients and performing gradient ascent. The expectation is the problem, as it would require evaluating an intractable interval over the distribution $q_\phi(\mathbf{z}|\mathbf{x})$. To bypass this, Monte Carlo techniques are used, but these suffer from high variance. This is where the main invention comes in: the \emph{stochastic gradient variational bayes} (SGVB) estimator replaces the need for sampling from the posterior directly by instead predicting its distributional parameters and combining them with sampled Gaussian noise in a reparameterisation,
+
+To remedy this, the authors come up with a novelty called the \emph{reparameterisation trick}. This consists of replacing the random variable $\mathbf{z}$ with a deterministic function of $\mathbf{x}$ and a random noise variable $\boldsymbol\epsilon \sim p(\boldsymbol\epsilon)$ such that,
+
+$$\mathbf{z} = g(\mathbf{x}, \boldsymbol\epsilon)$$
+
+The function $g(\mathbf{x}, \boldsymbol\epsilon)$ is chosen to be differentiable (in our case an \emph{encoding} network). Now, we have the \emph{stochastic gradient variational Bayes} (SGVB) estimator,
+
+\begin{align}\widetilde{\mathcal{L}}(\theta, \phi ; \mathbf{x}^{(i)}) = \underbrace{-D_{KL}\big(q_\phi(\mathbf{z}|\mathbf{x}^{(i)}) || p_\theta(\mathbf{z}) \big)}_{\text{analytic solution}} + \underbrace{\frac{1}{L}\sum_{l=1}^L \log p_\theta(\mathbf{x}^{(i)}|\mathbf{z}^{(i, l)})}_{\text{Monte Carlo approximation}} \notag
+\label{eq:sgvb}
+\end{align}
+
+The function $g$ of the reparameterisation embodies the sampling of the recognition model $q_\phi(\mathbf{z}|\mathbf{x})$ i.e. the posterior to compute the expectation. Thus, it is used for Monte Carlo estimation (which it turns out is stable for a single sample i.e. $L=1$) of the likelihood $p_\theta(\mathbf{x}|\mathbf{z})$, which is the probability of the sample given the $\mathbf{z}$ sampled from the posterior (under the reparamterisation trick). The eponymous AEVB algorithm is simply all of this sampling wrapped in a gradient descent loop.
+
+The nice thing about this framework is we can choose what the distributions are. One problem instance of all this is the variational autoencoder, where the prior $p_\theta(\mathbf{z}$ is unit Gaussian, and the posterior $q_\phi(\mathbf{z}|\mathbf{x}^{(i)}$ is diagonal. The KL divergence terms therefore ensures the posterior, as predicted by the recognition network, is close to the prior. Thus, the likelihood model becomes generative and can be sampled from at test time. The auxiliary noise variable of the reparameterisation follows a unit Normal distribution  $p(\boldsymbol\epsilon)$, which is sampled and combined with the predicted parameters of the recogition model to sample the posterior. The likelihood distribution $p_\theta(\mathbf{x}|\mathbf{z})$ is a Gaussian whose parameters are embodied by another neural network. Thus, applying MLE to the training data consists of predicting the mean of a Gaussian, just like in linear regression. The mean is the prediction for the target $\mathbf{x}$, and with the log probability this creates a MSE, and magically we have an autoencoder.
+
+% So, working backwards:
+
+% * We have a MSE (or log loss in the binary case) and regualisation terms. 
+% * The reg terms are an analytic solution of a KL divergence where we suppose the posterior p(z|x) and prior p(z) are diagonal Gaussian. The reg terms are themselves based on the recognition model outputs (prediction of mean, std) and ultimately ensure that the model bottleneck is Gaussian.
+% * The MSE is the result of the maximum likelihood estimation of the log probability of a Gaussian p(x|z).
+% * The Gaussian's parameters are predicted (just like in linear regression, but instead of a linear model, there is an MLP + the variance parameters are predicted + it's usually a multi-variate Gaussian because we're predicting an image), and we optimise the parameters so as to maximise the probability of the data given the model parameters, as usual.
+% * However, the MSE is actually a sum over L samples (even if in practice L = 1), because it's really the Monte Carlo estimation of an expectation.
+% * That expectation is weighted over the posterior distribution p(z|x), which is used to sample z, which is done by combining the predicted distribution parameters from *another* MLP with sampled Gaussian noise. This is the reparameterisation trick, which is the core of the method, and it motivated because it has better variance than typical MC estimators.
+% * The reason we want to maximise this expectation is because, along with the divergence (reg) terms, it forms the variational lower bound on probability of the data.
+% * If we maximise this lower bound, we are increasing the likelihood of the data given our model, which explains the data in terms of latents z.
+% * These latents, which have a known and trivial distribution, can be used to generate data at test time.
+
+\begin{figure}
+\centering
+  \includestandalone[width=0.8\textwidth]{Tikz/vae}%     without .tex extension
+  % or use \input{mytikz}
+  \caption{Recognition and generative networks of a variational autoencoder.}
+  \label{fig:vae}
+\end{figure}
 
 \section{Performance Metrics}
 
