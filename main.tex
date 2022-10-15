@@ -3363,7 +3363,7 @@ This allows the network to accumulate knowledge over time in a stable way. Build
 \mathbf{h}^{(t)} &= \mathbf{q}^{(t)} * \tanh\big(\mathbf{s}^{(t)}\big) \notag
 \end{align}
 
-where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. LSTM remains a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has also been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}.
+where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe the hidden state, the gating unit $\mathbf{g}$ accumulates memory, the hidden state $\mathbf{s}$ models its own recurrent relation, and the output gate $\mathbf{q}$ combines to create the next recurrent hidden unit $\mathbf{h}$, as in classical RNNs. LSTM remains a differentiable, end-to-end trainable function. LSTM has more recently been generalised to \emph{gated recurrent units} (GRU), which optimise the design of LSTM. The ideas of an implicit memory in RNNs has also been extended to an \emph{explicit memory} in the recent \emph{Neural Turing machines}, an end-to-end trainable network capable of reading and writing to \emph{memory cells}. Despite the stabilising effects of gated units, exploding gradients may still arise and cause catastrophic damage to the training process. To avoid this, the relatively ad-hoc technique of \emph{clipping gradients} was developed to rescale gradients whose norm exceed some nominal value.
 
 % \begin{figure}
 % \centering
@@ -3372,7 +3372,125 @@ where the \emph{forget gate} $\mathbf{f}$ controls the network's ability to wipe
 % \label{fig:rnn_lstm}
 % \end{figure}
 
-Despite the stabilising effects of gated units, exploding gradients may still arise and cause catastrophic damage to the training process. To avoid this, the relatively ad-hoc technique of \emph{clipping gradients} was developed to rescale gradients whose norm exceed some nominal value.
+\subsubsection{The constant error carousel}
+
+To motivate LSTM, consider the trivial case of a single self-connected unit, and examine the conditions for it to have constant error flow. A constant error flow implies the gradients are equal in time,
+
+\begin{equation}
+    \vartheta_j(t) = f'_j(net_j(t))\vartheta_j(t + 1)w_{jj}
+\end{equation}
+
+Setting $\vartheta_j(t) = \vartheta_j(t + 1)$ yields,
+
+\begin{equation}
+    f'_j(net_j(t))w_{jj} = 1.0.
+\end{equation}
+
+Integrating this differential equation with respect to the neuron $net_j(t)$ yields,
+
+\begin{equation}
+    f_j(net_j(t)) = \frac{net_j(t)}{w_{jj}}
+\end{equation}
+
+Thus, $f_j$ is linear (no activation) and,
+
+\begin{equation}
+    y_j(t+1) = f_j(net_j(t+1)) = f_j(w_{jj}\cdot y^j(t)) = \frac{w_{jj}y^j(t)}{w_{jj}} = y^j(t).
+\end{equation}
+
+i.e. the recurrent relationship is just a ``copy-through'' operation. This is what they call the \emph{constant error carousel} (CEC). As will be seen, the CEC memory cell will remain a ``copy-through'' operation, ultimately acting like a skip layer that is accessed ``on demand'' (rather than at intervals as with a ResNet). Nevertheless, connecting with other units implies another sort of problem. Suppose backpropagation determines that copying an input to memory at some point in a training sequence is advantageous. This implies the weight should be increased to perform the copy. What then if elsewhere in the sequence another input is better to be ignored by the same weight? Now, the same weight should be decreased. Thus, the incoming weights (from input neurons) are obliged to both write relevant inputs and not write irrelevant inputs to the recurrent units, implying conflicting weight updates from different parts of the sequence. The same is true of the outputs copying from memory. Reading and writing should therefore be \emph{context-sensitive}. LSTM does this by introducing gating functions,
+
+\begin{equation}
+y^{out_j}(t) = f_{out_j}(net_{out_j}(t)) = f_{out_j}\Big(\sum_u w_{out_j,u}y^u(t - 1)\Big)
+\end{equation}
+
+for the output gate and,
+
+\begin{equation}
+y^{in_j}(t) = f_{in_j}(net_{in_j}(t)) = f_{in_j}\Big(\sum_u w_{in_j,u} y^u(t - 1)\Big)
+\end{equation}
+
+for the input gate. The index $u$ refers to any type of connection. In practice these will be a combination of input and hidden neurons (see below). These are usually annotated respectively as,
+
+\begin{equation}
+    i_t = \sigma_g(W_ix_t + U_ih_{t-1} + b_i),
+\end{equation}
+
+and,
+
+\begin{equation}
+    o_t = \sigma_g(W_ox_t + U_oh_{t-1} + b_o),
+\end{equation}
+
+The CEC state is updated according to,
+
+\begin{align}
+s_{c_j}(t) &= s_{c_j}(t-1) + y^{in_j}(t)g(net_{c_j}(t)) \\
+&= s_{c_j}(t-1) + y^{in_j}(t)g\Big(\sum_u w_{c_j,u}y^u(t - 1)\Big),
+\end{align}
+
+that is, the application of the input gate. This encapsulates the following parts of the standard formulation,
+
+\begin{equation}
+    \hat{c}_t = \sigma_c(W_cx_t + U_ch_{t-1} + b_c),
+\end{equation}
+
+where $\hat{c}_t$ is like the ``prospective'' memory cell (subject to gating modifications) and,
+
+\begin{equation}
+    c_t = c_{t-1} + i_t\circ \hat{c}_t.
+\end{equation}
+
+Note that the ``copy-through'' operation preserves the constant error property with respect to the recurrent units. Thus, the new memory is a copy of the previous, with a context-sensitive residual.  What about the forget gate? This wasn't introduced until 1999! The final part of LSTM is,
+
+\begin{equation}
+    y^{c_j}(t) = y^{out_j}(t)h(s_{c_j}(t)),
+\end{equation}
+
+that is, the application of the output gate.
+
+\begin{equation}
+    h_t = o_{t} \circ \sigma_h(c_t).
+\end{equation}
+
+\begin{figure}[ht!]
+\centering
+\includestandalone[width=0.8\textwidth]{Tikz/cec}
+\caption{RNN unfolded in time for a single input, memory, and hidden unit, for $5$ time steps. The missing arrows indicate a gated connection at that time point.}
+\label{fig:cec}
+\end{figure}
+
+Thus, the new hidden state is a copy of the new memory (itself a function of the old hidden state), with a context-sensitive filter for irrelevant information (the output gate). Error signals are said to be ``trapped'' in the memory cell. To see what is meant by this, consider the computational graph in Figure \ref{fig:cec}. The error for the last memory node $c_4$ is the product of its activation and the $h_4$ gradient. Now, the activation is linear, and furthermore, the recurrent weight is fixed at $1.0$, so,
+
+\begin{equation}
+    f'(net_{c_4}) = \frac{\partial}{\partial net_{c_4}} net_{c_4} / w_{c_4c_4} = 1.
+\end{equation}
+
+This is the essence of the constant error carousel. We obtain,
+
+\begin{equation}
+    \vartheta_{c_4} = 1 \cdot w_{c_4h_4}\vartheta_{h_4}
+\end{equation}
+
+Following through, we have,
+
+\begin{equation}
+    \vartheta_{c_3} = 1 \cdot 1 \cdot \vartheta_{c_4} = w_{c_4h_4}\vartheta_{h_4},
+\end{equation}
+
+from which one can see how the error is ``trapped''. At the preceding node, another error is added:
+
+\begin{equation}
+    \vartheta_{c_2} = 1 \cdot (\vartheta_{c_3} + w_{c_2h_2}\vartheta_{h_2}) = w_{c_4h_4}\vartheta_{h_4} + w_{c_2h_2}\vartheta_{h_2},
+\end{equation}
+
+or rather ``superimposed''. Following through back to the initial node,
+
+\begin{equation}
+    \vartheta_{c_0} = w_{c_4h_4}\vartheta_{h_4} + w_{c_2h_2}\vartheta_{h_2} + w_{c_1h_1}\vartheta_{h_1} + w_{c_0h_0}\vartheta_{h_0},
+\end{equation}
+
+and one can notice the errors have travelled back through time in through a stable shortcut, to better inform the weight updates of the input layer, gating functions, and earlier hidden states. Notice that $h_0$ will receive gradients that represent $h_1$, $h_2$, and $h_4$. Note that, of course, the gates are soft and never entirely $0$ or $1$. It is to be assumed that this effect is negligible.
 
 \section{Support Vector Machines}
 
@@ -3570,7 +3688,7 @@ Random forests are an example of a bagging (bootstrapped aggregation). A related
 
 \section{Dimensionality Reduction and PCA}
 
-The curse of dimensionality motivates techniques to transform high-dimensional data, given by an $N \times D$ matrix $\mathbf{X}$, to a lower rank approximation. This can be achieved by choosing lower dimensionality, $M  < D$, and finding $D \times M$ matrix $\mathbf{W}$ and $N \times M$ matrix $\mathbf{Z}$ such that,
+The curse of dimensionality motivates techniques to transform high-dimensional data, given by an $N \times D$ matrix $\mathbf{X}$, to a lower rank approximation. This can be achieved by choosing lower dimensionality, $M  < D$, and finding $D \times M$ orthonormal matrix $\mathbf{W}$ and $N \times M$ matrix $\mathbf{Z}$ such that,
 
 $$\mathbf{X} \approx \mathbf{Z}\mathbf{W}^T,$$
 
@@ -3578,7 +3696,19 @@ and such that the \emph{reconstruction error} is minimised. This leads to the ob
 
 $$\min_{\mathbf{W}, \mathbf{Z}} J(\mathbf{W}, \mathbf{Z}) = \frac{1}{N}\sum_{i=1}^N||\mathbf{x}_i - \hat{\mathbf{x}}_i||^2,$$
 
-where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with an algorithm known as alternating least squares (ALS). It can be shown analytically that the optimal orthogonal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N-1}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \frac{1}{N-1}\mathbf{X}^T\mathbf{X} \in \mathbb{R}^D$ for the $D$ features of $\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X} \approx \mathbf{Z}\mathbf{W}^T$ for lower-dimensional, orthonormal $\mathbf{W}$, then $\mathbf{X}\mathbf{W} \approx \mathbf{Z}\mathbf{W}^T\mathbf{W} \implies \mathbf{X}\mathbf{W} \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional approximation. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
+where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the $i$th row. The reconstruction error function can be minimised (and the optimal decomposition found) with an algorithm known as alternating least squares (ALS).
+
+Assuming $\mathbf{W}$ is orthonormal, it can be shown that the optimal $\mathbf{Z}$ will be projections onto $\mathbf{W}$. Thus, is can be shown that the optimal $\mathbf{W}$ will equivalently:
+
+\begin{itemize}
+\item minimise the reconstruction error
+\item minimise the residuals of the projections 
+\item maximise the variance of the projected data
+\end{itemize}
+
+Examples of this equivalence is given in Figure \ref{fig:pca}.
+
+It can be shown analytically that the optimal orthonormal choice occurs when $\mathbf{W}$ is the matrix of the $M$ most significant eigenvectors (highest eigenvalues) of the sample covariance matrix, $\hat{\boldsymbol\Sigma} = \frac{1}{N-1}\sum_i\mathbf{x}_i\mathbf{x}_i^T = \frac{1}{N-1}\mathbf{X}^T\mathbf{X} \in \mathbb{R}^D$ for the $D$ features of $\mathbf{X}$. These are otherwise known as the \emph{principal components} of $\mathbf{X}$, which brings us to principal component analysis (PCA), a highly popular technique for dimensionality reduction. If we can find $\mathbf{X} \approx \mathbf{Z}\mathbf{W}^T$ for lower-dimensional, orthonormal $\mathbf{W}$, then $\mathbf{X}\mathbf{W} \approx \mathbf{Z}\mathbf{W}^T\mathbf{W} \implies \mathbf{X}\mathbf{W} \approx \mathbf{Z}$, hence $\mathbf{W}$ maps our data to a lower-dimensional approximation. When the transformation is made, a model may be trained, perhaps more successfully than with the full data.
 
 \begin{figure}
 \centering
@@ -3587,7 +3717,7 @@ where $\hat{\mathbf{x}}_i = \mathbf{W}\mathbf{z}_i$ is the reconstruction of the
 \subfloat[Other]{\includegraphics[width=0.5\textwidth]{Figures/pca2.pdf}}
 \end{tabular}
 \caption{Principal components analysis identifies the optimal line of projection (left, red line) versus any alternative (right, red line). The choice is optimal as it minimises the residuals (black dashed lines), or, equivalently, maximises the variance of the project data (spread of purple point along red lines).}
-\label{fig:decisionboundary}
+\label{fig:pca}
 \end{figure}
 
 \subsection{Derivation of PCA}
@@ -3658,11 +3788,161 @@ $$\sum_{i, j} (|\mathbf{x}_i - \mathbf{x}_j|_2^2 - D_{ij})^2$$
 
 \subsection{t-distributed Stochastic Neighbour Embedding}
 
+t-SNE (t-distributed stochastic neighbour embedding) defines probabilities between points in high-dimensional space by invoking a Gaussian centered on each point, then calculating the probability of choosing each other point. These are then normalised. Then t-SNE creates an embedding in a lower dimension by choosing coordinates such that the corresponding, similarly-defined probabilities are close to the former ones. This is ensured by minimising the KL-divergence between the set of distributions. t-SNE is not recommended as a general dimensionality reduction technique, rather a visualisation tool. It is somewhat similar to multi-dimensional scaling (MDS), MDS defines Euclidean distances (the log of a spherical Gaussian) and has a convex objective function.
+
 \section{Structured Sequence Learning}
 
 \subsection{Hidden Markov Models}
 
+Hidden Markov models (HMMs) are a staple of natural language processing (NLP) and other engineering fields. A HMM models a probability distribution over an unknown, \emph{hidden} sequence of states of length $T$, $\mathbf{y} = (y_1, y_2, ..., y_T)$, whose elements take on values in a finite set of states, $S$, and follow a Markov process. For each element in this hidden sequence, there is a corresponding observation element, forming a sequence of \emph{observations}, $\mathbf{x} = (x_1, x_2, ..., x_T)$, similarly taking values in a finite set, $O$. The graphical structure of a HMM (Figure \ref{fig:HMM}) shows the dependencies between consecutive hidden states (these are modelled with \emph{transition} probabilities), and states and their observations (modelled with \emph{emission} probabilities). The first dependency is referred to as the Markov condition, which postulates the dependency of each hidden state, $y_t$, on its $k$ precursors in the hidden sequence, namely, $\mathbf{y}_{t-k:t-1}$\footnote{In the following we use the notation $\mathbf{x}_{a:b}$ to refer to the elements of vector $\mathbf{x}$ from index $a$ through $b$ inclusive.}. In the discussion that follows, we assume the Markov condition to be of first degree, that is, $k =1$. Incidentally, higher-order HMMs may always be reconstructed to this simplest form. For example, for $k = 2$ it suffices to define $S' = S \times S$ and $O' = O \times O$, that is, compound transition and emission probabilities. Thus, we have a first-order HMM with variables $Y_t' = (Y_{t-1}, Y_t)$. The second dependency assumption may be referred to as \emph{limited lexical conditioning}, referring to the dependency of an observation only on its hidden state. Properties of the model may then be deduced through statistical inference, for example, a prediction of the most likely hidden sequence can be computed with the Viterbi algorithm (Section \ref{sec:viterbi}).
+
+HMMs have been shown to be successful in statistical modelling problems. In Part of Speech (PoS) tagging, a classic NLP problem for disambiguating natural language sentences, the parts of speech (nouns, verbs, and so on) of a word sequence (sentence) are modelled as hidden states, and the words themselves are the observations. The PoS sequence may be modelled and predicted for as a HMM. Even a simple HMM can achieve an accuracy of well over $90\%$.
+
+\begin{figure}[t]
+\center
+\includegraphics[width=4in]{Figures/HMM.pdf}
+\caption{An illustration of the graphical structure of a Hidden Markov Model (HMM). The arrows indicate the dependencies running from dependee to dependent.}
+\label{fig:HMM}
+\end{figure}
+
+We may build a HMM by first forming the joint probability distribution of the hidden state sequence and the observation sequence,
+
+\begin{equation}
+\p(\mathbf{x}, \mathbf{y}) = \p(\mathbf{x} | \mathbf{y}) \p(\mathbf{y}).
+\label{eq:joint}
+\end{equation}
+
+Applying the chain rule and the two dependency assumptions, we acquire,
+
+\begin{equation}
+\begin{aligned}
+\p(\mathbf{x} | \mathbf{y}) &= \p(x_1|\mathbf{y}) \p(x_2|x_1, \mathbf{y}) ... \p(x_T|\mathbf{x}_{1:T-1}\mathbf{y}) \\
+&= \p(x_1|y_1) \p(x_2|y_2) ... \p(x_T|y_T),
+\end{aligned}
+\label{eq:conditional}
+\end{equation}
+
+and,
+
+\begin{equation}
+\begin{aligned}
+\p(\mathbf{y}) &= \p(y_1) \p(y_2|y_1) ... \p(y_T|\mathbf{y}_{1:T-1}) \\
+&= \p(y_1) \p(y_2|y_1) ... \p(y_T|y_{T-1}),
+\end{aligned}
+\label{eq:prior}
+\end{equation}
+
+where $\p(y_1|y_0) = \p(y_1)$. Combining \ref{eq:conditional} and \ref{eq:prior}, we may rewrite the factorisation of the HMM as,
+
+\begin{equation}
+\p(\mathbf{x}, \mathbf{y}) = \prod_{t=1}^T \p(y_t | y_{t-1})\p(x_t | y_t).
+\label{eq:factorisedHMM}
+\end{equation}
+
+The probabilities $\p(y_t | y_{t-1})$ are known as \emph{transition} probabilities, and $\p(x_t | y_t) $ as \emph{emission} probabilities. These probabilities constitute the model parameters, $\theta = (\mathbf{A}, \mathbf{B}, \mathbf{I})$, where $\mathbf{A}$ is the $|S| \times |S|$ matrix of probabilities of transitioning from one state to another, $\mathbf{B}$ is the $|S| \times |O|$ matrix of probabilities of emitting an observation given an underlying hidden state, and $\mathbf{I}$ is the vector of probabilities of initial states. The model parameters must be precomputed\footnote{For example, the model parameters can be estimated through application of the Baum-Welch algorithm (\cite{baum1966statistical}) on an unsupervised training set.}. Now, given a sequence of observations, $\textbf{x}$, we may predict the hidden state sequence, $\mathbf{y}*$, by maximising the conditional distribution, $\p(\mathbf{y} | \mathbf{x})$. That is,
+
+\begin{equation}
+\textbf{y}* = \argmax_{\textbf{y}}\Bigg\{\prod_{t=1}^T \p(y_t | y_{t-1})\p(x_t | y_t)\Bigg\}.
+\label{eq:argmax}
+\end{equation}
+
+The hidden state sequence prediction is chosen to be the one maximising the likelihood over all possible hidden sequences. This seemingly intractable problem may be solved in polynomial time using dynamic programming (see Section \ref{sec:viterbi}).
+
+\subsubsection{Viterbi Algorithm}
+\label{sec:viterbi}
+
+The Viterbi algorithm is used to efficiently compute the most likely sequence, $\textbf{y}$, given an observation sequence, $\textbf{x}$. The algorithm can do this efficiently by working along the sequence from state to state, and choosing the transitions that maximise the likelihood of the sequence fragment. To show this we define, $v_t(s) = \max_{\mathbf{y}_{1:t-1}} \p(\mathbf{y}_{1:t-1}, y_t = s | \mathbf{x})$, that is, the most likely sequence from the first $t-1$ states, with the choice of state $s$ at time $t$. Thus, we may write,
+
+\begin{equation}
+\begin{aligned}
+v_t(s) &= \max_{\mathbf{y}_{1:t-1}} \p(\mathbf{y}_{1:t-1} | \mathbf{x}) \p(y_{t-1}, y_t = s) \p(x_t | y_t = s) \\
+&= \max_{\mathbf{y}_{1:t-1}} v_{t-1}(y_{t-1}) \p(y_{t-1}, y_t = s) \p(x_t | y_t = s), 
+\end{aligned}
+\label{eq:viterbi}
+\end{equation}
+
+and we may see the recursion. Once all states have been computed at time $t$, the maximum may be chosen and the algorithm proceeds to time $t+1$. The algorithm must test all $|S|$ transitions from the previous state to each of the $|S|$ current states, and it does that for each of the $|T|$ steps in the sequence. Hence, the complexity of the algorithm is a workable $\mathcal{O}(T|S|^2)$.
+
+\subsubsection{Forward-backward Algorithm}
+\label{sec:fb}
+
+Another key inference algorithm to sequence learning is the forward-backward algorithm, so called for its computation of variables in both directions along the sequence. It is another example of a dynamic programming algorithm and is used to compute the so-called \emph{forward-backward} variables, which are the conditional probabilities of the individual hidden states at each time step (that is, not the whole sequence), given the observation sequence and model parameters, namely, $\p(y_t = s | \mathbf{x}, \theta)$. These conditional probabilities have many useful applications, for example in the Baum-Welch algorithm for estimating model parameters, but also in the training of \emph{conditional random fields}, as we discuss in Section \ref{subsec:crfs}. We may write the forward-backward variables as,
+
+\begin{equation}
+\gamma_t(s) = \p(y_t = s | \mathbf{x}, \theta) = \frac{\alpha_t(s) \beta_t(s)}{\sum_{s' \in S} \alpha_t(s') \beta_t(s')},
+\label{eq:fb}
+\end{equation}
+
+where the \emph{forward} variables, $\alpha_t(s) = \p(\mathbf{x}_{t+1:n}|y_t = s, \mathbf{x}_{1:t}) = \p(\mathbf{x}_{t+1:n}|y_t = s)$, and the \emph{backward} variables, $\beta_t(s) = \p(y_t = s, \mathbf{x}_{1:t})$. To derive the forward-backward algorithm we write, by the law of total probability,
+
+\begin{equation}
+\begin{aligned}
+\alpha_t(s) &= \sum_{y_{t-1}} \p(y_{t-1}, y_t = s, \mathbf{x}_{1:t}) \\
+& = \sum_{y_{t-1}} \p(y_t = s|y_{t-1}) \p(x_t|y_t) \p(y_{t-1}, \mathbf{x}_{1:t-1}) \\
+& = \sum_{y_{t-1}} \mathbf{A}(y_{t-1}, s) \mathbf{B}(x_t, y_t) \alpha_{t-1}(y_{t-1})).
+\end{aligned}
+\label{eq:forward}
+\end{equation}
+
+Thus, we may see the recursion, as well as the way the forward variables will be computed, traversing the sequence in the forward direction with each forward variable of a given time a weighted product of those from the previous time. Likewise, for the backward variables, we may write,
+
+\begin{equation}
+\begin{aligned}
+\beta_t(s) &= \sum_{y_{t+1}} \p(y_t = s, y_{t+1}, \mathbf{x}_{t+1:n}) \\
+& = \sum_{y_{t+1}} \p(\mathbf{x}_{t+2:n}|y_{t+1}, x_{t+1}) \p(x_{t+1}, y_{t+1}|y_t = s) \\
+& = \sum_{y_{t+1}} \beta_{t+1}(y_{t+1}) \mathbf{A}(s, y_{t+1}) \mathbf{B}(x_{t+1}, y_{t+1})).
+\end{aligned}
+\label{eq:backward}
+\end{equation}
+
+From Equations \ref{eq:forward} and \ref{eq:backward} comes the algorithm, which combines the results to compute the forward-backward variables, $\gamma_t(s)$. The complexity of the algorithm comes from noting that at each of the $T$ steps in the sequence (in either direction), we compute $|S|$ variables, involving a summation of $|S|$ products. Hence, like the Viterbi algorithm, the complexity of the forward-backward algorithm is $\mathcal{O}(T|S|^2)$.
+
 \subsection{Conditional Random Fields}
+\label{subsec:crfs}
+
+Conditional Random Fields (CRFs) are a machine learning technique for making structured predictions. They are an improvement to the similar, Maximum Entropy Markov models (MEMM) (\cite{mccallum2000maximum}), which combine aspects of maximum entropy classifiers and hidden Markov models (\cite{lafferty2001conditional}). They are a member of a class of structured sequence models called \emph{random fields}, which are part of a broader family known as \emph{graphical models}, including within it \emph{Bayesian networks}.
+
+Classification over relational data can benefit greatly from rich features, that is, describing observed attributes of an observation beyond merely its identity (as with HMMs). Take for example the context of text processing, where we might consider describing a string token (observation) by non-lexical features such as by its capitalisation or punctuation. Furthermore, we may wish to model context-aware features that contrast a string token with its surroundings. However, the complexity of the interdependencies of such features will likely make their explicit modelling infeasible. With CRFs, we circumvent this problem by instead modelling the conditional distribution, $\p(\mathbf{y}|\mathbf{x})$, of the underlying graph structure, giving us free choice over features and, in so doing, \emph{implicitly} defining a distribution over $\mathbf{x}$ without having to model this distribution directly (\cite{sutton2006introduction}). Such a conditional model is called a \emph{discriminative} model, in contrast to a \emph{generative} model, whereby the joint probability distribution is modelled explicitly. If we wish to model the interdependencies in a generative model, we must either extend the model which may both be difficult and entail intractable solution algorithms, or we must simplify the model and thereby compromise model performance. Notice that modelling the conditional distribution is sufficient for classification, where the observation sequence is known. This freedom for rich feature engineering is what makes CRFs the current state-of-the-art in metadata extraction, where arbitrarily defined features often make for good indicators. One may be tempted to use a logistic regression and classify each part of a sequence separately, but this would fail to take into account the contextual relations between the entities. For example, in the metadata extraction of a bibliographic reference, it is more likely for a publication title to follow an author list, and for a journal name to follow a publication title. This is what we mean by structured sequence learning, where the data to predict exhibits interdependencies and are correlated.
+
+When the graph structure of a CRF model is the same as for a HMM (Figure \ref{fig:HMM}), we have what is called a \emph{linear-chain} CRF. HMMs and linear-chain CRFs thereby form what is called a generative-discriminative pair. In the general case, where the graph structure is more complex, we have what is called \emph{skip-chain} CRFs. In this case the problem becomes far more complex, and we will not discuss these models here. A HMM may alternatively be expressed by the joint probability,
+
+\begin{equation}
+\p(\textbf{x}, \textbf{y}) = \text{exp} \Bigg\{
+\sum_{i, j \in S}{
+\lambda_{ij}F_{i,j}(y_t, y_{t-1}, x_t)
+}
++
+\sum_{i \in S}\sum_{o \in O}{
+\mu_{io}F_{i,o}(y_t, y_{t-1}, x_t)
+}
+\Bigg\},
+\label{eq:jointcrf}
+\end{equation}
+
+where the parameters $\lambda_{ij}$ are the transition probabilities and $\mu_{ij}$ are the emission probabilities. $F_{i,j}(y_t, y_{t-1}, x_t) = \sum_t^T\mathbbm{1}_{\{y_t = i\}}\mathbbm{1}_{\{y_{t-1} = j\}}$ is a \emph{feature function} used to activate the transition probabilities, and $F_{i,o}(y_t, y_{t-1}, x_t) = \sum_t^T\mathbbm{1}_{\{y_t = i\}}\mathbbm{1}_{\{x_{i} = o\}}$ for the emissions. The indicator functions activate the probabilities in accordance with the identity of the states and observations. Regardless, this formulation is equivalent to Equation \ref{eq:factorisedHMM}. With some notational abuse we can define the more compact expression,
+
+\begin{equation}
+\p(\textbf{x}, \textbf{y}) = \text{exp} \Bigg\{\sum_k{
+\lambda_{k}F_{k}(y_t, y_{t-1}, x_t)
+}\Bigg\},
+\label{eq:jointcrfcompact}
+\end{equation}
+
+where $F_k$ is a general feature function and $\lambda_k$ a general feature weight. Now we may define the discriminative counterpart to this joint distribution, the linear-chain CRF,
+
+\begin{equation}
+\p(\textbf{y}|\textbf{x}) = \frac{\p(\textbf{x}, \textbf{y})}{\sum_{y'}{\p(\textbf{x}, \textbf{y}')}} = \frac{1}{Z(\mathbf{x})}\exp \Bigg\{\sum_k{
+\lambda_{k}F_{k}(y_t, y_{t-1}, x_t)
+}\Bigg\},
+\end{equation}
+
+where $Z(\mathbf{x}) = \sum_{y'}\exp \Big\{\sum_k{\lambda_{ij}F_{k}(y'_t, y'_{t-1}, x_t)}\Big\}$ is known as the partition function, ensuring probabilities sum to 1. Whereas HMMs model only the \emph{occurrence} of a word, with conditional random fields we may choose $F_k$ to define arbitrarily complex features, describing rich information about a word, its attributes, and its context. Finally, we may define a cost function in the following way,
+
+\begin{equation}
+l(\theta) = \sum_{n=1}^N\sum_{t=1}^T\sum_{k=1}^K\lambda_kF_{k}(y_t, y_{t-1}, x_t) - \sum_{n=1}^N\log Z(\mathbf{x}^{(n)}) - \sum_{k=1}^K \frac{\lambda_k^2}{2\sigma^2},
+\end{equation}
+
+where $\theta = \{\lambda_k\}_{k=1}^K$. This is called penalised maximum log likelihood. The penalty term, $\sum_{k=1}^K\frac{\lambda_k^2}{2\sigma^2}$, imposes an $l_2$ regularisation on the solution parameters, $\theta$. However, according to (\cite{mccallum2000maximum}), varying the tuning parameter, $\sigma^2$ (the variance), even by orders of magnitude has little effect on the outcome, a claim we corroborate in Chapter \ref{Chapter5}. This cost function represents a strictly convex function, solvable using numerical methods such as L-BFGS (see Section \ref{sec:lbfgs}). Forward-backward processing (Section \ref{sec:fb}) is performed at each iteration to compute the partition function, as well as the conditional probabilities resulting from deriving the partial derivatives required for gradient descent. Hence, the complexity of training is $\mathcal{O}(INT|S|^2)$, where $I$ is the number of iterations required and $N$ is the number of training samples. Finally, the Viterbi algorithm (Section \ref{sec:viterbi}) is used to make a prediction with the trained model, that is, the best state sequence is found given the optimal parameter set found in training.
 
 \subsection{Kalman Filters}
 
@@ -3717,6 +3997,7 @@ A more powerful clustering technique, Gaussian mixture models (GMM) improve on t
 
 $$\arg \max_\theta \mathbb{E}_{p(z_n)}[\log p(x_n, r_n | \theta)].$$
 
+\section{Generative models}
 \subsection{Variational Autoencoders}
 
 Autoencoding variational Bayes is about performing maximum likelihood estimation on the marginal probability distribution $p_\theta(\mathbf{x})$ for data sample $\mathbf{x}$, where it is supposed that latent variables $\mathbf{z}$ generate $\mathbf{x}$. The posterior distribution is defined as $q_\phi(\mathbf{z}|\mathbf{x})$. Applying Bayes theorem,
@@ -3773,6 +4054,81 @@ The nice thing about this framework is we can choose what the distributions are.
   \caption{Recognition and generative networks of a variational autoencoder.}
   \label{fig:vae}
 \end{figure}
+
+\subsection{Generative adversarial networks}
+\label{sec:gans_definition}
+Generative adversarial networks (GANs) is a learning framework that trains a generator model to be capable of sampling new data from a data distribution (in particular, images), learnt (implicitly) from a training set. GANs compete with variational autoencoders and, more recently, autoregressive models for image generation. GANs are arguably a more mature and versatile learning paradigm, however.
+
+\begin{figure}
+\centering
+\includestandalone[width=0.8\textwidth]{Tikz/gan}
+\caption{A GAN trains a generator network $G$ to fool a discriminator network $D$ in emitting counterfeit images $\mathbf{x} \sim p_g(\mathbf{x})$ by transforming noise input $\mathbf{z}$. In order to do so, $G$ must (implicitly) learn the data-generating distribution, $p_{data}$.}
+\label{fig:gan_schematic}
+\end{figure}
+
+The GAN framework (Figure \ref{fig:gan_schematic}) is \emph{adversarial} in that it pits a pair of neural networks in a two-player minimax \emph{game}: a \emph{generator},
+
+\begin{equation}
+G : Z \to X,
+\end{equation}
+
+where in the simplest case $\mathbf{z} \sim Z$ is a vector of (uniform or Gaussian) noise and $\mathbf{x} \sim X$ is a synthetic data point (in particular, an image); and a \emph{discriminator},
+
+\begin{equation}
+D : X \to \{0, 1\},
+\end{equation}
+
+that is, a mapping from data point to binary value. $D$ aims to minimise its rate of failure in discerning true data from ``fake'' data sampled from the the generator, which aims to maximise the error made by the discriminator,
+
+\begin{equation}
+\max_G\min_D\mathcal{L}_{GAN}(D, G) = \mathbb{E}_{\mathbf{x} \sim p(\mathbf{x})}[\log D(\mathbf{x})] + \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z})}[\log(1 - D(G(\mathbf{z})))].
+\label{eq:gan_objective}
+\end{equation}
+
+The stationary point of Equation \ref{eq:gan_objective} is a \emph{Nash equilibrium} (a saddle point) between the two objectives. It is guaranteed that the distribution implicitly defined\footnote{GANs are implicit generative models, in contrast to explicit models such as VAEs, which model the probabilities directly. GANs serve as an sample-emitting oracle emulating the true distribution.} by $G$, $p_g$ is equal to $p_{\text{data}}$ for $G^*$ at (global) optimality and,
+
+\begin{equation}
+D^*(\mathbf{x}) = \frac{p_{\text{data}}(\mathbf{x})}{p_{\text{data}}(\mathbf{x}) + p_{g}(\mathbf{x})},
+\end{equation}
+
+where $p_{\text{data}}$ is the data-generating distribution. In practice, GANs are trained by backpropagation with alternating gradient descent between $D$ and $G$. The weights of $D$ are frozen while propagating the errors back through $D$ to $G$.
+
+GAN architecture design must strike a balance between a generator expressive enough to approximate the data distribution, and a discriminator powerful enough to hold it to the task. GANs are afflicted with a phenomenon known as \emph{mode collapse}. Mode collapse is the condition in which the generator ``collapses'' to generating few or even a unique output, regardless of the noise input $\mathbf{z}$. Two varieties of mode collapse exist: \emph{discrete mode collapse}, where the generator collapses to a subset of data modes (easily detected); and the more insidious \emph{manifold collapse}, where the generator collapses to a subspace of the data distribution. They reason that mode collapse originates from the fact that in each iteration of training, the generator is impelled towards a delta function at the mode considered most ``real'' by the discriminator. The discriminator responds by lowering the probability of this mode, leading to oscillations in training. The ``unrolled'' GAN training approach that they advocate mitigates this tendency by informing the generator in advance of the discriminator's response to its prospective weight updates.
+
+Another promising attempt to attenuate the mode collapse problem is to replace the Jensen-Shannon divergence loss function with the Earth Mover (EM) or Wasserstein-1 distance. Such is the strategy of Wasserstein GANs (WGANs). Intuitively, the EM distance measures a distance between two distributions. One can write the EM distance as the quantity $\mathbb{E}_{x \sim \mathbb{P}_r}[f_w(x)] - \mathbb{E}_{z\sim p(z)}[f_w(g_{\theta}(z))]$ maximised by choice of $f_w$ (discriminator). The goal is then to minimise this distance through optimisation of the generator. The training algorithm is very similar to GANs. WGANs seem to be more stable, as the substituted loss function allows the discriminator to be trained to optimality. This greatly mitigates the mode collapse problem. Nevertheless, more subtle forms of partial mode collapse remain a recurrent problem for GANs. As a bonus, the discriminator loss (estimated EM distance) becomes meaningful during training, interpretable as image sample quality, rendering the implementation and fine-tuning of WGANs far easier.
+
+\subsubsection{Deep convolutional GANs}
+\label{subsec:dcgan_definition}
+DCGANs first succeeded in training more powerful, high-resolution GANs, by identifying a set of design principles: replacing pooling layers with strided convolutions; removing fully-connected layers (apart from the first layer of the generator); using batch normalisation after all but the last layer; using a $\tanh$ activation at the end of the generator (and ReLU everywhere else); and using LeakyReLU activations everywhere in the discriminator. For image data, deep convolutional GANs (DCGANs) represent a vast improvement over the original fully-connected GANs.
+
+\subsubsection{Conditional GANs}
+\label{subsec:conditional_gans_definition}
+Conditional GANs present a simple extension to GANs allowing for control over the data generating process. One simply includes an additional input $\mathbf{y} \sim Y$ (for example, class information), to obtain conditional GANs (CGANs). That is, now the generator is conditional,
+
+\begin{equation}
+G : Z, Y \to X,
+\end{equation}
+
+as is the discriminator,
+
+\begin{equation}
+G : X, Y \to \{0, 1\},
+\end{equation}
+
+and the CGAN is trained against the objective,
+
+\begin{align}\mathcal{L}_{CGAN}(D, G) = \mathbb{E}_{\mathbf{x} \sim p(\mathbf{x})}[\log D(\mathbf{x} | \mathbf{y})] + \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z})}[\log(1 - D(G(\mathbf{z} | \mathbf{y})))].
+\end{align}
+
+The intuition as to why conditional GANs works can be an instructive thing to consider. As $D$ learns to associate conditional information such as object class with the ground truth images, it will declare ``fake'' any image emitted by $G$ not conforming to the condition, no matter the quality of the image. If $G$ is to succeed, it will be forced to generate images in adherence to the condition. The outcome of successful training is therefore a generator that can, for example, synthesise an authentic-looking image of a desired class on demand.
+
+The implementation of CGANs is a straightforward modification to GANs. The conditional information is concatenated to the standard inputs of both $D$ and $G$ and fed through to their hidden layers. A DCGAN discriminator may, however, concatenate the conditional information after its convolutional layers.
+
+\subsubsection{Assorted GANs}
+
+The success of GANs have led to many interesting results in recent years. Image-to-image translation has been achieved with \texttt{pix2pix}, a GAN conditioned on a full image serving as a blueprint for the generated image. Such models are capable of an endless variety of applications, including segmentation and image colourisation. CycleGANs achieve \emph{unpaired} image-to-image translation, learning to map between image domains in an unsupervised way. Applications include style transfer. RecycleGANs achieve the same for video-to-video retargeting.
+
+Elsewhere, progressive growing of GANs produce dazzling high resolution outputs (up to $1024\times1024$ pixels). Here, training is done in stages, beginning at low resolutions ($4\times4$), and doubling the resolution at intervals. This is done by dynamically adding new layers to the generator and discriminator, which maintain symmetry throughout training. Thus, the GAN learns global structures first at low resolution and progressively refining its output.
 
 \section{Performance Metrics}
 
